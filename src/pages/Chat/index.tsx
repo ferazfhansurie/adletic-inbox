@@ -6,7 +6,7 @@ import React, {
   useMemo,
   Fragment,
 } from "react";
-import logoImage from "@/assets/images/logo.png";
+import logoImage from "@/assets/images/logo-adletic.png";
 import axios, { AxiosError } from "axios";
 import Lucide from "@/components/Base/Lucide";
 import Button from "@/components/Base/Button";
@@ -493,12 +493,12 @@ const DocumentModal: React.FC<DocumentModalProps> = ({
           <input
             type="text"
             placeholder="Add a caption"
-            className="flex-grow bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-grow bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f26522]"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
           />
           <button
-            className="ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition duration-200"
+            className="ml-2 bg-[#f26522] hover:bg-[#d94e1a] text-white p-2 rounded-lg transition duration-200"
             onClick={handleSendClick}
           >
             <Lucide icon="Send" className="w-5 h-5" />
@@ -545,7 +545,7 @@ const ImageModal: React.FC<ImageModalProps> = ({
         <a
           href={imageUrl}
           download
-          className="mt-2 block text-center text-blue-500 hover:underline"
+          className="mt-2 block text-center text-[#f26522] hover:underline"
         >
           Save Image
         </a>
@@ -1840,8 +1840,8 @@ function Main() {
     }
 
     return (
-      <div className="flex items-center gap-2 text-blue-500 text-sm">
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+      <div className="flex items-center gap-2 text-[#f26522] text-sm">
+        <div className="w-2 h-2 bg-[#f26522] rounded-full animate-pulse"></div>
         <span>Polling for messages...</span>
       </div>
     );
@@ -1865,7 +1865,7 @@ function Main() {
     return (
       <button
         onClick={handleReconnect}
-        className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        className="px-3 py-1 text-sm bg-[#f26522] text-white rounded hover:bg-[#d94e1a] transition-colors"
         disabled={wsReconnectAttempts >= maxReconnectAttempts}
       >
         {wsReconnectAttempts >= maxReconnectAttempts
@@ -9551,7 +9551,7 @@ function Main() {
             href={segment}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 dark:text-blue-400 underline hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
+            className="text-[#f26522] dark:text-[#ff7744] underline hover:text-[#d94e1a] dark:hover:text-[#f26522] transition-colors"
           >
             {segment}
           </a>
@@ -9563,7 +9563,7 @@ function Main() {
         return (
           <span
             key={index}
-            className="text-blue-600 dark:text-blue-400 font-medium"
+            className="text-[#f26522] dark:text-[#ff7744] font-medium"
           >
             {segment}
           </span>
@@ -12535,8 +12535,8 @@ function Main() {
         }
         .glass-input:focus {
           background: rgba(255, 255, 255, 0.95);
-          border-color: rgba(99, 102, 241, 0.5);
-          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 0 20px rgba(99, 102, 241, 0.1);
+          border-color: rgba(242, 101, 34, 0.5);
+          box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.1), 0 0 20px rgba(242, 101, 34, 0.1);
           outline: none;
         }
         
@@ -12548,8 +12548,8 @@ function Main() {
         }
         .dark .glass-input:focus {
           background: rgba(31, 41, 55, 0.95);
-          border-color: rgba(99, 102, 241, 0.6);
-          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), 0 0 20px rgba(99, 102, 241, 0.15);
+          border-color: rgba(242, 101, 34, 0.6);
+          box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.2), 0 0 20px rgba(242, 101, 34, 0.15);
         }
         .dark .glass-input::placeholder {
           color: #9ca3af;
@@ -12563,14 +12563,14 @@ function Main() {
         }
         .contact-item:hover {
           background: rgba(255, 255, 255, 0.9);
-          border-color: rgba(99, 102, 241, 0.2);
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+          border-color: rgba(242, 101, 34, 0.2);
+          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.1);
           transform: translateX(4px);
         }
         .contact-item.selected {
-          background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-          border-color: rgba(99, 102, 241, 0.3);
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15), inset 0 0 0 1px rgba(99, 102, 241, 0.1);
+          background: linear-gradient(135deg, rgba(242, 101, 34, 0.1) 0%, rgba(255, 119, 68, 0.1) 100%);
+          border-color: rgba(242, 101, 34, 0.3);
+          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.15), inset 0 0 0 1px rgba(242, 101, 34, 0.1);
         }
         
         /* Contact Item Styles - Dark Mode */
@@ -12580,21 +12580,21 @@ function Main() {
         }
         .dark .contact-item:hover {
           background: rgba(55, 65, 81, 0.6);
-          border-color: rgba(99, 102, 241, 0.4);
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+          border-color: rgba(242, 101, 34, 0.4);
+          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.2);
         }
         .dark .contact-item.selected {
-          background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
-          border-color: rgba(99, 102, 241, 0.5);
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          background: linear-gradient(135deg, rgba(242, 101, 34, 0.25) 0%, rgba(255, 119, 68, 0.2) 100%);
+          border-color: rgba(242, 101, 34, 0.5);
+          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         /* Message Bubbles - Light Mode */
         .message-bubble-sent {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
           color: white;
           border-radius: 18px 18px 4px 18px;
-          box-shadow: 0 2px 12px rgba(99, 102, 241, 0.3);
+          box-shadow: 0 2px 12px rgba(242, 101, 34, 0.3);
         }
         .message-bubble-received {
           background: rgba(255, 255, 255, 0.95);
@@ -12606,8 +12606,8 @@ function Main() {
         
         /* Message Bubbles - Dark Mode */
         .dark .message-bubble-sent {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          box-shadow: 0 2px 12px rgba(99, 102, 241, 0.4);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
+          box-shadow: 0 2px 12px rgba(242, 101, 34, 0.4);
         }
         .dark .message-bubble-received {
           background: rgba(30, 41, 59, 0.9);
@@ -12618,40 +12618,40 @@ function Main() {
 
         /* Tag Pills - Light Mode */
         .tag-pill {
-          background: rgba(99, 102, 241, 0.1);
-          color: #4f46e5;
-          border: 1px solid rgba(99, 102, 241, 0.2);
+          background: rgba(242, 101, 34, 0.1);
+          color: #d94e1a;
+          border: 1px solid rgba(242, 101, 34, 0.2);
           transition: all 0.2s ease;
         }
         .tag-pill:hover {
-          background: rgba(99, 102, 241, 0.2);
+          background: rgba(242, 101, 34, 0.2);
           transform: scale(1.05);
         }
         .tag-pill.active {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
           color: white;
           border-color: transparent;
-          box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 2px 10px rgba(242, 101, 34, 0.4);
         }
         
         /* Tag Pills - Dark Mode */
         .dark .tag-pill {
-          background: rgba(139, 92, 246, 0.15);
-          color: #a78bfa;
-          border-color: rgba(139, 92, 246, 0.3);
+          background: rgba(242, 101, 34, 0.15);
+          color: #ff9966;
+          border-color: rgba(242, 101, 34, 0.3);
         }
         .dark .tag-pill:hover {
-          background: rgba(139, 92, 246, 0.25);
+          background: rgba(242, 101, 34, 0.25);
         }
         .dark .tag-pill.active {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
           color: white;
-          box-shadow: 0 2px 10px rgba(139, 92, 246, 0.5);
+          box-shadow: 0 2px 10px rgba(242, 101, 34, 0.5);
         }
 
         /* Button Styles - Primary */
         .btn-chat-primary {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #6366f1 100%);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 50%, #f26522 100%);
           background-size: 200% 200%;
           animation: gradient-shift 3s ease infinite;
           transition: all 0.3s ease;
@@ -12673,7 +12673,7 @@ function Main() {
         }
         .btn-chat-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 8px 25px rgba(242, 101, 34, 0.4);
         }
         .btn-chat-primary:active {
           transform: translateY(0);
@@ -12687,7 +12687,7 @@ function Main() {
         }
         .btn-chat-secondary:hover {
           background: rgba(255, 255, 255, 0.95);
-          border-color: rgba(99, 102, 241, 0.3);
+          border-color: rgba(242, 101, 34, 0.3);
           transform: translateY(-1px);
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
@@ -12697,7 +12697,7 @@ function Main() {
         }
         .dark .btn-chat-secondary:hover {
           background: rgba(30, 41, 59, 0.8);
-          border-color: rgba(139, 92, 246, 0.3);
+          border-color: rgba(242, 101, 34, 0.3);
         }
 
         /* Chat Area Background - Light Mode */
@@ -12718,7 +12718,7 @@ function Main() {
           background: linear-gradient(180deg, rgba(17, 24, 39, 1) 0%, rgba(31, 41, 55, 0.95) 30%, rgba(17, 24, 39, 1) 100%);
         }
         .dark .chat-area-bg::before {
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f26522' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
           opacity: 1;
         }
 
@@ -12731,11 +12731,11 @@ function Main() {
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(99, 102, 241, 0.3);
+          background: rgba(242, 101, 34, 0.3);
           border-radius: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(99, 102, 241, 0.5);
+          background: rgba(242, 101, 34, 0.5);
         }
         
         /* Scrollbar Styles - Dark Mode */
@@ -12743,10 +12743,10 @@ function Main() {
           background: rgba(255, 255, 255, 0.05);
         }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(139, 92, 246, 0.3);
+          background: rgba(242, 101, 34, 0.3);
         }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(139, 92, 246, 0.5);
+          background: rgba(242, 101, 34, 0.5);
         }
 
         /* Avatar Glow */
@@ -12758,7 +12758,7 @@ function Main() {
           position: absolute;
           inset: -2px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6, #6366f1);
+          background: linear-gradient(135deg, #f26522, #ff7744, #f26522);
           background-size: 200% 200%;
           animation: gradient-shift 3s ease infinite;
           z-index: -1;
@@ -12892,7 +12892,7 @@ function Main() {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="text-start text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Total Contacts: <span className="font-semibold text-indigo-600 dark:text-indigo-400">{totalContacts}</span>
+                    Total Contacts: <span className="font-semibold text-[#f26522] dark:text-[#ff7744]">{totalContacts}</span>
                   </div>
 
                 {/* Error Message - Animated Badge */}
@@ -12922,11 +12922,11 @@ function Main() {
             {/* Phone Selection Button - Polished */}
             <button
               onClick={() => setShowPhoneModal(true)}
-              className="flex items-center space-x-2 text-sm font-semibold btn-chat-secondary px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition-all duration-300"
+              className="flex items-center space-x-2 text-sm font-semibold btn-chat-secondary px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f26522]/30 transition-all duration-300"
             >
               <Lucide
                 icon="Phone"
-                className="w-4 h-4 text-indigo-600 dark:text-indigo-400"
+                className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
               />
               <span className="text-gray-700 dark:text-gray-200">
                 {userData?.phone !== undefined
@@ -13043,7 +13043,7 @@ function Main() {
                       e.stopPropagation();
                       setIsTopUpModalOpen(true);
                     }}
-                    className="px-2 py-1 text-xs bg-primary/90 hover:bg-primary backdrop-blur-sm text-white rounded-lg transition-all duration-300 ease-out hover:scale-105 active:scale-95 font-medium border border-primary/50 shadow-sm hover:shadow-md"
+                    className="px-2 py-1 text-xs bg-[#f26522]/90 hover:bg-[#f26522] backdrop-blur-sm text-white rounded-lg transition-all duration-300 ease-out hover:scale-105 active:scale-95 font-medium border border-[#f26522]/50 shadow-sm hover:shadow-md"
                   >
                     Top-up
                   </button>
@@ -13138,7 +13138,7 @@ function Main() {
                 onClick={() => setIsSearchModalOpen(true)}
                 className="flex items-center w-full h-10 py-2 pl-10 pr-4 glass-input text-gray-500 dark:text-gray-400 rounded-xl focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md group"
               >
-                <Lucide icon="Search" className="absolute left-3 w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors" />
+                <Lucide icon="Search" className="absolute left-3 w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-[#f26522] dark:group-hover:text-[#ff7744] transition-colors" />
                 <span className="ml-2 text-sm font-medium">Search contacts...</span>
               </button>
 
@@ -13263,7 +13263,7 @@ function Main() {
                 <Menu.Button className="flex items-center justify-center p-2.5 btn-chat-secondary rounded-xl transition-all duration-300 shadow-sm hover:shadow-md">
                   <Lucide
                     icon="Users"
-                    className="w-4 h-4 text-indigo-600 dark:text-indigo-400"
+                    className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
                   />
                 </Menu.Button>
                 <Menu.Items className="absolute right-0 mt-2 w-48 glass-card rounded-xl p-2 z-10 max-h-64 overflow-y-auto custom-scrollbar animate-slide-up">
@@ -13281,7 +13281,7 @@ function Main() {
                       <button
                         className={`flex items-center w-full text-left p-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
                           !selectedEmployee
-                            ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md"
+                            ? "bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white shadow-md"
                             : active
                             ? "bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100"
                             : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30"
@@ -13312,7 +13312,7 @@ function Main() {
                           <button
                             className={`flex items-center justify-between w-full text-left p-2.5 rounded-lg transition-all duration-200 text-sm ${
                               selectedEmployee === employee.name
-                                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md"
+                                ? "bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white shadow-md"
                                 : active
                                 ? "bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100"
                                 : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30"
@@ -13349,7 +13349,7 @@ function Main() {
               >
                 <Lucide
                   icon={isTagsExpanded ? "ChevronUp" : "ChevronDown"}
-                  className="w-4 h-4 text-indigo-600 dark:text-indigo-400"
+                  className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
                 />
               </button>
             </div>
@@ -13558,7 +13558,7 @@ function Main() {
                             ? "bg-red-500 text-white"
                             : tagName.toLowerCase() === "active bot"
                             ? "bg-emerald-500 text-white"
-                            : "bg-indigo-500 text-white"
+                            : "bg-[#f26522] text-white"
                         }`}
                       >
                         {unreadCount}
@@ -13579,7 +13579,7 @@ function Main() {
           {isLoadingMoreContacts && (
             <div className="absolute inset-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md flex items-center justify-center z-10 animate-fade-in">
               <div className="flex flex-col items-center glass-card p-6 rounded-2xl shadow-xl">
-                <div className="w-10 h-10 border-3 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin"></div>
+                <div className="w-10 h-10 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
                 <span className="mt-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
                   Loading more contacts...
                 </span>
@@ -13591,7 +13591,7 @@ function Main() {
               {loadedContacts.length === 0 && (
                 <div className="flex flex-col items-center text-center max-w-md mx-auto p-6">
                   {/* Animated Icon */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg animate-float-slow">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#f26522] to-[#ff7744] rounded-2xl flex items-center justify-center mb-4 shadow-lg animate-float-slow">
                     <Lucide
                       icon="MessageCircle"
                       className="h-8 w-8 text-white"
@@ -13621,7 +13621,7 @@ function Main() {
                     <div className="w-full max-w-sm glass-card rounded-2xl p-5 animate-slide-up">
                       <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
                         <span className="font-medium">Loading progress</span>
-                        <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                        <span className="font-bold text-[#f26522] dark:text-[#ff7744]">
                           {realLoadingProgress}%
                         </span>
                       </div>
@@ -13629,7 +13629,7 @@ function Main() {
                       {/* Progress Bar */}
                       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
                         <div
-                          className="bg-gradient-to-r from-indigo-500 to-purple-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                          className="bg-gradient-to-r from-[#f26522] to-[#ff7744] h-2.5 rounded-full transition-all duration-500 ease-out"
                           style={{ width: `${realLoadingProgress}%` }}
                         ></div>
                       </div>
@@ -13649,8 +13649,8 @@ function Main() {
                           </div>
                         )}
                         {loadingSteps.contactsProcess && (
-                          <div className="flex items-center text-xs text-indigo-600 dark:text-indigo-400 animate-slide-up">
-                            <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2 animate-pulse"></div>
+                          <div className="flex items-center text-xs text-[#f26522] dark:text-[#ff7744] animate-slide-up">
+                            <div className="w-2 h-2 bg-[#f26522] rounded-full mr-2 animate-pulse"></div>
                             <span>Processing contacts...</span>
                           </div>
                         )}
@@ -13668,9 +13668,9 @@ function Main() {
                   {isTagFiltering && (
                     <div className="w-full max-w-sm glass-card rounded-2xl p-6 animate-slide-up">
                       <div className="flex items-center justify-center mb-4">
-                        <div className="w-10 h-10 border-3 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin"></div>
+                        <div className="w-10 h-10 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
                       </div>
-                      <p className="text-sm text-blue-700 dark:text-blue-300 font-medium text-center">
+                      <p className="text-sm text-[#f26522] dark:text-[#ff7744] font-medium text-center">
                         Searching through {contacts.length.toLocaleString()}{" "}
                         contacts...
                       </p>
@@ -13704,7 +13704,7 @@ function Main() {
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300 ${
                           selectedChatId === contact.contact_id
-                            ? "ring-2 ring-indigo-500 dark:ring-indigo-400 ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
+                            ? "ring-2 ring-[#f26522] dark:ring-[#ff7744] ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
                             : "ring-1 ring-gray-200 dark:ring-gray-700"
                         }`}
                       >
@@ -13724,7 +13724,7 @@ function Main() {
                                 }}
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600">
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#f26522] to-[#ff7744]">
                                 <Lucide
                                   icon="Users"
                                   className="w-5 h-5 text-white"
@@ -13738,7 +13738,7 @@ function Main() {
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#f26522] to-[#ff7744] text-white">
                               <Lucide icon="User" className="w-5 h-5" />
                             </div>
                           ))}
@@ -13766,8 +13766,8 @@ function Main() {
                             <h3
                               className={`text-sm font-semibold truncate transition-all duration-300 ${
                                 selectedChatId === contact.contact_id
-                                  ? "text-indigo-700 dark:text-indigo-300"
-                                  : "text-gray-800 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400"
+                                  ? "text-[#f26522] dark:text-[#ff7744]"
+                                  : "text-gray-800 dark:text-gray-100 group-hover:text-[#f26522] dark:group-hover:text-[#ff7744]"
                               }`}
                             >
                               {(
@@ -14183,20 +14183,20 @@ function Main() {
               nextLinkClassName="px-3 py-1.5 rounded-xl bg-white/60 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 hover:bg-white/90 dark:hover:bg-gray-600/60 text-xs font-medium transition-all duration-300 border border-gray-200/50 dark:border-gray-600/50 hover:scale-105"
               disabledClassName="opacity-40 cursor-not-allowed hover:scale-100"
               activeClassName="font-bold"
-              activeLinkClassName="bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 border-transparent shadow-md"
+              activeLinkClassName="bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white hover:from-[#d94e1a] hover:to-[#f26522] border-transparent shadow-md"
               forcePage={currentPage}
             />
           </div>
         </div>
         {isLoadingMoreContacts && (
           <div className="flex flex-col items-center justify-center py-4 px-4 glass-card mx-3 mb-3 rounded-2xl animate-slide-up">
-            <div className="w-8 h-8 border-3 border-indigo-200 dark:border-indigo-800 border-t-indigo-600 dark:border-t-indigo-400 rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
             <span className="mt-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
               Loading more contacts...
             </span>
             <div className="mt-2 w-full max-w-xs">
               <div className="w-full bg-white/20 dark:bg-gray-700/40 rounded-full h-2 backdrop-blur-md border border-white/30 dark:border-gray-600/50 shadow-lg">
-                <div className="bg-gradient-to-r from-blue-500/80 to-purple-600/80 h-2 rounded-full animate-pulse shadow-xl"></div>
+                <div className="bg-gradient-to-r from-[#f26522]/80 to-[#ff7744]/80 h-2 rounded-full animate-pulse shadow-xl"></div>
               </div>
             </div>
           </div>
@@ -14215,7 +14215,7 @@ function Main() {
                     e.stopPropagation();
                     handleBack();
                   }}
-                  className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700/60 rounded-xl transition-all duration-300 backdrop-blur-sm border border-slate-200/80 dark:border-gray-600/50 hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/20 dark:hover:shadow-indigo-400/20"
+                  className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700/60 rounded-xl transition-all duration-300 backdrop-blur-sm border border-slate-200/80 dark:border-gray-600/50 hover:scale-105 hover:shadow-lg hover:shadow-[#f26522]/20 dark:hover:shadow-[#ff7744]/20"
                 >
                   <Lucide
                     icon="ChevronLeft"
@@ -14224,9 +14224,9 @@ function Main() {
                 </button>
 
                 <div className="relative group profile-pic-container">
-                  <div className="w-9 h-9 overflow-hidden rounded-full shadow-lg bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center text-white border-2 border-white/40 dark:border-gray-500/40 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-purple-500/30 relative">
+                  <div className="w-9 h-9 overflow-hidden rounded-full shadow-lg bg-gradient-to-br from-[#f26522] via-[#ff7744] to-[#ff9966] flex items-center justify-center text-white border-2 border-white/40 dark:border-gray-500/40 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-[#f26522]/30 relative">
                     {/* Animated gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 animate-pulse opacity-80"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#f26522] via-[#ff7744] to-[#ff9966] animate-pulse opacity-80"></div>
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent"></div>
 
                     {selectedContact?.profilePicUrl ? (
@@ -16131,7 +16131,7 @@ function Main() {
                   className="w-full h-full object-cover rounded-xl transition-all duration-300 hover:brightness-110"
                 />
               </div>
-              <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent animate-gradient-shift bg-[length:200%_auto]">
+              <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#f26522] via-[#ff7744] to-[#ff9966] dark:from-[#f26522] dark:via-[#ff7744] dark:to-[#ff9966] bg-clip-text text-transparent animate-gradient-shift bg-[length:200%_auto]">
                 {hasNoPhones
                   ? "No Phones Connected"
                   : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") 

@@ -40,6 +40,8 @@ module.exports = {
           900: "rgb(var(--color-darkmode-900) / <alpha-value>)",
         },
         'custom-gray': '#E4E4E4',
+        'adletic-orange': '#f26522',
+        'adletic-white': '#FFFFFF',
       },
       fontFamily: {
         roboto: ["Roboto"],
@@ -75,23 +77,23 @@ module.exports = {
     require("@tailwindcss/forms"),
     plugin(function ({ addBase, matchUtilities }) {
       addBase({
-        // Default colors
+        // Default colors - Adletic Theme
        ":root": {
-  "--color-theme-1": toRGB(colors.black),
-  "--color-theme-2": toRGB(colors.gray["900"]),
-  "--color-primary": toRGB(colors.black),
-  "--color-secondary": toRGB(colors.gray["200"]),
-  "--color-success": toRGB(colors.gray["500"]),
-  "--color-info": toRGB(colors.gray["400"]),
-  "--color-warning": toRGB(colors.gray["600"]),
-  "--color-pending": toRGB(colors.gray["500"]),
-  "--color-danger": toRGB(colors.gray["700"]),
+  "--color-theme-1": "255 255 255", // White
+  "--color-theme-2": "242 101 34", // Orange #f26522
+  "--color-primary": "255 255 255", // White
+  "--color-secondary": "242 101 34", // Orange #f26522
+  "--color-success": toRGB(colors.emerald["600"]),
+  "--color-info": toRGB(colors.blue["500"]),
+  "--color-warning": toRGB(colors.amber["500"]),
+  "--color-pending": toRGB(colors.orange["500"]),
+  "--color-danger": toRGB(colors.red["600"]),
   "--color-light": toRGB(colors.gray["100"]),
-  "--color-dark": toRGB(colors.black),
+  "--color-dark": "75 75 75", // #4b4b4b
 },
         // Default dark-mode colors
         ".dark": {
-          "--color-primary": toRGB(colors.black),
+          "--color-primary": "242 101 34", // Orange #f26522
           "--color-darkmode-50": "87 103 132",
           "--color-darkmode-100": "74 90 121",
           "--color-darkmode-200": "65 81 114",

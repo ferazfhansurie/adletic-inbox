@@ -6,6 +6,28 @@ import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import MessagePreview from "@/components/MessagePreview";
 import axios from "axios";
+import Lucide from "@/components/Base/Lucide";
+
+// WhatsApp template interface for official API
+interface WhatsAppTemplate {
+  id: string;
+  name: string;
+  language: string;
+  status: 'APPROVED' | 'PENDING' | 'REJECTED';
+  category: 'MARKETING' | 'UTILITY' | 'AUTHENTICATION';
+  components: Array<{
+    type: string;
+    format?: string;
+    text?: string;
+    example?: any;
+  }>;
+}
+
+interface ConnectionInfo {
+  connectionType: string;
+  status: string;
+  requiresTemplates: boolean;
+}
 
 interface FollowUpTemplate {
   id: string;
@@ -70,6 +92,10 @@ interface FollowUpMessage {
   templateId?: string;
   addTags?: string[];
   removeTags?: string[];
+  // WhatsApp template fields for official API
+  whatsappTemplateName?: string;
+  whatsappTemplateLanguage?: string;
+  whatsappTemplateVariables?: string[];
 }
 
 interface TimeInterval {
@@ -193,6 +219,14 @@ const FollowUpsPage: React.FC = () => {
   );
   const [editingTemplate, setEditingTemplate] =
     useState<FollowUpTemplate | null>(null);
+  
+  // WhatsApp templates state for official API
+  const [whatsappTemplates, setWhatsappTemplates] = useState<WhatsAppTemplate[]>([]);
+  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo | null>(null);
+  const [isOfficialApi, setIsOfficialApi] = useState(false);
+  const [companyId, setCompanyId] = useState<string>('');
+  const [phoneIndex, setPhoneIndex] = useState<number>(0);
+  
   const [batchSettings, setBatchSettings] = useState<BatchSettings>({
     startDateTime: new Date().toISOString().slice(0, 16), // Format: YYYY-MM-DDTHH:mm
     contactsPerBatch: 10,
@@ -307,6 +341,10 @@ const FollowUpsPage: React.FC = () => {
     templateId?: string;
     addTags: string[];
     removeTags: string[];
+    // WhatsApp template fields for official API
+    whatsappTemplateName?: string;
+    whatsappTemplateLanguage?: string;
+    whatsappTemplateVariables?: string[];
   } & Partial<Omit<FollowUpMessage, "id" | "createdAt">>;
 
   // Update initial state
@@ -329,16 +367,82 @@ const FollowUpsPage: React.FC = () => {
     templateId: undefined,
     addTags: [],
     removeTags: [],
+    whatsappTemplateName: undefined,
+    whatsappTemplateLanguage: "en",
+    whatsappTemplateVariables: [],
   });
 
   useEffect(() => {
     // fetchFollowUps();
     fetchTemplates();
+    fetchUserDataAndConnection();
   }, []);
 
   useEffect(() => {
     fetchTags();
   }, []);
+
+  // Fetch WhatsApp templates when connection info indicates official API
+  useEffect(() => {
+    if (companyId && isOfficialApi) {
+      fetchWhatsAppTemplates();
+    }
+  }, [companyId, phoneIndex, isOfficialApi]);
+
+  const fetchUserDataAndConnection = async () => {
+    try {
+      const userEmail = localStorage.getItem("userEmail");
+      if (!userEmail) return;
+
+      // Fetch user data
+      const response = await fetch(
+        `https://bisnesgpt.jutateknologi.com/api/user-data?email=${encodeURIComponent(userEmail)}`,
+        { credentials: "include" }
+      );
+      
+      if (response.ok) {
+        const userData = await response.json();
+        setCompanyId(userData.company_id);
+        setPhoneIndex(userData.phone || 0);
+
+        // Fetch connection info
+        const connectionResponse = await fetch(
+          `https://bisnesgpt.jutateknologi.com/api/templates/connection-type/${userData.company_id}?phoneIndex=${userData.phone || 0}`,
+          { credentials: "include" }
+        );
+        
+        if (connectionResponse.ok) {
+          const connectionData = await connectionResponse.json();
+          setConnectionInfo(connectionData);
+          setIsOfficialApi(connectionData.requiresTemplates || false);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data and connection:", error);
+    }
+  };
+
+  const fetchWhatsAppTemplates = async () => {
+    if (!companyId) return;
+    
+    try {
+      const response = await fetch(
+        `https://bisnesgpt.jutateknologi.com/api/templates/${companyId}?phoneIndex=${phoneIndex}`,
+        { credentials: "include" }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Only show APPROVED templates
+        const approvedTemplates = (data.templates || []).filter(
+          (t: WhatsAppTemplate) => t.status === 'APPROVED'
+        );
+        setWhatsappTemplates(approvedTemplates);
+      }
+    } catch (error) {
+      console.error("Error fetching WhatsApp templates:", error);
+    }
+  };
 
   const fetchFollowUps = async () => {
     // This function is deprecated in favor of the new message-based system
@@ -859,6 +963,10 @@ const FollowUpsPage: React.FC = () => {
           : "",
         addTags: newMessage.addTags || [],
         removeTags: newMessage.removeTags || [],
+        // WhatsApp template fields for official API
+        whatsapp_template_name: newMessage.whatsappTemplateName || null,
+        whatsapp_template_language: newMessage.whatsappTemplateLanguage || 'en',
+        whatsapp_template_variables: newMessage.whatsappTemplateVariables || [],
       };
 
       // Send to backend
@@ -888,6 +996,9 @@ const FollowUpsPage: React.FC = () => {
           scheduledTime: "",
           addTags: [],
           removeTags: [],
+          whatsappTemplateName: undefined,
+          whatsappTemplateLanguage: "en",
+          whatsappTemplateVariables: [],
         });
         setNewNumber("");
         setSelectedDocument(null);
@@ -1183,6 +1294,60 @@ const FollowUpsPage: React.FC = () => {
                     {newMessage.message.length} characters
                   </div>
                 </div>
+
+                {/* WhatsApp Template Selection for Official API */}
+                {isOfficialApi && (
+                  <div className="mb-4 p-4 bg-gradient-to-br from-green-50/80 to-emerald-50/80 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200/50 dark:border-green-700/30 rounded-lg backdrop-blur-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Lucide icon="MessageSquare" className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <label className="text-xs font-semibold text-green-700 dark:text-green-300">
+                        WhatsApp Template (Official API)
+                      </label>
+                    </div>
+                    <p className="text-xs text-green-600/80 dark:text-green-400/80 mb-3">
+                      For messages sent outside the 24-hour window, select a Meta-approved template.
+                    </p>
+                    <select
+                      className="w-full px-3 py-2.5 border border-green-200/50 dark:border-green-700/30 rounded-lg bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all duration-200 text-xs"
+                      value={newMessage.whatsappTemplateName || ''}
+                      onChange={(e) => {
+                        const selectedTemplateName = e.target.value;
+                        const selectedWhatsAppTemplate = whatsappTemplates.find(t => t.name === selectedTemplateName);
+                        setNewMessage({
+                          ...newMessage,
+                          whatsappTemplateName: selectedTemplateName || undefined,
+                          whatsappTemplateLanguage: selectedWhatsAppTemplate?.language || 'en',
+                        });
+                      }}
+                    >
+                      <option value="">-- No template (use message content) --</option>
+                      {whatsappTemplates.map((template) => (
+                        <option key={template.id} value={template.name}>
+                          {template.name} ({template.language}) - {template.category}
+                        </option>
+                      ))}
+                    </select>
+                    {newMessage.whatsappTemplateName && (
+                      <div className="mt-3 p-2.5 bg-white/50 dark:bg-slate-800/50 rounded-lg border border-green-100/50 dark:border-green-800/30">
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
+                          <span className="font-medium text-green-700 dark:text-green-400">Selected:</span> {newMessage.whatsappTemplateName}
+                        </p>
+                        {whatsappTemplates.find(t => t.name === newMessage.whatsappTemplateName)?.components
+                          .filter(c => c.type === 'BODY')
+                          .map((c, idx) => (
+                            <p key={idx} className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 italic">
+                              "{c.text?.substring(0, 100)}{(c.text?.length || 0) > 100 ? '...' : ''}"
+                            </p>
+                          ))}
+                      </div>
+                    )}
+                    {!newMessage.whatsappTemplateName && (
+                      <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                        ⚠️ Without a template, messages will only be sent if within 24-hour window
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 {/* Timing Settings */}
                 <div className="space-y-2 mb-4">
@@ -2150,6 +2315,21 @@ const FollowUpsPage: React.FC = () => {
                                             </div>
                                           </div>
                                         )}
+
+                                      {/* WhatsApp Template Indicator */}
+                                      {message.whatsappTemplateName && (
+                                        <div className="mt-2 flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200/50 dark:border-green-700/30">
+                                          <Lucide icon="MessageSquare" className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
+                                          <span className="text-xs font-medium text-green-700 dark:text-green-300">
+                                            WhatsApp Template: {message.whatsappTemplateName}
+                                          </span>
+                                          {message.whatsappTemplateLanguage && (
+                                            <span className="text-xs text-green-600/70 dark:text-green-400/70">
+                                              ({message.whatsappTemplateLanguage})
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                 )}

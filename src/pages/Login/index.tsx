@@ -1,5 +1,5 @@
-import logoUrl from "@/assets/images/logo.png";
-import logoUrl2 from "@/assets/images/logo3.png";
+import logoUrl from "@/assets/images/logo-adletic.png";
+import logoUrl2 from "@/assets/images/logo-adletic.png";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
@@ -128,8 +128,8 @@ function Main() {
         }
 
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1); }
-          50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.2); }
+          0%, 100% { box-shadow: 0 0 20px rgba(242, 101, 34, 0.3), 0 0 40px rgba(242, 101, 34, 0.1); }
+          50% { box-shadow: 0 0 30px rgba(242, 101, 34, 0.5), 0 0 60px rgba(242, 101, 34, 0.2); }
         }
 
         @keyframes slide-up-fade {
@@ -174,11 +174,11 @@ function Main() {
 
         .aurora-bg {
           background:
-            radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-            radial-gradient(ellipse at 40% 60%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
-            radial-gradient(ellipse at 60% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-            linear-gradient(135deg, #0a0a1a 0%, #0f0f2d 25%, #0a0a1a 50%, #0d0d25 75%, #0a0a1a 100%);
+            radial-gradient(ellipse at 20% 20%, rgba(242, 101, 34, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(242, 101, 34, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse at 40% 60%, rgba(242, 101, 34, 0.05) 0%, transparent 40%),
+            radial-gradient(ellipse at 60% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 45%),
+            linear-gradient(135deg, #ffffff 0%, #fff5f0 25%, #ffffff 50%, #fff8f3 75%, #ffffff 100%);
           background-size: 200% 200%, 200% 200%, 150% 150%, 180% 180%, 100% 100%;
           animation: aurora 20s ease-in-out infinite;
         }
@@ -192,17 +192,17 @@ function Main() {
         .glass-card-premium {
           background: linear-gradient(
             135deg,
-            rgba(255, 255, 255, 0.05) 0%,
-            rgba(255, 255, 255, 0.02) 50%,
-            rgba(255, 255, 255, 0.05) 100%
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.9) 50%,
+            rgba(255, 255, 255, 0.95) 100%
           );
           backdrop-filter: blur(40px) saturate(150%);
           -webkit-backdrop-filter: blur(40px) saturate(150%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(242, 101, 34, 0.15);
           box-shadow:
-            0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-            0 20px 50px -15px rgba(0, 0, 0, 0.5),
-            0 0 100px -20px rgba(139, 92, 246, 0.15);
+            0 0 0 1px rgba(242, 101, 34, 0.05) inset,
+            0 20px 50px -15px rgba(0, 0, 0, 0.1),
+            0 0 100px -20px rgba(242, 101, 34, 0.15);
           position: relative;
           overflow: hidden;
         }
@@ -214,28 +214,28 @@ function Main() {
           left: 0;
           right: 0;
           height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          background: linear-gradient(90deg, transparent, rgba(242, 101, 34, 0.3), transparent);
         }
 
         .glass-input-premium {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.8);
+          border: 1px solid rgba(242, 101, 34, 0.15);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
         }
 
         .glass-input-premium:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.9);
+          border-color: rgba(242, 101, 34, 0.25);
         }
 
         .glass-input-premium:focus {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(139, 92, 246, 0.5);
+          background: rgba(255, 255, 255, 0.95);
+          border-color: rgba(242, 101, 34, 0.5);
           box-shadow:
-            0 0 0 4px rgba(139, 92, 246, 0.1),
-            0 0 30px rgba(139, 92, 246, 0.15),
-            inset 0 0 20px rgba(139, 92, 246, 0.03);
+            0 0 0 4px rgba(242, 101, 34, 0.1),
+            0 0 30px rgba(242, 101, 34, 0.15),
+            inset 0 0 20px rgba(242, 101, 34, 0.03);
           outline: none;
         }
 
@@ -259,7 +259,7 @@ function Main() {
           left: 50%;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #8b5cf6, #6366f1, #8b5cf6);
+          background: linear-gradient(90deg, #f26522, #ff7744, #f26522);
           background-size: 200% 100%;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           transform: translateX(-50%);
@@ -272,13 +272,13 @@ function Main() {
         }
 
         .btn-premium {
-          background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #7c3aed 100%);
+          background: linear-gradient(135deg, #f26522 0%, #ff7744 50%, #f26522 100%);
           background-size: 200% 200%;
           position: relative;
           overflow: hidden;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           box-shadow:
-            0 4px 15px rgba(139, 92, 246, 0.3),
+            0 4px 15px rgba(242, 101, 34, 0.3),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
@@ -296,8 +296,8 @@ function Main() {
         .btn-premium:hover {
           transform: translateY(-2px);
           box-shadow:
-            0 8px 30px rgba(139, 92, 246, 0.4),
-            0 0 60px rgba(139, 92, 246, 0.2),
+            0 8px 30px rgba(242, 101, 34, 0.4),
+            0 0 60px rgba(242, 101, 34, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
           background-position: 100% 100%;
         }
@@ -318,8 +318,8 @@ function Main() {
         }
 
         .btn-secondary-premium {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(242, 101, 34, 0.05);
+          border: 1px solid rgba(242, 101, 34, 0.2);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
@@ -329,15 +329,15 @@ function Main() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+          background: linear-gradient(135deg, rgba(242, 101, 34, 0.1), rgba(255, 119, 68, 0.1));
           opacity: 0;
           transition: opacity 0.4s ease;
         }
 
         .btn-secondary-premium:hover {
-          border-color: rgba(139, 92, 246, 0.3);
+          border-color: rgba(242, 101, 34, 0.4);
           transform: translateY(-1px);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.2);
         }
 
         .btn-secondary-premium:hover::before {
@@ -350,7 +350,7 @@ function Main() {
 
         .input-wrapper-premium:focus-within .icon-float {
           transform: translateY(-1px) scale(1.1);
-          color: rgba(139, 92, 246, 0.9);
+          color: rgba(242, 101, 34, 0.9);
         }
 
         .morph-blob {
@@ -406,22 +406,22 @@ function Main() {
         <div className="absolute inset-0 noise-overlay" />
 
         {/* Animated mesh gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] morph-blob bg-gradient-to-br from-purple-600/20 via-violet-600/15 to-transparent blur-[100px] animate-pulse-soft" />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] morph-blob bg-gradient-to-tl from-blue-600/15 via-indigo-600/10 to-transparent blur-[120px] animate-pulse-soft" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] morph-blob bg-gradient-to-r from-fuchsia-600/10 via-purple-600/15 to-transparent blur-[80px] animate-pulse-soft" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] morph-blob bg-gradient-to-br from-[#f26522]/15 via-[#f26522]/10 to-transparent blur-[100px] animate-pulse-soft" />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] morph-blob bg-gradient-to-tl from-[#f26522]/12 via-[#f26522]/8 to-transparent blur-[120px] animate-pulse-soft" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] morph-blob bg-gradient-to-r from-[#f26522]/8 via-[#f26522]/12 to-transparent blur-[80px] animate-pulse-soft" style={{ animationDelay: '4s' }} />
 
         {/* Floating geometric shapes */}
-        <div className="absolute top-[10%] right-[20%] w-16 h-16 border border-purple-500/20 rotate-45 floating-shape opacity-30" style={{ animationDelay: '0s' }} />
-        <div className="absolute bottom-[20%] left-[15%] w-12 h-12 border border-indigo-500/20 rotate-12 floating-shape opacity-25" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-[60%] right-[10%] w-8 h-8 border border-violet-500/25 rotate-[30deg] floating-shape opacity-30" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-[30%] left-[8%] w-20 h-20 border border-blue-500/15 rounded-full floating-shape opacity-20" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-[10%] right-[20%] w-16 h-16 border border-[#f26522]/20 rotate-45 floating-shape opacity-30" style={{ animationDelay: '0s' }} />
+        <div className="absolute bottom-[20%] left-[15%] w-12 h-12 border border-[#f26522]/15 rotate-12 floating-shape opacity-25" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-[60%] right-[10%] w-8 h-8 border border-[#f26522]/25 rotate-[30deg] floating-shape opacity-30" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[30%] left-[8%] w-20 h-20 border border-[#f26522]/15 rounded-full floating-shape opacity-20" style={{ animationDelay: '1.5s' }} />
 
         {/* Floating particles */}
-        <div className="absolute top-[15%] right-[25%] w-2 h-2 bg-purple-400/40 rounded-full floating-shape blur-[1px]" style={{ animationDelay: '0.5s' }} />
-        <div className="absolute bottom-[30%] left-[12%] w-1.5 h-1.5 bg-indigo-400/50 rounded-full floating-shape blur-[0.5px]" style={{ animationDelay: '1.2s' }} />
-        <div className="absolute top-[45%] right-[8%] w-1 h-1 bg-violet-400/60 rounded-full floating-shape" style={{ animationDelay: '2.3s' }} />
-        <div className="absolute bottom-[15%] right-[30%] w-2.5 h-2.5 bg-blue-400/30 rounded-full floating-shape blur-[1px]" style={{ animationDelay: '0.8s' }} />
-        <div className="absolute top-[70%] left-[25%] w-1.5 h-1.5 bg-fuchsia-400/40 rounded-full floating-shape" style={{ animationDelay: '1.8s' }} />
+        <div className="absolute top-[15%] right-[25%] w-2 h-2 bg-[#f26522]/40 rounded-full floating-shape blur-[1px]" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute bottom-[30%] left-[12%] w-1.5 h-1.5 bg-[#f26522]/50 rounded-full floating-shape blur-[0.5px]" style={{ animationDelay: '1.2s' }} />
+        <div className="absolute top-[45%] right-[8%] w-1 h-1 bg-[#f26522]/60 rounded-full floating-shape" style={{ animationDelay: '2.3s' }} />
+        <div className="absolute bottom-[15%] right-[30%] w-2.5 h-2.5 bg-[#f26522]/30 rounded-full floating-shape blur-[1px]" style={{ animationDelay: '0.8s' }} />
+        <div className="absolute top-[70%] left-[25%] w-1.5 h-1.5 bg-[#f26522]/40 rounded-full floating-shape" style={{ animationDelay: '1.8s' }} />
 
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
@@ -438,28 +438,28 @@ function Main() {
             <div className="mb-6 flex justify-center">
               <div className="relative">
                 {/* Outer glow effect */}
-                <div className="absolute -inset-8 bg-gradient-to-r from-purple-600/20 via-indigo-500/20 to-violet-600/20 rounded-full blur-3xl animate-pulse-soft" />
+                <div className="absolute -inset-8 bg-gradient-to-r from-[#f26522]/20 via-[#f26522]/15 to-[#f26522]/20 rounded-full blur-3xl animate-pulse-soft" />
 
                 {/* Animated outer ring */}
                 <div className="absolute -inset-6 ring-outer">
-                  <div className="w-full h-full rounded-full border border-dashed border-purple-500/25" />
+                  <div className="w-full h-full rounded-full border border-dashed border-[#f26522]/25" />
                 </div>
 
                 {/* Animated inner ring */}
                 <div className="absolute -inset-3 ring-inner">
                   <div className="w-full h-full rounded-full" style={{
-                    border: '1px dotted rgba(129, 140, 248, 0.2)'
+                    border: '1px dotted rgba(242, 101, 34, 0.2)'
                   }} />
                 </div>
 
                 {/* Orbiting dot */}
                 <div className="absolute inset-0 orbit-dot">
-                  <div className="w-1.5 h-1.5 bg-purple-400 rounded-full blur-[1px]" />
+                  <div className="w-1.5 h-1.5 bg-[#f26522] rounded-full blur-[1px]" />
                 </div>
 
                 {/* Main logo container */}
-                <div className="relative w-24 h-24 logo-premium rounded-full bg-gradient-to-br from-purple-600/30 via-indigo-600/20 to-violet-600/30 p-1">
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-900/95 via-slate-900 to-slate-800/95 flex items-center justify-center overflow-hidden border border-white/10 backdrop-blur-xl">
+                <div className="relative w-24 h-24 logo-premium rounded-full bg-gradient-to-br from-[#f26522]/30 via-white/20 to-[#f26522]/30 p-1">
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-white/95 via-white to-gray-50/95 flex items-center justify-center overflow-hidden border border-[#f26522]/10 backdrop-blur-xl">
                     <img
                       alt="Logo"
                       className="w-16 h-16 object-contain drop-shadow-2xl"
@@ -470,17 +470,17 @@ function Main() {
                 </div>
 
                 {/* Corner accents */}
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-gradient-to-b from-purple-400 to-purple-600 rounded-full shadow-lg shadow-purple-500/50" />
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-gradient-to-t from-indigo-400 to-indigo-600 rounded-full shadow-lg shadow-indigo-500/50" style={{ animationDelay: '0.5s' }} />
-                <div className="absolute top-1/2 -left-2 -translate-y-1/2 w-1 h-1 bg-gradient-to-r from-violet-400 to-violet-600 rounded-full shadow-lg shadow-violet-500/50" style={{ animationDelay: '1s' }} />
-                <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-1.5 h-1.5 bg-gradient-to-l from-purple-300 to-purple-500 rounded-full shadow-lg shadow-purple-400/50" style={{ animationDelay: '1.5s' }} />
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-gradient-to-b from-[#f26522] to-[#d94e1a] rounded-full shadow-lg shadow-[#f26522]/50" />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-gradient-to-t from-[#f26522] to-[#ff7744] rounded-full shadow-lg shadow-[#f26522]/50" style={{ animationDelay: '0.5s' }} />
+                <div className="absolute top-1/2 -left-2 -translate-y-1/2 w-1 h-1 bg-gradient-to-r from-[#f26522] to-[#ff8855] rounded-full shadow-lg shadow-[#f26522]/50" style={{ animationDelay: '1s' }} />
+                <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-1.5 h-1.5 bg-gradient-to-l from-[#f26522] to-[#ff6633] rounded-full shadow-lg shadow-[#f26522]/50" style={{ animationDelay: '1.5s' }} />
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gradient mb-2 tracking-tight">
+            <h1 className="text-3xl font-bold mb-2 tracking-tight" style={{ background: 'linear-gradient(135deg, #f26522 0%, #ff7744 50%, #f26522 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Welcome Back
             </h1>
-            <p className="text-sm text-gray-400/80 font-light">
+            <p className="text-sm text-gray-600 font-light">
               Sign in to continue to your dashboard
             </p>
           </div>
@@ -491,13 +491,13 @@ function Main() {
 
               {/* Email input */}
               <div className={`fade-up ${isVisible ? 'stagger-2' : ''}`}>
-                <label className="block text-xs font-medium text-gray-400/90 mb-2 ml-1 tracking-wide uppercase">
+                <label className="block text-xs font-medium text-gray-600 mb-2 ml-1 tracking-wide uppercase">
                   Email Address
                 </label>
                 <div className="input-wrapper-premium">
                   <input
                     type="email"
-                    className="glass-input-premium w-full pl-11 pr-4 py-3.5 rounded-2xl text-white text-sm font-light"
+                    className="glass-input-premium w-full pl-11 pr-4 py-3.5 rounded-2xl text-gray-900 text-sm font-light"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -505,7 +505,7 @@ function Main() {
                     onFocus={() => setFocusedInput('email')}
                     onBlur={() => setFocusedInput(null)}
                   />
-                  <svg className={`absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] icon-float transition-all duration-300 ${focusedInput === 'email' ? 'text-purple-400' : 'text-gray-500/60'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] icon-float transition-all duration-300 ${focusedInput === 'email' ? 'text-[#f26522]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
@@ -513,13 +513,13 @@ function Main() {
 
               {/* Password input */}
               <div className={`fade-up ${isVisible ? 'stagger-3' : ''}`}>
-                <label className="block text-xs font-medium text-gray-400/90 mb-2 ml-1 tracking-wide uppercase">
+                <label className="block text-xs font-medium text-gray-600 mb-2 ml-1 tracking-wide uppercase">
                   Password
                 </label>
                 <div className="input-wrapper-premium">
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="glass-input-premium w-full pl-11 pr-12 py-3.5 rounded-2xl text-white text-sm font-light"
+                    className="glass-input-premium w-full pl-11 pr-12 py-3.5 rounded-2xl text-gray-900 text-sm font-light"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -527,13 +527,13 @@ function Main() {
                     onFocus={() => setFocusedInput('password')}
                     onBlur={() => setFocusedInput(null)}
                   />
-                  <svg className={`absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] icon-float transition-all duration-300 ${focusedInput === 'password' ? 'text-purple-400' : 'text-gray-500/60'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] icon-float transition-all duration-300 ${focusedInput === 'password' ? 'text-[#f26522]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/60 hover:text-purple-400 transition-all duration-300 hover:scale-110"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#f26522] transition-all duration-300 hover:scale-110"
                   >
                     {showPassword ? (
                       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -553,7 +553,7 @@ function Main() {
               <div className={`text-right fade-up ${isVisible ? 'stagger-3' : ''}`}>
                 <button
                   onClick={() => setShowResetModal(true)}
-                  className="text-xs text-purple-400/80 hover:text-purple-300 transition-all duration-300 hover:underline underline-offset-4"
+                  className="text-xs text-[#f26522] hover:text-[#d94e1a] transition-all duration-300 hover:underline underline-offset-4"
                 >
                   Forgot Password?
                 </button>
@@ -598,17 +598,17 @@ function Main() {
               {/* Divider */}
               <div className={`relative py-2 fade-up ${isVisible ? 'stagger-4' : ''}`}>
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/[0.06]"></div>
+                  <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="px-4 text-[10px] text-gray-500/80 bg-transparent backdrop-blur-xl tracking-wider uppercase">New to Omniyal?</span>
+                  <span className="px-4 text-[10px] text-gray-500 bg-transparent backdrop-blur-xl tracking-wider uppercase">New to Adletic Inbox?</span>
                 </div>
               </div>
 
               {/* Register button */}
               <button
                 onClick={() => navigate('/register')}
-                className={`btn-secondary-premium w-full py-3.5 text-white/80 text-sm font-medium rounded-2xl fade-up ${isVisible ? 'stagger-5' : ''}`}
+                className={`btn-secondary-premium w-full py-3.5 text-gray-700 text-sm font-medium rounded-2xl fade-up ${isVisible ? 'stagger-5' : ''}`}
               >
                 <span className="relative z-10">Create Account</span>
               </button>
@@ -617,11 +617,11 @@ function Main() {
 
           {/* Footer */}
           <div className={`flex items-center justify-center gap-2 mt-6 fade-up ${isVisible ? 'stagger-5' : ''}`}>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.05]">
-              <svg className="w-3 h-3 text-emerald-400/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f26522]/5 border border-[#f26522]/20">
+              <svg className="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <p className="text-[10px] text-gray-500/80 tracking-wide">
+              <p className="text-[10px] text-gray-600 tracking-wide">
                 Secure & Encrypted
               </p>
             </div>
@@ -639,13 +639,13 @@ function Main() {
           />
           <div className="relative glass-card-premium rounded-3xl p-5 sm:p-6 w-full max-w-[95%] sm:max-w-[380px] mx-auto fade-up">
             <div className="text-center mb-5">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center border border-purple-500/20 backdrop-blur-xl">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-2xl bg-gradient-to-br from-[#f26522]/20 to-[#ff7744]/20 flex items-center justify-center border border-[#f26522]/30 backdrop-blur-xl">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#f26522]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-white mb-1">Reset Password</h3>
-              <p className="text-xs text-gray-400/80 font-light">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Reset Password</h3>
+              <p className="text-xs text-gray-600 font-light">
                 Enter your email to receive a reset link
               </p>
             </div>
@@ -654,12 +654,12 @@ function Main() {
               <div className="input-wrapper-premium">
                 <input
                   type="email"
-                  className="glass-input-premium w-full pl-11 pr-4 py-3.5 rounded-2xl text-white text-sm font-light"
+                  className="glass-input-premium w-full pl-11 pr-4 py-3.5 rounded-2xl text-gray-900 text-sm font-light"
                   placeholder="Enter your email"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                 />
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-500/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
@@ -685,7 +685,7 @@ function Main() {
 
               <div className="flex gap-3 pt-1">
                 <button
-                  className="btn-secondary-premium flex-1 py-3 text-white/70 text-sm rounded-2xl"
+                  className="btn-secondary-premium flex-1 py-3 text-gray-700 text-sm rounded-2xl"
                   onClick={() => { setShowResetModal(false); setResetMessage(""); setResetEmail(""); }}
                 >
                   <span className="relative z-10">Cancel</span>
