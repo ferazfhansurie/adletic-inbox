@@ -492,8 +492,7 @@ function LoadingPage() {
 
       // Show processing notification
       console.log(
-        `Reinitializing ${
-          phoneIndex !== undefined ? `Phone ${phoneIndex + 1}` : "all phones"
+        `Reinitializing ${phoneIndex !== undefined ? `Phone ${phoneIndex + 1}` : "all phones"
         }...`
       );
 
@@ -562,8 +561,7 @@ function LoadingPage() {
 
       // Show success notification
       console.log(
-        `${
-          phoneIndex !== undefined ? `Phone ${phoneIndex + 1}` : "All phones"
+        `${phoneIndex !== undefined ? `Phone ${phoneIndex + 1}` : "All phones"
         } is being reinitialized`
       );
 
@@ -624,10 +622,9 @@ function LoadingPage() {
 
       // Show processing notification
       showNotification(
-        `Disconnecting ${disconnectBotName}${
-          disconnectPhoneIndex !== undefined
-            ? ` Phone ${disconnectPhoneIndex + 1}`
-            : ""
+        `Disconnecting ${disconnectBotName}${disconnectPhoneIndex !== undefined
+          ? ` Phone ${disconnectPhoneIndex + 1}`
+          : ""
         }...`
       );
 
@@ -676,11 +673,10 @@ function LoadingPage() {
       // Show success notification
       showNotification(
         data.message ||
-          `${disconnectBotName}${
-            disconnectPhoneIndex !== undefined
-              ? ` Phone ${disconnectPhoneIndex + 1}`
-              : ""
-          } disconnected successfully`
+        `${disconnectBotName}${disconnectPhoneIndex !== undefined
+          ? ` Phone ${disconnectPhoneIndex + 1}`
+          : ""
+        } disconnected successfully`
       );
     } catch (error) {
       console.error("Error disconnecting bot:", error);
@@ -770,7 +766,7 @@ function LoadingPage() {
           const phoneNeedingPairingCode = statusData.phones.find(
             (phone: any) => phone.status === "pairing_code"
           );
-          
+
           if (phoneNeedingQR && phoneNeedingQR.qrCode) {
             if (phoneNeedingQR.qrCode !== qrCodeImage) {
               console.log("Polling: New QR code detected, updating...");
@@ -1357,13 +1353,13 @@ function LoadingPage() {
         const dateA = a.last_message?.createdAt
           ? new Date(a.last_message.createdAt)
           : a.last_message?.timestamp
-          ? new Date(a.last_message.timestamp * 1000)
-          : new Date(0);
+            ? new Date(a.last_message.timestamp * 1000)
+            : new Date(0);
         const dateB = b.last_message?.createdAt
           ? new Date(b.last_message.createdAt)
           : b.last_message?.timestamp
-          ? new Date(b.last_message.timestamp * 1000)
-          : new Date(0);
+            ? new Date(b.last_message.timestamp * 1000)
+            : new Date(0);
         return dateB.getTime() - dateA.getTime();
       });
 
@@ -1441,7 +1437,7 @@ function LoadingPage() {
 
   useEffect(() => {
     if (processingComplete && contactsFetched && !isLoading) {
-      const timer = setTimeout(() => {}, 1000); // Add a small delay to ensure smooth transition
+      const timer = setTimeout(() => { }, 1000); // Add a small delay to ensure smooth transition
       return () => clearTimeout(timer);
     }
   }, [processingComplete, contactsFetched, isLoading, navigate]);
@@ -1467,11 +1463,11 @@ function LoadingPage() {
   // Auto-redirect to chat when bot status becomes ready
   useEffect(() => {
     console.log("Bot status changed:", botStatus);
-    
+
     // Redirect to chat when bot is ready and processing is complete
     if (botStatus === "ready" || botStatus === "authenticated") {
       console.log("Bot status is ready/authenticated, checking if should navigate...");
-      
+
       // Navigate immediately when bot becomes ready, similar to the old implementation
       if (!isProcessingChats && processingComplete) {
         console.log("Navigating to /chat - bot is ready and processing complete");
@@ -1597,8 +1593,8 @@ function LoadingPage() {
           return contact.last_message.createdAt
             ? new Date(contact.last_message.createdAt).getTime()
             : contact.last_message.timestamp
-            ? contact.last_message.timestamp * 1000
-            : 0;
+              ? contact.last_message.timestamp * 1000
+              : 0;
         };
         return getTimestamp(b) - getTimestamp(a);
       })
@@ -1730,9 +1726,8 @@ function LoadingPage() {
           email: userEmail,
           name: userData.name || userEmail,
           amount,
-          description: `WhatsApp Business API Subscription - ${
-            companyData.plan?.toUpperCase() || "FREE"
-          } Plan`,
+          description: `WhatsApp Business API Subscription - ${companyData.plan?.toUpperCase() || "FREE"
+            } Plan`,
         }),
       });
 
@@ -1796,12 +1791,12 @@ function LoadingPage() {
               {botStatus === "qr" || botStatus === "pairing_code" ? (
                 <>
                   {/* Main Title */}
-                  <div className="mb-4">
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-1.5">
-                      Omniyal Web
+                  <div className="mb-6 border-b-4 border-[#4b4b4b] pb-4">
+                    <h1 className="text-3xl font-black text-[#f26522] uppercase tracking-wider mb-2">
+                      Adletic Web <span className="text-[#4b4b4b]">Connect</span>
                     </h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {botStatus === "pairing_code" 
+                    <p className="text-sm font-bold text-[#4b4b4b] uppercase tracking-wider">
+                      {botStatus === "pairing_code"
                         ? "Use the pairing code below to connect your WhatsApp Business account"
                         : "Connect your WhatsApp Business account to start managing customer conversations"
                       }
@@ -1809,69 +1804,69 @@ function LoadingPage() {
                   </div>
 
                   {/* Main Content Card */}
-                  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 w-full max-w-2xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 w-full max-w-2xl mb-8 relative">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                       {/* Left Side - Steps */}
                       <div className="text-left">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                        <h2 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-4 border-b-2 border-[#4b4b4b] pb-2 inline-block">
                           {botStatus === "pairing_code" ? "Steps to connect with pairing code:" : "Steps to connect:"}
                         </h2>
 
-                        <div className="space-y-2">
+                        <div className="space-y-4">
                           {botStatus === "pairing_code" ? (
                             // Pairing code steps
                             <>
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   1
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Open WhatsApp on your phone
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Make sure you have WhatsApp installed and open
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   2
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Go to Settings → Linked Devices
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Tap the three dots menu (Android) or Settings (iPhone), then "Linked Devices"
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   3
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Tap "Link with phone number"
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Choose the option to link with phone number instead of QR code
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   4
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Enter the pairing code
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Type the 8-digit code shown on the right into your WhatsApp app
                                   </p>
                                 </div>
@@ -1880,57 +1875,57 @@ function LoadingPage() {
                           ) : (
                             // QR code steps
                             <>
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   1
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Open WhatsApp on your phone
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Make sure you have WhatsApp installed and open
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   2
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Go to Settings
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Tap the three dots menu (Android) or Settings (iPhone)
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   3
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Tap "Linked Devices"
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Then tap "Link a Device"
                                   </p>
                                 </div>
                               </div>
 
-                              <div className="flex items-start space-x-2">
-                                <div className="flex-shrink-0 w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center font-semibold text-xs">
+                              <div className="flex items-start space-x-3">
+                                <div className="flex-shrink-0 w-6 h-6 bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center font-black text-xs">
                                   4
                                 </div>
                                 <div>
-                                  <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                     Scan the QR code
                                   </p>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                  <p className="text-xs font-semibold text-gray-500">
                                     Point your phone camera at the QR code on the right
                                   </p>
                                 </div>
@@ -1941,10 +1936,10 @@ function LoadingPage() {
 
                         {/* Alternative Method - Only show in QR mode */}
                         {botStatus === "qr" && (
-                          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                          <div className="mt-4 pt-4 border-t-2 border-[#4b4b4b]">
                             <button
                               onClick={() => setShowPairingCode(!showPairingCode)}
-                              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline text-xs font-medium"
+                              className="text-[#f26522] hover:text-[#e05216] underline text-sm font-black uppercase tracking-wider transition-all"
                             >
                               {showPairingCode
                                 ? "Hide phone number option"
@@ -1952,8 +1947,8 @@ function LoadingPage() {
                             </button>
 
                             {showPairingCode && (
-                              <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
-                                <p className="text-xs text-gray-600 dark:text-gray-300 mb-1.5">
+                              <div className="mt-3 p-3 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                <p className="text-xs font-bold text-[#4b4b4b] uppercase tracking-wider mb-2">
                                   Enter your phone number to get a pairing code:
                                 </p>
                                 <input
@@ -1968,20 +1963,20 @@ function LoadingPage() {
                                   }
                                   onChange={(e) => setPhoneNumber(e.target.value)}
                                   placeholder="Enter phone number (e.g., 60123456789)"
-                                  className="w-full px-2 py-1.5 border rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600 focus:outline-none focus:border-blue-500 text-xs mb-1.5"
+                                  className="w-full px-3 py-2 border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold bg-white focus:outline-none focus:border-[#f26522] focus:shadow-[2px_2px_0_#f26522] text-sm mb-2 transition-all"
                                 />
                                 <button
                                   onClick={requestPairingCode}
                                   disabled={isPairingCodeLoading || !phoneNumber}
-                                  className="w-full px-2 py-1.5 bg-blue-500 text-white text-xs font-semibold rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:bg-gray-400"
+                                  className="w-full px-3 py-2 bg-[#f26522] text-white text-sm font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all disabled:filter disabled:grayscale disabled:opacity-75 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0"
                                 >
                                   {isPairingCodeLoading ? (
                                     <span className="flex items-center justify-center">
                                       <LoadingIcon
                                         icon="three-dots"
-                                        className="w-3 h-3 mr-1"
+                                        className="w-4 h-4 mr-2"
                                       />
-                                      Generating pairing code...
+                                      Generating...
                                     </span>
                                   ) : (
                                     "Get Pairing Code"
@@ -1991,14 +1986,14 @@ function LoadingPage() {
                             )}
 
                             {pairingCode && (
-                              <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-md">
-                                <p className="text-green-700 dark:text-green-300 font-medium mb-1 text-sm">
+                              <div className="mt-3 p-3 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                <p className="text-white font-black uppercase tracking-wider mb-1 text-sm">
                                   Your pairing code:{" "}
-                                  <strong className="text-xl">
+                                  <strong className="text-2xl bg-white text-[#4b4b4b] px-2 py-1 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                                     {pairingCode}
                                   </strong>
                                 </p>
-                                <p className="text-xs text-green-600 dark:text-green-400">
+                                <p className="text-xs font-bold text-white uppercase tracking-wider mt-3">
                                   Enter this code in your WhatsApp app to
                                   authenticate.
                                 </p>
@@ -2009,39 +2004,38 @@ function LoadingPage() {
                       </div>
 
                       {/* Right Side - QR Code or Pairing Code */}
-                      <div className="flex flex-col items-center">
+                      <div className="flex flex-col items-center justify-center border-l-0 lg:border-l-4 border-[#4b4b4b] lg:pl-8 pt-6 lg:pt-0 border-t-4 lg:border-t-0 mt-4 lg:mt-0">
                         {/* Connection Status */}
-                        <div className="mb-2 flex items-center space-x-1.5">
+                        <div className="mb-4 flex items-center space-x-2 border-2 border-[#4b4b4b] bg-white px-3 py-1 shadow-[2px_2px_0_#4b4b4b]">
                           <div
-                            className={`w-2 h-2 rounded-full ${
-                              qrCodeImage || pairingCode
-                                ? "bg-green-500"
-                                : wsConnected
-                                ? "bg-green-500"
+                            className={`w-3 h-3 border-2 border-[#4b4b4b] ${qrCodeImage || pairingCode
+                              ? "bg-[#10b981]"
+                              : wsConnected
+                                ? "bg-[#10b981]"
                                 : isPolling
-                                ? "bg-blue-500 animate-pulse"
-                                : "bg-red-500"
-                            }`}
+                                  ? "bg-[#3b82f6] animate-pulse"
+                                  : "bg-[#ef4444]"
+                              }`}
                           ></div>
-                          <span className="text-xs text-gray-600 dark:text-gray-400">
+                          <span className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">
                             {botStatus === "pairing_code" && pairingCode
                               ? "Pairing Code Ready"
                               : qrCodeImage
-                              ? "QR Code Ready"
-                              : isPolling
-                              ? "Checking for updates..."
-                              : wsConnected
-                              ? "Connected to server"
-                              : error
-                              ? "Connection failed"
-                              : "Connecting..."}
+                                ? "QR Code Ready"
+                                : isPolling
+                                  ? "Checking for updates..."
+                                  : wsConnected
+                                    ? "Connected to server"
+                                    : error
+                                      ? "Connection failed"
+                                      : "Connecting..."}
                           </span>
                         </div>
 
                         {/* Phone Selection for Multiple Phones */}
                         {phones && phones.length > 1 && (
-                          <div className="w-full max-w-sm mb-2">
-                            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 text-center">
+                          <div className="w-full max-w-sm mb-4">
+                            <label className="block text-xs font-black text-[#4b4b4b] uppercase tracking-wider mb-2 text-center">
                               Select Phone Number:
                             </label>
                             <select
@@ -2049,7 +2043,7 @@ function LoadingPage() {
                               onChange={(e) =>
                                 handlePhoneSelection(Number(e.target.value))
                               }
-                              className="w-full px-2 py-1.5 border rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-600 focus:outline-none focus:border-blue-500 text-xs"
+                              className="w-full px-3 py-2 border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold bg-white focus:outline-none focus:border-[#f26522] focus:shadow-[4px_4px_0_#f26522] text-sm shadow-[2px_2px_0_#4b4b4b] transition-all cursor-pointer"
                             >
                               {phones.map((phone, index) => (
                                 <option
@@ -2067,40 +2061,40 @@ function LoadingPage() {
                         {botStatus === "pairing_code" ? (
                           // Pairing Code Display
                           pairingCode ? (
-                            <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md border-2 border-green-200 dark:border-green-600">
+                            <div className="bg-white p-6 border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] w-full max-w-xs">
                               <div className="text-center">
-                                <div className="mb-3">
-                                  <span className="text-3xl">📱</span>
+                                <div className="mb-4">
+                                  <span className="text-4xl block translate-y-2">📱</span>
                                 </div>
-                                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider mb-3">
                                   Your Pairing Code
                                 </h3>
-                                <div className="bg-gray-100 dark:bg-gray-600 rounded-lg p-4 mb-3">
-                                  <p className="text-3xl font-mono font-bold text-gray-800 dark:text-gray-200 tracking-wider">
+                                <div className="bg-white border-2 border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)] p-4 mb-4">
+                                  <p className="text-3xl font-black text-[#f26522] tracking-widest letter-spacing-tight">
                                     {pairingCode}
                                   </p>
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                                   Enter this code in your WhatsApp app
                                 </p>
                                 {phones && phones.length > 1 && (
-                                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">
+                                  <p className="mt-2 text-xs font-bold text-[#f26522] uppercase tracking-wider">
                                     For: {phones.find((p) => p.phoneIndex === selectedPhoneIndex)?.phoneInfo || ""}
                                   </p>
                                 )}
                               </div>
                             </div>
                           ) : (
-                            <div className="text-center p-4">
-                              <div className="mb-3">
-                                <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                                  <span className="text-2xl">📱</span>
+                            <div className="text-center p-6 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#4b4b4b] w-full max-w-xs">
+                              <div className="mb-4">
+                                <div className="w-16 h-16 mx-auto bg-white border-4 border-[#4b4b4b] flex items-center justify-center shadow-[4px_4px_0_#f26522]">
+                                  <span className="text-3xl block">📱</span>
                                 </div>
                               </div>
-                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                              <p className="font-black text-[#4b4b4b] uppercase tracking-wider text-sm mb-2">
                                 Generating pairing code...
                               </p>
-                              <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
+                              <p className="text-gray-500 font-bold text-xs uppercase tracking-wider">
                                 Please wait while we prepare your authentication code
                               </p>
                             </div>
@@ -2108,40 +2102,44 @@ function LoadingPage() {
                         ) : (
                           // QR Code Display
                           isQRLoading ? (
-                            <div className="text-center">
+                            <div className="text-center p-6 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#4b4b4b] w-full max-w-xs">
                               <img
                                 alt="Loading"
-                                className="w-12 h-12 animate-spin mx-auto mb-1.5"
+                                className="w-16 h-16 animate-spin mx-auto mb-4 border-none"
                                 src={logoUrl}
                                 style={{ animation: "spin 10s linear infinite" }}
                               />
-                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                              <p className="font-black text-[#4b4b4b] uppercase tracking-wider text-sm">
                                 Loading QR Code...
                               </p>
                             </div>
                           ) : qrCodeImage ? (
-                            <div className="bg-white dark:bg-gray-700 p-3 rounded-lg shadow-md border-2 border-gray-100 dark:border-gray-600">
+                            <div className="bg-white p-4 border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] relative group">
                               <img
                                 src={qrCodeImage}
                                 alt="QR Code"
-                                className="w-32 h-32 mx-auto"
+                                className="w-48 h-48 mx-auto"
                               />
                               {phones && phones.length > 1 && (
-                                <p className="mt-1.5 text-xs text-gray-600 dark:text-gray-400 text-center">
-                                  For:{" "}
-                                  {phones.find(
-                                    (p) => p.phoneIndex === selectedPhoneIndex
-                                  )?.phoneInfo || ""}
-                                </p>
+                                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border-2 border-[#4b4b4b] px-3 py-1 shadow-[2px_2px_0_#4b4b4b] whitespace-nowrap">
+                                  <p className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">
+                                    For:{" "}
+                                    <span className="text-[#f26522]">
+                                      {phones.find(
+                                        (p) => p.phoneIndex === selectedPhoneIndex
+                                      )?.phoneInfo || ""}
+                                    </span>
+                                  </p>
+                                </div>
                               )}
                             </div>
                           ) : (
-                            <div className="text-center p-4">
-                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            <div className="text-center p-6 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#4b4b4b] w-full max-w-xs">
+                              <p className="font-black text-[#ef4444] uppercase tracking-wider text-sm mb-2">
                                 No QR Code available
                               </p>
-                              <p className="text-gray-500 dark:text-gray-500 text-xs">
-                                Please try refreshing the page
+                              <p className="text-gray-500 font-bold text-xs uppercase tracking-wider">
+                                Please try refreshing the page Let's retry
                               </p>
                             </div>
                           )
@@ -2149,26 +2147,26 @@ function LoadingPage() {
 
                         {/* Success Message */}
                         {(qrCodeImage || (botStatus === "pairing_code" && pairingCode)) && (
-                          <div className="mt-2 space-y-1">
-                            <div className="p-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-md w-full">
-                              <p className="text-green-700 dark:text-green-300 font-medium text-xs text-center">
-                                {botStatus === "pairing_code" 
-                                  ? "✅ Pairing Code Ready - Enter in WhatsApp"
-                                  : "✅ QR Code Ready - Scan to Connect"
+                          <div className="mt-6 space-y-2 w-full max-w-xs">
+                            <div className="p-2 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] w-full">
+                              <p className="text-white font-black text-xs text-center uppercase tracking-wider">
+                                {botStatus === "pairing_code"
+                                  ? "Pairing Code Ready - Enter in App"
+                                  : "QR Code Ready - Scan to Connect"
                                 }
                               </p>
                             </div>
                             {isPolling && (
-                              <div className="p-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-md w-full">
-                                <p className="text-blue-700 dark:text-blue-300 text-xs text-center flex items-center justify-center space-x-1">
-                                  <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></div>
+                              <div className="p-2 bg-[#3b82f6] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] w-full">
+                                <p className="text-white font-black text-xs text-center flex items-center justify-center space-x-2 uppercase tracking-wider">
+                                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse border border-[#4b4b4b]"></span>
                                   <span>
-                                    {botStatus === "pairing_code" 
-                                      ? "Auto-updating pairing code"
-                                      : "Auto-updating QR code"
+                                    {botStatus === "pairing_code"
+                                      ? "Auto-updating code"
+                                      : "Auto-updating QR"
                                     }
                                   </span>
-                                  <div className="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></div>
+                                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse border border-[#4b4b4b]"></span>
                                 </p>
                               </div>
                             )}
@@ -2219,58 +2217,60 @@ function LoadingPage() {
                 <>
                   {/* Modern Status Card */}
                   <div className="mb-6">
-                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 w-full max-w-2xl">
+                    <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 w-full max-w-2xl">
                       {/* Status Header */}
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between mb-6 border-b-4 border-[#4b4b4b] pb-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-green-500 rounded-full animate-pulse"></div>
-                          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                          <div className="w-4 h-4 border-2 border-[#4b4b4b] bg-gradient-to-r from-[#3b82f6] to-[#10b981] animate-pulse shadow-[2px_2px_0_#4b4b4b]"></div>
+                          <h2 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                             Connection Status
                           </h2>
                         </div>
                         {isPolling && (
-                          <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-                            <span className="text-xs font-medium">Live Updates</span>
+                          <div className="flex items-center space-x-2 text-[#3b82f6] border-2 border-[#3b82f6] px-2 py-1 bg-blue-50">
+                            <div className="w-2.5 h-2.5 bg-[#3b82f6] border border-[#4b4b4b] animate-ping"></div>
+                            <span className="text-[10px] font-black uppercase tracking-wider">Live Updates</span>
                           </div>
                         )}
                       </div>
 
                       {/* Phone Status Display */}
+                      {/* Phone Status Display */}
                       {phones && phones.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           {/* Overall Status Banner */}
-                          <div className={`p-3 rounded-lg border-l-4 ${
-                            phones.every(
-                              (phone) =>
-                                phone.status === "ready" ||
-                                phone.status === "authenticated"
-                            )
-                              ? "bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-400"
-                              : "bg-blue-50 dark:bg-blue-900/20 border-blue-500 dark:border-blue-400"
-                          }`}>
-                            <div className="flex items-center space-x-2">
+                          <div className={`p-4 border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] ${phones.every(
+                            (phone) =>
+                              phone.status === "ready" ||
+                              phone.status === "authenticated"
+                          )
+                            ? "bg-[#10b981] text-white"
+                            : "bg-[#3b82f6] text-white"
+                            }`}>
+                            <div className="flex items-center space-x-3">
                               {phones.every(
                                 (phone) =>
                                   phone.status === "ready" ||
                                   phone.status === "authenticated"
                               ) ? (
-                                <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                                  <span className="text-xl">✨</span>
+                                </div>
                               ) : (
-                                <svg className="w-4 h-4 text-blue-600 dark:text-blue-400 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
+                                <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center animate-spin text-[#4b4b4b]">
+                                  <svg className="w-5 h-5 text-[#4b4b4b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                  </svg>
+                                </div>
                               )}
-                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                              <p className="text-sm font-black uppercase tracking-wider">
                                 {phones.every(
                                   (phone) =>
                                     phone.status === "ready" ||
                                     phone.status === "authenticated"
                                 )
-                                  ? "🎉 All phones authenticated! Loading your contacts..."
-                                  : "📱 Checking phone connections..."}
+                                  ? "All phones authenticated! Loading your contacts..."
+                                  : "Checking phone connections..."}
                               </p>
                             </div>
                           </div>
@@ -2280,35 +2280,34 @@ function LoadingPage() {
                             {phones.map((phone, index) => (
                               <div
                                 key={phone.phoneIndex}
-                                className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600"
+                                className="bg-white p-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                               >
                                 <div className="flex items-center justify-between">
                                   <div className="flex items-center space-x-3">
-                                    <div className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    <div className="w-3 h-3 bg-[#f26522] border-2 border-[#4b4b4b]"></div>
+                                    <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                                       📱 {phone.phoneInfo}
                                     </span>
                                   </div>
                                   <div className="flex items-center space-x-2">
                                     <span
-                                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                                        phone.status === "ready" ||
+                                      className={`inline-flex items-center px-2.5 py-1 border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] text-[10px] font-black uppercase tracking-wider ${phone.status === "ready" ||
                                         phone.status === "authenticated"
-                                          ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                          : phone.status === "qr"
-                                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                        ? "bg-[#10b981] text-white"
+                                        : phone.status === "qr"
+                                          ? "bg-[#eab308] text-white"
                                           : phone.status === "pairing_code"
-                                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
-                                          : phone.status === "initializing"
-                                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                                          : "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
-                                      }`}
+                                            ? "bg-[#a855f7] text-white"
+                                            : phone.status === "initializing"
+                                              ? "bg-[#3b82f6] text-white"
+                                              : "bg-[#f3f4f6] text-[#4b4b4b]"
+                                        }`}
                                     >
-                                      {phone.status === "ready" && "✅ Ready"}
-                                      {phone.status === "authenticated" && "✅ Connected"}
-                                      {phone.status === "qr" && "🔄 Waiting for scan"}
-                                      {phone.status === "pairing_code" && "🔢 Pairing code ready"}
-                                      {phone.status === "initializing" && "⏳ Starting up"}
+                                      {phone.status === "ready" && "Ready"}
+                                      {phone.status === "authenticated" && "Connected"}
+                                      {phone.status === "qr" && "Waiting for scan"}
+                                      {phone.status === "pairing_code" && "Pairing code ready"}
+                                      {phone.status === "initializing" && "Starting up"}
                                       {!["ready", "authenticated", "qr", "pairing_code", "initializing"].includes(phone.status) && phone.status}
                                     </span>
                                   </div>
@@ -2318,15 +2317,15 @@ function LoadingPage() {
                           </div>
                         </div>
                       ) : (
-                        <div className="text-center py-4">
-                          <div className="flex items-center justify-center space-x-2 mb-2">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className="text-center p-6 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                          <div className="flex items-center justify-center space-x-3 mb-2">
+                            <div className="w-4 h-4 bg-[#3b82f6] border-2 border-[#4b4b4b] animate-bounce shadow-[1px_1px_0_#4b4b4b]"></div>
+                            <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               {botStatus === "authenticated" || botStatus === "ready"
-                                ? "🎉 Authentication successful! Loading contacts..."
+                                ? "Authentication successful! Loading contacts..."
                                 : botStatus === "initializing"
-                                ? "⚡ Initializing WhatsApp connection..."
-                                : "🔄 Fetching connection data..."}
+                                  ? "Initializing WhatsApp connection..."
+                                  : "Fetching connection data..."}
                             </span>
                           </div>
                         </div>
@@ -2337,35 +2336,39 @@ function LoadingPage() {
                   {/* Modern Progress Card */}
                   {isProcessingChats && (
                     <div className="mb-6">
-                      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 w-full max-w-2xl">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                      <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 w-full max-w-2xl">
+                        <div className="flex items-center justify-between mb-4 border-b-4 border-[#4b4b4b] pb-2">
+                          <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                             Loading Progress
                           </h3>
-                          <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                          <span className="text-lg font-black text-[#f26522] tracking-wider px-2 py-1 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                             {Math.round((fetchedChats / totalChats) * 100)}%
                           </span>
                         </div>
-                        
-                        <div className="space-y-3">
+
+                        <div className="space-y-4 pt-2">
                           <div className="relative">
-                            <div className="overflow-hidden h-3 text-xs flex rounded-full bg-gray-200 dark:bg-gray-700">
+                            <div className="overflow-hidden h-6 text-xs flex bg-white border-4 border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)]">
                               <div
                                 style={{ width: `${(fetchedChats / totalChats) * 100}%` }}
-                                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500 ease-out"
-                              ></div>
+                                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#10b981] border-r-4 border-[#4b4b4b] transition-all duration-500 ease-out"
+                              >
+                                <div className="absolute top-0 bottom-0 left-0 right-0 overflow-hidden">
+                                  <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.2)_10px,rgba(255,255,255,0.2)_20px)] animate-[progress-stripes_1s_linear_infinite]"></div>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600 dark:text-gray-400">
+                            <span className="font-bold text-[#4b4b4b] uppercase tracking-wider text-xs">
                               {processingComplete
                                 ? contactsFetched
-                                  ? "✅ Chats loaded. Preparing to navigate..."
-                                  : "🔄 Processing complete. Loading contacts..."
-                                : `📥 Processing ${fetchedChats} of ${totalChats} chats`}
+                                  ? "Chats loaded. Preparing to navigate..."
+                                  : "Processing complete. Loading contacts..."
+                                : `Processing ${fetchedChats} of ${totalChats} chats`}
                             </span>
-                            <span className="text-gray-500 dark:text-gray-500 text-xs">
+                            <span className="font-black text-[#f26522] tracking-widest text-xs px-2 py-0.5 bg-white border-2 border-[#4b4b4b]">
                               {fetchedChats}/{totalChats}
                             </span>
                           </div>
@@ -2377,33 +2380,35 @@ function LoadingPage() {
                   {/* Modern Loading Card */}
                   {(isLoading || !processingComplete || isFetchingChats) && (
                     <div className="mb-6">
-                      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 w-full max-w-2xl">
-                        <div className="flex flex-col items-center text-center space-y-4">
-                          <div className="relative">
+                      <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-8 w-full max-w-2xl relative overflow-hidden">
+                        {/* Decorative Background Stripes */}
+                        <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.03),rgba(0,0,0,0.03)_10px,transparent_10px,transparent_20px)] pointer-events-none"></div>
+
+                        <div className="flex flex-col items-center text-center space-y-6 relative z-10">
+                          <div className="relative p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] inline-block">
                             <img
                               alt="Logo"
-                              className="w-12 h-12 mx-auto"
+                              className="w-12 h-12"
                               src={logoUrl}
                               style={{ animation: "spin 3s linear infinite" }}
                             />
-                            <div className="absolute inset-0 rounded-full border-2 border-blue-200 dark:border-blue-800 animate-ping"></div>
                           </div>
-                          
-                          <div className="space-y-2">
-                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+
+                          <div className="space-y-2 bg-white px-6 py-3 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                            <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                               Setting up your workspace
                             </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">
                               {isQRLoading
-                                ? "🔄 Generating secure QR code..."
-                                : "⚡ Preparing your WhatsApp integration..."}
+                                ? "Generating secure QR code..."
+                                : "Preparing your WhatsApp integration..."}
                             </p>
                           </div>
-                          
-                          <div className="flex items-center space-x-1">
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+
+                          <div className="flex items-center space-x-2 pt-2">
+                            <div className="w-3 h-3 bg-[#f26522] border-2 border-[#4b4b4b] animate-bounce shadow-[1px_1px_0_#4b4b4b]"></div>
+                            <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] animate-bounce shadow-[1px_1px_0_#4b4b4b]" style={{ animationDelay: "0.1s" }}></div>
+                            <div className="w-3 h-3 bg-[#3b82f6] border-2 border-[#4b4b4b] animate-bounce shadow-[1px_1px_0_#4b4b4b]" style={{ animationDelay: "0.2s" }}></div>
                           </div>
                         </div>
                       </div>
@@ -2415,28 +2420,30 @@ function LoadingPage() {
               <hr className="w-full mb-3 border-t border-gray-300 dark:border-gray-700" />
 
               {/* Action Buttons Section */}
-              <div className="mt-4 space-y-2 w-full max-w-xl mx-auto">
-                <h3 className="text-sm font-semibold text-gray-800 mb-2">
-                  Additional Options
-                </h3>
+              <div className="mt-8 space-y-4 w-full max-w-2xl mx-auto border-t-4 border-[#4b4b4b] pt-6">
+                <div className="inline-block bg-[#f26522] text-white px-3 py-1 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] mb-2 -rotate-1">
+                  <h3 className="text-sm font-black uppercase tracking-wider">
+                    Additional Options
+                  </h3>
+                </div>
 
                 {/* Primary Actions Row - First Row */}
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                   <button
                     onClick={handleRefresh}
                     disabled={isRefreshing}
-                    className="flex-1 px-3 py-2 bg-blue-500 text-white text-xs font-semibold rounded-md hover:bg-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm hover:shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-3 bg-[#3b82f6] text-white font-black uppercase tracking-wider border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0_#4b4b4b]"
                   >
-                    <div className="flex items-center justify-center space-x-1.5">
+                    <div className="flex items-center justify-center space-x-2">
                       {isRefreshing ? (
                         <img
                           alt="Loading"
-                          className="w-3 h-3 animate-spin"
+                          className="w-4 h-4 animate-spin filter brightness-0 invert"
                           src={logoUrl}
                         />
                       ) : (
                         <svg
-                          className="w-3 h-3"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -2444,13 +2451,13 @@ function LoadingPage() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
+                            strokeWidth={3}
                             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                           />
                         </svg>
                       )}
                       <span className="text-sm">
-                        {isRefreshing ? "Refreshing..." : "Refresh Connection"}
+                        {isRefreshing ? "Refreshing..." : "Refresh Status"}
                       </span>
                     </div>
                   </button>
@@ -2459,11 +2466,11 @@ function LoadingPage() {
                     href="https://wa.link/pcgo1k"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 px-3 py-2 bg-green-500 text-white text-xs font-semibold rounded-md hover:bg-green-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 shadow-sm hover:shadow-md"
+                    className="flex-1 px-4 py-3 bg-[#10b981] text-white font-black uppercase tracking-wider border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all flex items-center justify-center"
                   >
-                    <div className="flex items-center justify-center space-x-1.5">
+                    <div className="flex items-center justify-center space-x-2">
                       <svg
-                        className="w-3 h-3"
+                        className="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -2471,7 +2478,7 @@ function LoadingPage() {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
+                          strokeWidth={3}
                           d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
@@ -2481,7 +2488,7 @@ function LoadingPage() {
                 </div>
 
                 {/* Secondary Actions Row - Second Row */}
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                   {/* Reinitialize Bot Button */}
                   <button
                     onClick={() => reinitializeBot()}
@@ -2491,17 +2498,13 @@ function LoadingPage() {
                       !phones ||
                       phones.length === 0
                     }
-                    className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50 shadow-sm hover:shadow-md ${
-                      isReinitializing || reinitializeCooldown > 0
-                        ? "bg-orange-500 text-white cursor-not-allowed"
-                        : "bg-orange-500 text-white hover:bg-orange-600 focus:ring-orange-500"
-                    }`}
+                    className="flex-1 px-4 py-3 bg-[#f59e0b] text-white font-black uppercase tracking-wider border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0_#4b4b4b]"
                   >
-                    <div className="flex items-center justify-center space-x-1.5">
+                    <div className="flex items-center justify-center space-x-2">
                       {isReinitializing ? (
                         <div className="relative">
                           <svg
-                            className="w-3 h-3 animate-spin text-white"
+                            className="w-4 h-4 animate-spin text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                           >
@@ -2522,7 +2525,7 @@ function LoadingPage() {
                         </div>
                       ) : (
                         <svg
-                          className="w-3 h-3"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -2530,17 +2533,17 @@ function LoadingPage() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
+                            strokeWidth={3}
                             d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2M9 14l3-3m0 0l3 3m-3-3V4"
                           />
                         </svg>
                       )}
-                      <span className="font-medium text-sm">
+                      <span className="text-sm">
                         {isReinitializing
                           ? "Restarting..."
                           : reinitializeCooldown > 0
-                          ? `Wait (${reinitializeCooldown}s)`
-                          : "Restart Bot"}
+                            ? `Wait (${reinitializeCooldown}s)`
+                            : "Restart Server"}
                       </span>
                     </div>
                   </button>
@@ -2554,17 +2557,13 @@ function LoadingPage() {
                       !phones ||
                       phones.length === 0
                     }
-                    className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-opacity-50 shadow-sm hover:shadow-md ${
-                      isDisconnecting
-                        ? "bg-red-500 text-white cursor-not-allowed"
-                        : "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500"
-                    }`}
+                    className="flex-1 px-4 py-3 bg-[#e11d48] text-white font-black uppercase tracking-wider border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0_#4b4b4b]"
                   >
-                    <div className="flex items-center justify-center space-x-1.5">
+                    <div className="flex items-center justify-center space-x-2">
                       {isDisconnecting ? (
                         <div className="relative">
                           <svg
-                            className="w-3 h-3 animate-spin text-white"
+                            className="w-4 h-4 animate-spin text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                           >
@@ -2585,7 +2584,7 @@ function LoadingPage() {
                         </div>
                       ) : (
                         <svg
-                          className="w-3 h-3"
+                          className="w-4 h-4"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -2593,15 +2592,15 @@ function LoadingPage() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
+                            strokeWidth={3}
                             d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
                           />
                         </svg>
                       )}
-                      <span className="font-medium text-sm">
+                      <span className="text-sm">
                         {isDisconnecting
                           ? "Disconnecting..."
-                          : "Disconnect Bot"}
+                          : "Disconnect"}
                       </span>
                     </div>
                   </button>
@@ -2610,11 +2609,11 @@ function LoadingPage() {
                 {/* Go to Chat Button - Full Width */}
                 <button
                   onClick={() => navigate("/chat")}
-                  className="w-full px-3 py-2 bg-blue-500 text-white text-xs font-semibold rounded-md hover:bg-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm hover:shadow-md"
+                  className="w-full px-4 py-4 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[10px_10px_0_#f26522] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#f26522] transition-all flex justify-center items-center mt-2 group"
                 >
-                  <div className="flex items-center justify-center space-x-1.5">
+                  <div className="flex items-center justify-center space-x-2">
                     <svg
-                      className="w-3 h-3"
+                      className="w-5 h-5 group-hover:text-[#f26522] transition-colors"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -2622,11 +2621,12 @@ function LoadingPage() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       />
                     </svg>
-                    <span className="text-sm">Go to Chat</span>
+                    <span className="text-base">Go to Dashboard Workspace</span>
+                    <span className="transform translate-x-0 group-hover:translate-x-2 transition-transform opacity-0 group-hover:opacity-100 font-bold text-[#f26522] ml-2">→</span>
                   </div>
                 </button>
               </div>
@@ -2658,7 +2658,7 @@ function LoadingPage() {
         <button
           onClick={() => setShowOnboarding(true)}
           className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 border-3 border-white text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:from-blue-600 hover:to-blue-700 flex items-center justify-center relative group"
-          title="Learn about Omniyal CRM features"
+          title="Learn about Adletic CRM features"
         >
           <BookOpen className="w-4 h-4" />
 
@@ -2678,7 +2678,7 @@ function LoadingPage() {
               <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
             </div>
             <div className="flex-1">
-              <p className="text-xs font-medium mb-0.5">Welcome to Omniyal CRM!</p>
+              <p className="text-xs font-medium mb-0.5">Welcome to Adletic CRM!</p>
               <p className="text-xs text-blue-100 mb-1">
                 Click the blue button below for a step-by-step guide to get
                 started.
@@ -2783,9 +2783,8 @@ function LoadingPage() {
                   <div className="text-gray-600 dark:text-gray-400 space-y-2">
                     <p className="text-sm leading-relaxed">
                       {disconnectPhoneIndex !== undefined
-                        ? `You're about to disconnect Phone ${
-                            disconnectPhoneIndex + 1
-                          } of ${disconnectBotName}.`
+                        ? `You're about to disconnect Phone ${disconnectPhoneIndex + 1
+                        } of ${disconnectBotName}.`
                         : `You're about to disconnect all phones of ${disconnectBotName}.`}
                     </p>
                     <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
@@ -2838,7 +2837,7 @@ function LoadingPage() {
                   <span>Cancel</span>
                 </div>
               </button>
-              
+
               <button
                 type="button"
                 onClick={confirmDisconnect}

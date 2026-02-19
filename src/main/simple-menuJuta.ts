@@ -26,11 +26,7 @@ const menu: Array<Menu | "divider"> = [
       pathname: "/inbox",
       title: "Assistant",
     },
-    {
-      icon: "Calendar",
-      pathname: "/calendar",
-      title: "Calendar",
-    },
+
     {
       icon: "FileText",
       pathname: "/message-templates",

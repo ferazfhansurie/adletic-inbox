@@ -33,7 +33,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
         "Wait for 'Device linked successfully' message"
       ],
       benefits: [
-        "Connect WhatsApp Business to Omniyal CRM",
+        "Connect WhatsApp Business to Adletic CRM",
         "Access all CRM features",
         "Manage customer conversations",
         "Use automation tools"
@@ -164,7 +164,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
     {
       id: "logout",
       title: "Logout",
-      description: "Securely sign out of your Omniyal CRM account and return to the login page.",
+      description: "Securely sign out of your Adletic CRM account and return to the login page.",
       selector: "logout",
       features: [
         "Secure session termination",
@@ -226,7 +226,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
         console.log('✅ Found QR code image');
         return qrImage as HTMLElement;
       }
-      
+
       // Fallback: look for any image that might be a QR code
       const allImages = document.querySelectorAll('img');
       for (const img of allImages) {
@@ -235,7 +235,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
           return img as HTMLElement;
         }
       }
-      
+
       console.log('❌ No QR code image found');
       return null;
     }
@@ -243,32 +243,32 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
     // For other selectors, find buttons and links
     const allButtons = document.querySelectorAll('button, a[href]');
     console.log(`Found ${allButtons.length} total buttons/links on page`);
-    
+
     for (const button of allButtons) {
       const buttonText = button.textContent?.trim() || '';
       console.log(`Checking button: "${buttonText}"`);
-      
+
       if (texts.some(text => buttonText.includes(text))) {
         console.log(`✅ Found matching button: "${buttonText}" for selector "${selector}"`);
         return button as HTMLElement;
       }
     }
-    
+
     console.log(`❌ No button found for selector "${selector}"`);
-    
+
     // Fallback: try to find by partial text match
     for (const button of allButtons) {
       const buttonText = button.textContent?.trim() || '';
       const selectorWords = selector.split('-');
-      
-      if (selectorWords.some(word => 
+
+      if (selectorWords.some(word =>
         buttonText.toLowerCase().includes(word.toLowerCase())
       )) {
         console.log(`🔄 Found button by partial match: "${buttonText}" for selector "${selector}"`);
         return button as HTMLElement;
       }
     }
-    
+
     return null;
   };
 
@@ -289,23 +289,23 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
   const showCurrentButtonTooltip = () => {
     const currentGuide = buttonGuides[currentStep];
     console.log('Looking for button with selector:', currentGuide.selector);
-    
+
     const button = findButtonByContent(currentGuide.selector);
     console.log('Found button:', button);
-    
+
     if (button) {
       removeAllHighlights();
       button.classList.add('onboarding-highlight');
-      
+
       // Scroll button into view smoothly
-      button.scrollIntoView({ 
-        behavior: 'smooth', 
+      button.scrollIntoView({
+        behavior: 'smooth',
         block: 'center',
         inline: 'center'
       });
-      
+
       console.log('✅ Button highlighted successfully');
-      
+
     } else {
       console.error('Button not found with selector:', currentGuide.selector);
       console.log('Available buttons on page:');
@@ -357,7 +357,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
     <>
       {/* Overlay Background */}
       <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" onClick={handleClose} />
-      
+
       {/* Fixed Onboarding Panel on Right Side */}
       <div className="fixed top-4 right-4 w-96 bg-white rounded-lg border border-gray-200 shadow-xl z-50 max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -374,20 +374,19 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
               <X className="w-6 h-6" />
             </button>
           </div>
-          
+
           {/* Progress Steps */}
           <div className="flex items-center justify-center space-x-1 overflow-x-auto">
             {buttonGuides.map((guide, index) => (
               <button
                 key={guide.id}
                 onClick={() => handleStepClick(index)}
-                className={`flex items-center space-x-1 px-2 py-1 rounded-md transition-all whitespace-nowrap text-xs ${
-                  index === currentStep
+                className={`flex items-center space-x-1 px-2 py-1 rounded-md transition-all whitespace-nowrap text-xs ${index === currentStep
                     ? 'bg-white/20 text-white border border-white/30'
                     : completedSteps.has(guide.id)
-                    ? 'bg-green-500/20 text-green-100 border border-green-300/30'
-                    : 'bg-white/10 text-white/80 border border-white/20 hover:bg-white/20'
-                }`}
+                      ? 'bg-green-500/20 text-green-100 border border-green-300/30'
+                      : 'bg-white/10 text-white/80 border border-white/20 hover:bg-white/20'
+                  }`}
               >
                 {completedSteps.has(guide.id) ? (
                   <Check className="w-3 h-3" />
@@ -396,17 +395,17 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
                     {index + 1}
                   </span>
                 )}
-                <span className="font-medium">{guide.id === 'qr-scan' ? 'QR' : 
+                <span className="font-medium">{guide.id === 'qr-scan' ? 'QR' :
                   guide.id === 'wait-authentication' ? 'Auth' :
-                  guide.id === 'navigate-chat' ? 'Chat' :
-                  guide.id === 'refresh-button' ? 'Refresh' :
-                  guide.id === 'reinitialize-bot' ? 'Restart' :
-                  guide.id === 'pairing-code' ? 'Pair' :
-                  guide.id === 'get-pairing-code' ? 'Pair' :
-                  guide.id === 'need-help' ? 'Help' :
-                  guide.id === 'logout' ? 'Logout' :
-                  guide.id === 'retry-connection' ? 'Retry' :
-                  guide.title.split(' ')[0]}</span>
+                    guide.id === 'navigate-chat' ? 'Chat' :
+                      guide.id === 'refresh-button' ? 'Refresh' :
+                        guide.id === 'reinitialize-bot' ? 'Restart' :
+                          guide.id === 'pairing-code' ? 'Pair' :
+                            guide.id === 'get-pairing-code' ? 'Pair' :
+                              guide.id === 'need-help' ? 'Help' :
+                                guide.id === 'logout' ? 'Logout' :
+                                  guide.id === 'retry-connection' ? 'Retry' :
+                                    guide.title.split(' ')[0]}</span>
               </button>
             ))}
           </div>
@@ -439,7 +438,7 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
                 ))}
               </ul>
             </div>
-            
+
             <div className="bg-blue-50 p-4 rounded-lg">
               <h4 className="text-base font-semibold text-gray-800 mb-3 flex items-center">
                 <TrendingUp className="w-5 h-5 text-blue-500 mr-3" />
@@ -461,17 +460,17 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
             <div className="flex items-start space-x-2">
               <HelpCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
               <div className="text-xs text-yellow-800">
-                <strong>Tip:</strong> {currentGuide.id === 'qr-scan' ? 'Follow the steps above: Open WhatsApp > Settings > Linked Devices > Link a Device, then scan this QR code!' : 
+                <strong>Tip:</strong> {currentGuide.id === 'qr-scan' ? 'Follow the steps above: Open WhatsApp > Settings > Linked Devices > Link a Device, then scan this QR code!' :
                   currentGuide.id === 'wait-authentication' ? 'Watch the status indicators to see your connection progress!' :
-                  currentGuide.id === 'navigate-chat' ? 'You\'ll be automatically redirected once everything is ready!' :
-                  currentGuide.id === 'refresh-button' ? 'Click this button to update your WhatsApp connection status and fetch the latest data!' :
-                  currentGuide.id === 'reinitialize-bot' ? 'Click this button to completely restart your WhatsApp bot connection if you encounter persistent issues.' :
-                  currentGuide.id === 'pairing-code-toggle' ? 'If QR scanning doesn\'t work, you can switch to phone number pairing.' :
-                  currentGuide.id === 'get-pairing-code' ? 'If you prefer not to use QR codes, you can generate a pairing code to authenticate your WhatsApp account.' :
-                  currentGuide.id === 'need-help' ? 'If you need assistance, our support team is here to help!' :
-                  currentGuide.id === 'logout' ? 'If you want to sign out of your Omniyal CRM account, click this button.' :
-                  currentGuide.id === 'retry-connection' ? 'If you\'re experiencing connection issues, clicking this button will attempt to reconnect to the WebSocket server.' :
-                  'The highlighted element below shows you exactly where this feature is located!'}
+                    currentGuide.id === 'navigate-chat' ? 'You\'ll be automatically redirected once everything is ready!' :
+                      currentGuide.id === 'refresh-button' ? 'Click this button to update your WhatsApp connection status and fetch the latest data!' :
+                        currentGuide.id === 'reinitialize-bot' ? 'Click this button to completely restart your WhatsApp bot connection if you encounter persistent issues.' :
+                          currentGuide.id === 'pairing-code-toggle' ? 'If QR scanning doesn\'t work, you can switch to phone number pairing.' :
+                            currentGuide.id === 'get-pairing-code' ? 'If you prefer not to use QR codes, you can generate a pairing code to authenticate your WhatsApp account.' :
+                              currentGuide.id === 'need-help' ? 'If you need assistance, our support team is here to help!' :
+                                currentGuide.id === 'logout' ? 'If you want to sign out of your Adletic CRM account, click this button.' :
+                                  currentGuide.id === 'retry-connection' ? 'If you\'re experiencing connection issues, clicking this button will attempt to reconnect to the WebSocket server.' :
+                                    'The highlighted element below shows you exactly where this feature is located!'}
               </div>
             </div>
           </div>
@@ -483,11 +482,10 @@ const LoadingPageOnboarding: React.FC<LoadingPageOnboardingProps> = ({ isOpen, o
             <button
               onClick={handlePrevious}
               disabled={currentStep === 0}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all text-sm ${
-                currentStep === 0
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all text-sm ${currentStep === 0
                   ? 'text-gray-400 cursor-not-allowed'
                   : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
-              }`}
+                }`}
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Previous</span>

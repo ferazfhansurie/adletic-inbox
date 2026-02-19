@@ -802,1302 +802,586 @@ console.log("userEmail:", userEmail);
   }
 
   return (
-    <div className="h-screen overflow-auto bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      {/* Modern Glassmorphism Layout */}
-      <div className="min-h-screen backdrop-blur-3xl">
-        {/* Top Navigation Bar with Enhanced Glassmorphism */}
-        <div className="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl border-b border-white/30 dark:border-slate-700/40 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/30">
-          <div className="max-w-7xl mx-auto px-4 py-2">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-4">
-                <Link to="/users-layout-2">
-                  <Button
-                    variant="outline-secondary"
-                    className="group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-800/60 dark:to-slate-700/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-slate-300/60 dark:hover:border-slate-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-slate-500/10 dark:hover:shadow-slate-500/20 rounded-xl hover:scale-105 transform-gpu"
-                  >
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-slate-500/20 to-slate-600/20 dark:from-slate-400/20 dark:to-slate-500/20 backdrop-blur-sm border border-slate-200/40 dark:border-slate-700/40 group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                    </div>
-                    <span className="ml-2 text-sm font-medium">Back</span>
-                  </Button>
-                </Link>
-                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
-                  <svg
-                    className="w-8 h-8 text-blue-600 dark:text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                  Settings
-                </h1>
-              </div>
-              <ThemeSwitcher />
-            </div>
+    <div style={{fontFamily:"'Inter',sans-serif",minHeight:'100vh',background:'#f5f5f5'}}>
+      <style>{`
+        .st-root{font-family:'Inter',sans-serif;min-height:100vh;background:#f5f5f5}
+        .st-navbar{position:sticky;top:0;z-index:50;background:#4b4b4b;border-bottom:3px solid #f26522;padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+        .st-nav-left{display:flex;align-items:center;gap:14px}
+        .st-icon-sq{width:40px;height:40px;background:#f26522;border:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .st-inner{max-width:900px;margin:0 auto;padding:24px 20px 40px;display:flex;flex-direction:column;gap:16px}
+        .st-card{background:#fff;border:2px solid #4b4b4b;box-shadow:4px 4px 0 #f26522}
+        .st-card-header{background:#4b4b4b;padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:2px solid #f26522}
+        .st-card-body{padding:20px}
+        .st-card-icon{width:36px;height:36px;background:#f26522;border:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .st-card-icon-sm{width:28px;height:28px;border:2px solid #4b4b4b;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .st-section-title{font-weight:800;font-size:.82rem;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin:0}
+        .st-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4b4b4b;display:block;margin-bottom:6px}
+        .st-input{font-family:'Inter',sans-serif;width:100%;padding:10px 14px;border:2px solid #e8e8e8;background:#fff;font-size:.85rem;color:#4b4b4b;outline:none;transition:border-color .15s;box-sizing:border-box}
+        .st-input:focus{border-color:#f26522}
+        .st-input:disabled{background:#f5f5f5;color:#8b8b8b;cursor:not-allowed}
+        .st-select{font-family:'Inter',sans-serif;padding:10px 14px;border:2px solid #e8e8e8;background:#fff;font-size:.85rem;color:#4b4b4b;cursor:pointer;outline:none;width:100%}
+        .st-select:focus{border-color:#f26522}
+        .st-btn{font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding:9px 20px;border:2px solid #4b4b4b;background:#fff;color:#4b4b4b;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+        .st-btn:hover:not(:disabled){box-shadow:3px 3px 0 #f26522;transform:translate(-1px,-1px)}
+        .st-btn:disabled{opacity:.5;cursor:not-allowed}
+        .st-btn-primary{background:#f26522;border-color:#f26522;color:#fff}
+        .st-btn-primary:hover:not(:disabled){box-shadow:3px 3px 0 #4b4b4b}
+        .st-btn-danger{background:#8b0000;border-color:#8b0000;color:#fff}
+        .st-btn-danger:hover:not(:disabled){box-shadow:3px 3px 0 #4b4b4b}
+        .st-btn-warning{background:#8b5e00;border-color:#8b5e00;color:#fff}
+        .st-btn-warning:hover:not(:disabled){box-shadow:3px 3px 0 #4b4b4b}
+        .st-btn-nav{background:#fff;border:2px solid #4b4b4b;color:#4b4b4b;font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding:8px 16px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+        .st-btn-nav:hover{background:#f26522;border-color:#f26522;color:#fff}
+        .st-info-box{background:#f5f5f5;border:2px solid #e8e8e8;padding:14px;display:flex;gap:10px;align-items:flex-start}
+        .st-info-box-warn{background:#fff8ec;border:2px solid #f26522;border-left:4px solid #f26522}
+        .st-info-box-error{background:#fff0f0;border:2px solid #8b0000;border-left:4px solid #8b0000}
+        .st-status-pill{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border:1.5px solid}
+        .st-status-connected{color:#2a7a2a;border-color:#2a7a2a;background:#f0fff0}
+        .st-status-qr{color:#8b6000;border-color:#8b6000;background:#fffbf0}
+        .st-status-init{color:#00468b;border-color:#00468b;background:#f0f6ff}
+        .st-status-off{color:#8b0000;border-color:#8b0000;background:#fff0f0}
+        .st-divider{display:flex;align-items:center;gap:12px;margin:12px 0}
+        .st-divider-line{flex:1;height:2px;background:#e8e8e8}
+        .st-divider-text{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#8b8b8b;padding:3px 10px;border:2px solid #e8e8e8;background:#f5f5f5}
+        .st-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50}
+        .st-modal-wrap{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+        .st-modal{background:#fff;border:3px solid #4b4b4b;box-shadow:6px 6px 0 #f26522;max-width:480px;width:100%;position:relative}
+        .st-modal-header{background:#8b0000;padding:16px 20px;display:flex;align-items:center;gap:10px;border-bottom:2px solid #4b4b4b}
+        .st-modal-body{padding:20px}
+        .st-modal-footer{padding:14px 20px;border-top:2px solid #e8e8e8;display:flex;gap:10px;justify-content:flex-end}
+        .st-theme-btn{padding:10px 24px;border:2px solid #4b4b4b;background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#4b4b4b;transition:all .15s;display:flex;align-items:center;gap:8px}
+        .st-theme-btn:hover{box-shadow:3px 3px 0 #f26522;transform:translate(-1px,-1px)}
+        .st-theme-btn-active{background:#4b4b4b;color:#fff;box-shadow:3px 3px 0 #f26522}
+        .st-theme-btn-active:hover{transform:none}
+      `}</style>
+
+      {/* Top Nav */}
+      <div className="st-navbar">
+        <div className="st-nav-left">
+          <Link to="/users-layout-2">
+            <button className="st-btn" style={{padding:'6px 14px',background:'rgba(255,255,255,.12)',borderColor:'rgba(255,255,255,.3)',color:'#fff'}}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
+          </Link>
+          <div className="st-icon-sq">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
           </div>
+          <h1 style={{fontWeight:800,fontSize:'1rem',color:'#fff',textTransform:'uppercase',letterSpacing:'.08em',margin:0}}>Settings</h1>
         </div>
-
-        {/* Main Content Area with Enhanced Glassmorphism */}
-        <div className="max-w-7xl mx-auto p-4 pb-8">
-          {/* Navigation Buttons */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex flex-wrap gap-4">
-              <Link to="/loading2">
-                {showAddUserButton && phoneCount >= 2 && (
-                  <Button
-                    variant="primary"
-                    className="group bg-gradient-to-r from-blue-500/90 to-indigo-500/90 hover:from-blue-600/90 hover:to-indigo-600/90 backdrop-blur-sm border-blue-400/30 shadow-xl shadow-blue-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-blue-500/40"
-                  >
-                    <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                        />
-                      </svg>
-                    </div>
-                    <span className="ml-2 text-sm font-medium">Add Number</span>
-                  </Button>
-                )}
-              </Link>
-
-              <Link to="/quick-replies">
-                <Button
-                  variant="primary"
-                  className="group bg-gradient-to-r from-emerald-500/90 to-green-500/90 hover:from-emerald-600/90 hover:to-green-600/90 backdrop-blur-sm border-emerald-400/30 shadow-xl shadow-emerald-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-emerald-500/40"
-                >
-                  <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="ml-2 text-sm font-medium">Quick Replies</span>
-                </Button>
-              </Link>
-
-              {companyId === "0380" && (
-                <Link to="/feedback-form-builder">
-                  <Button
-                    variant="primary"
-                    className="group bg-gradient-to-r from-purple-500/90 to-pink-500/90 hover:from-purple-600/90 hover:to-pink-600/90 backdrop-blur-sm border-purple-400/30 shadow-xl shadow-purple-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-purple-500/40"
-                  >
-                    <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </div>
-                    <span className="ml-2 text-sm font-medium">
-                      Feedback Form Builder
-                    </span>
-                  </Button>
-                </Link>
-              )}
-
-              {companyId === "0123" && (
-                <Link to="/storage-pricing">
-                  <Button
-                    variant="primary"
-                    className="group bg-gradient-to-r from-orange-500/90 to-red-500/90 hover:from-orange-600/90 hover:to-red-600/90 backdrop-blur-sm border-orange-400/30 shadow-xl shadow-orange-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-orange-500/40"
-                  >
-                    <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2"
-                        />
-                      </svg>
-                    </div>
-                    <span className="ml-2 text-sm font-medium">Storage Pricing</span>
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Theme Settings Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 dark:from-indigo-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-indigo-200/40 dark:border-indigo-700/40">
-                <svg
-                  className="w-8 h-8 text-indigo-600 dark:text-indigo-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
-                Theme Settings
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                  Appearance Mode
-                </label>
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => dispatch(setDarkMode(false))}
-                    className={`group relative px-8 py-4 rounded-2xl border transition-all duration-300 backdrop-blur-sm ${
-                      !activeDarkMode
-                        ? "bg-gradient-to-r from-yellow-400/90 to-orange-500/90 text-white border-yellow-300/50 shadow-2xl shadow-yellow-500/40"
-                        : "bg-white/50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-300 border-white/30 dark:border-slate-600/40 hover:bg-white/70 dark:hover:bg-slate-600/60 hover:scale-105 transform-gpu"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 shadow-xl shadow-yellow-500/30"></div>
-                      <span className="text-sm font-semibold">Light Mode</span>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => dispatch(setDarkMode(true))}
-                    className={`group relative px-8 py-4 rounded-2xl border transition-all duration-300 backdrop-blur-sm ${
-                      activeDarkMode
-                        ? "bg-gradient-to-r from-slate-600/90 to-slate-800/90 text-white border-slate-500/50 shadow-2xl shadow-slate-700/40"
-                        : "bg-white/50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-300 border-white/30 dark:border-slate-600/40 hover:bg-white/70 dark:hover:bg-slate-600/60 hover:scale-105 transform-gpu"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-slate-600 to-slate-800 shadow-xl shadow-slate-700/30"></div>
-                      <span className="text-sm font-semibold">Dark Mode</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* WhatsApp Cloud API / Embedded Signup Section */}
-          {companyId && (
-            <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-400/20 dark:to-emerald-400/20 backdrop-blur-sm border border-green-200/40 dark:border-green-700/40">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-8 h-8 text-green-600 dark:text-green-400"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
-                    WhatsApp Cloud API
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Connect using Meta's Official WhatsApp Business API
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                  <div className="flex items-start space-x-4">
-                    <div className="p-2 rounded-xl bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200/40 dark:border-blue-700/40 flex-shrink-0">
-                      <Lucide icon="Info" className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                        Official WhatsApp Business API
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Connect your WhatsApp Business account using Meta's official Embedded Signup flow. 
-                        This provides a more stable connection with official API access, message templates, 
-                        and advanced business features.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-r from-green-50/50 to-emerald-50/30 dark:from-green-900/20 dark:to-emerald-900/10 backdrop-blur-xl rounded-2xl p-4 border border-green-200/40 dark:border-green-700/40">
-                  {(() => {
-                    const phone0 = qrCodes.find(q => q.phoneIndex === 0);
-                    const isQrConnected = phone0?.status === 'ready' || phone0?.status === 'authenticated';
-                    
-                    // Show connected state if using Cloud API (v2)
-                    if (isCloudApiConnected) {
-                      return (
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm border border-green-200/40 dark:border-green-700/40">
-                              <Lucide icon="CheckCircle" className="w-5 h-5 text-green-600 dark:text-green-400" />
-                            </div>
-                            <div>
-                              <span className="text-sm font-semibold text-green-700 dark:text-green-300">
-                                Meta Cloud API Connected
-                              </span>
-                              <p className="text-xs text-slate-500 dark:text-slate-400">
-                                Connected via official WhatsApp Business API
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                            <span className="text-xs font-medium text-green-600 dark:text-green-400">Active</span>
-                          </div>
-                        </div>
-                      );
-                    }
-                    
-                    return (
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                        <div className="flex items-center space-x-4">
-                          <div className="p-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm border border-green-200/40 dark:border-green-700/40">
-                            <Lucide icon="Link" className="w-5 h-5 text-green-600 dark:text-green-400" />
-                          </div>
-                          <div>
-                            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                              Connect WhatsApp Business
-                            </span>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
-                              Click to start the official signup flow
-                            </p>
-                          </div>
-                        </div>
-                        <WhatsAppEmbeddedSignup
-                          companyId={companyId}
-                          phoneIndex={0}
-                          onSuccess={(data) => {
-                            toast.success(`Connected: ${data.displayPhoneNumber}`);
-                            setIsCloudApiConnected(true);
-                            fetchPhoneStatus();
-                          }}
-                          onError={(error) => {
-                            toast.error(error);
-                          }}
-                          buttonText="Connect via Meta"
-                          disabled={isCloudApiConnected}
-                          className="bg-gradient-to-r from-green-500/90 to-emerald-500/90 hover:from-green-600/90 hover:to-emerald-600/90 backdrop-blur-sm border-green-400/30 shadow-xl shadow-green-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-green-500/40"
-                        />
-                      </div>
-                    );
-                  })()}
-                </div>
-
-                <div className="bg-gradient-to-r from-amber-50/50 to-yellow-50/30 dark:from-amber-900/20 dark:to-yellow-900/10 backdrop-blur-xl rounded-2xl p-4 border border-amber-200/40 dark:border-amber-700/40">
-                  <div className="flex items-start space-x-3">
-                    <Lucide icon="AlertTriangle" className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                    <div className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">
-                      <strong>Note:</strong> This will connect your phone using the official WhatsApp Cloud API, 
-                      which is separate from the QR code-based connection above. You can use either method, 
-                      but not both simultaneously for the same phone number.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Company ID Change Section - Only show for juta.com users */}
-          {showCompanyIdChange && (
-            <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 dark:from-orange-400/20 dark:to-red-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40">
-                  <svg
-                    className="w-6 h-6 text-orange-600 dark:text-orange-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-lg font-semibold bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
-                  Change Company ID
-                </h2>
-              </div>
-
-              {error && (
-                <div className="backdrop-blur-sm bg-red-100/80 border border-red-400/50 text-red-700 px-6 py-4 rounded-2xl mb-6 shadow-lg">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-4">
-                <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                  <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    Current Company ID
-                  </label>
-                  <input
-                    type="text"
-                    value={companyId || ""}
-                    disabled
-                    className="w-full px-6 py-4 border border-white/30 dark:border-slate-600/40 rounded-2xl backdrop-blur-sm bg-white/50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-400 font-medium shadow-lg"
-                  />
-                </div>
-
-                <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                  <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    New Company ID
-                  </label>
-                  <input
-                    type="text"
-                    value={newCompanyId}
-                    onChange={(e) => setNewCompanyId(e.target.value)}
-                    placeholder="Enter new Company ID"
-                    className="w-full px-6 py-4 border border-white/30 dark:border-slate-600/40 rounded-2xl backdrop-blur-sm bg-white/70 dark:bg-slate-700/70 focus:border-orange-500/60 focus:ring-2 focus:ring-orange-500/30 transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
-                  />
-                </div>
-
-                <Button
-                  variant="warning"
-                  onClick={handleChangeCompanyId}
-                  disabled={isChangingCompanyId || !newCompanyId.trim()}
-                  className="group bg-gradient-to-r from-orange-500/90 to-red-500/90 hover:from-orange-600/90 hover:to-red-600/90 backdrop-blur-sm border-orange-400/30 shadow-xl shadow-orange-500/30 transition-all duration-300 rounded-xl px-8 py-4 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-orange-500/40"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                        />
-                      </svg>
-                    </div>
-                    <span className="text-sm font-semibold">
-                      {isChangingCompanyId
-                        ? "Changing..."
-                        : "Change Company ID"}
-                    </span>
-                  </div>
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Bot Management Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 backdrop-blur-sm border border-red-200/40 dark:border-red-700/40">
-                <svg
-                  className="w-6 h-6 text-red-600 dark:text-red-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-red-600 to-pink-600 dark:from-red-400 dark:to-pink-400 bg-clip-text text-transparent">
-                Bot Management
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                <div className="flex flex-col space-y-4">
-                  <div className="text-center space-y-2">
-                    <div className="mx-auto w-16 h-16 bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-red-200/40 dark:border-red-700/40">
-                      <svg
-                        className="w-8 h-8 text-red-600 dark:text-red-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                      Disconnect Bot
-                    </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-                      Disconnect your WhatsApp bot connection
-                      {phoneCount > 1 ? "s" : ""}
-                    </p>
-                  </div>
-
-                  {/* Single Phone or Multiple Phones Layout */}
-                  {phoneCount <= 1 ? (
-                    // Single phone layout
-                    <div className="flex items-center justify-center">
-                      <Button
-                        variant="danger"
-                        onClick={() =>
-                          showDisconnectConfirmation(companyId || "", 0)
-                        }
-                        disabled={isDisconnecting || !companyId}
-                        className="group bg-gradient-to-r from-red-500/90 to-pink-500/90 hover:from-red-600/90 hover:to-pink-600/90 backdrop-blur-sm border-red-400/30 shadow-xl shadow-red-500/30 transition-all duration-300 rounded-xl px-8 py-4 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-red-500/40"
-                      >
-                        {isDisconnecting ? (
-                          <div className="flex items-center space-x-3">
-                            <LoadingIcon
-                              icon="three-dots"
-                              className="w-5 h-5"
-                            />
-                            <span className="text-sm font-semibold">
-                              Disconnecting...
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center space-x-3">
-                            <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                              <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                                />
-                              </svg>
-                            </div>
-                            <span className="text-sm font-semibold">
-                              Disconnect Bot
-                            </span>
-                          </div>
-                        )}
-                      </Button>
-                    </div>
-                  ) : (
-                    // Multiple phones layout
-                    <div className="space-y-4">
-                      {/* Individual Phone Disconnect */}
-                      <div className="bg-gradient-to-r from-slate-100/60 to-slate-200/40 dark:from-slate-600/40 dark:to-slate-500/30 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/50 dark:border-slate-600/50">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-6">
-                          <div className="flex items-center space-x-4">
-                            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
-                              <svg
-                                className="w-5 h-5 text-blue-600 dark:text-blue-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                                />
-                              </svg>
-                            </div>
-                            <div>
-                              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                Disconnect specific phone:
-                              </span>
-                              <p className="text-xs text-slate-500 dark:text-slate-400">
-                                Select a phone to disconnect individually
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-4">
-                            <div className="relative">
-                              <select
-                                value={disconnectPhoneIndex ?? 0}
-                                onChange={(e) =>
-                                  setDisconnectPhoneIndex(
-                                    Number(e.target.value)
-                                  )
-                                }
-                                className="appearance-none pl-6 pr-12 py-3 text-sm border border-white/40 dark:border-slate-600/40 rounded-2xl backdrop-blur-sm bg-white/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/60 min-w-[280px] transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
-                                disabled={isDisconnecting}
-                              >
-                                {Object.keys(phoneNames).length > 0
-                                  ? Object.keys(phoneNames).map((index) => {
-                                      const phoneIndexOption = parseInt(index);
-                                      const qrCode = qrCodes[phoneIndexOption];
-                                      const phoneInfo =
-                                        qrCode?.phoneInfo ||
-                                        `Phone ${phoneIndexOption + 1}`;
-                                      const statusInfo = qrCode
-                                        ? getStatusInfo(qrCode.status)
-                                        : isLoadingStatus
-                                        ? {
-                                            text: "Checking...",
-                                            color:
-                                              "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200",
-                                            icon: "RefreshCw",
-                                          }
-                                        : {
-                                            text: "Not Connected",
-                                            color:
-                                              "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200",
-                                            icon: "XCircle",
-                                          };
-                                      return (
-                                        <option
-                                          key={phoneIndexOption}
-                                          value={phoneIndexOption}
-                                          className="bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300"
-                                        >
-                                          {`${getPhoneName(
-                                            phoneIndexOption
-                                          )} - (${phoneInfo}) ${
-                                            qrCode
-                                              ? "✅"
-                                              : isLoadingStatus
-                                              ? "⏳"
-                                              : "❌"
-                                          } ${statusInfo.text}`}
-                                        </option>
-                                      );
-                                    })
-                                  : Array.from(
-                                      { length: phoneCount },
-                                      (_, i) => (
-                                        <option
-                                          key={i}
-                                          value={i}
-                                          className="bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300"
-                                        >
-                                          Phone {i + 1}
-                                        </option>
-                                      )
-                                    )}
-                              </select>
-                              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                <svg
-                                  className="w-5 h-5 text-slate-400"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 9l-7 7-7-7"
-                                  />
-                                </svg>
-                              </div>
-                            </div>
-                            <Button
-                              variant="warning"
-                              onClick={() =>
-                                showDisconnectConfirmation(
-                                  companyId || "",
-                                  disconnectPhoneIndex ?? 0
-                                )
-                              }
-                              disabled={isDisconnecting || !companyId}
-                              className="group bg-gradient-to-r from-orange-500/90 to-red-500/90 hover:from-orange-600/90 hover:to-red-600/90 backdrop-blur-sm border-orange-400/30 shadow-xl shadow-orange-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-orange-500/40"
-                            >
-                              {isDisconnecting ? (
-                                <div className="flex items-center space-x-2">
-                                  <LoadingIcon
-                                    icon="three-dots"
-                                    className="w-4 h-4"
-                                  />
-                                  <span className="text-sm font-medium">
-                                    Disconnecting...
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="flex items-center space-x-2">
-                                  <div className="p-1 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                                    <svg
-                                      className="w-4 h-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                                      />
-                                    </svg>
-                                  </div>
-                                  <span className="text-sm font-medium">
-                                    Disconnect Selected
-                                  </span>
-                                </div>
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* Separator */}
-                        <div className="flex items-center py-4">
-                          <div className="flex-1 border-t border-slate-300/50 dark:border-slate-600/50"></div>
-                          <span className="px-6 text-sm font-medium text-slate-500 dark:text-slate-400 backdrop-blur-sm bg-white/60 dark:bg-slate-700/60 rounded-2xl border border-slate-200/50 dark:border-slate-600/50">
-                            OR
-                          </span>
-                          <div className="flex-1 border-t border-slate-300/50 dark:border-slate-600/50"></div>
-                        </div>
-
-                        {/* Disconnect All Phones */}
-                        <div className="bg-gradient-to-r from-red-50/60 to-pink-50/40 dark:from-red-900/30 dark:to-pink-900/20 backdrop-blur-xl rounded-2xl p-4 border border-red-200/50 dark:border-red-700/50">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-6">
-                            <div className="flex items-center space-x-4">
-                              <div className="p-2 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 backdrop-blur-sm border border-red-200/40 dark:border-red-700/40">
-                                <svg
-                                  className="w-5 h-5 text-red-600 dark:text-red-400"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                  />
-                                </svg>
-                              </div>
-                              <div>
-                                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                                  Disconnect all phones ({phoneCount} phones)
-                                </span>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                  This will disconnect all {phoneCount} phone
-                                  connections
-                                </p>
-                              </div>
-                            </div>
-                            <Button
-                              variant="danger"
-                              onClick={() =>
-                                showDisconnectConfirmation(
-                                  companyId || "",
-                                  undefined
-                                )
-                              }
-                              disabled={isDisconnecting || !companyId}
-                              className="group bg-gradient-to-r from-red-500/90 to-pink-500/90 hover:from-red-600/90 hover:to-pink-600/90 backdrop-blur-sm border-red-400/30 shadow-xl shadow-red-500/30 transition-all duration-300 rounded-xl px-6 py-3 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-red-500/40"
-                            >
-                              {isDisconnecting ? (
-                                <div className="flex items-center space-x-2">
-                                  <LoadingIcon
-                                    icon="three-dots"
-                                    className="w-4 h-4"
-                                  />
-                                  <span className="text-sm font-medium">
-                                    Disconnecting All...
-                                  </span>
-                                </div>
-                              ) : (
-                                <div className="flex items-center space-x-2">
-                                  <div className="p-1 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                                    <svg
-                                      className="w-4 h-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                                      />
-                                    </svg>
-                                  </div>
-                                  <span className="text-sm font-medium">
-                                    Disconnect All
-                                  </span>
-                                </div>
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Daily Report Settings Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-green-500/20 to-teal-500/20 dark:from-green-400/20 dark:to-teal-400/20 backdrop-blur-sm border border-green-200/40 dark:border-green-700/40">
-                <svg
-                  className="w-6 h-6 text-green-600 dark:text-green-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-400 dark:to-teal-400 bg-clip-text text-transparent">
-                Daily Report Settings
-              </h2>
-            </div>
-
-            {error && (
-              <div className="backdrop-blur-sm bg-red-100/80 border border-red-400/50 text-red-700 px-6 py-4 rounded-2xl mb-6 shadow-lg">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={enabled}
-                    onChange={(e) => setEnabled(e.target.checked)}
-                    className="form-checkbox h-5 w-5 text-green-500 rounded focus:ring-green-500/50 focus:ring-2"
-                  />
-                  <span className="text-sm font-medium">
-                    Enable Daily Reports
-                  </span>
-                </label>
-              </div>
-
-              {enabled && (
-                <>
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Report Time
-                    </label>
-                    <input
-                      type="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
-                      className="w-full px-4 py-3 border border-white/20 dark:border-gray-600/30 rounded-xl backdrop-blur-sm bg-white/10 dark:bg-gray-700/20 focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                      WhatsApp Group ID
-                    </label>
-                    <input
-                      type="text"
-                      value={groupId}
-                      onChange={(e) => setGroupId(e.target.value)}
-                      placeholder="Enter group ID"
-                      className="w-full px-4 py-3 border border-white/20 dark:border-gray-600/30 rounded-xl backdrop-blur-sm bg-white/10 dark:bg-gray-700/20 focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20 transition-all duration-300"
-                    />
-                  </div>
-
-                  {lastRun && (
-                    <div className="text-sm text-gray-600 dark:text-gray-400 backdrop-blur-sm bg-white/5 dark:bg-gray-800/20 rounded-lg p-3 border border-white/10">
-                      Last report sent: {lastRun}
-                    </div>
-                  )}
-                </>
-              )}
-
-              <div className="flex flex-wrap gap-4">
-                <Button
-                  variant="primary"
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="backdrop-blur-sm bg-gradient-to-r from-green-500/80 to-teal-500/80 border border-white/20 hover:from-green-600/80 hover:to-teal-600/80 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
-                >
-                  <span className="text-sm">{isSaving ? "Saving..." : "Save Settings"}</span>
-                </Button>
-
-                {enabled && (
-                  <Button
-                    variant="success"
-                    onClick={handleTriggerReport}
-                    className="backdrop-blur-sm bg-gradient-to-r from-emerald-500/80 to-green-500/80 border border-white/20 hover:from-emerald-600/80 hover:to-green-600/80 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
-                  >
-                    <span className="text-sm">Send Report Now</span>
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Manual Report Trigger Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-400/20 dark:to-cyan-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
-                <svg
-                  className="w-6 h-6 text-blue-600 dark:text-blue-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
-                Manual Report Trigger
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                  Send a daily contact report for a specific date. This is useful for generating historical reports or resending reports for specific dates.
-                </p>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Select Date
-                    </label>
-                    <input
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      max={new Date().toISOString().split("T")[0]}
-                      className="w-full px-4 py-3 border border-white/20 dark:border-gray-600/30 rounded-xl backdrop-blur-sm bg-white/50 dark:bg-gray-700/50 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
-                    />
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      Select a date to generate and send the contact report for that specific day
-                    </p>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    onClick={handleTriggerManualReport}
-                    disabled={isTriggeringManualReport || !selectedDate || !companyId}
-                    className="w-full group bg-gradient-to-r from-blue-500/90 to-cyan-500/90 hover:from-blue-600/90 hover:to-cyan-600/90 backdrop-blur-sm border-blue-400/30 shadow-xl shadow-blue-500/30 transition-all duration-300 rounded-xl px-8 py-4 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-blue-500/40"
-                  >
-                    {isTriggeringManualReport ? (
-                      <div className="flex items-center justify-center space-x-3">
-                        <LoadingIcon icon="three-dots" className="w-5 h-5" />
-                        <span className="text-sm font-semibold">Sending Report...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center space-x-3">
-                        <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                            />
-                          </svg>
-                        </div>
-                        <span className="text-sm font-semibold">Send Report for Selected Date</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Weekly Report Trigger Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 dark:from-purple-400/20 dark:to-pink-400/20 backdrop-blur-sm border border-purple-200/40 dark:border-purple-700/40">
-                <svg
-                  className="w-6 h-6 text-purple-600 dark:text-purple-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-                Weekly Report Trigger
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-slate-50/50 to-slate-100/30 dark:from-slate-700/30 dark:to-slate-600/20 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/40 dark:border-slate-600/40">
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                  Send a 7-day performance summary report to your WhatsApp group. The report includes total leads, daily average, engagement rate, qualified & hot leads, and AI-generated insights.
-                </p>
-
-                <Button
-                  variant="primary"
-                  onClick={handleTriggerWeeklyReport}
-                  disabled={isTriggeringWeeklyReport || !companyId}
-                  className="w-full group bg-gradient-to-r from-purple-500/90 to-pink-500/90 hover:from-purple-600/90 hover:to-pink-600/90 backdrop-blur-sm border-purple-400/30 shadow-xl shadow-purple-500/30 transition-all duration-300 rounded-xl px-8 py-4 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-purple-500/40"
-                >
-                  {isTriggeringWeeklyReport ? (
-                    <div className="flex items-center justify-center space-x-3">
-                      <LoadingIcon icon="three-dots" className="w-5 h-5" />
-                      <span className="text-sm font-semibold">Sending Weekly Report...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center space-x-3">
-                      <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-sm font-semibold">Send Weekly Summary Report</span>
-                    </div>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Auto-Reply Settings Section */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-4 mb-4 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 dark:from-purple-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-purple-200/40 dark:border-purple-700/40">
-                <svg
-                  className="w-6 h-6 text-purple-600 dark:text-purple-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                Auto-Reply Settings
-              </h2>
-            </div>
-
-            {error && (
-              <div className="backdrop-blur-sm bg-red-100/80 border border-red-400/50 text-red-700 px-6 py-4 rounded-2xl mb-6 shadow-lg">
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={autoReplyEnabled}
-                    onChange={(e) => setAutoReplyEnabled(e.target.checked)}
-                    className="form-checkbox h-5 w-5 text-purple-500 rounded focus:ring-purple-500/50 focus:ring-2"
-                  />
-                  <span className="text-sm font-medium">Enable Auto-Reply</span>
-                </label>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 ml-8">
-                  Automatically reply to messages that haven't been responded to
-                  within the specified time frame
-                </p>
-              </div>
-
-              {autoReplyEnabled && (
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Auto-Reply Threshold (Hours)
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <input
-                      type="number"
-                      min="1"
-                      max="168"
-                      value={autoReplyHours}
-                      onChange={(e) => setAutoReplyHours(e.target.value)}
-                      className="w-24 px-4 py-3 border border-white/20 dark:border-gray-600/30 rounded-xl backdrop-blur-sm bg-white/10 dark:bg-gray-700/20 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
-                    />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      hours prior to reconnection
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    Messages older than this threshold will NOT be auto-replied
-                    to.
-                  </p>
-                </div>
-              )}
-
-              <div className="flex flex-wrap gap-4">
-                <Button
-                  variant="primary"
-                  onClick={handleSaveAutoReply}
-                  disabled={isSavingAutoReply}
-                  className="backdrop-blur-sm bg-gradient-to-r from-purple-500/80 to-indigo-500/80 border border-white/20 hover:from-purple-600/80 hover:to-indigo-600/80 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
-                >
-                  <span className="text-sm">{isSavingAutoReply ? "Saving..." : "Save Auto-Reply Settings"}</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Modern Disconnect Confirmation Modal */}
-        <Dialog
-          open={showDisconnectModal}
-          onClose={() => setShowDisconnectModal(false)}
-        >
-          <Dialog.Panel>
-            <div className="backdrop-blur-2xl bg-white/20 dark:bg-gray-800/20 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-700/40 overflow-hidden max-w-md mx-auto">
-              {/* Header Section */}
-              <div className="bg-gradient-to-r from-red-500/90 to-red-600/90 backdrop-blur-sm px-8 py-6">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                      <svg
-                        className="w-7 h-7 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      ⚠️ Disconnect Bot
-                    </h3>
-                    <p className="text-red-100 text-xs">
-                      This action requires confirmation
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content Section */}
-              <div className="px-6 py-4">
-                <div className="text-center space-y-4">
-                  {/* Warning Icon */}
-                  <div className="mx-auto w-20 h-20 bg-red-50/20 dark:bg-red-900/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-red-200/30">
-                    <svg
-                      className="w-10 h-10 text-red-500 dark:text-red-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                      />
-                    </svg>
-                  </div>
-
-                  {/* Main Message */}
-                  <div className="space-y-2">
-                    <h4 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                      Are you absolutely sure?
-                    </h4>
-                    <div className="text-gray-600 dark:text-gray-400 space-y-2">
-                      <p className="text-xs leading-relaxed">
-                        {disconnectPhoneIndex !== undefined
-                          ? `You're about to disconnect Phone ${
-                              disconnectPhoneIndex + 1
-                            } of ${disconnectBotName}.`
-                          : `You're about to disconnect all phones of ${disconnectBotName}.`}
-                      </p>
-                      <div className="backdrop-blur-sm bg-amber-50/30 dark:bg-amber-900/20 border border-amber-200/40 dark:border-amber-800/40 rounded-xl p-4">
-                        <div className="flex items-start space-x-3">
-                          <svg
-                            className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          <p className="text-xs text-amber-700 dark:text-amber-300 leading-tight">
-                            <strong>Warning:</strong> This action cannot be
-                            undone. You'll need to reconnect by scanning the QR
-                            code again.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="backdrop-blur-sm bg-gray-50/30 dark:bg-gray-700/30 px-6 py-4 flex flex-col sm:flex-row gap-3">
-                <Button
-                  type="button"
-                  variant="outline-secondary"
-                  onClick={() => setShowDisconnectModal(false)}
-                  disabled={isDisconnecting}
-                  className="flex-1 px-6 py-3 text-sm font-medium transition-all duration-300 backdrop-blur-sm bg-white/20 dark:bg-gray-800/20 border border-white/30 dark:border-gray-700/40 hover:bg-white/30 dark:hover:bg-gray-700/30"
-                >
-                  <div className="flex items-center justify-center space-x-2">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                    <span className="text-sm">Cancel</span>
-                  </div>
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="danger"
-                  onClick={confirmDisconnect}
-                  disabled={isDisconnecting}
-                  className="flex-1 px-6 py-3 text-sm font-medium backdrop-blur-sm bg-gradient-to-r from-red-600/90 to-red-700/90 hover:from-red-700/90 hover:to-red-800/90 transition-all duration-300 shadow-xl hover:shadow-2xl border border-white/20"
-                >
-                  {isDisconnecting ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <LoadingIcon icon="three-dots" className="w-4 h-4" />
-                      <span className="text-sm">
-                        {disconnectPhoneIndex !== undefined
-                          ? "Disconnecting..."
-                          : "Disconnecting All..."}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center space-x-2">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                        />
-                      </svg>
-                      <span className="text-sm">
-                        {disconnectPhoneIndex !== undefined
-                          ? "Yes, Disconnect"
-                          : "Yes, Disconnect All"}
-                      </span>
-                    </div>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </Dialog.Panel>
-        </Dialog>
+        <ThemeSwitcher />
       </div>
+
+      {/* Main Content */}
+      <div className="st-inner">
+        {/* Navigation Buttons */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Quick Navigation</h2>
+          </div>
+          <div className="st-card-body" style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+            {showAddUserButton && phoneCount >= 2 && (
+              <Link to="/loading2">
+                <button className="st-btn-nav">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Add Number
+                </button>
+              </Link>
+            )}
+            <Link to="/quick-replies">
+              <button className="st-btn-nav">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Quick Replies
+              </button>
+            </Link>
+            {companyId === "0380" && (
+              <Link to="/feedback-form-builder">
+                <button className="st-btn-nav">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Feedback Form Builder
+                </button>
+              </Link>
+            )}
+            {companyId === "0123" && (
+              <Link to="/storage-pricing">
+                <button className="st-btn-nav">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2" />
+                  </svg>
+                  Storage Pricing
+                </button>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Theme Settings */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Theme Settings</h2>
+          </div>
+          <div className="st-card-body">
+            <label className="st-label">Appearance Mode</label>
+            <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+              <button
+                onClick={() => dispatch(setDarkMode(false))}
+                className={`st-theme-btn${!activeDarkMode ? ' st-theme-btn-active' : ''}`}
+              >
+                <div style={{width:'16px',height:'16px',background:'#f26522',border:'2px solid currentColor',borderRadius:'50%'}} />
+                Light Mode
+              </button>
+              <button
+                onClick={() => dispatch(setDarkMode(true))}
+                className={`st-theme-btn${activeDarkMode ? ' st-theme-btn-active' : ''}`}
+              >
+                <div style={{width:'16px',height:'16px',background:'#4b4b4b',border:'2px solid currentColor',borderRadius:'50%'}} />
+                Dark Mode
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* WhatsApp Cloud API */}
+        {companyId && (
+          <div className="st-card">
+            <div className="st-card-header">
+              <div className="st-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="st-section-title">WhatsApp Cloud API</h2>
+                <p style={{fontSize:'.68rem',color:'rgba(255,255,255,.6)',margin:'2px 0 0'}}>Connect using Meta's Official WhatsApp Business API</p>
+              </div>
+            </div>
+            <div className="st-card-body" style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+              <div className="st-info-box">
+                <Lucide icon="Info" className="w-4 h-4 flex-shrink-0" style={{color:'#f26522',marginTop:'1px'}} />
+                <div>
+                  <p style={{fontWeight:700,fontSize:'.8rem',color:'#4b4b4b',margin:'0 0 4px'}}>Official WhatsApp Business API</p>
+                  <p style={{fontSize:'.75rem',color:'#8b8b8b',lineHeight:1.6,margin:0}}>
+                    Connect your WhatsApp Business account using Meta's official Embedded Signup flow.
+                    This provides a more stable connection with official API access, message templates, and advanced business features.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{border:'2px solid #e8e8e8',padding:'14px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'12px'}}>
+                {isCloudApiConnected ? (
+                  <>
+                    <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                      <Lucide icon="CheckCircle" className="w-5 h-5" style={{color:'#2a7a2a'}} />
+                      <div>
+                        <p style={{fontWeight:700,fontSize:'.82rem',color:'#2a7a2a',margin:0}}>Meta Cloud API Connected</p>
+                        <p style={{fontSize:'.72rem',color:'#8b8b8b',margin:0}}>Connected via official WhatsApp Business API</p>
+                      </div>
+                    </div>
+                    <span className="st-status-pill st-status-connected">Active</span>
+                  </>
+                ) : (
+                  <>
+                    <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                      <Lucide icon="Link" className="w-4 h-4" style={{color:'#8b8b8b'}} />
+                      <div>
+                        <p style={{fontWeight:700,fontSize:'.82rem',color:'#4b4b4b',margin:0}}>Connect WhatsApp Business</p>
+                        <p style={{fontSize:'.72rem',color:'#8b8b8b',margin:0}}>Click to start the official signup flow</p>
+                      </div>
+                    </div>
+                    <WhatsAppEmbeddedSignup
+                      companyId={companyId}
+                      phoneIndex={0}
+                      onSuccess={(data) => { toast.success(`Connected: ${data.displayPhoneNumber}`); setIsCloudApiConnected(true); fetchPhoneStatus(); }}
+                      onError={(error) => { toast.error(error); }}
+                      buttonText="Connect via Meta"
+                      disabled={isCloudApiConnected}
+                      className="st-btn st-btn-primary"
+                    />
+                  </>
+                )}
+              </div>
+
+              <div className="st-info-box st-info-box-warn">
+                <Lucide icon="AlertTriangle" className="w-4 h-4 flex-shrink-0" style={{color:'#f26522',marginTop:'1px'}} />
+                <p style={{fontSize:'.75rem',color:'#4b4b4b',lineHeight:1.6,margin:0}}>
+                  <strong>Note:</strong> This will connect your phone using the official WhatsApp Cloud API,
+                  which is separate from the QR code-based connection. You can use either method, but not both simultaneously for the same phone number.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Company ID Change */}
+        {showCompanyIdChange && (
+          <div className="st-card">
+            <div className="st-card-header">
+              <div className="st-card-icon">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h2 className="st-section-title">Change Company ID</h2>
+            </div>
+            <div className="st-card-body" style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+              {error && (
+                <div className="st-info-box st-info-box-error">
+                  <Lucide icon="AlertCircle" className="w-4 h-4 flex-shrink-0" style={{color:'#8b0000'}} />
+                  <p style={{fontSize:'.8rem',color:'#8b0000',margin:0}}>{error}</p>
+                </div>
+              )}
+              <div>
+                <label className="st-label">Current Company ID</label>
+                <input type="text" value={companyId || ""} disabled className="st-input" />
+              </div>
+              <div>
+                <label className="st-label">New Company ID</label>
+                <input type="text" value={newCompanyId} onChange={(e) => setNewCompanyId(e.target.value)} placeholder="Enter new Company ID" className="st-input" />
+              </div>
+              <div>
+                <button className="st-btn st-btn-warning" onClick={handleChangeCompanyId} disabled={isChangingCompanyId || !newCompanyId.trim()}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  {isChangingCompanyId ? "Changing..." : "Change Company ID"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bot Management */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Bot Management</h2>
+          </div>
+          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"16px"}}>
+            <div style={{textAlign:"center",padding:"8px 0"}}>
+              <h3 style={{fontWeight:800,fontSize:"1rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".04em",marginBottom:"6px"}}>Disconnect Bot</h3>
+              <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0}}>Disconnect your WhatsApp bot connection{phoneCount > 1 ? "s" : ""}</p>
+            </div>
+
+            {phoneCount <= 1 ? (
+              <div style={{display:"flex",justifyContent:"center"}}>
+                <button className="st-btn st-btn-danger" onClick={() => showDisconnectConfirmation(companyId || "", 0)} disabled={isDisconnecting || !companyId}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                  </svg>
+                  {isDisconnecting ? "Disconnecting..." : "Disconnect Bot"}
+                </button>
+              </div>
+            ) : (
+              <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+                {/* Disconnect specific phone */}
+                <div style={{border:"2px solid #e8e8e8",padding:"14px",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
+                  <div>
+                    <p style={{fontWeight:700,fontSize:".8rem",color:"#4b4b4b",margin:"0 0 2px",textTransform:"uppercase",letterSpacing:".06em"}}>Disconnect specific phone</p>
+                    <p style={{fontSize:".72rem",color:"#8b8b8b",margin:0}}>Select a phone to disconnect individually</p>
+                  </div>
+                  <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap"}}>
+                    <select
+                      value={disconnectPhoneIndex ?? 0}
+                      onChange={(e) => setDisconnectPhoneIndex(Number(e.target.value))}
+                      className="st-select"
+                      style={{minWidth:"220px",width:"auto"}}
+                      disabled={isDisconnecting}
+                    >
+                      {Object.keys(phoneNames).length > 0
+                        ? Object.keys(phoneNames).map((index) => {
+                            const phoneIndexOption = parseInt(index);
+                            const qrCode = qrCodes[phoneIndexOption];
+                            const phoneInfo = qrCode?.phoneInfo || `Phone ${phoneIndexOption + 1}`;
+                            const statusInfo = qrCode ? getStatusInfo(qrCode.status) : {text:"Not Connected"};
+                            return (
+                              <option key={phoneIndexOption} value={phoneIndexOption}>
+                                {`${getPhoneName(phoneIndexOption)} - (${phoneInfo}) ${qrCode ? "✅" : isLoadingStatus ? "⏳" : "❌"} ${statusInfo.text}`}
+                              </option>
+                            );
+                          })
+                        : Array.from({length:phoneCount},(_,i) => <option key={i} value={i}>Phone {i+1}</option>)
+                      }
+                    </select>
+                    <button
+                      className="st-btn st-btn-warning"
+                      onClick={() => showDisconnectConfirmation(companyId || "", disconnectPhoneIndex ?? 0)}
+                      disabled={isDisconnecting || !companyId}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                      </svg>
+                      {isDisconnecting ? "Disconnecting..." : "Disconnect Selected"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="st-divider">
+                  <div className="st-divider-line" />
+                  <span className="st-divider-text">OR</span>
+                  <div className="st-divider-line" />
+                </div>
+
+                {/* Disconnect all */}
+                <div style={{border:"2px solid #8b0000",background:"#fff0f0",padding:"14px",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
+                  <div>
+                    <p style={{fontWeight:700,fontSize:".8rem",color:"#8b0000",margin:"0 0 2px",textTransform:"uppercase",letterSpacing:".06em"}}>Disconnect all phones ({phoneCount} phones)</p>
+                    <p style={{fontSize:".72rem",color:"#8b6060",margin:0}}>This will disconnect all {phoneCount} phone connections</p>
+                  </div>
+                  <button
+                    className="st-btn st-btn-danger"
+                    onClick={() => showDisconnectConfirmation(companyId || "", undefined)}
+                    disabled={isDisconnecting || !companyId}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    {isDisconnecting ? "Disconnecting All..." : "Disconnect All"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+                {/* Daily Report Settings */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Daily Report Settings</h2>
+          </div>
+          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+            {error && (
+              <div className="st-info-box st-info-box-error">
+                <p style={{fontSize:".8rem",color:"#8b0000",margin:0}}>{error}</p>
+              </div>
+            )}
+            <label style={{display:"flex",alignItems:"center",gap:"10px",cursor:"pointer"}}>
+              <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} style={{width:"18px",height:"18px",accentColor:"#f26522",cursor:"pointer"}} />
+              <span style={{fontWeight:700,fontSize:".82rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".06em"}}>Enable Daily Reports</span>
+            </label>
+
+            {enabled && (
+              <>
+                <div>
+                  <label className="st-label">Report Time</label>
+                  <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="st-input" style={{maxWidth:"200px"}} />
+                </div>
+                <div>
+                  <label className="st-label">WhatsApp Group ID</label>
+                  <input type="text" value={groupId} onChange={(e) => setGroupId(e.target.value)} placeholder="Enter group ID" className="st-input" />
+                </div>
+                {lastRun && (
+                  <div style={{background:"#f5f5f5",border:"2px solid #e8e8e8",padding:"10px 14px"}}>
+                    <p style={{fontSize:".78rem",color:"#8b8b8b",margin:0,fontWeight:600}}>Last report sent: {lastRun}</p>
+                  </div>
+                )}
+              </>
+            )}
+
+            <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
+              <button className="st-btn st-btn-primary" onClick={handleSave} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Save Settings"}
+              </button>
+              {enabled && (
+                <button className="st-btn" onClick={handleTriggerReport}>
+                  Send Report Now
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+                {/* Manual Report Trigger */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Manual Report Trigger</h2>
+          </div>
+          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+            <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0,lineHeight:1.6}}>
+              Send a daily contact report for a specific date. Useful for generating historical reports or resending reports for specific dates.
+            </p>
+            <div>
+              <label className="st-label">Select Date</label>
+              <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} max={new Date().toISOString().split("T")[0]} className="st-input" style={{maxWidth:"240px"}} />
+              <p style={{fontSize:".7rem",color:"#8b8b8b",marginTop:"6px"}}>Select a date to generate and send the contact report for that specific day.</p>
+            </div>
+            <div>
+              <button className="st-btn st-btn-primary" onClick={handleTriggerManualReport} disabled={isTriggeringManualReport || !selectedDate || !companyId}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                {isTriggeringManualReport ? "Sending Report..." : "Send Report for Selected Date"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+                {/* Weekly Report Trigger */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Weekly Report Trigger</h2>
+          </div>
+          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+            <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0,lineHeight:1.6}}>
+              Send a 7-day performance summary report to your WhatsApp group. Includes total leads, daily average, engagement rate, qualified and hot leads, and AI-generated insights.
+            </p>
+            <div>
+              <button className="st-btn st-btn-primary" onClick={handleTriggerWeeklyReport} disabled={isTriggeringWeeklyReport || !companyId}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                </svg>
+                {isTriggeringWeeklyReport ? "Sending Weekly Report..." : "Send Weekly Summary Report"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+                {/* Auto-Reply Settings */}
+        <div className="st-card">
+          <div className="st-card-header">
+            <div className="st-card-icon">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h2 className="st-section-title">Auto-Reply Settings</h2>
+          </div>
+          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+            {error && (
+              <div className="st-info-box st-info-box-error">
+                <p style={{fontSize:".8rem",color:"#8b0000",margin:0}}>{error}</p>
+              </div>
+            )}
+            <div>
+              <label style={{display:"flex",alignItems:"flex-start",gap:"10px",cursor:"pointer"}}>
+                <input type="checkbox" checked={autoReplyEnabled} onChange={(e) => setAutoReplyEnabled(e.target.checked)} style={{width:"18px",height:"18px",accentColor:"#f26522",cursor:"pointer",marginTop:"2px",flexShrink:0}} />
+                <div>
+                  <span style={{fontWeight:700,fontSize:".82rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".06em",display:"block"}}>Enable Auto-Reply</span>
+                  <span style={{fontSize:".72rem",color:"#8b8b8b",display:"block",marginTop:"3px"}}>Automatically reply to messages that haven't been responded to within the specified time frame</span>
+                </div>
+              </label>
+            </div>
+
+            {autoReplyEnabled && (
+              <div>
+                <label className="st-label">Auto-Reply Threshold (Hours)</label>
+                <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+                  <input type="number" min="1" max="168" value={autoReplyHours} onChange={(e) => setAutoReplyHours(e.target.value)} className="st-input" style={{maxWidth:"100px"}} />
+                  <span style={{fontSize:".82rem",color:"#8b8b8b",fontWeight:600}}>hours prior to reconnection</span>
+                </div>
+                <p style={{fontSize:".7rem",color:"#8b8b8b",marginTop:"6px"}}>Messages older than this threshold will NOT be auto-replied to.</p>
+              </div>
+            )}
+
+            <div>
+              <button className="st-btn st-btn-primary" onClick={handleSaveAutoReply} disabled={isSavingAutoReply}>
+                {isSavingAutoReply ? "Saving..." : "Save Auto-Reply Settings"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        {/* Disconnect Confirmation Modal */}
+        <Dialog open={showDisconnectModal} onClose={() => setShowDisconnectModal(false)}>
+          <div className="st-modal-overlay" />
+          <div className="st-modal-wrap">
+            <Dialog.Panel className="st-modal">
+              <div className="st-modal-header">
+                <div style={{width:"32px",height:"32px",background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <h3 style={{fontWeight:800,fontSize:".9rem",color:"#fff",textTransform:"uppercase",letterSpacing:".06em",margin:0}}>Disconnect Bot</h3>
+              </div>
+
+              <div className="st-modal-body">
+                <div style={{textAlign:"center",padding:"8px 0"}}>
+                  <div style={{width:"52px",height:"52px",background:"#fff0f0",border:"2px solid #8b0000",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px"}}>
+                    <svg className="w-6 h-6" style={{color:"#8b0000"}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                    </svg>
+                  </div>
+                  <h4 style={{fontWeight:800,fontSize:"1rem",color:"#4b4b4b",margin:"0 0 10px"}}>Are you absolutely sure?</h4>
+                  <p style={{fontSize:".82rem",color:"#8b8b8b",lineHeight:1.6,margin:"0 0 14px"}}>
+                    {disconnectPhoneIndex !== undefined
+                      ? `You're about to disconnect Phone ${disconnectPhoneIndex + 1} of ${disconnectBotName}.`
+                      : `You're about to disconnect all phones of ${disconnectBotName}.`}
+                  </p>
+                  <div className="st-info-box st-info-box-warn" style={{textAlign:"left"}}>
+                    <svg className="w-4 h-4 flex-shrink-0" style={{color:"#f26522",marginTop:"1px"}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p style={{fontSize:".75rem",color:"#4b4b4b",lineHeight:1.5,margin:0}}>
+                      <strong>Warning:</strong> This action cannot be undone. You'll need to reconnect by scanning the QR code again.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="st-modal-footer">
+                <button className="st-btn" onClick={() => setShowDisconnectModal(false)} disabled={isDisconnecting}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Cancel
+                </button>
+                <button className="st-btn st-btn-danger" onClick={confirmDisconnect} disabled={isDisconnecting}>
+                  {isDisconnecting ? (
+                    <>{disconnectPhoneIndex !== undefined ? "Disconnecting..." : "Disconnecting All..."}</>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
+                      </svg>
+                      {disconnectPhoneIndex !== undefined ? "Yes, Disconnect" : "Yes, Disconnect All"}
+                    </>
+                  )}
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
     </div>
   );
 }

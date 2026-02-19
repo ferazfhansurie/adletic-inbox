@@ -24,7 +24,7 @@ import { Chart as ChartJS, ChartData, CategoryScale, LinearScale, BarElement, Ti
 import { BarChart } from "lucide-react";
 import { useContacts } from "@/contact";
 import { User, ChevronRight } from 'lucide-react';
-import { format, subDays, subMonths, startOfDay, endOfDay, eachHourOfInterval, eachDayOfInterval,  parse,  } from 'date-fns';
+import { format, subDays, subMonths, startOfDay, endOfDay, eachHourOfInterval, eachDayOfInterval, parse, } from 'date-fns';
 
 
 // Register ChartJS components
@@ -56,11 +56,11 @@ const SplitTestDashboardCompact = () => {
     try {
       const companyId = "001";
       const savedVariations = localStorage.getItem(`splitTestVariations_${companyId}`);
-      
+
       if (savedVariations) {
         const variations = JSON.parse(savedVariations);
         const activeVariations = variations.filter((variation: any) => variation.isActive);
-        
+
         let totalCustomers = 0;
         let totalClosed = 0;
         const variationStats: Array<{
@@ -74,12 +74,12 @@ const SplitTestDashboardCompact = () => {
         variations.forEach((variation: any) => {
           const customers = variation.isActive ? Math.floor(Math.random() * 50) + 15 : 0;
           const closed = variation.isActive ? Math.floor(customers * (Math.random() * 0.4 + 0.1)) : 0;
-          
+
           if (variation.isActive) {
             totalCustomers += customers;
             totalClosed += closed;
           }
-          
+
           variationStats.push({
             variationName: variation.name,
             totalCustomers: customers,
@@ -103,33 +103,31 @@ const SplitTestDashboardCompact = () => {
   const hasData = splitTestData.variationStats.length > 0;
 
   return (
-    <div className="h-full relative">
+    <div className="h-full relative bg-white">
       <div className="p-6 relative z-10">
-        {/* Enhanced glassmorphic inner glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-purple-500/20 to-indigo-600/20 dark:from-purple-400/30 dark:to-indigo-500/30 rounded-xl border border-purple-200/30 dark:border-purple-500/30">
-              <div className="text-lg">🧪</div>
+            <div className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+              <div className="text-xl leading-none">🧪</div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Split Test Performance</h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400">AI variation analytics</p>
+              <h3 className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">Split Test Performance</h3>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-0.5">AI variation analytics</p>
             </div>
           </div>
           <Link to="/split-test">
-            <Button variant="outline-primary" className="px-3 py-1.5 text-xs rounded-lg hover:shadow-md transition-all duration-200">
+            <Button variant="primary" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-[10px] px-3 py-1.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
               Manage Tests →
             </Button>
           </Link>
         </div>
 
         {!hasData ? (
-          <div className="text-center py-6">
-            <div className="text-gray-400 text-2xl mb-3">🚀</div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">No split tests yet</p>
+          <div className="text-center py-6 border-2 border-[#4b4b4b] border-dashed bg-white">
+            <div className="text-4xl mb-3">🚀</div>
+            <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-4">No split tests yet</p>
             <Link to="/split-test">
-              <Button variant="primary" className="px-4 py-2 text-sm rounded-lg hover:shadow-md transition-all duration-200">
+              <Button variant="primary" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
                 Create First Test
               </Button>
             </Link>
@@ -137,36 +135,30 @@ const SplitTestDashboardCompact = () => {
         ) : (
           <div>
             {/* Compact metrics */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="text-center backdrop-blur-md bg-gradient-to-br from-blue-500/20 to-blue-600/20 dark:from-blue-400/30 dark:to-blue-500/30 rounded-2xl p-3 border border-blue-300/40 dark:border-blue-400/40 hover:bg-blue-500/25 dark:hover:bg-blue-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                {/* Inner glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-transparent to-blue-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="text-lg font-bold text-blue-700 dark:text-blue-300 relative z-10">{splitTestData.totalCustomers}</div>
-                <div className="text-xs font-medium text-blue-600 dark:text-blue-400 relative z-10">Total</div>
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+                <div className="text-xl font-black text-[#3b82f6]">{splitTestData.totalCustomers}</div>
+                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Total</div>
               </div>
-              <div className="text-center backdrop-blur-md bg-gradient-to-br from-green-500/20 to-green-600/20 dark:from-green-400/30 dark:to-green-500/30 rounded-2xl p-3 border border-green-300/40 dark:border-green-400/40 hover:bg-green-500/25 dark:hover:bg-green-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                {/* Inner glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-green-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="text-lg font-bold text-green-700 dark:text-green-300 relative z-10">{splitTestData.closedCustomers}</div>
-                <div className="text-xs font-medium text-green-600 dark:text-green-400 relative z-10">Closed</div>
+              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+                <div className="text-xl font-black text-[#10b981]">{splitTestData.closedCustomers}</div>
+                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Closed</div>
               </div>
-              <div className="text-center backdrop-blur-md bg-gradient-to-br from-purple-500/20 to-purple-600/20 dark:from-purple-400/30 dark:to-purple-500/30 rounded-2xl p-3 border border-purple-300/40 dark:border-purple-400/40 hover:bg-purple-500/25 dark:hover:bg-purple-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                {/* Inner glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-400/20 via-transparent to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="text-lg font-bold text-purple-700 dark:text-purple-300 relative z-10">
-                  {splitTestData.totalCustomers > 0 
+              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+                <div className="text-xl font-black text-[#8b5cf6]">
+                  {splitTestData.totalCustomers > 0
                     ? ((splitTestData.closedCustomers / splitTestData.totalCustomers) * 100).toFixed(1)
                     : '0'
                   }%
                 </div>
-                <div className="text-xs font-medium text-purple-600 dark:text-purple-400 relative z-10">Rate</div>
+                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Rate</div>
               </div>
             </div>
 
             {/* Performance ranking */}
-            <div className="space-y-2">
-              <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-3">Performance Ranking:</div>
-              
+            <div className="space-y-3">
+              <div className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider mb-2">Performance Ranking:</div>
+
               {/* Show active variations first, sorted by performance */}
               {splitTestData.variationStats
                 .filter(v => v.isActive)
@@ -174,84 +166,67 @@ const SplitTestDashboardCompact = () => {
                 .map((variation, index) => {
                   const isTop = index === 0;
                   const isWorst = index === splitTestData.variationStats.filter(v => v.isActive).length - 1 && splitTestData.variationStats.filter(v => v.isActive).length > 1;
-                  
+
                   return (
-                    <div key={index} className={`flex items-center justify-between text-xs rounded-2xl px-3 py-2 backdrop-blur-md transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group ${
-                      isTop ? 'bg-gradient-to-r from-green-500/20 to-green-600/20 dark:from-green-400/30 dark:to-green-500/30 border border-green-300/40 dark:border-green-400/40 hover:bg-green-500/25 dark:hover:bg-green-400/35' :
-                      isWorst ? 'bg-gradient-to-r from-red-500/20 to-red-600/20 dark:from-red-400/30 dark:to-red-500/30 border border-red-300/40 dark:border-red-400/40 hover:bg-red-500/25 dark:hover:bg-red-400/35' :
-                      'bg-gradient-to-r from-gray-500/20 to-gray-600/20 dark:from-gray-400/30 dark:to-gray-500/30 border border-gray-300/40 dark:border-gray-400/40 hover:bg-gray-500/25 dark:hover:bg-gray-400/35'
-                    }`}>
-                      {/* Inner glow effect */}
-                      <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                        isTop ? 'bg-gradient-to-r from-green-400/20 via-transparent to-green-500/20' :
-                        isWorst ? 'bg-gradient-to-r from-red-400/20 via-transparent to-red-500/20' :
-                        'bg-gradient-to-r from-gray-400/20 via-transparent to-gray-500/20'
-                      }`}></div>
-                      <div className="flex items-center gap-1.5 relative z-10">
-                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm ${
-                          isTop ? 'bg-gradient-to-br from-yellow-500 to-yellow-600' : isWorst ? 'bg-gradient-to-br from-red-500 to-red-600' : 'bg-gradient-to-br from-blue-500 to-blue-600'
-                        }`}>
+                    <div key={index} className={`flex items-center justify-between text-xs bg-white border-2 border-[#4b4b4b] px-3 py-2 ${isTop ? 'shadow-[2px_2px_0_#10b981]' : isWorst ? 'shadow-[2px_2px_0_#ef4444]' : 'shadow-[2px_2px_0_#3b82f6]'}`}>
+                      <div className="flex items-center gap-2 max-w-[50%]">
+                        <div className={`flex-shrink-0 w-5 h-5 flex items-center justify-center text-[10px] font-black text-white border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] ${isTop ? 'bg-[#eab308]' : isWorst ? 'bg-[#ef4444]' : 'bg-[#3b82f6]'}`}>
                           {index + 1}
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-gray-100 text-xs">
+                        <span className="font-black text-[#4b4b4b] text-xs uppercase tracking-wider truncate">
                           {variation.variationName}
                         </span>
-                        {isTop && <span className="text-xs">👑</span>}
-                        {isWorst && <span className="text-xs">📉</span>}
+                        {isTop && <span className="text-sm">👑</span>}
+                        {isWorst && <span className="text-sm">📉</span>}
                       </div>
-                      <div className="flex items-center gap-2 relative z-10">
-                        <span className="text-gray-600 dark:text-gray-400 text-xs">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[#4b4b4b] font-bold text-[10px]">
                           {variation.closedCustomers}/{variation.totalCustomers}
                         </span>
-                        <span className={`font-bold text-xs ${
-                          variation.conversionRate >= 30 ? 'text-green-600' : 
-                          variation.conversionRate >= 20 ? 'text-yellow-600' : 'text-red-600'
-                        }`}>
+                        <span className={`font-black text-xs ${variation.conversionRate >= 30 ? 'text-[#10b981]' :
+                          variation.conversionRate >= 20 ? 'text-[#eab308]' : 'text-[#ef4444]'
+                          }`}>
                           {variation.conversionRate.toFixed(1)}%
                         </span>
                       </div>
                     </div>
                   );
                 })}
-              
+
               {/* Show inactive variations if any */}
               {splitTestData.variationStats.filter(v => !v.isActive).length > 0 && (
-                <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                <div className="mt-4 pt-4 border-t-2 border-[#4b4b4b] border-dashed">
+                  <div className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
                     Inactive Variations ({splitTestData.variationStats.filter(v => !v.isActive).length}):
                   </div>
                   {splitTestData.variationStats
                     .filter(v => !v.isActive)
                     .slice(0, 2)
                     .map((variation, index) => (
-                      <div key={`inactive-${index}`} className="flex items-center justify-between text-xs backdrop-blur-sm bg-gray-500/10 dark:bg-gray-400/20 rounded-lg px-2 py-1.5 mb-1.5 border border-gray-200/30 dark:border-gray-500/30">
-                        <span className="text-gray-600 dark:text-gray-300 text-xs">{variation.variationName}</span>
-                        <span className="text-gray-500 dark:text-gray-400 text-xs">⚫ Inactive</span>
+                      <div key={`inactive-${index}`} className="flex items-center justify-between text-xs bg-gray-100 border-2 border-gray-300 px-3 py-1.5 mb-2 rounded-none opacity-70">
+                        <span className="text-gray-500 font-bold text-[10px] uppercase truncate max-w-[120px]">{variation.variationName}</span>
+                        <span className="text-gray-500 font-black text-[10px] uppercase">⚫ Inactive</span>
                       </div>
                     ))}
                 </div>
               )}
-              
+
               {/* Best/Worst summary if multiple active variations */}
               {splitTestData.variationStats.filter(v => v.isActive).length > 1 && (
-                <div className="mt-3 pt-3 border-t border-gray-200/50 dark:border-gray-600/50">
-                  <div className="grid grid-cols-1 gap-2 text-xs">
-                    <div className="flex items-center gap-2 p-3 backdrop-blur-md bg-gradient-to-r from-green-500/20 to-green-600/20 dark:from-green-400/30 dark:to-green-500/30 rounded-xl border border-green-300/40 dark:border-green-400/40 hover:bg-green-500/25 dark:hover:bg-green-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                      {/* Inner glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 via-transparent to-green-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="text-green-600 text-sm relative z-10">🏆</span>
-                      <span className="text-gray-600 dark:text-gray-400 text-xs relative z-10">
-                        Best: <strong className="text-green-700 dark:text-green-400">
+                <div className="mt-4 pt-4 border-t-2 border-[#4b4b4b] border-dashed">
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#10b981]">
+                      <span className="text-xl leading-none">🏆</span>
+                      <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                        Best: <strong className="text-[#10b981]">
                           {splitTestData.variationStats.filter(v => v.isActive)[0]?.variationName}
                         </strong>
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 p-3 backdrop-blur-md bg-gradient-to-r from-red-500/20 to-red-600/20 dark:from-red-400/30 dark:to-red-500/30 rounded-xl border border-red-300/40 dark:border-red-400/40 hover:bg-red-500/25 dark:hover:bg-red-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                      {/* Inner glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 via-transparent to-red-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <span className="text-red-600 text-sm relative z-10">📈</span>
-                      <span className="text-gray-600 dark:text-gray-400 text-xs relative z-10">
-                        Needs Work: <strong className="text-red-700 dark:text-red-400">
+                    <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#ef4444]">
+                      <span className="text-xl leading-none">📉</span>
+                      <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                        Needs Work: <strong className="text-[#ef4444]">
                           {splitTestData.variationStats.filter(v => v.isActive).slice(-1)[0]?.variationName}
                         </strong>
                       </span>
@@ -259,9 +234,9 @@ const SplitTestDashboardCompact = () => {
                   </div>
                 </div>
               )}
-              
-              <div className="text-center mt-4">
-                <Link to="/split-test" className="text-xs text-blue-600 hover:text-blue-800 font-medium hover:underline transition-all duration-200">
+
+              <div className="text-center mt-5">
+                <Link to="/split-test" className="text-[10px] font-black text-[#f26522] uppercase tracking-wider hover:underline transition-all duration-200">
                   View All Variations →
                 </Link>
               </div>
@@ -300,11 +275,11 @@ const SplitTestDashboardComponent = () => {
       // Later this would come from your API
       const companyId = "001"; // Get this from user context
       const savedTests = localStorage.getItem(`splitTests_${companyId}`);
-      
+
       if (savedTests) {
         const splitTests = JSON.parse(savedTests);
         const activeTests = splitTests.filter((test: any) => test.isActive);
-        
+
         if (activeTests.length > 0) {
           let totalCustomers = 0;
           let totalClosed = 0;
@@ -319,10 +294,10 @@ const SplitTestDashboardComponent = () => {
             test.variations.forEach((variation: any) => {
               const customers = Math.floor(Math.random() * 100) + 20;
               const closed = Math.floor(customers * (Math.random() * 0.4 + 0.1));
-              
+
               totalCustomers += customers;
               totalClosed += closed;
-              
+
               variationStats.push({
                 variationName: variation.name,
                 totalCustomers: customers,
@@ -397,7 +372,7 @@ const SplitTestDashboardComponent = () => {
               <div>
                 <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">Overall Conversion Rate</p>
                 <p className="text-2xl font-bold text-purple-900 dark:text-purple-100">
-                  {splitTestData.totalCustomers > 0 
+                  {splitTestData.totalCustomers > 0
                     ? ((splitTestData.closedCustomers / splitTestData.totalCustomers) * 100).toFixed(1)
                     : '0'
                   }%
@@ -415,7 +390,7 @@ const SplitTestDashboardComponent = () => {
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Performance by Variation
           </h3>
-          
+
           {!hasData ? (
             <div className="text-center py-8">
               <div className="text-gray-400 text-4xl mb-3">🧪</div>
@@ -431,104 +406,100 @@ const SplitTestDashboardComponent = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {splitTestData.variationStats.map((variation, index) => {
-              const isTopPerformer = index === 0;
-              const isLowestPerformer = index === splitTestData.variationStats.length - 1 && splitTestData.variationStats.length > 1;
-              
-              return (
-                <div
-                  key={index}
-                  className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${
-                    isTopPerformer 
-                      ? 'border-green-300 bg-green-50 dark:bg-green-900/20 dark:border-green-700' 
+              {splitTestData.variationStats.map((variation, index) => {
+                const isTopPerformer = index === 0;
+                const isLowestPerformer = index === splitTestData.variationStats.length - 1 && splitTestData.variationStats.length > 1;
+
+                return (
+                  <div
+                    key={index}
+                    className={`border rounded-lg p-4 relative transition-all hover:shadow-md ${isTopPerformer
+                      ? 'border-green-300 bg-green-50 dark:bg-green-900/20 dark:border-green-700'
                       : isLowestPerformer
-                      ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700'
-                      : 'border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600'
-                  }`}
-                >
-                  {/* Ranking Badge */}
-                  {isTopPerformer && (
-                    <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      🏆 Best
-                    </div>
-                  )}
-                  {isLowestPerformer && (
-                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-                      📉 Lowest
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">
-                      {variation.variationName}
-                    </h4>
-                    <span className={`text-lg font-bold ${
-                      isTopPerformer 
-                        ? 'text-green-700 dark:text-green-300' 
+                        ? 'border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700'
+                        : 'border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600'
+                      }`}
+                  >
+                    {/* Ranking Badge */}
+                    {isTopPerformer && (
+                      <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                        🏆 Best
+                      </div>
+                    )}
+                    {isLowestPerformer && (
+                      <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                        📉 Lowest
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                        {variation.variationName}
+                      </h4>
+                      <span className={`text-lg font-bold ${isTopPerformer
+                        ? 'text-green-700 dark:text-green-300'
                         : 'text-gray-900 dark:text-gray-100'
-                    }`}>
-                      {variation.conversionRate.toFixed(1)}%
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-4 text-xs">
-                      <div className="text-center p-2 bg-white dark:bg-gray-800 rounded">
-                        <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
-                          {variation.totalCustomers}
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">Total</div>
-                      </div>
-                      <div className="text-center p-2 bg-white dark:bg-gray-800 rounded">
-                        <div className="font-bold text-lg text-green-600 dark:text-green-400">
-                          {variation.closedCustomers}
-                        </div>
-                        <div className="text-gray-600 dark:text-gray-400">Closed</div>
-                      </div>
-                    </div>
-                    
-                    {/* Progress Bar */}
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-gray-600 dark:text-gray-400">Conversion Rate</span>
-                        <span className="font-medium">{variation.conversionRate.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full transition-all duration-500 ${
-                            isTopPerformer 
-                              ? 'bg-green-500' 
-                              : isLowestPerformer 
-                              ? 'bg-red-500'
-                              : 'bg-blue-500'
-                          }`}
-                          style={{ width: `${Math.min(variation.conversionRate, 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    
-                    {/* Performance Indicator */}
-                    <div className="text-xs text-center">
-                      <span className={`px-2 py-1 rounded-full ${
-                        variation.conversionRate >= 35 
-                          ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-                          : variation.conversionRate >= 25
-                          ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
-                          : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
-                      }`}>
-                        {variation.conversionRate >= 35 
-                          ? '🔥 Excellent' 
-                          : variation.conversionRate >= 25
-                          ? '👍 Good'
-                          : '📈 Needs Improvement'
-                        }
+                        }`}>
+                        {variation.conversionRate.toFixed(1)}%
                       </span>
                     </div>
+
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4 text-xs">
+                        <div className="text-center p-2 bg-white dark:bg-gray-800 rounded">
+                          <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
+                            {variation.totalCustomers}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400">Total</div>
+                        </div>
+                        <div className="text-center p-2 bg-white dark:bg-gray-800 rounded">
+                          <div className="font-bold text-lg text-green-600 dark:text-green-400">
+                            {variation.closedCustomers}
+                          </div>
+                          <div className="text-gray-600 dark:text-gray-400">Closed</div>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-600 dark:text-gray-400">Conversion Rate</span>
+                          <span className="font-medium">{variation.conversionRate.toFixed(1)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full transition-all duration-500 ${isTopPerformer
+                              ? 'bg-green-500'
+                              : isLowestPerformer
+                                ? 'bg-red-500'
+                                : 'bg-blue-500'
+                              }`}
+                            style={{ width: `${Math.min(variation.conversionRate, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* Performance Indicator */}
+                      <div className="text-xs text-center">
+                        <span className={`px-2 py-1 rounded-full ${variation.conversionRate >= 35
+                          ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                          : variation.conversionRate >= 25
+                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+                            : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                          }`}>
+                          {variation.conversionRate >= 35
+                            ? '🔥 Excellent'
+                            : variation.conversionRate >= 25
+                              ? '👍 Good'
+                              : '📈 Needs Improvement'
+                          }
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
           )}
         </div>
 
@@ -541,8 +512,8 @@ const SplitTestDashboardComponent = () => {
                 How it works
               </h4>
               <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                This dashboard tracks customers based on automated tags. Set up tags like "closed", "converted", or "deal-won" 
-                in your CRM system. When customers receive these tags, they'll be counted as closed customers for the 
+                This dashboard tracks customers based on automated tags. Set up tags like "closed", "converted", or "deal-won"
+                in your CRM system. When customers receive these tags, they'll be counted as closed customers for the
                 corresponding AI variation that interacted with them.
               </p>
             </div>
@@ -600,7 +571,7 @@ let companyId = "";
 let total_contacts = 0;
 let role = 2;
 
-function EmployeeSearch({ 
+function EmployeeSearch({
   employees,
   onSelect,
   currentUser
@@ -615,7 +586,7 @@ function EmployeeSearch({
 
   const filteredEmployees = useMemo(() => {
     console.log('🔍 Filtering employees:', employees.length, 'employees, query:', searchQuery);
-    const filtered = employees.filter(employee => 
+    const filtered = employees.filter(employee =>
       employee.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     console.log('🔍 Filtered result:', filtered.length, 'employees');
@@ -645,58 +616,57 @@ function EmployeeSearch({
   return (
     <div className="relative" ref={dropdownRef}>
       <div className="flex items-center relative">
-        <Lucide icon="User" className="absolute left-3 text-gray-400" />
+        <Lucide icon="User" className="absolute left-3 text-[#4b4b4b] w-4 h-4" />
         <FormInput
           type="text"
-          placeholder="Search employees..."
+          placeholder="SEARCH EMPLOYEES..."
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
-          className="w-full pl-10 pr-10 border-gray-300 dark:border-gray-700 focus:border-primary dark:focus:border-primary rounded-lg transition-all duration-200"
+          className="w-full pl-10 pr-10 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] placeholder-[#4b4b4b] font-bold text-xs uppercase tracking-wider rounded-none focus:ring-0 focus:border-[#f26522] transition-colors"
         />
         {searchQuery && (
-          <button 
-            className="absolute right-3 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          <button
+            className="absolute right-3 text-[#4b4b4b] hover:text-[#f26522] transition-colors"
             onClick={() => {
               setSearchQuery("");
               setIsOpen(true);
             }}
           >
-            <Lucide icon="X" className="w-4 h-4" />
+            <Lucide icon="X" className="w-4 h-4 stroke-[3]" />
           </button>
         )}
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-2 backdrop-blur-md bg-white/90 dark:bg-gray-800/90 border border-white/20 dark:border-gray-700/50 rounded-xl shadow-xl max-h-60 overflow-auto">
+        <div className="absolute z-10 w-full mt-1 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] max-h-60 overflow-auto">
           {filteredEmployees.length > 0 ? (
             filteredEmployees.map((employee) => (
               <div
                 key={employee.id}
-                className={`p-3 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 cursor-pointer flex items-center rounded-lg transition-all duration-200 ${
-                  employee.id === currentUser?.id ? 'bg-blue-500/20 dark:bg-blue-400/20 border border-blue-200/30 dark:border-blue-500/30' : ''
-                }`}
+                className={`p-3 border-b-2 border-gray-100 last:border-b-0 hover:bg-gray-100 cursor-pointer flex items-center transition-colors ${employee.id === currentUser?.id ? 'bg-[#f8fafc] border-l-4 border-l-[#3b82f6]' : ''
+                  }`}
                 onClick={() => {
                   onSelect(employee);
                   setIsOpen(false);
                   setSearchQuery(employee.name);
                 }}
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center mr-3 shadow-sm">
+                <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] font-black flex items-center justify-center mr-3 flex-shrink-0">
                   {employee.name.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <span className="text-gray-900 dark:text-gray-100 font-medium block">{employee.name}</span>
-                  <span className="text-gray-600 dark:text-gray-400 text-sm">{employee.assignedContacts || 0} assigned contacts</span>
+                <div className="min-w-0">
+                  <span className="text-[#4b4b4b] font-black text-xs uppercase tracking-wider block truncate">{employee.name}</span>
+                  <span className="text-gray-500 font-bold text-[10px] uppercase truncate block">{employee.assignedContacts || 0} assigned</span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="p-4 text-gray-500 dark:text-gray-400 text-center">
-              <div className="text-gray-400 text-lg mb-1">👥</div>
-              <p className="text-sm">No employees found</p>
+            <div className="p-4 bg-white text-center">
+              <div className="text-2xl mb-2">👥</div>
+              <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">No employees found</p>
             </div>
           )}
         </div>
@@ -735,7 +705,7 @@ function Main() {
     tags: string[];
     type: string;
     website: string | null;
-  
+
   }
 
   interface Employee {
@@ -769,15 +739,15 @@ function Main() {
     contacts: { id: string, name: string, session: number }[];
   }
 
-interface Tag {
-  id: string;
-  name: string;
-}
+  interface Tag {
+    id: string;
+    name: string;
+  }
   const importantNotesRef = useRef<TinySliderElement>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
-  const { contacts: initialContacts} = useContacts();
+  const { contacts: initialContacts } = useContacts();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [totalContacts, setTotalContacts] = useState(0);
   const [closed, setClosed] = useState(0);
@@ -816,7 +786,7 @@ interface Tag {
   const [monthlyPrice, setMonthlyPrice] = useState<number>(0);
   const [monthlySpendData, setMonthlySpendData] = useState<{ labels: string[], datasets: any[] }>({ labels: [], datasets: [] });
   const filteredEmployees = useMemo(() => {
-    return employees.filter(employee => 
+    return employees.filter(employee =>
       employee.name.toLowerCase().includes(employeeSearchQuery.toLowerCase())
     );
   }, [employees, employeeSearchQuery]);
@@ -832,10 +802,10 @@ interface Tag {
       const companyId = userRes.data.company_id;
       const res = await axios.get(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}/monthly-usage`);
       const usage = res.data.usage;
-  
+
       const labels = usage.map((row: any) => row.month);
       const data = usage.map((row: any) => (row.total_tokens / 1000) * 0.003);
-  
+
       setMonthlySpendData({
         labels,
         datasets: [
@@ -858,7 +828,7 @@ interface Tag {
 
   const calculateMonthlyPrice = (tokens: number) => {
     const price = (tokens / 1000) * 0.003;
-    
+
     setMonthlyPrice(price);
   };
 
@@ -871,7 +841,7 @@ interface Tag {
       // TODO: Replace with actual appointments API when available
       // For now, setting a placeholder value
       setTotalAppointments(0);
-      
+
     } catch (error) {
       console.error('Error fetching appointments:', error);
     }
@@ -899,86 +869,86 @@ interface Tag {
   async function fetchConfigFromDatabase() {
     // Get the stored user email from your login response
     const userEmail = localStorage.getItem('userEmail'); // or however you store it after login
-    
+
     if (!userEmail) {
       console.error("No user email found.");
       return;
     }
-  
+
     try {
       // Fetch user data from SQL database
       const response = await fetch(`https://bisnesgpt.jutateknologi.com/api/user/config?email=${encodeURIComponent(userEmail)}`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json'
         }
       });
-  
-  
+
+
       if (!response.ok) {
         throw new Error('Failed to fetch user config');
       }
-  
+
       const dataUser = await response.json();
-      
+
       if (!dataUser) {
         return;
       }
-  
+
       const companyId = dataUser.company_id;
       const role = dataUser.role;
-  
+
       if (!companyId) {
         return;
       }
-  
+
       // Fetch company data
       const companyResponse = await fetch(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-  
+
       if (!companyResponse.ok) {
         throw new Error('Failed to fetch company data');
       }
-  
+
       const data = await companyResponse.json();
-      
+
       if (!data) {
         return;
       }
-  
+
       // Fetch contacts with replies
-   /*   const repliesResponse = await fetch(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}/replies`, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-  
-      if (!repliesResponse.ok) {
-        throw new Error('Failed to fetch replies data');
-      }
-  
-      const repliesData = await repliesResponse.json();
-     // setReplies(repliesData.contactsWithReplies);*/
-  
+      /*   const repliesResponse = await fetch(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}/replies`, {
+           method: 'GET',
+           headers: { 
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${localStorage.getItem('token')}`
+           }
+         });
+     
+         if (!repliesResponse.ok) {
+           throw new Error('Failed to fetch replies data');
+         }
+     
+         const repliesData = await repliesResponse.json();
+        // setReplies(repliesData.contactsWithReplies);*/
+
     } catch (error) {
       console.error('Error fetching config:', error);
       throw error;
     }
   }
 
-  
+
   useEffect(() => {
     fetchCompanyData();
   }, []);
 
-  
+
 
   async function fetchEmployeeData(employeeId: string): Promise<Employee | null> {
     try {
@@ -1002,7 +972,7 @@ interface Tag {
       });
       const employees = employeesResponse.data;
       const employeeData = employees.find((emp: any) => emp.id === employeeId);
-      
+
       if (!employeeData) return null;
 
       // Get contacts data
@@ -1014,10 +984,10 @@ interface Tag {
       );
       // Handle API response format { success, total, contacts: [...] }
       const contacts = contactsResponse.data.contacts || [];
-      
+
       // Create a timeline of assignments
       const assignmentTimeline: { date: Date; count: number }[] = [];
-      
+
       contacts.forEach((contactData: any) => {
         if (contactData.tags?.includes(employeeData.name)) {
           const assignmentDate = contactData.createdAt ? new Date(contactData.createdAt) : null;
@@ -1056,7 +1026,7 @@ interface Tag {
         const normalizedTags = tags
           .filter((tag: any) => typeof tag === 'string')
           .map((tag: string) => tag.toLowerCase());
-        
+
         console.log(`Checking contact tags for closed status: ${normalizedTags}`);
         return normalizedTags.includes('closed') && normalizedTags.includes(employeeData.name.toLowerCase());
       }).length;
@@ -1083,33 +1053,33 @@ interface Tag {
   // Add this useEffect to log the selected employee
   useEffect(() => {
     if (selectedEmployee) {
-      
-      
+
+
     }
   }, [selectedEmployee]);
 
   // Modify the existing useEffect for selectedEmployee
- /* useEffect(() => {
-    if (selectedEmployee) {
-      const employeeRef = doc(firestore, `companies/${companyId}/employee/${selectedEmployee.id}`);
-      const monthlyAssignmentsRef = collection(employeeRef, 'monthlyAssignments');
-      
-      const unsubscribe = onSnapshot(monthlyAssignmentsRef, (snapshot) => {
-        const updatedMonthlyAssignments: { [key: string]: number } = {};
-        snapshot.forEach((doc) => {
-          updatedMonthlyAssignments[doc.id] = doc.data().assignments;
-        });
-        
-        setSelectedEmployee(prevState => ({
-          ...prevState!,
-          monthlyAssignments: updatedMonthlyAssignments
-        }));
-      });
+  /* useEffect(() => {
+     if (selectedEmployee) {
+       const employeeRef = doc(firestore, `companies/${companyId}/employee/${selectedEmployee.id}`);
+       const monthlyAssignmentsRef = collection(employeeRef, 'monthlyAssignments');
+       
+       const unsubscribe = onSnapshot(monthlyAssignmentsRef, (snapshot) => {
+         const updatedMonthlyAssignments: { [key: string]: number } = {};
+         snapshot.forEach((doc) => {
+           updatedMonthlyAssignments[doc.id] = doc.data().assignments;
+         });
+         
+         setSelectedEmployee(prevState => ({
+           ...prevState!,
+           monthlyAssignments: updatedMonthlyAssignments
+         }));
+       });
+ 
+       return () => unsubscribe();
+     }
+   }, [selectedEmployee?.id, companyId]);*/
 
-      return () => unsubscribe();
-    }
-  }, [selectedEmployee?.id, companyId]);*/
-  
   // Usage in your component
   useEffect(() => {
     async function loadEmployeeData() {
@@ -1124,7 +1094,7 @@ interface Tag {
         }
       }
     }
-  
+
     if (currentUser) {
       loadEmployeeData();
     }
@@ -1144,12 +1114,12 @@ interface Tag {
     for (let i = 11; i >= 0; i--) {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
       const monthKey = format(date, 'yyyy-MM');
-      
+
       // If this month has data, use it and update lastKnownTotal
       if (monthlyAssignments[monthKey] !== undefined) {
         lastKnownTotal = monthlyAssignments[monthKey];
       }
-      
+
       // Use the last known total for this month
       last12Months.push({
         month: format(date, 'MMM'),
@@ -1157,7 +1127,7 @@ interface Tag {
         assignments: lastKnownTotal
       });
     }
-    
+
     return last12Months;
   };
 
@@ -1174,25 +1144,25 @@ interface Tag {
     // Create a fallback data point if there are no monthly assignments but there are assigned contacts
     let monthlyAssignments = selectedEmployee.monthlyAssignments || {};
     const assignedContacts = selectedEmployee.assignedContacts || 0;
-    
+
     console.log('🔍 Chart calculation values:', { monthlyAssignments, assignedContacts });
-    
+
     if (Object.keys(monthlyAssignments).length === 0 && assignedContacts > 0) {
       // Create data for the current month
       const currentMonth = format(new Date(), 'yyyy-MM');
       monthlyAssignments = { [currentMonth]: assignedContacts };
       console.log('🔍 Created fallback monthly assignments:', monthlyAssignments);
-      
+
       // Don't call setSelectedEmployee here - it causes infinite loops
       // The monthlyAssignments will be used locally for this chart calculation
     }
 
     // Pass both parameters to the function
     const last12Months = getLast12MonthsData(monthlyAssignments, assignedContacts);
-    
+
     // Debug log
     console.log('Chart data for', selectedEmployee.name, last12Months);
-    
+
     return {
       labels: last12Months.map(d => `${d.month} ${d.year}`),
       datasets: [
@@ -1291,7 +1261,7 @@ interface Tag {
             size: 11
           },
           callbacks: {
-            label: function(context: any) {
+            label: function (context: any) {
               return `Total Assigned: ${context.parsed.y}`;
             }
           }
@@ -1322,7 +1292,7 @@ interface Tag {
   const [totalMessages, setTotalMessages] = useState(0);
   const [totalAIResponses, setTotalAIResponses] = useState(0);
   const [aiMessageQuota, setAiMessageQuota] = useState(5000); // Default quota
-  
+
   // Debug: Track quota changes
   useEffect(() => {
     console.log('🔍 AI Message Quota changed to:', aiMessageQuota);
@@ -1340,11 +1310,11 @@ interface Tag {
     performance: number;
     metric: string;
   }>>([]);
-  
+
   // Add state for info tooltips
   const [infoTooltip, setInfoTooltip] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  
+
   // Helper function to get KPI descriptions
   const getKPIInfo = (label: string): string => {
     const infoMap: { [key: string]: string } = {
@@ -1355,7 +1325,7 @@ interface Tag {
     };
     return infoMap[label] || 'No description available.';
   };
-  
+
   // Helper function to get engagement metrics descriptions
   const getEngagementInfo = (label: string): string => {
     const infoMap: { [key: string]: string } = {
@@ -1366,7 +1336,7 @@ interface Tag {
     };
     return infoMap[label] || 'No description available.';
   };
-  
+
 
 
   // Update this function
@@ -1400,7 +1370,7 @@ interface Tag {
       // Handle API response format { success, total, contacts: [...] }
       const contacts = contactsResponse.data.contacts || [];
       console.log('Contacts data structure:', contacts);
-      
+
       let total = 0;
       let closed = 0;
       let today = 0;
@@ -1462,24 +1432,24 @@ interface Tag {
     // Response Rate (percentage of contacts that have replied)
     const newResponseRate = totalContacts > 0 ? (numReplies / totalContacts) * 100 : 0;
     setResponseRate(Number(newResponseRate.toFixed(1))); // Use 1 decimal place for percentage
-  
+
     // Average Replies per Lead
-   // const newAverageRepliesPerLead = totalContacts > 0 ? numReplies / totalContacts : 0;
-   // setAverageRepliesPerLead(Number(newAverageRepliesPerLead.toFixed(2))); // Use 2 decimal places
+    // const newAverageRepliesPerLead = totalContacts > 0 ? numReplies / totalContacts : 0;
+    // setAverageRepliesPerLead(Number(newAverageRepliesPerLead.toFixed(2))); // Use 2 decimal places
     const newBookAppointmentsRate = totalContacts > 0 ? (totalAppointments / totalContacts) * 100 : 0;
     setAverageRepliesPerLead(Number(newBookAppointmentsRate.toFixed(2)));
- // Engagement Score (weighted sum of response rate and booking appointments rate)
-  // Adjust weights as needed; the sum should be 1 for better scaling
-  const responseWeight = 0.15; // weight for response rate
-  const appointmentWeight = 0.35; // weight for booking appointments rate
-  const closedContactsWeight = 0.5;
-  const newClosedContactsRate = totalContacts > 0 ? (closedContacts / totalContacts) * 100 : 0;
+    // Engagement Score (weighted sum of response rate and booking appointments rate)
+    // Adjust weights as needed; the sum should be 1 for better scaling
+    const responseWeight = 0.15; // weight for response rate
+    const appointmentWeight = 0.35; // weight for booking appointments rate
+    const closedContactsWeight = 0.5;
+    const newClosedContactsRate = totalContacts > 0 ? (closedContacts / totalContacts) * 100 : 0;
 
-  const newEngagementScore = (newResponseRate * responseWeight) + 
-  (newBookAppointmentsRate * appointmentWeight) + 
-  (newClosedContactsRate * closedContactsWeight);
+    const newEngagementScore = (newResponseRate * responseWeight) +
+      (newBookAppointmentsRate * appointmentWeight) +
+      (newClosedContactsRate * closedContactsWeight);
 
-setEngagementScore(Number(newEngagementScore.toFixed(2)));
+    setEngagementScore(Number(newEngagementScore.toFixed(2)));
   }, [numReplies, totalContacts, totalAppointments]);
 
   // Update useEffect to call calculateAdditionalStats
@@ -1496,7 +1466,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         });
         companyId = userResponse.data.company_id;
-        
+
         if (companyId) {
           // Load AI message data FIRST to ensure it's displayed correctly
           console.log('🚀 Starting AI data loading FIRST...');
@@ -1509,14 +1479,14 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                 }
               });
               console.log('🔍 AI config response:', configResponse.data);
-              
+
               if (configResponse.data && configResponse.data.messageUsage) {
                 const aiMessages = configResponse.data.messageUsage.aiMessages || 0;
                 setTotalAIResponses(aiMessages);
                 setAiDataLoaded(true);
                 console.log('🚀 AI Message Usage loaded FIRST:', aiMessages);
               }
-              
+
               if (configResponse.data && configResponse.data.usageQuota) {
                 console.log('🔍 Usage quota data:', configResponse.data.usageQuota);
                 console.log('🔍 Company data:', configResponse.data.companyData);
@@ -1531,22 +1501,22 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                   quota = (configResponse.data.usageQuota.aiMessages || 0) + 100;
                   console.log('🔍 Free plan calculation:', configResponse.data.usageQuota.aiMessages, '+ 100 =', quota);
                 }
-                              // Only set quota if it's not already set to a higher value
-              if (!aiDataLoaded || quota > aiMessageQuota) {
-                setAiMessageQuota(quota);
-                console.log('✅ AI Message Quota loaded FIRST:', quota);
-              } else {
-                console.log('🛡️ Quota already set to higher value:', aiMessageQuota, 'keeping it instead of:', quota);
-              }
+                // Only set quota if it's not already set to a higher value
+                if (!aiDataLoaded || quota > aiMessageQuota) {
+                  setAiMessageQuota(quota);
+                  console.log('✅ AI Message Quota loaded FIRST:', quota);
+                } else {
+                  console.log('🛡️ Quota already set to higher value:', aiMessageQuota, 'keeping it instead of:', quota);
+                }
               }
             } catch (error) {
               console.log('❌ Error loading AI data first:', error);
             }
           };
-          
+
           // Load AI data immediately
           loadAIDataFirst();
-          
+
           // Then load other data
           fetchContactsData();
           calculateAdditionalStats();
@@ -1565,12 +1535,12 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
   const handleEmployeeSelect = async (employee: Employee) => {
     console.log('🚀 Employee selected:', employee);
     setLoading(true);
-    
+
     try {
       // Use the existing employee data which already has the correct assignedContacts
       // Only fetch additional data if needed
       const existingEmployee = employees.find(emp => emp.id === employee.id);
-      
+
       if (existingEmployee && existingEmployee.assignedContacts !== undefined) {
         console.log('✅ Using existing employee data with correct assignedContacts:', existingEmployee);
         setSelectedEmployee(existingEmployee);
@@ -1580,7 +1550,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         console.log('⚠️ No existing data or missing assignedContacts, fetching complete data');
         // Only fetch if we don't have the data
         const completeEmployeeData = await fetchEmployeeData(employee.id);
-        
+
         if (completeEmployeeData) {
           console.log('✅ Complete employee data fetched:', completeEmployeeData);
           setSelectedEmployee(completeEmployeeData);
@@ -1610,7 +1580,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
   const fetchAvailableTags = async () => {
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) return;
-    
+
     try {
       // Get companyId from user data
       const userResponse = await axios.get(`https://bisnesgpt.jutateknologi.com/api/user-data/${userEmail}`, {
@@ -1628,7 +1598,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         }
       });
       const tags = tagsResponse.data.map((tag: any) => tag.name);
-      
+
       setAvailableTags(tags.sort());
     } catch (error) {
       console.error('Error fetching tags:', error);
@@ -1845,8 +1815,8 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         x: {
           title: {
             display: true,
-            text: contactsTimeFilter === 'today' ? 'Hour' : 
-                  contactsTimeFilter === 'all' ? 'Month' : 'Date',
+            text: contactsTimeFilter === 'today' ? 'Hour' :
+              contactsTimeFilter === 'all' ? 'Month' : 'Date',
             color: 'rgb(75, 85, 99)',
             font: {
               weight: 'bold',
@@ -1859,8 +1829,8 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           },
           ticks: {
             color: 'rgb(107, 114, 128)',
-            maxTicksLimit: contactsTimeFilter === 'today' ? 24 : 
-                          contactsTimeFilter === 'all' ? undefined : 10,
+            maxTicksLimit: contactsTimeFilter === 'today' ? 24 :
+              contactsTimeFilter === 'all' ? undefined : 10,
             autoSkip: true,
             maxRotation: 45,
             minRotation: 45,
@@ -1874,15 +1844,15 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         legend: {
           display: false,
         },
-                  title: {
-            display: true,
-            text: 'Total Contacts Over Time',
-            color: 'rgb(31, 41, 55)',
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          },
+        title: {
+          display: true,
+          text: 'Total Contacts Over Time',
+          color: 'rgb(31, 41, 55)',
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        },
       },
       barPercentage: 0.9,
       categoryPercentage: 0.9,
@@ -1891,11 +1861,11 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           const index = elements[0].index;
           const label = contactsOverTime[index].date;
           setSelectedPeriodLabel(label);
-          
+
           // Calculate period start and end based on the filter
           let periodStart: Date;
           let periodEnd: Date;
-          
+
           if (contactsTimeFilter === 'today') {
             // For hourly view
             const [hours] = label.split(':');
@@ -1915,7 +1885,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             periodEnd = new Date(periodStart);
             periodEnd.setDate(periodEnd.getDate() + 1);
           }
-          
+
           fetchContactsForPeriod(periodStart, periodEnd);
         }
       },
@@ -1950,7 +1920,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       );
       // Handle API response format { success, total, contacts: [...] }
       const contacts = contactsResponse.data.contacts || [];
-      
+
       const closedContacts: { [key: string]: number } = {};
 
       contacts.forEach((contactData: any) => {
@@ -2080,7 +2050,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       const companyId = userRes.data.company_id;
       const res = await axios.get(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}/scheduled-messages-summary`);
       const summary = res.data.summary;
-  
+
       // Process into chart data
       const monthlyData: { [key: string]: { scheduled: number; completed: number; failed: number } } = {};
       summary.forEach((row: any) => {
@@ -2091,7 +2061,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         else if (row.status === 'failed') monthlyData[row.month_key].failed = Number(row.count);
         else monthlyData[row.month_key].scheduled = Number(row.count);
       });
-  
+
       const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
         const [monthA, yearA] = a.split(' ');
         const [monthB, yearB] = b.split(' ');
@@ -2100,31 +2070,31 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         if (yearDiff !== 0) return yearDiff;
         return monthNames.indexOf(monthA) - monthNames.indexOf(monthB);
       });
-  
+
       setBlastMessageData({
         labels: sortedMonths,
         datasets: [
-          { 
-            label: 'Scheduled', 
-            data: sortedMonths.map(m => monthlyData[m].scheduled), 
+          {
+            label: 'Scheduled',
+            data: sortedMonths.map(m => monthlyData[m].scheduled),
             backgroundColor: 'rgba(59, 130, 246, 0.6)',
             borderColor: 'rgba(59, 130, 246, 0.8)',
             borderWidth: 2,
             borderRadius: 4,
             hoverBackgroundColor: 'rgba(59, 130, 246, 0.8)'
           },
-          { 
-            label: 'Completed', 
-            data: sortedMonths.map(m => monthlyData[m].completed), 
+          {
+            label: 'Completed',
+            data: sortedMonths.map(m => monthlyData[m].completed),
             backgroundColor: 'rgba(34, 197, 94, 0.6)',
             borderColor: 'rgba(34, 197, 94, 0.8)',
             borderWidth: 2,
             borderRadius: 4,
             hoverBackgroundColor: 'rgba(34, 197, 94, 0.8)'
           },
-          { 
-            label: 'Failed', 
-            data: sortedMonths.map(m => monthlyData[m].failed), 
+          {
+            label: 'Failed',
+            data: sortedMonths.map(m => monthlyData[m].failed),
             backgroundColor: 'rgba(239, 68, 68, 0.6)',
             borderColor: 'rgba(239, 68, 68, 0.8)',
             borderWidth: 2,
@@ -2168,7 +2138,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
     try {
       const userEmail = localStorage.getItem('userEmail');
       if (!userEmail) return;
-  
+
       // Get companyId from user-data endpoint
       const userRes = await axios.get(`https://bisnesgpt.jutateknologi.com/api/user-data/${userEmail}`);
       const companyId = userRes.data.company_id;
@@ -2190,27 +2160,27 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         setClosedContacts(dashboardData.kpi.closedContacts);
         setOpenContacts(dashboardData.kpi.openContacts);
         setReplies(dashboardData.kpi.numReplies);
-        
+
         // Set engagement metrics
         if (dashboardData.engagementMetrics) {
           setResponseRate(parseFloat(dashboardData.engagementMetrics.responseRate));
           setEngagementScore(parseFloat(dashboardData.engagementMetrics.engagementScore));
           setConversionRate(parseFloat(dashboardData.engagementMetrics.conversionRate));
         }
-        
+
         // Set leads overview
         if (dashboardData.leadsOverview) {
           setLeadsOverview(dashboardData.leadsOverview);
         }
-        
+
         // Set phone line stats
         if (dashboardData.phoneLineStats) {
           setPhoneLineStats(dashboardData.phoneLineStats);
         }
-        
+
         // Set employee data from the dashboard response
         let employeeListData: Employee[] = [];
-        
+
         if (dashboardData.employeePerformance && dashboardData.employeePerformance.length > 0) {
           employeeListData = dashboardData.employeePerformance.map((emp: any) => ({
             id: emp.employee_id,
@@ -2243,23 +2213,23 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             messageCountMap: {}
           };
         }
-        
+
         // Apply assignment data to employees
         console.log('🔍 Available employees to match:', employeeListData.map(emp => emp.name));
         console.log('🔍 Assignment data keys:', Object.keys(assignmentData.contactCountMap));
-        
+
         employeeListData.forEach(emp => {
           // Try to match employee by name (case-insensitive)
           const normalizedEmpName = emp.name.trim().toLowerCase();
           console.log(`🔍 Trying to match employee: "${emp.name}" (normalized: "${normalizedEmpName}")`);
-          
+
           // Update assigned contacts
           if (assignmentData.contactCountMap[normalizedEmpName] !== undefined) {
             emp.assignedContacts = assignmentData.contactCountMap[normalizedEmpName];
             console.log(`✅ ${emp.name}: ${emp.assignedContacts} assigned contacts (exact match)`);
           } else {
             // Try partial name matching
-            const partialMatch = Object.keys(assignmentData.contactCountMap).find(key => 
+            const partialMatch = Object.keys(assignmentData.contactCountMap).find(key =>
               key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
             );
             if (partialMatch) {
@@ -2270,24 +2240,24 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
               console.log(`⚠️ ${emp.name}: No match found, using fallback ${emp.assignedContacts} assigned contacts`);
             }
           }
-          
+
           // Update closed contacts
           if (assignmentData.closedCountMap[normalizedEmpName] !== undefined) {
             emp.closedContacts = assignmentData.closedCountMap[normalizedEmpName];
           } else {
-            const partialMatch = Object.keys(assignmentData.closedCountMap).find(key => 
+            const partialMatch = Object.keys(assignmentData.closedCountMap).find(key =>
               key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
             );
             if (partialMatch) {
               emp.closedContacts = assignmentData.closedCountMap[partialMatch];
             }
           }
-          
+
           // Update outgoing messages
           if (assignmentData.messageCountMap[normalizedEmpName] !== undefined) {
             emp.outgoingMessages = assignmentData.messageCountMap[normalizedEmpName];
           } else {
-            const partialMatch = Object.keys(assignmentData.messageCountMap).find(key => 
+            const partialMatch = Object.keys(assignmentData.messageCountMap).find(key =>
               key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
             );
             if (partialMatch) {
@@ -2295,7 +2265,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             }
           }
         });
-        
+
         console.log('🎯 Final employee assignments applied:', employeeListData.map(emp => ({
           name: emp.name,
           assignedContacts: emp.assignedContacts,
@@ -2305,7 +2275,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
 
         // Sort employees by assigned contacts
         employeeListData.sort((a, b) => (b.assignedContacts || 0) - (a.assignedContacts || 0));
-        
+
         // Ensure we have employees before setting state
         if (employeeListData.length === 0) {
           console.log('⚠️ Still no employees, creating minimal employee list...');
@@ -2332,7 +2302,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             }
           }
         }
-        
+
         console.log('🎯 Final employee list:', employeeListData);
         setEmployees(employeeListData);
 
@@ -2348,12 +2318,12 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         }
 
         // Set company data - companyId is already available from userRes
-        
+
         console.log('Dashboard data loaded:', dashboardData);
         console.log('Employee performance data:', dashboardData.employeePerformance);
         console.log('Final employee list with assignments:', employeeListData);
       }
-  
+
     } catch (error) {
       console.error('Error fetching company data:', error);
       // Fallback to original method if new endpoint fails
@@ -2369,7 +2339,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
   // Add this new function to fetch real dashboard data
   const fetchRealDashboardData = async () => {
     let dashboardData: any = null; // Declare outside try block so it's available in catch
-    
+
     try {
       const userEmail = localStorage.getItem('userEmail');
       if (!userEmail) return;
@@ -2386,7 +2356,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       let dashboardData: any = null;
       let retryCount = 0;
       const maxRetries = 2;
-      
+
       while (retryCount <= maxRetries) {
         try {
           console.log(`🔄 Attempting dashboard fetch (attempt ${retryCount + 1}/${maxRetries + 1})...`);
@@ -2403,15 +2373,15 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         } catch (dashboardError: any) {
           retryCount++;
           console.log(`⚠️ Dashboard endpoint failed (attempt ${retryCount}/${maxRetries + 1}):`, dashboardError?.response?.status, dashboardError?.message);
-          
+
           if (retryCount > maxRetries) {
             console.log('⚠️ Max retries reached, using fallback data');
             setDashboardStatus('fallback');
-            
+
             // Preserve existing employee data instead of clearing it
             const existingEmployees = employees.length > 0 ? employees : [];
             console.log('🔄 Preserving existing employee data:', existingEmployees.length, 'employees');
-            
+
             // Create minimal dashboard data structure but preserve employee data
             dashboardData = {
               employeePerformance: existingEmployees.map(emp => ({
@@ -2431,7 +2401,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             };
             break;
           }
-          
+
           // Wait before retry (exponential backoff)
           await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
         }
@@ -2455,7 +2425,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           console.log('Message usage data:', configResponse.data?.messageUsage);
           console.log('Usage quota data:', configResponse.data?.usageQuota);
           console.log('Company data:', configResponse.data?.companyData);
-          
+
           if (configResponse.data && configResponse.data.messageUsage) {
             const aiMessages = configResponse.data.messageUsage.aiMessages || 0;
             if (!aiDataLoaded || aiMessages > 0) {
@@ -2468,11 +2438,11 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           } else {
             console.log('❌ No messageUsage found in config response');
           }
-          
+
           if (configResponse.data && configResponse.data.usageQuota) {
             let quota = configResponse.data.usageQuota.aiMessages || 5000;
             console.log('Raw quota from API:', quota);
-            
+
             // Use the EXACT same quota calculation logic as the Chat page
             if (configResponse.data.companyData && configResponse.data.companyData.plan === "enterprise") {
               quota = (configResponse.data.usageQuota.aiMessages || 0) + 5000;
@@ -2484,7 +2454,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
               quota = (configResponse.data.usageQuota.aiMessages || 0) + 100;
               console.log('🔄 Free plan: quota =', configResponse.data.usageQuota.aiMessages, '+ 100 =', quota);
             }
-            
+
             console.log('🎯 Final AI Message Quota set to:', quota);
             // Only set quota if it's not already set to a higher value (indicating it was loaded correctly)
             if (!aiDataLoaded || quota > aiMessageQuota) {
@@ -2499,7 +2469,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           } else {
             console.log('🚀 AI quota already loaded, skipping fallback');
           }
-          
+
           console.log('=== END DASHBOARD AI MESSAGE DEBUG ===');
         } catch (error) {
           console.log('❌ Config endpoint error:', error);
@@ -2552,7 +2522,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
 
     } catch (error) {
       console.error('Error fetching real dashboard data:', error);
-      
+
       // Ensure we have a dashboardData object even if the main fetch failed
       if (!dashboardData) {
         dashboardData = {
@@ -2562,12 +2532,12 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           performanceMetrics: { topPerformers: [] }
         };
       }
-      
+
       // Fallback to calculated values
       setActiveConversations(openContacts);
       setAvgResponseTime(employeeStats?.averageResponseTime || 0);
       setTotalMessages(numReplies);
-      
+
       // Try to get AI responses from dashboard data if available, otherwise use fallback
       if (dashboardData && dashboardData.aiMessageUsage !== undefined && !aiDataLoaded) {
         setTotalAIResponses(dashboardData.aiMessageUsage);
@@ -2579,19 +2549,19 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         setAiDataLoaded(true);
         console.log('🔄 Using calculated AI responses fallback:', Math.floor(numReplies * 0.8) || 0);
       }
-      
+
       if (!aiDataLoaded) {
         setAiMessageQuota(5000); // Default quota only if AI data not loaded
         console.log('🔄 Using default quota 5000 as fallback');
       } else {
         console.log('🚀 AI quota already loaded, skipping default fallback');
       }
-      
+
       // Additional protection: never override a quota that's already set to the correct value
       if (aiMessageQuota > 5000 && aiDataLoaded) {
         console.log('🛡️ Protecting existing quota:', aiMessageQuota, 'from being overwritten');
       }
-      
+
       // Add sample data for demonstration
       setRecentActivity([
         {
@@ -2613,7 +2583,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           employee: 'Marketing Team'
         }
       ]);
-      
+
       setTopPerformers([
         {
           name: 'John Smith',
@@ -2638,7 +2608,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
   const fetchEmployeeAssignments = async (companyId: string, userEmail: string) => {
     try {
       console.log('🔍 Fetching real employee assignment data...');
-      
+
       // Method 1: Try to get assignments from dedicated assignments endpoint
       try {
         const assignmentsResponse = await axios.get(`https://bisnesgpt.jutateknologi.com/api/assignments/${companyId}`, {
@@ -2646,7 +2616,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
-        
+
         if (assignmentsResponse.data && assignmentsResponse.data.length > 0) {
           console.log('✅ Assignments data found:', assignmentsResponse.data);
           return assignmentsResponse.data;
@@ -2654,7 +2624,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       } catch (error) {
         console.log('⚠️ Assignments endpoint not available, trying contacts method...');
       }
-      
+
       // Method 2: Get contacts and analyze tags for assignments
       const contactsResponse = await axios.get(
         `https://bisnesgpt.jutateknologi.com/api/companies/${companyId}/contacts?email=${encodeURIComponent(userEmail)}`,
@@ -2664,16 +2634,16 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         }
       );
-      
+
       const contacts = contactsResponse.data.contacts || [];
       console.log('🔍 Analyzing', contacts.length, 'contacts for employee assignments...');
-      
+
       // Debug: Show sample contact structure
       if (contacts.length > 0) {
         console.log('🔍 Sample contact structure:', JSON.stringify(contacts[0], null, 2));
         console.log('🔍 Sample contact tags:', contacts[0].tags);
         console.log('🔍 Sample contact assignedTo:', contacts[0].assignedTo);
-        
+
         // Show first few contacts with their assignments
         console.log('🔍 First 5 contacts and their assignments:');
         for (let i = 0; i < Math.min(5, contacts.length); i++) {
@@ -2681,15 +2651,15 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           console.log(`  ${i + 1}. ${contact.name}: assignedTo=${JSON.stringify(contact.assignedTo)}, tags=${JSON.stringify(contact.tags)}`);
         }
       }
-      
+
       // Create maps to count contacts per employee
       const contactCountMap: { [key: string]: number } = {};
       const closedCountMap: { [key: string]: number } = {};
       const messageCountMap: { [key: string]: number } = {};
-      
+
       contacts.forEach((contact: any) => {
         let assignedEmployee = null;
-        
+
         // Structure 1: assignedTo array (this is what we see in the actual data)
         if (contact.assignedTo && Array.isArray(contact.assignedTo) && contact.assignedTo.length > 0) {
           // Take the first assigned employee (remove duplicates)
@@ -2717,17 +2687,17 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         } else if (contact.tags && contact.tags.assigned_employee) {
           assignedEmployee = contact.tags.assigned_employee;
         }
-        
+
         if (assignedEmployee) {
           // Normalize employee name (remove extra spaces, convert to lowercase for comparison)
           const normalizedName = assignedEmployee.trim().toLowerCase();
           contactCountMap[normalizedName] = (contactCountMap[normalizedName] || 0) + 1;
-          
+
           console.log(`✅ Found assignment: ${contact.name} -> ${assignedEmployee} (normalized: ${normalizedName})`);
-          
+
           // Check if contact is closed (look in tags array)
           if (contact.tags && Array.isArray(contact.tags)) {
-            const hasClosedTag = contact.tags.some((tag: any) => 
+            const hasClosedTag = contact.tags.some((tag: any) =>
               typeof tag === 'string' && tag.toLowerCase() === 'closed'
             );
             if (hasClosedTag) {
@@ -2735,7 +2705,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
               console.log(`✅ Contact ${contact.name} is closed`);
             }
           }
-          
+
           // Count messages if available
           if (contact.messageCount) {
             messageCountMap[normalizedName] = (messageCountMap[normalizedName] || 0) + contact.messageCount;
@@ -2744,18 +2714,18 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           console.log(`⚠️ No assignment found for contact: ${contact.name}`);
         }
       });
-      
+
       console.log('🔍 Assignment analysis results:');
       console.log('Contact counts:', contactCountMap);
       console.log('Closed counts:', closedCountMap);
       console.log('Message counts:', messageCountMap);
-      
+
       return {
         contactCountMap,
         closedCountMap,
         messageCountMap
       };
-      
+
     } catch (error) {
       console.error('❌ Error fetching employee assignments:', error);
       return {
@@ -2775,10 +2745,10 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
+
       const employeesData = employeesResponse.data;
       console.log('✅ Employees fetched:', employeesData);
-      
+
       // Transform to Employee format
       const employeeListData: Employee[] = employeesData.map((emp: any) => ({
         id: emp.id || emp.employee_id,
@@ -2791,17 +2761,17 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         closedContacts: 0,
         currentMonthAssignments: 0
       }));
-      
+
       // Fetch real assignment data for these employees
       const userEmail = localStorage.getItem('userEmail');
       if (userEmail) {
         console.log('🔍 Fetching assignment data for fallback employees...');
         const assignmentData = await fetchEmployeeAssignments(companyId, userEmail);
-        
+
         // Apply assignment data
         employeeListData.forEach(emp => {
           const normalizedEmpName = emp.name.trim().toLowerCase();
-          
+
           if (assignmentData.contactCountMap[normalizedEmpName] !== undefined) {
             emp.assignedContacts = assignmentData.contactCountMap[normalizedEmpName];
             emp.closedContacts = assignmentData.closedCountMap[normalizedEmpName] || 0;
@@ -2809,7 +2779,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             console.log(`✅ Fallback ${emp.name}: ${emp.assignedContacts} assigned contacts`);
           } else {
             // Try partial matching
-            const partialMatch = Object.keys(assignmentData.contactCountMap).find(key => 
+            const partialMatch = Object.keys(assignmentData.contactCountMap).find(key =>
               key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
             );
             if (partialMatch) {
@@ -2821,9 +2791,9 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         });
       }
-      
+
       setEmployees(employeeListData);
-      
+
       // Find current user
       if (userEmail) {
         const currentUserData = employeeListData.find(emp => emp.email === userEmail);
@@ -2836,7 +2806,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         }
       }
-      
+
       return employeeListData;
     } catch (error) {
       console.error('❌ Error fetching employees fallback:', error);
@@ -2852,20 +2822,20 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         setError("User not authenticated");
         return;
       }
-      
+
       // Get companyId from user-data endpoint
       const userRes = await axios.get(`https://bisnesgpt.jutateknologi.com/api/user-data/${userEmail}`);
       const companyId = userRes.data.company_id;
       if (!companyId) return;
-  
+
       console.log('🔍 Fetching employee stats for:', { companyId, employeeId });
-  
+
       // Get the current selected employee to preserve existing data
       const currentSelectedEmployee = selectedEmployee;
       console.log('🔍 Current selected employee data:', currentSelectedEmployee);
       console.log('🔍 Employee ID being fetched:', employeeId);
       console.log('🔍 Current selected employee ID:', currentSelectedEmployee?.id);
-  
+
       // Try to fetch stats from the stats endpoint first
       try {
         const response = await axios.get(
@@ -2876,10 +2846,10 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
             }
           }
         );
-        
+
         const statsData = response.data;
         console.log('✅ Employee stats fetched successfully:', statsData);
-        
+
         setEmployeeStats({
           conversationsAssigned: statsData.conversationsAssigned || currentSelectedEmployee?.assignedContacts || 0,
           outgoingMessagesSent: statsData.outgoingMessagesSent || currentSelectedEmployee?.outgoingMessages || 0,
@@ -2896,7 +2866,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         return;
       } catch (statsError: any) {
         console.log('⚠️ Stats endpoint failed, using fallback data:', statsError?.response?.status, statsError?.message);
-        
+
         // If stats endpoint fails, preserve the existing employee data and only set the stats fields
         if (currentSelectedEmployee) {
           console.log('🔄 Using fallback employee data for stats, preserving existing data');
@@ -2915,7 +2885,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           });
           return;
         }
-        
+
         // If no current selected employee, try to get from the employee list
         const currentEmployee = employees.find(emp => emp.id === employeeId);
         if (currentEmployee) {
@@ -2936,7 +2906,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           return;
         }
       }
-      
+
       // Final fallback - set default values
       console.log('🔄 Using default employee stats');
       setEmployeeStats({
@@ -2952,7 +2922,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         phoneAssignments: {},
         weightageUsed: {}
       });
-      
+
     } catch (error) {
       console.error('❌ Error in fetchEmployeeStats:', error);
       // Set default values on error
@@ -2972,24 +2942,24 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
     }
   };
 
-          // Update useEffect to fetch stats for current user by default
-        useEffect(() => {
-          if (currentUser) {
-            fetchEmployeeStats(currentUser.id);
-          }
-        }, [currentUser]); // Dependency on currentUser
+  // Update useEffect to fetch stats for current user by default
+  useEffect(() => {
+    if (currentUser) {
+      fetchEmployeeStats(currentUser.id);
+    }
+  }, [currentUser]); // Dependency on currentUser
 
   // Add useEffect to update monthly assignments when employee data changes
   useEffect(() => {
-    if (selectedEmployee && selectedEmployee.assignedContacts && 
-        (!selectedEmployee.monthlyAssignments || Object.keys(selectedEmployee.monthlyAssignments).length === 0)) {
-      
+    if (selectedEmployee && selectedEmployee.assignedContacts &&
+      (!selectedEmployee.monthlyAssignments || Object.keys(selectedEmployee.monthlyAssignments).length === 0)) {
+
       console.log('🔄 Updating monthly assignments for employee:', selectedEmployee.name);
-      
+
       // Create monthly assignments data if it doesn't exist
       const currentMonth = format(new Date(), 'yyyy-MM');
       const monthlyAssignments = { [currentMonth]: selectedEmployee.assignedContacts };
-      
+
       // Only update if monthlyAssignments is actually missing or empty
       if (!selectedEmployee.monthlyAssignments || Object.keys(selectedEmployee.monthlyAssignments).length === 0) {
         setSelectedEmployee(prev => {
@@ -3042,7 +3012,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         }
       }
     };
-    
+
     ensureEmployeesLoaded();
   }, [employees.length]);
 
@@ -3059,14 +3029,14 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
               }
             });
-            
+
             if (configResponse.data && configResponse.data.messageUsage) {
               const aiMessages = configResponse.data.messageUsage.aiMessages || 0;
               setTotalAIResponses(aiMessages);
               setAiDataLoaded(true);
               console.log('🚀 Dashboard mounted - AI Message Usage loaded:', aiMessages);
             }
-            
+
             if (configResponse.data && configResponse.data.usageQuota) {
               let quota = 0;
               if (configResponse.data.companyData && configResponse.data.companyData.plan === "enterprise") {
@@ -3089,7 +3059,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         }
       };
-      
+
       refreshAIData();
     } else {
       console.log('🚀 AI data already loaded, skipping mount refresh');
@@ -3168,13 +3138,13 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       });
       // Handle API response format { success, total, contacts: [...] }
       const contacts = contactsResponse.data.contacts || [];
-      
+
       const periodContacts: Contact[] = [];
-      
+
       contacts.forEach((contactData: any) => {
         if (contactData.phone && contactData.phone.startsWith('+') && contactData.createdAt) {
           const createdAt = new Date(contactData.createdAt);
-          
+
           if (createdAt >= periodStart && createdAt < periodEnd) {
             if (selectedTag === 'all' || (contactData.tags && contactData.tags.includes(selectedTag))) {
               periodContacts.push({
@@ -3210,12 +3180,12 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           }
         }
       });
-      
+
       // Sort contacts by date added
-      periodContacts.sort((a, b) => 
+      periodContacts.sort((a, b) =>
         new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
       );
-      
+
       setSelectedPeriodContacts(periodContacts);
       setIsContactModalOpen(true);
     } catch (error) {
@@ -3224,16 +3194,16 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
   };
 
   // Add the ContactsModal component
-  const ContactsModal = ({ 
-    isOpen, 
-    onClose, 
-    contacts, 
-    periodLabel 
-  }: { 
-    isOpen: boolean; 
-    onClose: () => void; 
-    contacts: Contact[]; 
-    periodLabel: string; 
+  const ContactsModal = ({
+    isOpen,
+    onClose,
+    contacts,
+    periodLabel
+  }: {
+    isOpen: boolean;
+    onClose: () => void;
+    contacts: Contact[];
+    periodLabel: string;
   }) => {
     if (!isOpen) return null;
 
@@ -3274,7 +3244,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                     <td className="p-3">
                       <div className="flex flex-wrap gap-1.5">
                         {contact.tags.map((tag, index) => (
-                          <span 
+                          <span
                             key={index}
                             className="px-2.5 py-1 text-xs rounded-full backdrop-blur-sm bg-blue-500/20 dark:bg-blue-400/30 text-blue-700 dark:text-blue-300 border border-blue-200/30 dark:border-blue-500/30 font-medium"
                           >
@@ -3338,7 +3308,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         }
       });
       const companyId = userResponse.data.company_id;
-      
+
       if (companyId !== '072') return;
 
       // TODO: Replace with actual assignments API endpoint when available
@@ -3356,7 +3326,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       contacts.forEach((contactData: any) => {
         if (contactData.assignedTo && contactData.createdAt) {
           const date = format(new Date(contactData.createdAt), 'yyyy-MM-dd');
-          
+
           if (!employeeAssignments[contactData.assignedTo]) {
             employeeAssignments[contactData.assignedTo] = {
               daily: [],
@@ -3464,13 +3434,13 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
     {
       id: 'employee-assignments',
       title: 'Employee Metrics',
-      content: { 
-        employees, 
-        filteredEmployees, 
-        chartData, 
-        lineChartOptions, 
-        currentUser, 
-        selectedEmployee, 
+      content: {
+        employees,
+        filteredEmployees,
+        chartData,
+        lineChartOptions,
+        currentUser,
+        selectedEmployee,
         handleEmployeeSelect,
         closedContactsChartData,
         closedContactsChartOptions
@@ -3482,7 +3452,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       content: (
         <div className="h-full flex flex-col">
           {blastMessageData.labels.length > 0 ? (
-            <Bar 
+            <Bar
               data={{
                 labels: blastMessageData.labels,
                 datasets: [
@@ -3503,8 +3473,8 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                   },
                 ]
               }}
-              options={{ 
-                responsive: true, 
+              options={{
+                responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                   y: {
@@ -3573,7 +3543,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                     }
                   },
                 },
-              }} 
+              }}
             />
           ) : (
             <div className="flex items-center justify-center h-full text-center text-gray-600 dark:text-gray-400">
@@ -3634,11 +3604,11 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                   // },
                   tooltip: {
                     callbacks: {
-                      label: function(context) {
+                      label: function (context) {
                         const label = context.dataset.label || '';
                         const value = context.parsed.x;
                         const metric = context.label;
-                        
+
                         if (metric === 'Response Time (min)') {
                           return `${label}: ${value} minutes`;
                         }
@@ -3665,10 +3635,10 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         <div className="h-[500px]"> {/* Fixed height */}
           <div className="h-[300px]"> {/* Chart height */}
             {assignmentsData.labels.length > 0 ? (
-              <Bar 
-                data={assignmentsData} 
-                options={{ 
-                  responsive: true, 
+              <Bar
+                data={assignmentsData}
+                options={{
+                  responsive: true,
                   maintainAspectRatio: false,
                   scales: {
                     y: {
@@ -3743,15 +3713,15 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
 
                           // Show last 5 days of assignments
                           const recentAssignments = employeeData.daily.slice(-5);
-                          return '\nRecent daily assignments:\n' + 
-                            recentAssignments.map(day => 
+                          return '\nRecent daily assignments:\n' +
+                            recentAssignments.map(day =>
                               `${format(new Date(day.date), 'MMM dd')}: ${day.count} assignments`
                             ).join('\n');
                         }
                       }
                     },
                   },
-                }} 
+                }}
               />
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
@@ -3762,7 +3732,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
               </div>
             )}
           </div>
-          
+
           {/* Daily breakdown table */}
           <div className="mt-6 h-[160px] overflow-y-auto">
             <table className="w-full text-sm">
@@ -3777,7 +3747,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                 {assignmentsData.labels.map(employeeId => {
                   const employeeData = assignmentsData.dailyData[employeeId];
                   const recentAssignments = employeeData.daily.slice(-5);
-                  
+
                   return (
                     <tr key={employeeId} className="border-t border-gray-100/50 dark:border-gray-600/30 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors duration-200">
                       <td className="p-3 font-medium">{employeeId}</td>
@@ -3898,7 +3868,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
       console.log('No employee selected');
       return;
     }
-    
+
     console.log('Employee Debug Info:', {
       name: employee.name,
       id: employee.id,
@@ -3919,11 +3889,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
 
 
   return (
-          <div className="flex flex-col w-full h-full overflow-x-hidden overflow-y-auto bg-gradient-to-br from-slate-100/80 via-blue-100/60 to-indigo-200/80 dark:from-gray-900/90 dark:via-gray-800/80 dark:to-gray-700/90 relative">
-        {/* Enhanced background with multiple layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-blue-50/30 dark:from-gray-800/40 dark:via-transparent dark:to-gray-700/30"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-100/20 via-transparent to-transparent dark:from-purple-900/20"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-100/20 via-transparent to-transparent dark:from-blue-900/20"></div>
+    <div className="flex flex-col w-full h-full overflow-x-hidden overflow-y-auto bg-white relative">
       <style>{`
         @keyframes fade-in-up {
           from {
@@ -3940,136 +3906,111 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
         }
       `}</style>
 
-      <div className="container mx-auto px-4 pt-6 pb-6 space-y-6 relative">
-        {/* Enhanced background decorative elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-400/20 to-pink-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-cyan-400/15 to-blue-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-pink-400/15 to-rose-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }}></div>
-        </div>
+      <div className="container mx-auto px-4 pt-6 pb-6 space-y-8 relative">
         {/* Dashboard Status Indicator - Removed since fallback data is working correctly */}
-        
+
         {/* KPIs Section - Glassmorphic and Compact */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {dashboardCards.find(card => card.id === 'kpi')?.content && Array.isArray(dashboardCards.find(card => card.id === 'kpi')?.content) 
+        {/* KPIs Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {dashboardCards.find(card => card.id === 'kpi')?.content && Array.isArray(dashboardCards.find(card => card.id === 'kpi')?.content)
             ? (dashboardCards.find(card => card.id === 'kpi')?.content as any[]).map((item: any, index: number) => (
-            <div key={index} className="backdrop-blur-xl bg-white/40 dark:bg-gray-800/40 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-600/40 p-5 hover:shadow-3xl transition-all duration-500 hover:scale-[1.03] animate-fade-in-up relative overflow-hidden group" style={{ animationDelay: `${index * 100}ms` }}>
-              {/* Glassmorphic inner glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-              {/* Subtle border glow */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-1.5 mb-1.5">
-                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400">{item.label}</p>
-                    <button
-                      className="text-gray-400 hover:text-blue-500 transition-colors"
-                      onClick={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        setTooltipPosition({ x: rect.left, y: rect.bottom + 10 });
-                        setInfoTooltip(getKPIInfo(item.label));
-                      }}
-                    >
-                      <Lucide icon="Info" className="w-3 h-3" />
-                    </button>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                    {!loading ? item.value : (
-                      <div className="h-5 w-14 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div key={index} className="bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-5 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#f26522] transition-all duration-300 animate-fade-in-up relative group" style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <p className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">{item.label}</p>
+                      <button
+                        className="text-[#4b4b4b] hover:text-[#f26522] transition-colors"
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setTooltipPosition({ x: rect.left, y: rect.bottom + 10 });
+                          setInfoTooltip(getKPIInfo(item.label));
+                        }}
+                      >
+                        <Lucide icon="Info" className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <h3 className="text-2xl font-black text-[#f26522]">
+                      {!loading ? item.value : (
+                        <div className="h-8 w-16 bg-gray-200 border-2 border-[#4b4b4b] animate-pulse"></div>
+                      )}
+                    </h3>
+
+                    {/* Progress bar for Total Contacts */}
+                    {item.label === "Total Contacts" && (
+                      <div className="mt-4">
+                        <div className="w-full h-4 bg-white border-2 border-[#4b4b4b] relative">
+                          <div
+                            className={`h-full border-r-2 border-[#4b4b4b] transition-all duration-500 bg-[#3b82f6]`}
+                            style={{
+                              width: `${Math.min((totalContacts / 10000) * 100, 100)}%`
+                            }}
+                          >
+                            <div className="absolute top-0 bottom-0 left-0 right-0 overflow-hidden opacity-30">
+                              <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.8)_10px,rgba(255,255,255,0.8)_20px)] animate-[progress-stripes_1s_linear_infinite]"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-2">
+                          <span>Used: {totalContacts}</span>
+                          <span>Limit: 10000</span>
+                        </div>
+                      </div>
                     )}
-                  </h3>
-                  
-                  {/* Progress bar for Total Contacts */}
-                  {item.label === "Total Contacts" && (
-                    <div className="mt-3">
-                      <div className="w-full h-3 bg-gray-200/30 dark:bg-gray-700/30 rounded-full overflow-hidden backdrop-blur-md border border-white/20 dark:border-gray-600/20 relative">
-                        {/* Progress bar glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/10 rounded-full"></div>
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-500 bg-gradient-to-r ${
-                            totalContacts > 10000
-                              ? "from-red-500 to-red-600"
-                              : totalContacts > 10000 * 0.9
-                              ? "from-red-400 to-red-500"
-                              : totalContacts > 10000 * 0.7
-                              ? "from-yellow-400 to-yellow-500"
-                              : "from-blue-500 to-indigo-600"
-                          }`}
-                          style={{
-                            width: `${Math.min((totalContacts / 10000) * 100, 100)}%`
-                          }}
-                        ></div>
+
+                    {/* Progress bar for AI Responses */}
+                    {item.label === "Total AI Responses Used" && (
+                      <div className="mt-4">
+                        <div className="w-full h-4 bg-white border-2 border-[#4b4b4b] relative">
+                          <div
+                            className={`h-full border-r-2 border-[#4b4b4b] transition-all duration-500 bg-[#10b981]`}
+                            style={{
+                              width: `${Math.min(Math.max((aiMessageQuota - totalAIResponses) / aiMessageQuota * 100, 0), 100)}%`
+                            }}
+                          >
+                            <div className="absolute top-0 bottom-0 left-0 right-0 overflow-hidden opacity-30">
+                              <div className="w-full h-full bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.8)_10px,rgba(255,255,255,0.8)_20px)] animate-[progress-stripes_1s_linear_infinite]"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-2">
+                          <span>Remaining: {Math.max(aiMessageQuota - totalAIResponses, 0)}</span>
+                          <span>Limit: {aiMessageQuota}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-2">
-                        <span className="font-medium">Used: {totalContacts}</span>
-                        <span className="font-medium">Limit: 10000</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Progress bar for AI Responses */}
-                  {item.label === "Total AI Responses Used" && (
-                    <div className="mt-3">
-                      <div className="w-full h-3 bg-gray-200/30 dark:bg-gray-700/30 rounded-full overflow-hidden backdrop-blur-md border border-white/20 dark:border-gray-600/20 relative">
-                        {/* Progress bar glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/10 rounded-full"></div>
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-500 bg-gradient-to-r ${
-                            totalAIResponses > aiMessageQuota
-                              ? "from-red-500 to-red-600"
-                              : aiMessageQuota - totalAIResponses < aiMessageQuota * 0.3
-                              ? "from-yellow-400 to-yellow-500"
-                              : "from-green-500 to-emerald-600"
-                          }`}
-                          style={{ 
-                            width: `${Math.min(Math.max((aiMessageQuota - totalAIResponses) / aiMessageQuota * 100, 0), 100)}%`
-                          }}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-2">
-                        <span className="font-medium">Remaining: {Math.max(aiMessageQuota - totalAIResponses, 0)}</span>
-                        <span className="font-medium">Limit: {aiMessageQuota}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="p-3 rounded-2xl backdrop-blur-md bg-gradient-to-br from-blue-500/30 to-indigo-600/30 dark:from-blue-400/40 dark:to-indigo-500/40 text-blue-600 dark:text-blue-400 border border-blue-300/40 dark:border-blue-400/40 shadow-lg relative overflow-hidden group">
-                  {/* Inner glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-transparent to-indigo-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  {item.icon && <Lucide icon={item.icon} className="w-6 h-6 relative z-10" />}
+                    )}
+                  </div>
+                  <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#f26522] group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
+                    {item.icon && <Lucide icon={item.icon} className="w-6 h-6 stroke-[3]" />}
+                  </div>
                 </div>
               </div>
-            </div>
-          )) : null}
+            )) : null}
         </div>
-        
+
         {/* Main Dashboard Cards - Glassmorphic and Compact */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Main Dashboard Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contacts Over Time */}
           {dashboardCards.find(card => card.id === 'contacts-over-time') && (
-            <div className="backdrop-blur-xl bg-gradient-to-br from-white/50 via-white/40 to-white/30 dark:from-gray-800/50 dark:via-gray-800/40 dark:to-gray-800/30 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-600/40 overflow-hidden hover:shadow-3xl transition-all duration-500 relative group">
-              {/* Enhanced glassmorphic inner glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-              {/* Subtle border glow on hover */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="px-6 pt-5 pb-4 flex justify-between items-center border-b border-white/30 dark:border-gray-500/40 relative z-10">
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+              <div className="px-6 py-4 flex justify-between items-center border-b-4 border-[#4b4b4b] bg-white">
+                <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                   {dashboardCards.find(card => card.id === 'contacts-over-time')?.title}
                 </h3>
-                <div className="flex space-x-1.5">
+                <div className="flex space-x-2">
                   {dashboardCards.find(card => card.id === 'contacts-over-time')?.filterControls}
                 </div>
               </div>
-              <div className="p-6 relative z-10">
+              <div className="p-6">
                 {('datasets' in totalContactsChartData) ? (
                   <Bar data={totalContactsChartData} options={totalContactsChartOptions} />
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-48 text-gray-500 dark:text-gray-400">
-                    <div className="p-3 backdrop-blur-sm bg-gray-500/10 dark:bg-gray-400/20 rounded-xl border border-gray-200/30 dark:border-gray-500/30 mb-3">
-                      <Lucide icon="BarChart3" className="w-8 h-8 text-gray-400" />
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
+                    <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                      <Lucide icon="BarChart3" className="w-8 h-8 text-[#4b4b4b]" />
                     </div>
-                    <p className="text-sm font-medium">No data available</p>
+                    <p className="text-sm font-black uppercase tracking-wider">No data available</p>
                   </div>
                 )}
               </div>
@@ -4077,45 +4018,37 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
           )}
 
           {/* Split Test Performance */}
-          <div className="backdrop-blur-xl bg-gradient-to-br from-white/50 via-white/40 to-white/30 dark:from-gray-800/50 dark:via-gray-800/40 dark:to-gray-800/30 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-600/40 overflow-hidden hover:shadow-3xl transition-all duration-500 relative group">
-            {/* Enhanced glassmorphic inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-            {/* Subtle border glow on hover */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="px-6 pt-5 pb-4 border-b border-white/30 dark:border-gray-500/40 relative z-10">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+            <div className="px-6 py-4 border-b-4 border-[#4b4b4b] bg-white">
+              <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                 Split Test Performance
               </h3>
             </div>
             <SplitTestDashboardCompact />
           </div>
         </div>
-        
+
         {/* Additional Cards Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Blast Messages */}
           {dashboardCards.find(card => card.id === 'blast-messages') && (
-            <div className="backdrop-blur-xl bg-gradient-to-br from-white/50 via-white/40 to-white/30 dark:from-gray-800/50 dark:via-gray-800/40 dark:to-gray-800/30 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-600/40 overflow-hidden hover:shadow-3xl transition-all duration-500 relative group">
-              {/* Enhanced glassmorphic inner glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-              {/* Subtle border glow on hover */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="px-6 pt-5 pb-4 flex justify-between items-center border-b border-white/30 dark:border-gray-500/40 relative z-10">
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+              <div className="px-6 py-4 flex justify-between items-center border-b-4 border-[#4b4b4b] bg-white">
+                <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                   {dashboardCards.find(card => card.id === 'blast-messages')?.title}
                 </h3>
                 <Link to="blast-history">
-                  <Button variant="primary" size="sm" className="shadow-sm text-xs px-2 py-1">
-                    <Lucide icon="ExternalLink" className="w-3 h-3 mr-1" />
+                  <Button variant="primary" size="sm" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-[10px] px-3 py-1.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                    <Lucide icon="ExternalLink" className="w-3 h-3 mr-1 inline-block" />
                     Blast History
                   </Button>
                 </Link>
               </div>
-              <div className="p-6 relative z-10">
+              <div className="p-6">
                 <div className="h-64">
                   {blastMessageData.labels.length > 0 ? (
-                    <Bar data={blastMessageData} options={{ 
-                      responsive: true, 
+                    <Bar data={blastMessageData} options={{
+                      responsive: true,
                       maintainAspectRatio: false,
                       scales: {
                         y: {
@@ -4128,12 +4061,9 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                               size: 12
                             }
                           },
-                          grid: {
-                            color: 'rgba(107, 114, 128, 0.1)'
-                          },
                           ticks: {
-                            color: 'rgb(107, 114, 128)',
-                            font: { size: 11 }
+                            color: '#4b4b4b',
+                            font: { size: 11, weight: 'bold' }
                           }
                         },
                         x: {
@@ -4145,77 +4075,46 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                               size: 12
                             }
                           },
-                          grid: {
-                            color: 'rgba(107, 114, 128, 0.1)'
-                          },
                           ticks: {
-                            color: 'rgb(107, 114, 128)',
-                            font: { size: 11 }
+                            color: '#4b4b4b',
+                            font: { size: 11, weight: 'bold' }
                           }
-                        },
+                        }
                       },
                       plugins: {
-                        title: {
-                          display: false,
-                        },
                         legend: {
-                          position: 'top',
-                          labels: {
-                            usePointStyle: true,
-                            boxWidth: 6,
-                            padding: 12,
-                            font: { size: 11 }
-                          }
-                        },
-                        tooltip: {
-                          mode: 'index',
-                          intersect: false,
-                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                          padding: 8,
-                          cornerRadius: 4,
-                          titleFont: {
-                            size: 12
-                          },
-                          bodyFont: {
-                            size: 11
-                          }
-                        },
-                      },
+                          labels: { font: { weight: 'bold' } }
+                        }
+                      }
                     }} />
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-center text-gray-600 dark:text-gray-400">
-                      <div className="p-3 backdrop-blur-sm bg-gray-500/10 dark:bg-gray-400/20 rounded-xl border border-gray-200/30 dark:border-gray-500/30 mb-3">
-                        <Lucide icon="Mail" className="w-8 h-8 text-gray-400" />
+                    <div className="flex flex-col items-center justify-center h-full text-center text-[#4b4b4b] bg-white border-4 border-[#4b4b4b] border-dashed">
+                      <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                        <Lucide icon="Mail" className="w-8 h-8 text-[#4b4b4b]" />
                       </div>
-                      <p className="text-sm font-medium mb-2">No scheduled message data available</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Create blast messages to see analytics here</p>
+                      <p className="text-sm font-black uppercase tracking-wider mb-2">No scheduled message data available</p>
+                      <p className="text-xs font-bold text-gray-500 uppercase">Create blast messages to see analytics</p>
                     </div>
                   )}
                 </div>
 
                 {blastMessageData.labels.length > 0 && (
                   <div className="mt-6 grid grid-cols-3 gap-4">
-                    <div className="p-3 rounded-2xl backdrop-blur-md bg-gradient-to-br from-blue-500/20 to-blue-600/20 dark:from-blue-400/30 dark:to-blue-500/30 border border-blue-300/40 dark:border-blue-400/40 hover:bg-blue-500/25 dark:hover:bg-blue-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                      {/* Inner glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-transparent to-blue-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <p className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1 relative z-10">Total Scheduled:</p>
-                      <p className="text-sm font-bold text-blue-900 dark:text-blue-100 relative z-10">
+                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[#3b82f6] mb-1">Total Scheduled</p>
+                      <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[0].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
                     </div>
-                    <div className="p-3 rounded-2xl backdrop-blur-md bg-gradient-to-br from-green-500/20 to-green-600/20 dark:from-green-400/30 dark:to-green-500/30 border border-green-300/40 dark:border-green-400/40 hover:bg-green-500/25 dark:hover:bg-green-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                      {/* Inner glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-transparent to-green-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <p className="text-xs font-medium text-green-700 dark:text-green-300 mb-1 relative z-10">Total Completed:</p>
-                      <p className="text-sm font-bold text-green-900 dark:text-green-100 relative z-10">
+                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[#10b981] mb-1">Total Completed</p>
+                      <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[1].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
                     </div>
-                    <div className="p-3 rounded-2xl backdrop-blur-md bg-gradient-to-br from-red-500/20 to-red-600/20 dark:from-red-400/30 dark:to-red-500/30 border border-red-300/40 dark:border-red-400/40 hover:bg-red-500/25 dark:hover:bg-red-400/35 transition-all duration-300 hover:scale-105 shadow-lg relative overflow-hidden group">
-                      {/* Inner glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-red-400/20 via-transparent to-red-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <p className="text-xs font-medium text-red-700 dark:text-red-300 mb-1 relative z-10">Total Failed:</p>
-                      <p className="text-sm font-bold text-red-900 dark:text-red-100 relative z-10">
+                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
+                      <p className="text-[10px] font-black uppercase tracking-wider text-[#e11d48] mb-1">Total Failed</p>
+                      <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[2].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
                     </div>
@@ -4224,24 +4123,20 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
               </div>
             </div>
           )}
-          
+
           {/* Employee Metrics */}
           {dashboardCards.find(card => card.id === 'employee-assignments') && (
-            <div className="backdrop-blur-xl bg-gradient-to-br from-white/50 via-white/40 to-white/30 dark:from-gray-800/50 dark:via-gray-800/40 dark:to-gray-800/30 rounded-3xl shadow-2xl border border-white/30 dark:border-gray-600/40 overflow-hidden hover:shadow-3xl transition-all duration-500 relative group">
-              {/* Enhanced glassmorphic inner glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 dark:from-gray-700/20 dark:via-transparent dark:to-gray-700/10 rounded-3xl"></div>
-              {/* Subtle border glow on hover */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="px-6 pt-5 pb-4 border-b border-white/30 dark:border-gray-500/40 relative z-10">
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+              <div className="px-6 py-4 border-b-4 border-[#4b4b4b] bg-white">
+                <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider mb-4">
                   {dashboardCards.find(card => card.id === 'employee-assignments')?.title}
                 </h3>
-                <div className="mb-3">
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                <div className="mb-2">
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#4b4b4b] mb-2">
                     Select Employee
                   </label>
-                  <div className="text-xs text-gray-500 mb-2 flex items-center justify-between">
-                    <span className="font-medium">Available employees: {employees.length} | Current user: {currentUser?.name || 'None'}</span>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center justify-between">
+                    <span>Available employees: {employees.length} | Current user: {currentUser?.name || 'None'}</span>
                     <button
                       onClick={async () => {
                         const userEmail = localStorage.getItem('userEmail');
@@ -4252,17 +4147,17 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                             if (companyId) {
                               console.log('🔄 Manually refreshing employee assignments...');
                               const assignmentData = await fetchEmployeeAssignments(companyId, userEmail);
-                              
+
                               // Update existing employees with new assignment data
                               const updatedEmployees = employees.map(emp => {
                                 const normalizedEmpName = emp.name.trim().toLowerCase();
-                                const contactCount = assignmentData.contactCountMap[normalizedEmpName] || 
-                                                  Object.keys(assignmentData.contactCountMap).find(key => 
-                                                    key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
-                                                  ) ? assignmentData.contactCountMap[Object.keys(assignmentData.contactCountMap).find(key => 
-                                                    key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
-                                                  )!] : emp.assignedContacts;
-                                
+                                const contactCount = assignmentData.contactCountMap[normalizedEmpName] ||
+                                  Object.keys(assignmentData.contactCountMap).find(key =>
+                                    key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
+                                  ) ? assignmentData.contactCountMap[Object.keys(assignmentData.contactCountMap).find(key =>
+                                    key.includes(normalizedEmpName) || normalizedEmpName.includes(key)
+                                  )!] : emp.assignedContacts;
+
                                 return {
                                   ...emp,
                                   assignedContacts: contactCount,
@@ -4270,7 +4165,7 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                                   outgoingMessages: assignmentData.messageCountMap[normalizedEmpName] || emp.outgoingMessages
                                 };
                               });
-                              
+
                               setEmployees(updatedEmployees);
                               console.log('✅ Employee assignments refreshed');
                             }
@@ -4279,58 +4174,60 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
                           }
                         }
                       }}
-                      className="px-2 py-1 text-xs bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all duration-200 hover:shadow-md"
+                      className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
                       title="Refresh employee assignments"
                     >
                       🔄 Refresh
                     </button>
                   </div>
-                  <EmployeeSearch 
-                    employees={employees}
-                    onSelect={(employee: { id: string; name: string; assignedContacts?: number | undefined; }) => 
-                      handleEmployeeSelect(employee as Employee)}
-                    currentUser={currentUser}
-                  />
+                  <div className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] p-1 bg-white focus-within:ring-2 focus-within:ring-[#f26522] transition-all">
+                    <EmployeeSearch
+                      employees={employees}
+                      onSelect={(employee: { id: string; name: string; assignedContacts?: number | undefined; }) =>
+                        handleEmployeeSelect(employee as Employee)}
+                      currentUser={currentUser}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="p-6 relative z-10">
+              <div className="p-6">
                 {loading ? (
-                  <div className="flex flex-col items-center justify-center h-48">
-                    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin shadow-sm"></div>
-                    <span className="mt-3 text-sm font-medium text-gray-600 dark:text-gray-400">Loading employee data...</span>
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
+                    <div className="w-8 h-8 border-4 border-[#4b4b4b] border-t-transparent rounded-none animate-spin shadow-[2px_2px_0_#4b4b4b]"></div>
+                    <span className="mt-4 text-[10px] font-black uppercase tracking-wider">Loading employee data...</span>
                   </div>
                 ) : selectedEmployee ? (
                   chartData ? (
                     <div>
-                      <div className="flex items-center mb-4 p-3 backdrop-blur-sm bg-blue-500/10 dark:bg-blue-400/20 rounded-xl border border-blue-200/30 dark:border-blue-500/30">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center mr-2 shadow-sm">
+                      <div className="flex items-center mb-6 p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                        <div className="w-8 h-8 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] text-white flex items-center justify-center mr-3 font-black border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                           {selectedEmployee.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-semibold text-sm text-gray-800 dark:text-gray-200">{selectedEmployee.name}</span>
-                        <span className="mx-2 text-gray-400">•</span>
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{selectedEmployee.assignedContacts || 0} assigned contacts</span>
+                        <span className="font-black text-[#4b4b4b] uppercase tracking-wider">{selectedEmployee.name}</span>
+                        <span className="mx-3 text-[#4b4b4b] font-black">|</span>
+                        <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">{selectedEmployee.assignedContacts || 0} assigned contacts</span>
                       </div>
-                      <div className="h-48">
+                      <div className="h-48 border-2 border-[#4b4b4b] p-2 bg-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]">
                         <Line data={chartData} options={lineChartOptions} />
                       </div>
                     </div>
-                                  ) : (
-                  <div className="flex flex-col items-center justify-center h-48 text-gray-600 dark:text-gray-400">
-                    <div className="p-3 backdrop-blur-sm bg-gray-500/10 dark:bg-gray-400/20 rounded-xl border border-gray-200/30 dark:border-gray-500/30 mb-3">
-                      <Lucide icon="BarChart2" className="w-8 h-8 text-gray-400" />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
+                      <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                        <Lucide icon="BarChart2" className="w-8 h-8 text-[#4b4b4b]" />
+                      </div>
+                      <p className="text-sm font-black uppercase tracking-wider mb-1">No assignment data available</p>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase">Employee has {selectedEmployee.assignedContacts || 0} assigned contacts</p>
                     </div>
-                    <p className="text-sm font-medium mb-1">No assignment data available for this employee</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Employee has {selectedEmployee.assignedContacts || 0} assigned contacts</p>
+                  )
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
+                    <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                      <Lucide icon="User" className="w-8 h-8 text-[#4b4b4b]" />
+                    </div>
+                    <p className="text-sm font-black uppercase tracking-wider">Select an employee to view their chart</p>
                   </div>
-                )
-              ) : (
-                <div className="flex flex-col items-center justify-center h-48 text-gray-600 dark:text-gray-400">
-                  <div className="p-3 backdrop-blur-sm bg-gray-500/10 dark:bg-gray-400/20 rounded-xl border border-gray-200/30 dark:border-gray-500/30 mb-3">
-                    <Lucide icon="User" className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <p className="text-sm font-medium">Select an employee to view their chart</p>
-                </div>
-              )}
+                )}
               </div>
             </div>
           )}
@@ -4339,24 +4236,24 @@ setEngagementScore(Number(newEngagementScore.toFixed(2)));
 
       {/* Info Tooltip */}
       {infoTooltip && (
-        <div 
-          className="fixed z-50 backdrop-blur-md bg-black/80 text-white p-3 rounded-xl shadow-2xl max-w-xs text-xs border border-white/20"
-          style={{ 
-            left: tooltipPosition.x, 
+        <div
+          className="fixed z-50 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] text-[#4b4b4b] p-4 max-w-xs text-xs font-bold"
+          style={{
+            left: tooltipPosition.x,
             top: tooltipPosition.y,
             transform: 'translateX(-50%)'
           }}
         >
           {infoTooltip}
           <button
-            className="absolute top-2 right-2 text-gray-300 hover:text-white transition-colors duration-200"
+            className="absolute top-2 right-2 text-[#4b4b4b] hover:text-[#f26522] transition-colors duration-200"
             onClick={() => setInfoTooltip(null)}
           >
-            <Lucide icon="X" className="w-3 h-3" />
+            <Lucide icon="X" className="w-4 h-4 stroke-[3]" />
           </button>
         </div>
       )}
-      
+
       <ContactsModal
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}

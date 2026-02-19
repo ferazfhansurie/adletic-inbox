@@ -360,26 +360,26 @@ const MessageTemplatesPage: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'APPROVED':
-        return <span className="px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">Approved</span>;
+        return <span className="mt-badge mt-badge-approved">Approved</span>;
       case 'PENDING':
-        return <span className="px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">Pending</span>;
+        return <span className="mt-badge mt-badge-pending">Pending</span>;
       case 'REJECTED':
-        return <span className="px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">Rejected</span>;
+        return <span className="mt-badge mt-badge-rejected">Rejected</span>;
       default:
-        return <span className="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">{status}</span>;
+        return <span className="mt-badge" style={{color:'#4b4b4b',borderColor:'#4b4b4b'}}>{status}</span>;
     }
   };
 
   const getCategoryBadge = (category: string) => {
     switch (category) {
       case 'MARKETING':
-        return <span className="px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded-full">Marketing</span>;
+        return <span className="mt-badge mt-badge-marketing">Marketing</span>;
       case 'UTILITY':
-        return <span className="px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Utility</span>;
+        return <span className="mt-badge mt-badge-utility">Utility</span>;
       case 'AUTHENTICATION':
-        return <span className="px-2 py-1 text-xs font-medium text-orange-800 bg-orange-100 rounded-full">Authentication</span>;
+        return <span className="mt-badge mt-badge-auth">Auth</span>;
       default:
-        return <span className="px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full">{category}</span>;
+        return <span className="mt-badge" style={{color:'#4b4b4b',borderColor:'#4b4b4b'}}>{category}</span>;
     }
   };
 
@@ -414,26 +414,21 @@ const MessageTemplatesPage: React.FC = () => {
 
   if (!connectionInfo?.requiresTemplates) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
+      <div style={{fontFamily:"'Inter',sans-serif",minHeight:'100vh',background:'#f5f5f5',padding:'40px 24px',display:'flex',alignItems:'center',justifyContent:'center'}}>
         <ToastContainer />
-        <div className="max-w-2xl mx-auto">
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-white/20 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-violet-500/5 to-purple-500/10 pointer-events-none" />
-            <div className="relative flex flex-col items-center justify-center p-12">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 backdrop-blur-sm flex items-center justify-center border border-slate-200 dark:border-white/10 mb-6">
-                <Lucide icon="Info" className="w-10 h-10 text-blue-500 dark:text-blue-400" />
-              </div>
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">Templates Not Required</h2>
-              <p className="text-slate-600 dark:text-white/70 text-center max-w-md">
-                Your WhatsApp connection is using the unofficial API (QR code method). 
-                Message templates are only required for the Official WhatsApp Business API.
-              </p>
-              <div className="mt-6 px-4 py-2 bg-slate-100 dark:bg-white/5 backdrop-blur-sm rounded-full border border-slate-200 dark:border-white/10">
-                <p className="text-slate-500 dark:text-white/60 text-sm">
-                  Current connection: <span className="font-medium text-slate-700 dark:text-white/90">{connectionInfo?.connectionType || 'wwebjs'}</span>
-                </p>
-              </div>
-            </div>
+        <div style={{background:'#fff',border:'2px solid #4b4b4b',boxShadow:'6px 6px 0 #f26522',padding:'48px 40px',maxWidth:'520px',width:'100%',textAlign:'center'}}>
+          <div style={{width:'56px',height:'56px',background:'#f26522',border:'2px solid #4b4b4b',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 24px'}}>
+            <Lucide icon="Info" className="w-7 h-7 text-white" />
+          </div>
+          <h2 style={{fontSize:'1.4rem',fontWeight:800,color:'#4b4b4b',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'12px'}}>Templates Not Required</h2>
+          <p style={{fontSize:'.9rem',color:'#8b8b8b',lineHeight:1.6,marginBottom:'20px'}}>
+            Your WhatsApp connection is using the unofficial API (QR code method).
+            Message templates are only required for the Official WhatsApp Business API.
+          </p>
+          <div style={{display:'inline-block',padding:'6px 16px',border:'2px solid #e8e8e8',background:'#f5f5f5'}}>
+            <span style={{fontSize:'.78rem',fontWeight:700,color:'#8b8b8b',textTransform:'uppercase',letterSpacing:'.08em'}}>
+              Connection: <span style={{color:'#4b4b4b'}}>{connectionInfo?.connectionType || 'wwebjs'}</span>
+            </span>
           </div>
         </div>
       </div>
@@ -441,262 +436,222 @@ const MessageTemplatesPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-6">
+    <div className="mt-root">
+      <style>{`
+        .mt-root{font-family:'Inter',sans-serif;min-height:100vh;background:#f5f5f5;padding:28px 24px}
+        .mt-inner{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+        .mt-card{background:#fff;border:2px solid #4b4b4b;box-shadow:4px 4px 0 #f26522}
+        .mt-navbar{background:#4b4b4b;padding:16px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+        .mt-icon-sq{width:44px;height:44px;background:#f26522;border:2px solid #fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .mt-btn{font-family:'Inter',sans-serif;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding:8px 18px;border:2px solid #4b4b4b;background:#fff;color:#4b4b4b;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+        .mt-btn:hover:not(:disabled){box-shadow:3px 3px 0 #f26522;transform:translate(-1px,-1px)}
+        .mt-btn:disabled{opacity:.5;cursor:not-allowed}
+        .mt-btn-primary{background:#f26522;border-color:#f26522;color:#fff}
+        .mt-btn-primary:hover:not(:disabled){box-shadow:3px 3px 0 #4b4b4b}
+        .mt-btn-ghost{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+        .mt-btn-ghost:hover:not(:disabled){background:rgba(255,255,255,.2);box-shadow:none;transform:none}
+        .mt-stat{background:#fff;border:2px solid #4b4b4b;box-shadow:3px 3px 0 #f26522;padding:20px}
+        .mt-stat-val{font-size:2rem;font-weight:800;color:#4b4b4b;line-height:1}
+        .mt-stat-approved{color:#2a7a2a}
+        .mt-stat-pending{color:#8b6000}
+        .mt-stat-rejected{color:#8b0000}
+        .mt-stat-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8b8b8b;margin-top:6px}
+        .mt-info-banner{background:#fff8ec;border:2px solid #f26522;border-left:5px solid #f26522;padding:16px 20px;display:flex;gap:14px;align-items:flex-start}
+        .mt-input{font-family:'Inter',sans-serif;width:100%;padding:10px 14px;border:2px solid #e8e8e8;background:#fff;font-size:.85rem;color:#4b4b4b;outline:none;transition:border-color .15s;box-sizing:border-box}
+        .mt-input:focus{border-color:#f26522}
+        .mt-select{font-family:'Inter',sans-serif;padding:10px 14px;border:2px solid #e8e8e8;background:#fff;font-size:.85rem;color:#4b4b4b;cursor:pointer;outline:none}
+        .mt-select:focus{border-color:#f26522}
+        .mt-template-card{background:#fff;border:2px solid #4b4b4b;cursor:pointer;transition:all .15s;display:flex;flex-direction:column}
+        .mt-template-card:hover{box-shadow:4px 4px 0 #f26522;transform:translate(-2px,-2px)}
+        .mt-preview-box{background:#f5f5f5;border:2px solid #e8e8e8;padding:14px}
+        .mt-badge{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border:1.5px solid;white-space:nowrap}
+        .mt-badge-approved{color:#2a7a2a;border-color:#2a7a2a;background:#f0fff0}
+        .mt-badge-pending{color:#8b6000;border-color:#8b6000;background:#fffbf0}
+        .mt-badge-rejected{color:#8b0000;border-color:#8b0000;background:#fff0f0}
+        .mt-badge-marketing{color:#5b008b;border-color:#5b008b;background:#f9f0ff}
+        .mt-badge-utility{color:#00468b;border-color:#00468b;background:#f0f6ff}
+        .mt-badge-auth{color:#4b4b4b;border-color:#4b4b4b;background:#f5f5f5}
+        .mt-modal-wrap{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+        .mt-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55)}
+        .mt-modal{background:#fff;border:3px solid #4b4b4b;box-shadow:6px 6px 0 #f26522;max-width:640px;width:100%;position:relative;z-index:1;max-height:90vh;display:flex;flex-direction:column}
+        .mt-modal-header{background:#4b4b4b;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+        .mt-modal-body{padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+        .mt-modal-footer{padding:16px 24px;border-top:2px solid #e8e8e8;display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+        .mt-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4b4b4b;display:block;margin-bottom:6px}
+        .mt-wa-preview{background:#e5ddd5;padding:16px;border:2px solid #e8e8e8}
+        .mt-wa-bubble{background:#fff;max-width:320px;margin:0 auto;border:1px solid #e8e8e8}
+        .mt-wa-btn-row{border-top:1px solid #e8e8e8}
+        .mt-wa-btn{width:100%;padding:10px;text-align:center;color:#f26522;font-size:.8rem;font-weight:600;border:none;background:transparent;border-top:1px solid #e8e8e8;cursor:default}
+        .mt-wa-btn:first-child{border-top:none}
+        .mt-var-note{background:#fff8ec;border:2px solid #f26522;border-left:4px solid #f26522;padding:12px 16px}
+        .mt-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+        .mt-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+        @media(max-width:1024px){.mt-grid-4{grid-template-columns:repeat(2,1fr)}.mt-grid-3{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:640px){.mt-grid-4{grid-template-columns:1fr}.mt-grid-3{grid-template-columns:1fr}}
+      `}</style>
       <ToastContainer />
-      
-      <div className="max-w-7xl mx-auto space-y-6">
+
+      <div className="mt-inner">
         {/* Header */}
-        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-3xl shadow-xl dark:shadow-2xl border border-slate-200 dark:border-white/20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-violet-500/5 to-purple-500/10 pointer-events-none" />
-          <div className="relative p-6">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-                  <Lucide icon="FileText" className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Message Templates</h1>
-                  <p className="text-slate-500 dark:text-white/60 text-sm mt-0.5">
-                    Manage your WhatsApp Business API templates
-                  </p>
-                  {connectionInfo && (
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="w-2 h-2 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-pulse" />
-                      <span className="text-xs text-slate-400 dark:text-white/50">
-                        {connectionInfo.connectionType}
-                        {connectionInfo.displayPhoneNumber && ` • ${connectionInfo.displayPhoneNumber}`}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={fetchTemplates}
-                  disabled={isLoading}
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur-sm border border-slate-200 dark:border-white/20 rounded-xl text-slate-700 dark:text-white/90 hover:text-slate-900 dark:hover:text-white transition-all duration-200 flex items-center gap-2 text-sm font-medium"
-                >
-                  <Lucide icon="RefreshCw" className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </button>
-                <button
-                  onClick={syncTemplates}
-                  disabled={isSyncing}
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 backdrop-blur-sm border border-slate-200 dark:border-white/20 rounded-xl text-slate-700 dark:text-white/90 hover:text-slate-900 dark:hover:text-white transition-all duration-200 flex items-center gap-2 text-sm font-medium"
-                >
-                  {isSyncing ? (
-                    <>
-                      <LoadingIcon icon="oval" color="currentColor" className="w-4 h-4" />
-                      Syncing...
-                    </>
-                  ) : (
-                    <>
-                      <Lucide icon="Download" className="w-4 h-4" />
-                      Sync from Meta
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => setShowCreateModal(true)}
-                  className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 rounded-xl text-white transition-all duration-200 flex items-center gap-2 text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105"
-                >
-                  <Lucide icon="Plus" className="w-4 h-4" />
-                  Create Template
-                </button>
-              </div>
+        <div className="mt-navbar">
+          <div style={{display:'flex',alignItems:'center',gap:'14px'}}>
+            <div className="mt-icon-sq">
+              <Lucide icon="FileText" className="w-5 h-5 text-white" />
             </div>
+            <div>
+              <h1 style={{fontSize:'1.1rem',fontWeight:800,color:'#fff',textTransform:'uppercase',letterSpacing:'.06em',margin:0}}>Message Templates</h1>
+              <p style={{fontSize:'.72rem',color:'rgba(255,255,255,.6)',margin:'2px 0 0',fontWeight:500}}>
+                Manage your WhatsApp Business API templates
+                {connectionInfo?.displayPhoneNumber && ` · ${connectionInfo.displayPhoneNumber}`}
+              </p>
+            </div>
+          </div>
+
+          <div style={{display:'flex',flexWrap:'wrap',gap:'8px'}}>
+            <button className="mt-btn mt-btn-ghost" onClick={fetchTemplates} disabled={isLoading}>
+              <Lucide icon="RefreshCw" className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+            <button className="mt-btn mt-btn-ghost" onClick={syncTemplates} disabled={isSyncing}>
+              {isSyncing ? <><LoadingIcon icon="oval" color="white" className="w-3.5 h-3.5" /> Syncing...</> : <><Lucide icon="Download" className="w-3.5 h-3.5" />Sync from Meta</>}
+            </button>
+            <button className="mt-btn mt-btn-primary" onClick={() => setShowCreateModal(true)}>
+              <Lucide icon="Plus" className="w-3.5 h-3.5" />
+              Create Template
+            </button>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-5 overflow-hidden group hover:scale-105 transition-transform duration-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <Lucide icon="FileText" className="w-5 h-5 text-blue-500 dark:text-blue-400" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-slate-800 dark:text-white">{templates.length}</p>
-              <p className="text-sm text-slate-500 dark:text-white/50 mt-1">Total Templates</p>
-            </div>
+        <div className="mt-grid-4">
+          <div className="mt-stat">
+            <p className="mt-stat-val">{templates.length}</p>
+            <p className="mt-stat-label">Total Templates</p>
           </div>
-          
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-5 overflow-hidden group hover:scale-105 transition-transform duration-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                  <Lucide icon="CheckCircle" className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{templates.filter(t => t.status === 'APPROVED').length}</p>
-              <p className="text-sm text-slate-500 dark:text-white/50 mt-1">Approved</p>
-            </div>
+          <div className="mt-stat">
+            <p className="mt-stat-val mt-stat-approved">{templates.filter(t => t.status === 'APPROVED').length}</p>
+            <p className="mt-stat-label">Approved</p>
           </div>
-          
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-5 overflow-hidden group hover:scale-105 transition-transform duration-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                  <Lucide icon="Clock" className="w-5 h-5 text-amber-500 dark:text-amber-400" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{templates.filter(t => t.status === 'PENDING').length}</p>
-              <p className="text-sm text-slate-500 dark:text-white/50 mt-1">Pending Review</p>
-            </div>
+          <div className="mt-stat">
+            <p className="mt-stat-val mt-stat-pending">{templates.filter(t => t.status === 'PENDING').length}</p>
+            <p className="mt-stat-label">Pending Review</p>
           </div>
-          
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-5 overflow-hidden group hover:scale-105 transition-transform duration-200">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                  <Lucide icon="XCircle" className="w-5 h-5 text-red-500 dark:text-red-400" />
-                </div>
-              </div>
-              <p className="text-3xl font-bold text-red-600 dark:text-red-400">{templates.filter(t => t.status === 'REJECTED').length}</p>
-              <p className="text-sm text-slate-500 dark:text-white/50 mt-1">Rejected</p>
-            </div>
+          <div className="mt-stat">
+            <p className="mt-stat-val mt-stat-rejected">{templates.filter(t => t.status === 'REJECTED').length}</p>
+            <p className="mt-stat-label">Rejected</p>
           </div>
         </div>
 
         {/* Info Banner */}
-        <div className="relative bg-gradient-to-r from-blue-500/10 via-violet-500/10 to-purple-500/10 dark:from-blue-500/20 dark:via-violet-500/20 dark:to-purple-500/20 backdrop-blur-xl rounded-2xl border border-blue-300/30 dark:border-blue-400/30 p-5 overflow-hidden">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 dark:bg-blue-500/30 flex items-center justify-center flex-shrink-0">
-              <Lucide icon="Info" className="w-5 h-5 text-blue-600 dark:text-blue-300" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-800 dark:text-white">24-Hour Messaging Window</h3>
-              <p className="text-sm text-slate-600 dark:text-white/70 mt-1">
-                With the Official WhatsApp API, you can only send free-form messages within 24 hours of receiving a customer message. 
-                After that, you must use an approved template to re-engage. Create templates here and they'll be submitted to Meta for review.
-              </p>
-            </div>
+        <div className="mt-info-banner">
+          <div style={{width:'36px',height:'36px',background:'#f26522',border:'2px solid #4b4b4b',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            <Lucide icon="Info" className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h3 style={{fontWeight:800,fontSize:'.85rem',color:'#4b4b4b',textTransform:'uppercase',letterSpacing:'.04em',marginBottom:'4px'}}>24-Hour Messaging Window</h3>
+            <p style={{fontSize:'.82rem',color:'#8b8b8b',lineHeight:1.6}}>
+              With the Official WhatsApp API, you can only send free-form messages within 24 hours of receiving a customer message.
+              After that, you must use an approved template to re-engage. Create templates here and they'll be submitted to Meta for review.
+            </p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-5">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Lucide icon="Search" className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/40" />
+        <div className="mt-card" style={{padding:'16px 20px'}}>
+          <div style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+            <div style={{flex:'1',minWidth:'200px',position:'relative'}}>
+              <Lucide icon="Search" className="w-4 h-4" style={{position:'absolute',left:'12px',top:'50%',transform:'translateY(-50%)',color:'#8b8b8b'}} />
               <input
                 type="text"
                 placeholder="Search templates..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all"
+                className="mt-input"
+                style={{paddingLeft:'36px'}}
               />
             </div>
-            
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all appearance-none cursor-pointer"
-              style={{ backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%239ca3af\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.5em 1.5em', backgroundRepeat: 'no-repeat', paddingRight: '2.5rem' }}
-            >
-              <option value="all" className="bg-white dark:bg-slate-800">All Categories</option>
-              <option value="MARKETING" className="bg-white dark:bg-slate-800">Marketing</option>
-              <option value="UTILITY" className="bg-white dark:bg-slate-800">Utility</option>
-              <option value="AUTHENTICATION" className="bg-white dark:bg-slate-800">Authentication</option>
+            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="mt-select">
+              <option value="all">All Categories</option>
+              <option value="MARKETING">Marketing</option>
+              <option value="UTILITY">Utility</option>
+              <option value="AUTHENTICATION">Authentication</option>
             </select>
-            
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-4 py-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all appearance-none cursor-pointer"
-              style={{ backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%239ca3af\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.5em 1.5em', backgroundRepeat: 'no-repeat', paddingRight: '2.5rem' }}
-            >
-              <option value="all" className="bg-white dark:bg-slate-800">All Statuses</option>
-              <option value="APPROVED" className="bg-white dark:bg-slate-800">Approved</option>
-              <option value="PENDING" className="bg-white dark:bg-slate-800">Pending</option>
-              <option value="REJECTED" className="bg-white dark:bg-slate-800">Rejected</option>
+            <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)} className="mt-select">
+              <option value="all">All Statuses</option>
+              <option value="APPROVED">Approved</option>
+              <option value="PENDING">Pending</option>
+              <option value="REJECTED">Rejected</option>
             </select>
           </div>
         </div>
 
         {/* Templates List */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <LoadingIcon icon="oval" className="w-10 h-10 text-blue-500 dark:text-blue-400" />
-            <span className="mt-4 text-slate-500 dark:text-white/60">Loading templates...</span>
+          <div style={{textAlign:'center',padding:'48px 0',display:'flex',flexDirection:'column',alignItems:'center',gap:'12px'}}>
+            <LoadingIcon icon="oval" className="w-10 h-10" style={{color:'#f26522'}} />
+            <span style={{fontSize:'.85rem',color:'#8b8b8b',fontWeight:600,textTransform:'uppercase',letterSpacing:'.08em'}}>Loading templates...</span>
           </div>
         ) : filteredTemplates.length === 0 ? (
-          <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 p-12 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-4">
-              <Lucide icon="FileText" className="w-8 h-8 text-slate-400 dark:text-white/40" />
+          <div className="mt-card" style={{padding:'48px 24px',textAlign:'center'}}>
+            <div style={{width:'52px',height:'52px',background:'#f26522',border:'2px solid #4b4b4b',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
+              <Lucide icon="FileText" className="w-6 h-6 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-white">No templates found</h3>
-            <p className="text-slate-500 dark:text-white/50 mt-2">
-              {templates.length === 0 
+            <h3 style={{fontWeight:800,fontSize:'1rem',color:'#4b4b4b',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:'8px'}}>No templates found</h3>
+            <p style={{fontSize:'.85rem',color:'#8b8b8b'}}>
+              {templates.length === 0
                 ? "Click 'Sync from Meta' to fetch your templates or create a new one"
-                : "No templates match your current filters"
-              }
+                : "No templates match your current filters"}
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-grid-3">
             {filteredTemplates.map((template) => (
-              <div 
+              <div
                 key={template.id}
-                className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/20 overflow-hidden group hover:border-blue-400/50 transition-all duration-300 cursor-pointer hover:scale-[1.02]"
-                onClick={() => {
-                  setSelectedTemplate(template);
-                  setShowPreviewModal(true);
-                }}
+                className="mt-template-card"
+                onClick={() => { setSelectedTemplate(template); setShowPreviewModal(true); }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-5">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-slate-800 dark:text-white truncate">{template.name}</h3>
-                      <p className="text-xs text-slate-500 dark:text-white/50 mt-1">Language: {template.language}</p>
+                <div style={{padding:'16px',borderBottom:'2px solid #e8e8e8'}}>
+                  <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:'8px',marginBottom:'10px'}}>
+                    <div style={{flex:1,minWidth:0}}>
+                      <h3 style={{fontWeight:700,fontSize:'.85rem',color:'#4b4b4b',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{template.name}</h3>
+                      <p style={{fontSize:'.7rem',color:'#8b8b8b',marginTop:'2px',fontWeight:600,textTransform:'uppercase',letterSpacing:'.06em'}}>Lang: {template.language}</p>
                     </div>
-                    <div className="flex flex-col gap-1.5 items-end ml-3">
+                    <div style={{display:'flex',flexDirection:'column',gap:'4px',alignItems:'flex-end',flexShrink:0}}>
                       {getStatusBadge(template.status)}
                       {getCategoryBadge(template.category)}
                     </div>
                   </div>
-                  
-                  <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/10">
-                    <p className="text-sm text-slate-600 dark:text-white/70 whitespace-pre-wrap line-clamp-4">
+
+                  <div className="mt-preview-box">
+                    <p style={{fontSize:'.8rem',color:'#4b4b4b',whiteSpace:'pre-wrap',overflow:'hidden',display:'-webkit-box',WebkitLineClamp:4,WebkitBoxOrient:'vertical'}}>
                       {getTemplatePreview(template) || 'No preview available'}
                     </p>
                   </div>
 
-                  {/* Buttons preview */}
                   {template.components?.some(c => c.type === 'BUTTONS') && (
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div style={{display:'flex',flexWrap:'wrap',gap:'6px',marginTop:'10px'}}>
                       {template.components
                         .filter(c => c.type === 'BUTTONS')
                         .flatMap(c => c.buttons || [])
                         .map((btn, idx) => (
-                          <span key={idx} className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 rounded-lg border border-blue-200 dark:border-blue-400/20">
+                          <span key={idx} style={{fontSize:'.65rem',fontWeight:700,padding:'3px 8px',border:'1.5px solid #f26522',color:'#f26522',textTransform:'uppercase',letterSpacing:'.06em'}}>
                             {btn.text}
                           </span>
                         ))
                       }
                     </div>
                   )}
+                </div>
 
-                  {/* Delete button */}
-                  <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/10 flex justify-end">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteTemplate(template.name);
-                      }}
-                      className="text-xs text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
-                    >
-                      <Lucide icon="Trash2" className="w-3.5 h-3.5" />
-                      Delete
-                    </button>
-                  </div>
+                <div style={{padding:'10px 16px',display:'flex',justifyContent:'flex-end'}}>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); deleteTemplate(template.name); }}
+                    style={{fontSize:'.65rem',fontWeight:800,textTransform:'uppercase',letterSpacing:'.08em',color:'#8b0000',border:'1.5px solid #8b0000',background:'transparent',padding:'4px 10px',cursor:'pointer',display:'flex',alignItems:'center',gap:'4px'}}
+                  >
+                    <Lucide icon="Trash2" className="w-3 h-3" />
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
@@ -705,417 +660,238 @@ const MessageTemplatesPage: React.FC = () => {
       </div>
 
       {/* Preview Modal */}
-      <Dialog
-        open={showPreviewModal}
-        onClose={() => {
-          setShowPreviewModal(false);
-          setSelectedTemplate(null);
-        }}
-      >
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
-          <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-3xl bg-white dark:bg-slate-800/90 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-2xl transition-all">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-violet-500/5 dark:from-blue-500/10 dark:to-violet-500/10 pointer-events-none rounded-3xl" />
-              
-              <div className="relative p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
-                      <Lucide icon="Eye" className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Template Preview</h3>
-                  </div>
-                  <button 
-                    onClick={() => setShowPreviewModal(false)}
-                    className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-white/70 hover:text-slate-700 dark:hover:text-white transition-colors"
-                  >
-                    <Lucide icon="X" className="w-5 h-5" />
-                  </button>
+      <Dialog open={showPreviewModal} onClose={() => { setShowPreviewModal(false); setSelectedTemplate(null); }}>
+        <div className="mt-modal-overlay" aria-hidden="true" />
+        <div className="mt-modal-wrap">
+          <Dialog.Panel className="mt-modal" style={{maxWidth:'520px'}}>
+            <div className="mt-modal-header">
+              <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                <div style={{width:'32px',height:'32px',background:'#f26522',border:'2px solid #fff',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                  <Lucide icon="Eye" className="w-4 h-4 text-white" />
                 </div>
-                
-                {selectedTemplate && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-slate-800 dark:text-white">{selectedTemplate.name}</h4>
-                      <div className="flex gap-2">
-                        {getStatusBadge(selectedTemplate.status)}
-                        {getCategoryBadge(selectedTemplate.category)}
-                      </div>
-                    </div>
-                    
-                    <div className="text-sm text-slate-500 dark:text-white/60">
-                      Language: {selectedTemplate.language}
-                    </div>
+                <h3 style={{fontWeight:800,fontSize:'.9rem',color:'#fff',textTransform:'uppercase',letterSpacing:'.06em',margin:0}}>Template Preview</h3>
+              </div>
+              <button onClick={() => setShowPreviewModal(false)} style={{width:'28px',height:'28px',background:'rgba(255,255,255,.15)',border:'1px solid rgba(255,255,255,.3)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',color:'#fff'}}>
+                <Lucide icon="X" className="w-4 h-4" />
+              </button>
+            </div>
 
-                    {/* Template Preview Card (WhatsApp style) */}
-                    <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-600/20 dark:to-emerald-700/20 rounded-2xl p-4 border border-emerald-200 dark:border-emerald-500/20">
-                      <div className="bg-white rounded-xl shadow-lg max-w-sm mx-auto overflow-hidden">
-                        {selectedTemplate.components?.map((comp, idx) => (
-                          <div key={idx}>
-                            {comp.type === 'HEADER' && comp.text && (
-                              <div className="px-4 pt-3 font-semibold text-gray-800">
-                                {comp.text}
-                              </div>
-                            )}
-                            {comp.type === 'HEADER' && comp.format === 'IMAGE' && (
-                              <div className="bg-gray-100 h-32 flex items-center justify-center">
-                                <Lucide icon="Image" className="w-12 h-12 text-gray-400" />
-                              </div>
-                            )}
-                            {comp.type === 'BODY' && comp.text && (
-                              <div className="px-4 py-2 text-gray-700 whitespace-pre-wrap text-sm">
-                                {comp.text}
-                              </div>
-                            )}
-                            {comp.type === 'FOOTER' && comp.text && (
-                              <div className="px-4 pb-2 text-xs text-gray-500">
-                                {comp.text}
-                              </div>
-                            )}
-                            {comp.type === 'BUTTONS' && comp.buttons && (
-                              <div className="border-t border-gray-100">
-                                {comp.buttons.map((btn, btnIdx) => (
-                                  <button
-                                    key={btnIdx}
-                                    className="w-full py-2.5 text-center text-blue-500 hover:bg-gray-50 border-t border-gray-100 first:border-t-0 text-sm font-medium"
-                                  >
-                                    {btn.type === 'URL' && <Lucide icon="ExternalLink" className="w-4 h-4 inline mr-1" />}
-                                    {btn.type === 'PHONE_NUMBER' && <Lucide icon="Phone" className="w-4 h-4 inline mr-1" />}
-                                    {btn.text}
-                                  </button>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+            {selectedTemplate && (
+              <div className="mt-modal-body">
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'8px'}}>
+                  <h4 style={{fontWeight:700,fontSize:'.95rem',color:'#4b4b4b',margin:0}}>{selectedTemplate.name}</h4>
+                  <div style={{display:'flex',gap:'6px'}}>
+                    {getStatusBadge(selectedTemplate.status)}
+                    {getCategoryBadge(selectedTemplate.category)}
+                  </div>
+                </div>
+                <p style={{fontSize:'.75rem',color:'#8b8b8b',fontWeight:600,textTransform:'uppercase',letterSpacing:'.06em',margin:0}}>Language: {selectedTemplate.language}</p>
 
-                    {/* Variables info */}
-                    {selectedTemplate.components?.some(c => c.text?.includes('{{')) && (
-                      <div className="bg-amber-50 dark:bg-amber-500/20 border border-amber-200 dark:border-amber-400/30 rounded-xl p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-500/30 flex items-center justify-center flex-shrink-0">
-                            <Lucide icon="AlertCircle" className="w-4 h-4 text-amber-600 dark:text-amber-300" />
+                <div className="mt-wa-preview">
+                  <div className="mt-wa-bubble">
+                    {selectedTemplate.components?.map((comp, idx) => (
+                      <div key={idx}>
+                        {comp.type === 'HEADER' && comp.text && (
+                          <div style={{padding:'10px 14px 0',fontWeight:700,color:'#222',fontSize:'.85rem'}}>{comp.text}</div>
+                        )}
+                        {comp.type === 'HEADER' && comp.format === 'IMAGE' && (
+                          <div style={{background:'#e8e8e8',height:'120px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <Lucide icon="Image" className="w-10 h-10 text-gray-400" />
                           </div>
-                          <div>
-                            <p className="text-sm font-medium text-amber-800 dark:text-amber-200">This template has variables</p>
-                            <p className="text-xs text-amber-700 dark:text-amber-300/70 mt-1">
-                              Variables like {'{{1}}'}, {'{{2}}'} will need to be filled in when sending the message.
-                            </p>
+                        )}
+                        {comp.type === 'BODY' && comp.text && (
+                          <div style={{padding:'8px 14px',color:'#333',whiteSpace:'pre-wrap',fontSize:'.82rem',lineHeight:1.5}}>{comp.text}</div>
+                        )}
+                        {comp.type === 'FOOTER' && comp.text && (
+                          <div style={{padding:'0 14px 10px',fontSize:'.7rem',color:'#888'}}>{comp.text}</div>
+                        )}
+                        {comp.type === 'BUTTONS' && comp.buttons && (
+                          <div className="mt-wa-btn-row">
+                            {comp.buttons.map((btn, btnIdx) => (
+                              <button key={btnIdx} className="mt-wa-btn">
+                                {btn.type === 'URL' && <Lucide icon="ExternalLink" className="w-3.5 h-3.5 inline mr-1" />}
+                                {btn.type === 'PHONE_NUMBER' && <Lucide icon="Phone" className="w-3.5 h-3.5 inline mr-1" />}
+                                {btn.text}
+                              </button>
+                            ))}
                           </div>
-                        </div>
+                        )}
                       </div>
-                    )}
+                    ))}
+                  </div>
+                </div>
+
+                {selectedTemplate.components?.some(c => c.text?.includes('{{')) && (
+                  <div className="mt-var-note" style={{display:'flex',gap:'10px',alignItems:'flex-start'}}>
+                    <Lucide icon="AlertCircle" className="w-4 h-4 flex-shrink-0" style={{color:'#f26522',marginTop:'1px'}} />
+                    <div>
+                      <p style={{fontWeight:700,fontSize:'.78rem',color:'#4b4b4b',margin:'0 0 4px'}}>This template has variables</p>
+                      <p style={{fontSize:'.72rem',color:'#8b8b8b',margin:0}}>
+                        Variables like {'{{1}}'}, {'{{2}}'} will need to be filled in when sending.
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
-            </div>
+            )}
           </Dialog.Panel>
         </div>
       </Dialog>
 
       {/* Create Template Modal */}
-      <Dialog
-        open={showCreateModal}
-        onClose={() => {
-          setShowCreateModal(false);
-          resetCreateForm();
-        }}
-      >
-        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-50" />
-        <div className="fixed inset-0 overflow-y-auto z-50">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/20 p-6 shadow-2xl transition-all">
-              <Dialog.Title className="text-lg font-semibold text-slate-800 dark:text-white mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
-                    <Lucide icon="Plus" className="w-5 h-5 text-white" />
-                  </div>
-                  <span>Create Message Template</span>
+      <Dialog open={showCreateModal} onClose={() => { setShowCreateModal(false); resetCreateForm(); }}>
+        <div className="mt-modal-overlay" />
+        <div className="mt-modal-wrap">
+          <Dialog.Panel className="mt-modal">
+            <div className="mt-modal-header">
+              <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+                <div style={{width:'32px',height:'32px',background:'#f26522',border:'2px solid #fff',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                  <Lucide icon="Plus" className="w-4 h-4 text-white" />
                 </div>
-                <button 
-                  onClick={() => setShowCreateModal(false)}
-                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center text-slate-500 dark:text-white/70 hover:text-slate-700 dark:hover:text-white transition-colors"
-                >
-                  <Lucide icon="X" className="w-5 h-5" />
-                </button>
-              </Dialog.Title>
+                <h3 style={{fontWeight:800,fontSize:'.9rem',color:'#fff',textTransform:'uppercase',letterSpacing:'.06em',margin:0}}>Create Message Template</h3>
+              </div>
+              <button onClick={() => setShowCreateModal(false)} style={{width:'28px',height:'28px',background:'rgba(255,255,255,.15)',border:'1px solid rgba(255,255,255,.3)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',color:'#fff'}}>
+                <Lucide icon="X" className="w-4 h-4" />
+              </button>
+            </div>
 
-              <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-                {/* Template Name */}
+            <div className="mt-modal-body">
+              {/* Template Name */}
+              <div>
+                <label className="mt-label">Template Name <span style={{color:'#e53e3e'}}>*</span></label>
+                <input type="text" value={createForm.name} onChange={(e) => setCreateForm({...createForm,name:e.target.value})} placeholder="my_template_name" className="mt-input" />
+                <p style={{fontSize:'.68rem',color:'#8b8b8b',marginTop:'4px'}}>Lowercase letters, numbers, and underscores only.</p>
+              </div>
+
+              {/* Category & Language */}
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px'}}>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">
-                    Template Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={createForm.name}
-                    onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
-                    placeholder="my_template_name"
-                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
-                  />
-                  <p className="text-xs text-slate-500 dark:text-white/50 mt-1">
-                    Lowercase letters, numbers, and underscores only. Spaces will be converted to underscores.
-                  </p>
-                </div>
-
-                {/* Category & Language */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">Category</label>
-                    <select
-                      value={createForm.category}
-                      onChange={(e) => setCreateForm({ ...createForm, category: e.target.value as any })}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
-                    >
-                      <option value="UTILITY" className="bg-white dark:bg-slate-800">Utility</option>
-                      <option value="MARKETING" className="bg-white dark:bg-slate-800">Marketing</option>
-                      <option value="AUTHENTICATION" className="bg-white dark:bg-slate-800">Authentication</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">Language</label>
-                    <select
-                      value={createForm.language}
-                      onChange={(e) => setCreateForm({ ...createForm, language: e.target.value })}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
-                    >
-                      {LANGUAGES.map(lang => (
-                        <option key={lang.code} value={lang.code} className="bg-white dark:bg-slate-800">{lang.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Header */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">Header (Optional)</label>
-                  <select
-                    value={createForm.headerType}
-                    onChange={(e) => setCreateForm({ ...createForm, headerType: e.target.value as any })}
-                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all mb-2"
-                  >
-                    <option value="none" className="bg-white dark:bg-slate-800">No Header</option>
-                    <option value="text" className="bg-white dark:bg-slate-800">Text Header</option>
+                  <label className="mt-label">Category</label>
+                  <select value={createForm.category} onChange={(e) => setCreateForm({...createForm,category:e.target.value as any})} className="mt-select" style={{width:'100%'}}>
+                    <option value="UTILITY">Utility</option>
+                    <option value="MARKETING">Marketing</option>
+                    <option value="AUTHENTICATION">Authentication</option>
                   </select>
-                  {createForm.headerType === 'text' && (
-                    <input
-                      type="text"
-                      value={createForm.headerText}
-                      onChange={(e) => setCreateForm({ ...createForm, headerText: e.target.value })}
-                      placeholder="Header text"
-                      maxLength={60}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
-                    />
-                  )}
                 </div>
-
-                {/* Body */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">
-                    Body Text <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    value={createForm.bodyText}
-                    onChange={(e) => handleBodyTextChange(e.target.value)}
-                    placeholder="Hello {{1}}, your order {{2}} has been shipped!"
-                    rows={4}
-                    maxLength={1024}
-                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all resize-none"
-                  />
-                  <p className="text-xs text-slate-500 dark:text-white/50 mt-1">
-                    Use {'{{1}}'}, {'{{2}}'}, etc. for variables. Max 1024 characters.
-                  </p>
+                  <label className="mt-label">Language</label>
+                  <select value={createForm.language} onChange={(e) => setCreateForm({...createForm,language:e.target.value})} className="mt-select" style={{width:'100%'}}>
+                    {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)}
+                  </select>
                 </div>
+              </div>
 
-                {/* Variable Examples */}
-                {createForm.bodyExamples.length > 0 && (
-                  <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/10">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-2">
-                      Example values for variables <span className="text-red-500">*</span>
-                    </label>
-                    <div className="space-y-2">
-                      {createForm.bodyExamples.map((example, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <span className="text-sm text-slate-500 dark:text-white/50 w-16">{`{{${idx + 1}}}`}:</span>
-                          <input
-                            type="text"
-                            value={example}
-                            onChange={(e) => {
-                              const newExamples = [...createForm.bodyExamples];
-                              newExamples[idx] = e.target.value;
-                              setCreateForm({ ...createForm, bodyExamples: newExamples });
-                            }}
-                            placeholder={`Example for variable ${idx + 1}`}
-                            className="flex-1 px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-lg text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
-                          />
+              {/* Header */}
+              <div>
+                <label className="mt-label">Header (Optional)</label>
+                <select value={createForm.headerType} onChange={(e) => setCreateForm({...createForm,headerType:e.target.value as any})} className="mt-select" style={{width:'100%',marginBottom:'8px'}}>
+                  <option value="none">No Header</option>
+                  <option value="text">Text Header</option>
+                </select>
+                {createForm.headerType === 'text' && (
+                  <input type="text" value={createForm.headerText} onChange={(e) => setCreateForm({...createForm,headerText:e.target.value})} placeholder="Header text" maxLength={60} className="mt-input" />
+                )}
+              </div>
+
+              {/* Body */}
+              <div>
+                <label className="mt-label">Body Text <span style={{color:'#e53e3e'}}>*</span></label>
+                <textarea value={createForm.bodyText} onChange={(e) => handleBodyTextChange(e.target.value)} placeholder="Hello {{1}}, your order {{2}} has been shipped!" rows={4} maxLength={1024} className="mt-input" style={{resize:'none',height:'auto'}} />
+                <p style={{fontSize:'.68rem',color:'#8b8b8b',marginTop:'4px'}}>Use {'{{1}}'}, {'{{2}}'}, etc. for variables. Max 1024 chars.</p>
+              </div>
+
+              {/* Variable Examples */}
+              {createForm.bodyExamples.length > 0 && (
+                <div style={{background:'#f5f5f5',border:'2px solid #e8e8e8',padding:'14px'}}>
+                  <label className="mt-label">Example values for variables <span style={{color:'#e53e3e'}}>*</span></label>
+                  <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+                    {createForm.bodyExamples.map((example, idx) => (
+                      <div key={idx} style={{display:'flex',alignItems:'center',gap:'8px'}}>
+                        <span style={{fontSize:'.72rem',fontWeight:700,color:'#8b8b8b',minWidth:'48px'}}>{'{{' + (idx+1) + '}}'}:</span>
+                        <input type="text" value={example} onChange={(e) => { const n=[...createForm.bodyExamples]; n[idx]=e.target.value; setCreateForm({...createForm,bodyExamples:n}); }} placeholder={`Example ${idx+1}`} className="mt-input" style={{flex:1}} />
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{fontSize:'.68rem',color:'#8b8b8b',marginTop:'8px'}}>Meta requires example values to understand how variables will be used.</p>
+                </div>
+              )}
+
+              {/* Footer */}
+              <div>
+                <label className="mt-label">Footer (Optional)</label>
+                <input type="text" value={createForm.footerText} onChange={(e) => setCreateForm({...createForm,footerText:e.target.value})} placeholder="Reply STOP to unsubscribe" maxLength={60} className="mt-input" />
+              </div>
+
+              {/* Buttons */}
+              <div>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
+                  <label className="mt-label" style={{margin:0}}>Buttons (Optional)</label>
+                  <button type="button" onClick={handleAddButton} className="mt-btn" style={{padding:'4px 12px',fontSize:'.65rem'}}>
+                    <Lucide icon="Plus" className="w-3 h-3" /> Add Button
+                  </button>
+                </div>
+                {createForm.buttons.length > 0 && (
+                  <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
+                    {createForm.buttons.map((btn, idx) => (
+                      <div key={idx} style={{background:'#f5f5f5',border:'2px solid #e8e8e8',padding:'12px'}}>
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
+                          <span style={{fontSize:'.72rem',fontWeight:700,color:'#4b4b4b',textTransform:'uppercase',letterSpacing:'.06em'}}>Button {idx+1}</span>
+                          <button type="button" onClick={() => handleRemoveButton(idx)} style={{color:'#8b0000',background:'transparent',border:'none',cursor:'pointer',display:'flex',alignItems:'center'}}>
+                            <Lucide icon="Trash2" className="w-4 h-4" />
+                          </button>
                         </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-white/50 mt-2">
-                      Meta requires example values to understand how variables will be used.
-                    </p>
+                        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px',marginBottom:'6px'}}>
+                          <select value={btn.type} onChange={(e) => handleButtonChange(idx,'type',e.target.value)} className="mt-select">
+                            <option value="QUICK_REPLY">Quick Reply</option>
+                            <option value="URL">URL</option>
+                            <option value="PHONE_NUMBER">Phone Number</option>
+                          </select>
+                          <input type="text" value={btn.text} onChange={(e) => handleButtonChange(idx,'text',e.target.value)} placeholder="Button text" maxLength={25} className="mt-input" />
+                        </div>
+                        {btn.type === 'URL' && <input type="url" value={btn.url||''} onChange={(e) => handleButtonChange(idx,'url',e.target.value)} placeholder="https://example.com" className="mt-input" />}
+                        {btn.type === 'PHONE_NUMBER' && <input type="tel" value={btn.phone_number||''} onChange={(e) => handleButtonChange(idx,'phone_number',e.target.value)} placeholder="+60123456789" className="mt-input" />}
+                      </div>
+                    ))}
                   </div>
                 )}
+                <p style={{fontSize:'.68rem',color:'#8b8b8b',marginTop:'6px'}}>Maximum 3 buttons allowed.</p>
+              </div>
 
-                {/* Footer */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-1">Footer (Optional)</label>
-                  <input
-                    type="text"
-                    value={createForm.footerText}
-                    onChange={(e) => setCreateForm({ ...createForm, footerText: e.target.value })}
-                    placeholder="Footer text (e.g., Reply STOP to unsubscribe)"
-                    maxLength={60}
-                    className="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-xl text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all"
-                  />
-                </div>
-
-                {/* Buttons */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium text-slate-700 dark:text-white/80">Buttons (Optional)</label>
-                    <button
-                      type="button"
-                      onClick={handleAddButton}
-                      className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center font-medium"
-                    >
-                      <Lucide icon="Plus" className="w-4 h-4 mr-1" />
-                      Add Button
-                    </button>
-                  </div>
-                  
-                  {createForm.buttons.length > 0 && (
-                    <div className="space-y-3">
-                      {createForm.buttons.map((btn, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-white/5 rounded-xl p-4 border border-slate-100 dark:border-white/10">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-medium text-slate-700 dark:text-white/80">Button {idx + 1}</span>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveButton(idx)}
-                              className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-                            >
-                              <Lucide icon="Trash2" className="w-4 h-4" />
-                            </button>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 gap-2 mb-2">
-                            <select
-                              value={btn.type}
-                              onChange={(e) => handleButtonChange(idx, 'type', e.target.value)}
-                              className="px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-lg text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
-                            >
-                              <option value="QUICK_REPLY" className="bg-white dark:bg-slate-800">Quick Reply</option>
-                              <option value="URL" className="bg-white dark:bg-slate-800">URL</option>
-                              <option value="PHONE_NUMBER" className="bg-white dark:bg-slate-800">Phone Number</option>
-                            </select>
-                            <input
-                              type="text"
-                              value={btn.text}
-                              onChange={(e) => handleButtonChange(idx, 'text', e.target.value)}
-                              placeholder="Button text"
-                              maxLength={25}
-                              className="px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-lg text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
-                            />
-                          </div>
-                          
-                          {btn.type === 'URL' && (
-                            <input
-                              type="url"
-                              value={btn.url || ''}
-                              onChange={(e) => handleButtonChange(idx, 'url', e.target.value)}
-                              placeholder="https://example.com"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-lg text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
-                            />
-                          )}
-                          
-                          {btn.type === 'PHONE_NUMBER' && (
-                            <input
-                              type="tel"
-                              value={btn.phone_number || ''}
-                              onChange={(e) => handleButtonChange(idx, 'phone_number', e.target.value)}
-                              placeholder="+60123456789"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/20 rounded-lg text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-white/40 focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm"
-                            />
-                          )}
-                        </div>
-                      ))}
+              {/* Live Preview */}
+              <div style={{borderTop:'2px solid #e8e8e8',paddingTop:'16px'}}>
+                <label className="mt-label">Live Preview</label>
+                <div className="mt-wa-preview">
+                  <div className="mt-wa-bubble">
+                    {createForm.headerType === 'text' && createForm.headerText && (
+                      <div style={{padding:'10px 14px 0',fontWeight:700,color:'#222',fontSize:'.85rem'}}>{createForm.headerText}</div>
+                    )}
+                    <div style={{padding:'8px 14px',color:'#333',whiteSpace:'pre-wrap',fontSize:'.82rem',lineHeight:1.5}}>
+                      {createForm.bodyText || 'Your message text will appear here...'}
                     </div>
-                  )}
-                  <p className="text-xs text-slate-500 dark:text-white/50 mt-1">Maximum 3 buttons allowed.</p>
-                </div>
-
-                {/* Preview */}
-                <div className="border-t border-slate-200 dark:border-white/10 pt-4">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-white/80 mb-2">Preview</label>
-                  <div className="bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-600/20 dark:to-emerald-700/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-500/20">
-                    <div className="bg-white rounded-xl shadow-lg max-w-sm mx-auto overflow-hidden">
-                      {createForm.headerType === 'text' && createForm.headerText && (
-                        <div className="px-4 pt-3 font-semibold text-gray-800">
-                          {createForm.headerText}
-                        </div>
-                      )}
-                      <div className="px-4 py-2 text-gray-700 whitespace-pre-wrap text-sm">
-                        {createForm.bodyText || 'Your message text will appear here...'}
+                    {createForm.footerText && <div style={{padding:'0 14px 10px',fontSize:'.7rem',color:'#888'}}>{createForm.footerText}</div>}
+                    {createForm.buttons.length > 0 && (
+                      <div className="mt-wa-btn-row">
+                        {createForm.buttons.filter(b => b.text).map((btn, idx) => (
+                          <button key={idx} className="mt-wa-btn">
+                            {btn.type === 'URL' && <Lucide icon="ExternalLink" className="w-3.5 h-3.5 inline mr-1" />}
+                            {btn.type === 'PHONE_NUMBER' && <Lucide icon="Phone" className="w-3.5 h-3.5 inline mr-1" />}
+                            {btn.text}
+                          </button>
+                        ))}
                       </div>
-                      {createForm.footerText && (
-                        <div className="px-4 pb-2 text-xs text-gray-500">
-                          {createForm.footerText}
-                        </div>
-                      )}
-                      {createForm.buttons.length > 0 && (
-                        <div className="border-t border-gray-100">
-                          {createForm.buttons.filter(btn => btn.text).map((btn, idx) => (
-                            <button
-                              key={idx}
-                              className="w-full py-2.5 text-center text-blue-500 hover:bg-gray-50 border-t border-gray-100 first:border-t-0 text-sm font-medium"
-                            >
-                              {btn.type === 'URL' && <Lucide icon="ExternalLink" className="w-4 h-4 inline mr-1" />}
-                              {btn.type === 'PHONE_NUMBER' && <Lucide icon="Phone" className="w-4 h-4 inline mr-1" />}
-                              {btn.text}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Actions */}
-              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-slate-200 dark:border-white/10">
-                <button
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    resetCreateForm();
-                  }}
-                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-200 dark:border-white/20 rounded-xl text-slate-700 dark:text-white/90 hover:text-slate-900 dark:hover:text-white transition-all duration-200 text-sm font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={createTemplate}
-                  disabled={isCreating}
-                  className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 rounded-xl text-white transition-all duration-200 flex items-center gap-2 text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isCreating ? (
-                    <>
-                      <LoadingIcon icon="oval" color="white" className="w-4 h-4" />
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      <Lucide icon="Plus" className="w-4 h-4" />
-                      Create Template
-                    </>
-                  )}
-                </button>
-              </div>
-            </Dialog.Panel>
-          </div>
+            <div className="mt-modal-footer">
+              <button className="mt-btn" onClick={() => { setShowCreateModal(false); resetCreateForm(); }}>Cancel</button>
+              <button className="mt-btn mt-btn-primary" onClick={createTemplate} disabled={isCreating}>
+                {isCreating ? <><LoadingIcon icon="oval" color="white" className="w-3.5 h-3.5" />Creating...</> : <><Lucide icon="Plus" className="w-3.5 h-3.5" />Create Template</>}
+              </button>
+            </div>
+          </Dialog.Panel>
         </div>
       </Dialog>
     </div>

@@ -163,10 +163,10 @@ function Main() {
       setEmployeeList(data.employees || []);
 
       // Filter employees based on role
-      const filteredEmployees = data.role === "3" 
+      const filteredEmployees = data.role === "3"
         ? data.employees.filter((employee: Employee) => employee.email === userEmail)
         : data.employees;
-      
+
       setEmployeeList(filteredEmployees);
       setShowAddUserButton(data.role === "1");
 
@@ -236,9 +236,9 @@ function Main() {
 
       // Delete user via API
       const response = await axios.delete(`${baseUrl}/api/delete-user`, {
-        data: { 
+        data: {
           email: employeeEmail,
-          companyId: companyId 
+          companyId: companyId
         }
       });
 
@@ -246,7 +246,7 @@ function Main() {
         // Update UI
         const updatedEmployeeList = employeeList.filter(employee => employee.email !== employeeEmail);
         setEmployeeList(updatedEmployeeList);
-        
+
         toast.success('Employee deleted successfully');
         toggleModal();
       } else {
@@ -276,10 +276,10 @@ function Main() {
 
   const filteredEmployees = useMemo(() => {
     let filtered = employeeList;
-    
+
     if (searchTerm.trim()) {
       const lowercaseSearchTerm = searchTerm.toLowerCase();
-      filtered = filtered.filter(employee => 
+      filtered = filtered.filter(employee =>
         employee.name.toLowerCase().includes(lowercaseSearchTerm) ||
         employee.email?.toLowerCase().includes(lowercaseSearchTerm) ||
         employee.employeeId?.toLowerCase().includes(lowercaseSearchTerm) ||
@@ -370,7 +370,7 @@ function Main() {
         .map(phone => phone.replace(/\D/g, '') + "@c.us");
 
       const allMessages = [];
-      
+
       // Add first message to the array
       if (messages.length > 0 && messages[0].text.trim()) {
         allMessages.push({
@@ -379,7 +379,7 @@ function Main() {
           delayAfter: 0
         });
       }
-      
+
       // Add additional messages
       if (messages.length > 1) {
         messages.slice(1).forEach((msg, idx) => {
@@ -492,37 +492,37 @@ function Main() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen bg-[#f8fafc]">
       {/* Header Section */}
-      <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 shadow-sm">
-        <div className="px-5 py-4">
-          <div className="flex items-center justify-between">
+      <div className="sticky top-0 z-40 bg-white border-b-4 border-[#4b4b4b] shadow-[0_4px_0_rgba(75,75,75,0.1)]">
+        <div className="px-6 py-5">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center space-x-4">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Users Directory</h2>
-              <div className="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900">
-                <span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">
+              <h2 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">Users Directory</h2>
+              <div className="px-3 py-1 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#f26522]">
+                <span className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">
                   {employeeList.length} Users
                 </span>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="relative">
+            <div className="flex items-center flex-wrap gap-4">
+              <div className="relative w-full md:w-auto">
                 <FormInput
                   type="text"
-                  className="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
-                  placeholder="Search users..."
+                  className="w-full md:w-72 pl-10 pr-4 py-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] placeholder-[#4b4b4b] font-bold text-xs uppercase tracking-wider focus:ring-0 focus:border-[#f26522] shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)] transition-colors"
+                  placeholder="SEARCH USERS..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <Lucide
                   icon="Search"
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#4b4b4b] stroke-[3]"
                 />
               </div>
               <ThemeSwitcher />
-              <div className="flex items-center px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
-                <Lucide icon="User" className="w-4 h-4 mr-2 text-gray-500 dark:text-gray-400" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <div className="flex items-center px-4 py-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                <Lucide icon="User" className="w-4 h-4 mr-2 text-[#4b4b4b] stroke-[3]" />
+                <span className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider truncate max-w-[120px]">
                   {currentUserEmail && currentUserEmail.split('@')[0]}
                 </span>
               </div>
@@ -530,11 +530,11 @@ function Main() {
           </div>
 
           {/* Controls Section */}
-          <div className="flex items-center justify-between mt-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3">
+          <div className="flex items-center justify-between mt-6 pb-2 border-b-4 border-[#4b4b4b] border-dashed">
+            <div className="flex items-center flex-wrap gap-3">
               <Link to="settings">
-                <Button variant="primary" className="shadow-sm hover:shadow-md transition-shadow duration-200">
-                  <Lucide icon="Settings" className="w-4 h-4 mr-2" />
+                <Button variant="primary" className="bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                  <Lucide icon="Settings" className="w-4 h-4 mr-2 stroke-[3]" />
                   Settings
                 </Button>
               </Link>
@@ -542,29 +542,28 @@ function Main() {
                 <Button
                   variant="primary"
                   onClick={() => setBlastMessageModal(true)}
-                  className="shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                 >
-                  <Lucide icon="Send" className="w-4 h-4 mr-2" />
+                  <Lucide icon="Send" className="w-4 h-4 mr-2 stroke-[3]" />
                   Send Blast Message
                 </Button>
               )}
               <Menu>
-                <Menu.Button as={Button} variant="outline-secondary" className="shadow-sm hover:shadow-md transition-shadow duration-200">
-                  <Lucide icon="Users" className="w-4 h-4 mr-2" />
+                <Menu.Button as={Button} variant="outline-secondary" className="bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                  <Lucide icon="Users" className="w-4 h-4 mr-2 stroke-[3]" />
                   {selectedGroup || "All Groups"}
-                  <Lucide icon="ChevronDown" className="w-4 h-4 ml-2" />
+                  <Lucide icon="ChevronDown" className="w-4 h-4 ml-2 stroke-[3]" />
                 </Menu.Button>
-                <Menu.Items className="absolute z-50 mt-2 w-48 rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute z-50 mt-2 w-56 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] rounded-none focus:outline-none">
                   <div className="py-1">
                     <Menu.Item>
                       {({ active }) => (
                         <button
                           onClick={() => setSelectedGroup('')}
-                          className={`${
-                            active ? 'bg-indigo-50 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300' : 'text-gray-700 dark:text-gray-300'
-                          } flex items-center w-full px-4 py-2 text-sm`}
+                          className={`${active ? 'bg-[#f26522] text-white' : 'text-[#4b4b4b]'
+                            } flex items-center w-full px-4 py-3 text-xs font-black uppercase tracking-wider border-b-2 border-gray-100 last:border-b-0`}
                         >
-                          <Lucide icon="Users" className="w-4 h-4 mr-2" />
+                          <Lucide icon="Users" className="w-4 h-4 mr-2 stroke-[3]" />
                           All Groups
                         </button>
                       )}
@@ -574,11 +573,10 @@ function Main() {
                         {({ active }) => (
                           <button
                             onClick={() => setSelectedGroup(group)}
-                            className={`${
-                              active ? 'bg-indigo-50 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300' : 'text-gray-700 dark:text-gray-300'
-                            } flex items-center w-full px-4 py-2 text-sm`}
+                            className={`${active ? 'bg-[#f26522] text-white' : 'text-[#4b4b4b]'
+                              } flex items-center w-full px-4 py-3 text-xs font-black uppercase tracking-wider border-b-2 border-gray-100 last:border-b-0`}
                           >
-                            <Lucide icon="Users" className="w-4 h-4 mr-2" />
+                            <Lucide icon="Users" className="w-4 h-4 mr-2 stroke-[3]" />
                             {group}
                           </button>
                         )}
@@ -591,24 +589,23 @@ function Main() {
             <div className="flex items-center space-x-4">
               {phoneCount >= 2 && (
                 <Menu>
-                  <Menu.Button as={Button} variant="outline-secondary" className="shadow-sm hover:shadow-md transition-shadow duration-200">
-                    <Lucide icon="Phone" className="w-4 h-4 mr-2" />
+                  <Menu.Button as={Button} variant="outline-secondary" className="bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                    <Lucide icon="Phone" className="w-4 h-4 mr-2 stroke-[3]" />
                     Phone Names
-                    <Lucide icon="ChevronDown" className="w-4 h-4 ml-2" />
+                    <Lucide icon="ChevronDown" className="w-4 h-4 ml-2 stroke-[3]" />
                   </Menu.Button>
-                  <Menu.Items className="absolute right-0 z-50 mt-2 w-72 rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-50 mt-2 w-80 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#3b82f6] rounded-none focus:outline-none">
                     <div className="p-2">
                       {Object.entries(phoneNames).map(([index, phoneName]) => (
                         <Menu.Item key={index}>
                           {({ active }) => (
-                            <div className={`${
-                              active ? 'bg-gray-50 dark:bg-gray-700' : ''
-                            } px-4 py-3 rounded-md flex items-center justify-between group`}>
+                            <div className={`${active ? 'bg-gray-100' : ''
+                              } px-4 py-3 border-b-2 border-[#4b4b4b] last:border-b-0 flex items-center justify-between group transition-colors`}>
                               <div className="flex flex-col">
-                                <span className="font-medium text-gray-900 dark:text-white">
+                                <span className="font-black text-[#4b4b4b] uppercase tracking-wider text-sm">
                                   {companyData?.[`phone${index}`] || `Phone ${index}`}
                                 </span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                                   {phoneName || `Phone ${index}`}
                                 </span>
                               </div>
@@ -617,9 +614,9 @@ function Main() {
                                   const newName = prompt(`Enter new name for ${phoneName || `Phone ${index}`}`, phoneName);
                                   if (newName) updatePhoneName(parseInt(index), newName);
                                 }}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600"
+                                className="p-2 bg-white border-2 border-[#4b4b4b] text-[#f26522] shadow-[2px_2px_0_#4b4b4b] hover:translate-y-0.5 hover:translate-x-0.5 hover:shadow-none transition-all"
                               >
-                                <Lucide icon="Pencil" className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                <Lucide icon="Pencil" className="w-4 h-4 stroke-[3]" />
                               </button>
                             </div>
                           )}
@@ -633,154 +630,155 @@ function Main() {
           </div>
         </div>
       </div>
-      
+
       {/* Loading Indicator */}
       {isLoading && !isDataLoaded && (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Loading user data...</p>
+            <div className="w-12 h-12 border-4 border-[#4b4b4b] border-t-transparent animate-spin mx-auto mb-4 shadow-[2px_2px_0_#f26522]"></div>
+            <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">Loading user data...</p>
           </div>
         </div>
       )}
-      
+
       {/* Main Content */}
       {isDataLoaded && (
-        <div className="flex-1 px-5 py-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {paginatedEmployees.map((employee, index) => (
-            <div 
-              key={index} 
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-1"
-            >
-              <div className="p-6">
-                <div className="flex items-start space-x-4">
-                  {employee.imageUrl ? (
-                    <img
-                      src={employee.imageUrl}
-                      alt={employee.name}
-                      className="w-16 h-16 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center ring-2 ring-gray-200 dark:ring-gray-700">
-                      <Lucide icon="User" className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
-                      {employee.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                      {employee.email}
-                    </p>
-                    <div className="mt-2 flex items-center">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        employee.role === "1" ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
-                        employee.role === "2" ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                        employee.role === "3" ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                        employee.role === "4" ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                        'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-                      }`}>
-                        {employee.role === "1" ? 'Admin' :
-                         employee.role === "2" ? 'Sales' :
-                         employee.role === "3" ? 'Observer' :
-                         employee.role === "4" ? 'Manager' :
-                         employee.role === "5" ? 'Supervisor' : 'Other'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col space-y-2">
-                    {(role === "1" || (role !== "1" && employee.email === currentUserEmail)) && (
-                      <button
-                        onClick={() => navigate(`crud-form`, { state: { contactId: employee.email, contact: { ...employee, id: employee.email }, companyId: companyId || '' } })}
-                        className="p-2 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        aria-label="Edit"
-                      >
-                        <Lucide icon="Pencil" className="w-5 h-5" />
-                      </button>
+        <div className="flex-1 px-6 py-8 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
+            {paginatedEmployees.map((employee, index) => (
+              <div
+                key={index}
+                className="bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#f26522] transition-all duration-300 flex flex-col"
+              >
+                <div className="p-5 flex-1 flex flex-col">
+                  <div className="flex items-start gap-4">
+                    {employee.imageUrl ? (
+                      <div className="w-16 h-16 border-4 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] overflow-hidden flex-shrink-0">
+                        <img
+                          src={employee.imageUrl}
+                          alt={employee.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 bg-[#f26522] text-white border-4 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center flex-shrink-0">
+                        <Lucide icon="User" className="w-8 h-8 stroke-[3]" />
+                      </div>
                     )}
-                    {role === "1" && (
-                      <button 
-                        onClick={() => toggleModal(employee.email)}
-                        className="p-2 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                        aria-label="Delete"
-                      >
-                        <Lucide icon="Trash" className="w-5 h-5" />
-                      </button>
-                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-black text-[#4b4b4b] uppercase tracking-wider truncate mb-1">
+                        {employee.name}
+                      </h3>
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider truncate mb-2">
+                        {employee.email}
+                      </p>
+                      <div className="flex items-center flex-wrap gap-2">
+                        <span className={`inline-flex items-center px-2 py-1 text-[10px] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] ${employee.role === "1" ? 'bg-[#c084fc] text-white' :
+                          employee.role === "2" ? 'bg-[#3b82f6] text-white' :
+                            employee.role === "3" ? 'bg-[#10b981] text-white' :
+                              employee.role === "4" ? 'bg-[#eab308] text-[#4b4b4b]' :
+                                'bg-gray-200 text-[#4b4b4b]'
+                          }`}>
+                          {employee.role === "1" ? 'Admin' :
+                            employee.role === "2" ? 'Sales' :
+                              employee.role === "3" ? 'Observer' :
+                                employee.role === "4" ? 'Manager' :
+                                  employee.role === "5" ? 'Supervisor' : 'Other'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col space-y-2 border-l-2 border-[#4b4b4b] pl-4 border-dashed">
+                      {(role === "1" || (role !== "1" && employee.email === currentUserEmail)) && (
+                        <button
+                          onClick={() => navigate(`crud-form`, { state: { contactId: employee.email, contact: { ...employee, id: employee.email }, companyId: companyId || '' } })}
+                          className="p-2 bg-white border-2 border-[#4b4b4b] text-[#f26522] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all duration-200"
+                          aria-label="Edit"
+                        >
+                          <Lucide icon="Pencil" className="w-4 h-4 stroke-[3]" />
+                        </button>
+                      )}
+                      {role === "1" && (
+                        <button
+                          onClick={() => toggleModal(employee.email)}
+                          className="p-2 bg-white border-2 border-[#4b4b4b] text-red-500 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all duration-200 mt-2"
+                          aria-label="Delete"
+                        >
+                          <Lucide icon="Trash" className="w-4 h-4 stroke-[3]" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Pagination */}
-        <div className="mt-6">
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel={<div className="flex items-center">Next <Lucide icon="ChevronRight" className="w-4 h-4 ml-1" /></div>}
-            previousLabel={<div className="flex items-center"><Lucide icon="ChevronLeft" className="w-4 h-4 mr-1" /> Previous</div>}
-            onPageChange={handlePageChange}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={1}
-            pageCount={Math.ceil(filteredEmployees.length / itemsPerPage)}
-            renderOnZeroPageCount={null}
-            containerClassName="flex justify-center items-center space-x-2"
-            pageClassName="inline-flex"
-            pageLinkClassName="inline-flex items-center px-4 py-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-medium"
-            previousClassName="inline-flex"
-            nextClassName="inline-flex"
-            previousLinkClassName="inline-flex items-center px-4 py-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-medium"
-            nextLinkClassName="inline-flex items-center px-4 py-2 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm font-medium"
-            disabledClassName="opacity-50 cursor-not-allowed"
-            activeClassName="font-bold"
-            activeLinkClassName="!bg-indigo-50 !text-indigo-600 dark:!bg-indigo-900 dark:!text-indigo-300 !border-indigo-200 dark:!border-indigo-700"
-            breakClassName="px-2 py-2 text-gray-500 dark:text-gray-400"
-          />
+          {/* Pagination */}
+          <div className="mt-10 flex justify-center relative z-10 block">
+            <ReactPaginate
+              breakLabel={<span className="font-black text-[#4b4b4b] tracking-wider px-2 block">...</span>}
+              nextLabel={<div className="flex items-center text-xs font-black uppercase tracking-wider block">Next <Lucide icon="ChevronRight" className="w-4 h-4 ml-1 stroke-[3] block" /></div>}
+              previousLabel={<div className="flex items-center text-xs font-black uppercase tracking-wider block"><Lucide icon="ChevronLeft" className="w-4 h-4 mr-1 stroke-[3] block" /> Prev</div>}
+              onPageChange={handlePageChange}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={1}
+              pageCount={Math.ceil(filteredEmployees.length / itemsPerPage)}
+              renderOnZeroPageCount={null}
+              containerClassName="flex justify-center flex-wrap items-center gap-2 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-3 block"
+              pageClassName="inline-flex block"
+              pageLinkClassName="inline-flex items-center justify-center min-w-[32px] h-8 px-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-xs font-black transition-all block"
+              previousClassName="inline-flex block"
+              nextClassName="inline-flex block"
+              previousLinkClassName="inline-flex items-center px-4 py-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-xs font-black transition-all disabled:opacity-50 disabled:cursor-not-allowed block"
+              nextLinkClassName="inline-flex items-center px-4 py-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-xs font-black transition-all disabled:opacity-50 disabled:cursor-not-allowed block"
+              disabledClassName="opacity-50 cursor-not-allowed block"
+              activeClassName="font-bold block"
+              activeLinkClassName="!bg-[#f26522] !text-white shadow-[2px_2px_0_#4b4b4b]"
+              breakClassName="flex items-center justify-center block"
+            />
+          </div>
         </div>
-      </div>
       )}
 
       {/* Rest of the modals remain unchanged */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="fixed inset-0 bg-[#4b4b4b] opacity-80" onClick={() => toggleModal()}></div>
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-              <div className="bg-white dark:bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className="relative transform overflow-hidden bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] text-left transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <Lucide icon="AlertTriangle" className="h-6 w-6 text-red-600" aria-hidden="true" />
+                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center bg-red-100 border-4 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] sm:mx-0 sm:h-10 sm:w-10">
+                    <Lucide icon="AlertTriangle" className="h-6 w-6 text-red-600 stroke-[3]" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                    <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                       Delete User
                     </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <div className="mt-2 text-left">
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                         Are you sure you want to delete this user? This action cannot be undone.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 border-t-4 border-[#4b4b4b]">
                 <button
                   type="button"
                   onClick={() => handleDeleteEmployee(employeeIdToDelete)}
                   disabled={!isDataLoaded || isLoading}
-                  className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto ${
-                    !isDataLoaded || isLoading 
-                      ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'bg-red-600 hover:bg-red-500'
-                  }`}
+                  className={`inline-flex w-full justify-center px-4 py-2 text-xs font-black uppercase tracking-wider text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:translate-y-0.5 hover:translate-x-0.5 hover:shadow-none transition-all sm:ml-3 sm:w-auto ${!isDataLoaded || isLoading
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-red-500'
+                    }`}
                 >
                   {isLoading ? 'Deleting...' : 'Delete'}
                 </button>
                 <button
                   type="button"
                   onClick={() => toggleModal()}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto"
+                  className="mt-3 inline-flex w-full justify-center px-4 py-2 text-xs font-black uppercase tracking-wider text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:translate-y-0.5 hover:translate-x-0.5 hover:shadow-none transition-all sm:mt-0 sm:w-auto"
                 >
                   Cancel
                 </button>
@@ -789,225 +787,243 @@ function Main() {
           </div>
         </div>
       )}
-      
+
       <Dialog open={blastMessageModal} onClose={() => setBlastMessageModal(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 bg-[#4b4b4b] opacity-80" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
-            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">
+          <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 sm:p-8 text-left transition-all max-h-[90vh] overflow-y-auto">
+            <Dialog.Title className="text-xl sm:text-2xl font-black text-[#4b4b4b] uppercase tracking-wider mb-6 border-b-4 border-[#4b4b4b] pb-4">
               Send Blast Message to Employees
             </Dialog.Title>
-            
+
             {/* Employee Selection */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="mb-6">
+              <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
                 Select Employees
               </label>
-              <div className="max-h-40 overflow-y-auto border rounded-md p-2 bg-white dark:bg-gray-700">
+              <div className="max-h-40 overflow-y-auto bg-white border-4 border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)] p-3">
                 {employeeList.map((employee) => (
-                  <div key={employee.id} className="flex items-center space-x-2 mb-2">
+                  <div key={employee.id} className="flex items-center space-x-3 mb-3 last:mb-0">
                     <input
                       type="checkbox"
                       checked={selectedEmployees.some(e => e.id === employee.id)}
                       onChange={() => handleEmployeeSelection(employee)}
-                      className="rounded text-indigo-600 focus:ring-indigo-500"
+                      className="w-5 h-5 rounded-none border-2 border-[#4b4b4b] text-[#f26522] focus:ring-0 focus:ring-offset-0 cursor-pointer"
                     />
-                    <span className="text-gray-900 dark:text-white">{employee.name}</span>
+                    <span className="text-sm font-bold text-[#4b4b4b]">{employee.name}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Messages Section */}
-            <div className="mt-4">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Messages</label>
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">Messages</label>
                 <button
                   type="button"
-                  className="text-sm text-indigo-600 hover:text-indigo-500"
+                  className="bg-white border-2 border-[#4b4b4b] text-[#f26522] font-black uppercase tracking-wider text-[10px] px-3 py-1.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all"
                   onClick={() => setMessages([...messages, { text: '', delayAfter: 0 }])}
                 >
                   Add Message
                 </button>
               </div>
-              {messages.map((msg, index) => (
-                <div key={index} className="mt-2">
-                  <textarea
-                    className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder={`Message ${index + 1}`}
-                    value={msg.text}
-                    onChange={(e) => {
-                      const newMessages = [...messages];
-                      newMessages[index].text = e.target.value;
-                      setMessages(newMessages);
-                    }}
-                    rows={3}
-                  />
-                  {index > 0 && (
-                    <div className="mt-2 flex items-center space-x-2">
-                      <label className="text-sm text-gray-700 dark:text-gray-300">Delay after (seconds):</label>
-                      <input
-                        type="number"
-                        value={msg.delayAfter}
-                        onChange={(e) => {
-                          const newMessages = [...messages];
-                          newMessages[index].delayAfter = parseInt(e.target.value) || 0;
-                          setMessages(newMessages);
-                        }}
-                        className="w-20 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        min="0"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
+              <div className="space-y-4">
+                {messages.map((msg, index) => (
+                  <div key={index} className="p-4 bg-[#f8fafc] border-4 border-[#4b4b4b]">
+                    <textarea
+                      className="w-full p-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-medium text-sm focus:ring-0 focus:border-[#f26522] shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)] resize-y min-h-[80px]"
+                      placeholder={`Message ${index + 1}...`}
+                      value={msg.text}
+                      onChange={(e) => {
+                        const newMessages = [...messages];
+                        newMessages[index].text = e.target.value;
+                        setMessages(newMessages);
+                      }}
+                    />
+                    {index > 0 && (
+                      <div className="mt-3 flex items-center flex-wrap gap-2">
+                        <label className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider whitespace-nowrap">Delay after:</label>
+                        <div className="flex items-center whitespace-nowrap">
+                          <input
+                            type="number"
+                            value={msg.delayAfter}
+                            onChange={(e) => {
+                              const newMessages = [...messages];
+                              newMessages[index].delayAfter = parseInt(e.target.value) || 0;
+                              setMessages(newMessages);
+                            }}
+                            className="w-20 px-2 py-1.5 text-center bg-white border-y-2 border-l-2 border-[#4b4b4b] text-[#4b4b4b] font-black text-sm focus:ring-0 focus:border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]"
+                            min="0"
+                          />
+                          <span className="bg-gray-200 border-2 border-[#4b4b4b] px-3 py-1.5 text-xs font-black text-[#4b4b4b] uppercase tracking-wider shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]">sec</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Schedule Time */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Schedule Time
-              </label>
-              <input
-                type="datetime-local"
-                onChange={(e) => setBlastStartTime(new Date(e.target.value))}
-                className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-
-            {/* Batch Settings */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Batch Settings
-              </label>
-              <div className="flex items-center space-x-2">
+            {/* Schedule Time & Batch Settings */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                  Schedule Time
+                </label>
                 <input
-                  type="number"
-                  value={batchQuantity}
-                  onChange={(e) => setBatchQuantity(parseInt(e.target.value) || 1)}
-                  className="w-20 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  min="1"
+                  type="datetime-local"
+                  onChange={(e) => setBlastStartTime(new Date(e.target.value))}
+                  className="w-full p-2.5 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold text-sm focus:ring-0 focus:border-[#f26522] shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">messages per batch</span>
+              </div>
+              <div>
+                <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                  Batch Settings
+                </label>
+                <div className="flex items-center">
+                  <input
+                    type="number"
+                    value={batchQuantity}
+                    onChange={(e) => setBatchQuantity(parseInt(e.target.value) || 1)}
+                    className="w-16 sm:w-20 p-2.5 text-center bg-white border-y-2 border-l-2 border-[#4b4b4b] text-[#4b4b4b] font-black text-sm focus:ring-0 focus:border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]"
+                    min="1"
+                  />
+                  <span className="flex-1 bg-gray-200 border-2 border-[#4b4b4b] px-3 py-2.5 text-[10px] sm:text-xs font-black text-[#4b4b4b] uppercase tracking-wider shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)] whitespace-nowrap">msg/batch</span>
+                </div>
               </div>
             </div>
 
             {/* Media Upload */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div className="mb-6 p-5 border-4 border-[#4b4b4b] bg-yellow-50">
+              <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-4 border-b-2 border-[#4b4b4b] pb-2">
                 Attachments
               </label>
-              <div className="flex space-x-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400">Media</label>
-                  <input
-                    type="file"
-                    onChange={(e) => setSelectedMedia(e.target.files?.[0] || null)}
-                    className="mt-1"
-                    accept="image/*,video/*"
-                  />
+                  <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Media</label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      onChange={(e) => setSelectedMedia(e.target.files?.[0] || null)}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      accept="image/*,video/*"
+                    />
+                    <div className="bg-[#f26522] text-white border-2 border-[#4b4b4b] px-4 py-2 text-xs font-black uppercase tracking-wider shadow-[2px_2px_0_#4b4b4b] text-center pointer-events-none w-full truncate">
+                      {selectedMedia ? selectedMedia.name : "CHOOSE IMAGE/VIDEO"}
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400">Document</label>
-                  <input
-                    type="file"
-                    onChange={(e) => setSelectedDocument(e.target.files?.[0] || null)}
-                    className="mt-1"
-                    accept=".pdf,.doc,.docx,.txt"
-                  />
+                  <label className="block text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Document</label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      onChange={(e) => setSelectedDocument(e.target.files?.[0] || null)}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      accept=".pdf,.doc,.docx,.txt"
+                    />
+                    <div className="bg-[#3b82f6] text-white border-2 border-[#4b4b4b] px-4 py-2 text-xs font-black uppercase tracking-wider shadow-[2px_2px_0_#4b4b4b] text-center pointer-events-none w-full truncate">
+                      {selectedDocument ? selectedDocument.name : "CHOOSE DOCUMENT"}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Sleep Settings */}
-            <div className="mt-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={activateSleep}
-                  onChange={(e) => setActivateSleep(e.target.checked)}
-                  className="rounded text-indigo-600 focus:ring-indigo-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Activate Sleep Mode
-                </span>
-              </label>
-              {activateSleep && (
-                <div className="mt-2 space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <label className="text-sm text-gray-700 dark:text-gray-300">Sleep after:</label>
-                    <input
-                      type="number"
-                      value={sleepAfterMessages || ''}
-                      onChange={(e) => setSleepAfterMessages(parseInt(e.target.value) || null)}
-                      className="w-20 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      min="1"
-                    />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">messages</span>
+            {/* Sleep Settings & Active Hours & Infinite Loop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="p-4 border-4 border-[#4b4b4b] bg-indigo-50">
+                <label className="flex items-center space-x-3 mb-4 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={activateSleep}
+                    onChange={(e) => setActivateSleep(e.target.checked)}
+                    className="w-5 h-5 rounded-none border-2 border-[#4b4b4b] text-indigo-600 focus:ring-0 focus:ring-offset-0"
+                  />
+                  <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider leading-none">
+                    Sleep Mode
+                  </span>
+                </label>
+                {activateSleep && (
+                  <div className="space-y-3 pt-3 border-t-2 border-[#4b4b4b] border-dashed">
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-[10px] font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Sleep after:</label>
+                      <div className="flex items-center">
+                        <input
+                          type="number"
+                          value={sleepAfterMessages || ''}
+                          onChange={(e) => setSleepAfterMessages(parseInt(e.target.value) || null)}
+                          className="w-14 sm:w-16 p-1 text-center bg-white border-y-2 border-l-2 border-[#4b4b4b] text-[#4b4b4b] font-black text-sm focus:ring-0 shadow-[inset_1px_1px_0_rgba(0,0,0,0.05)]"
+                          min="1"
+                        />
+                        <span className="bg-gray-200 border-2 border-[#4b4b4b] px-2 py-1 text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">msgs</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-[10px] font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">Duration:</label>
+                      <div className="flex items-center">
+                        <input
+                          type="number"
+                          value={sleepDuration || ''}
+                          onChange={(e) => setSleepDuration(parseInt(e.target.value) || null)}
+                          className="w-14 sm:w-16 p-1 text-center bg-white border-y-2 border-l-2 border-[#4b4b4b] text-[#4b4b4b] font-black text-sm focus:ring-0 shadow-[inset_1px_1px_0_rgba(0,0,0,0.05)]"
+                          min="1"
+                        />
+                        <span className="bg-gray-200 border-2 border-[#4b4b4b] px-2 py-1 text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">sec</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <label className="text-sm text-gray-700 dark:text-gray-300">Sleep duration:</label>
-                    <input
-                      type="number"
-                      value={sleepDuration || ''}
-                      onChange={(e) => setSleepDuration(parseInt(e.target.value) || null)}
-                      className="w-20 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                      min="1"
-                    />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">seconds</span>
+                )}
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 border-4 border-[#4b4b4b] bg-pink-50">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-4 border-b-2 border-[#4b4b4b] pb-2">
+                    Active Hours
+                  </label>
+                  <div className="flex items-center space-x-2 sm:space-x-4">
+                    <div className="flex-1">
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Start</label>
+                      <input
+                        type="time"
+                        value={activeTimeStart}
+                        onChange={(e) => setActiveTimeStart(e.target.value)}
+                        className="w-full px-1 sm:px-2 py-1.5 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold text-xs sm:text-sm focus:ring-0"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">End</label>
+                      <input
+                        type="time"
+                        value={activeTimeEnd}
+                        onChange={(e) => setActiveTimeEnd(e.target.value)}
+                        className="w-full px-1 sm:px-2 py-1.5 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold text-xs sm:text-sm focus:ring-0"
+                      />
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Active Hours */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Active Hours
-              </label>
-              <div className="flex items-center space-x-4">
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400">Start</label>
-                  <input
-                    type="time"
-                    value={activeTimeStart}
-                    onChange={(e) => setActiveTimeStart(e.target.value)}
-                    className="mt-1 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 dark:text-gray-400">End</label>
-                  <input
-                    type="time"
-                    value={activeTimeEnd}
-                    onChange={(e) => setActiveTimeEnd(e.target.value)}
-                    className="mt-1 p-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  />
+                <div className="p-3 border-4 border-[#4b4b4b] bg-white flex items-center justify-center hover:bg-gray-50 transition-colors">
+                  <label className="flex items-center space-x-3 cursor-pointer w-full justify-center">
+                    <input
+                      type="checkbox"
+                      checked={infiniteLoop}
+                      onChange={(e) => setInfiniteLoop(e.target.checked)}
+                      className="w-5 h-5 rounded-none border-2 border-[#4b4b4b] text-[#10b981] focus:ring-0 focus:ring-offset-0 cursor-pointer text-center"
+                    />
+                    <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider leading-none">
+                      Infinite Loop
+                    </span>
+                  </label>
                 </div>
               </div>
-            </div>
-
-            {/* Infinite Loop */}
-            <div className="mt-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={infiniteLoop}
-                  onChange={(e) => setInfiniteLoop(e.target.checked)}
-                  className="rounded text-indigo-600 focus:ring-indigo-500"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Infinite Loop
-                </span>
-              </label>
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-6 flex justify-end space-x-3">
+            <div className="mt-8 pt-6 border-t-4 border-[#4b4b4b] flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setBlastMessageModal(false)}
-                className="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="w-full sm:w-auto bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs px-6 py-2.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all order-2 sm:order-1 text-center"
               >
                 Cancel
               </button>
@@ -1015,7 +1031,7 @@ function Main() {
                 type="button"
                 onClick={sendBlastMessage}
                 disabled={isScheduling}
-                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto bg-[#10b981] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-xs px-6 py-2.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-[2px_2px_0_#4b4b4b] order-1 sm:order-2 text-center"
               >
                 {isScheduling ? "Scheduling..." : "Schedule Message"}
               </button>

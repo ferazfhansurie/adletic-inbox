@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.example.juta',
-  appName: 'OmniyalCRM',
+  appName: 'AdleticCRM',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

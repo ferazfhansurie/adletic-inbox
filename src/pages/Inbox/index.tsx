@@ -191,9 +191,9 @@ const MessageList: React.FC<MessageListProps> = ({
   const [newMessage, setNewMessage] = useState("");
 
   const myMessageClass =
-    "flex flex-col max-w-xs lg:max-w-md px-4 py-3 mx-2 mb-3 message-bubble-user text-white rounded-2xl rounded-br-md self-end ml-auto text-left";
+    "flex flex-col max-w-xs lg:max-w-md px-4 py-3 mb-2 message-bubble-user text-white self-end ml-auto text-left";
   const otherMessageClass =
-    "flex flex-col max-w-xs lg:max-w-md px-4 py-3 mx-2 mb-3 message-bubble-assistant text-gray-900 dark:text-gray-100 rounded-2xl rounded-bl-md self-start text-left border border-gray-100 dark:border-gray-700";
+    "flex flex-col max-w-xs lg:max-w-md px-4 py-3 mb-2 message-bubble-assistant self-start text-left";
 
   const handleSendMessage = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -206,66 +206,47 @@ const MessageList: React.FC<MessageListProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm relative rounded-2xl overflow-hidden shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-      <div className="flex items-center justify-between p-3 border-b border-gray-200/80 dark:border-gray-700/80 bg-gradient-to-r from-white/90 to-gray-50/90 dark:from-gray-800/90 dark:to-gray-900/90 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl header-gradient flex items-center justify-center shadow-md">
+    <div style={{display:'flex',flexDirection:'column',width:'100%',height:'100%',background:'#ffffff',border:'2px solid #4b4b4b',boxShadow:'4px 4px 0 #f26522',overflow:'hidden'}}>
+      {/* Chat header */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px 16px',background:'#4b4b4b',borderBottom:'3px solid #f26522',flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <div style={{width:32,height:32,background:'#f26522',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
           </div>
           <div>
-            <div className="text-sm font-semibold text-gray-800 dark:text-gray-100 capitalize">
-              {assistantName}
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">AI Assistant</div>
+            <div style={{fontSize:'.85rem',fontWeight:800,color:'#ffffff',textTransform:'capitalize',letterSpacing:'-0.01em'}}>{assistantName}</div>
+            <div style={{fontSize:'.6rem',fontWeight:600,color:'rgba(255,255,255,0.5)',textTransform:'uppercase',letterSpacing:'.06em'}}>AI Assistant</div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {/* New Chat Button - Always creates a fresh conversation */}
-          <button
-            onClick={onCreateNewThread}
-            className="px-3 py-2 btn-primary-gradient text-white rounded-xl text-xs font-medium active:scale-95 transition-all duration-200 flex items-center gap-1.5 shadow-md"
-          >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            New Chat
-          </button>
-        </div>
+        <button onClick={onCreateNewThread} className="inbox-action-btn inbox-action-btn-orange" style={{fontSize:'.65rem'}}>
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          New Chat
+        </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-gray-800/50 relative custom-scrollbar">
-        {/* Tool Buttons - Positioned at top of chat area */}
-        <div className="flex items-center gap-1.5 mb-3 pb-2 border-b border-gray-200/50 dark:border-gray-700/50"></div>
-
+      {/* Messages area */}
+      <div className="custom-scrollbar" style={{flex:1,overflowY:'auto',padding:16,background:'#f9f9f9',display:'flex',flexDirection:'column',gap:4}}>
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center p-8">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl header-gradient flex items-center justify-center shadow-lg">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%'}}>
+            <div style={{textAlign:'center',padding:32}}>
+              <div style={{width:56,height:56,background:'#f26522',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Start a Conversation</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 max-w-xs mx-auto">
-                Chat with <span className="font-medium text-indigo-600 dark:text-indigo-400">{assistantName}</span> to test your AI assistant
+              <h3 style={{fontSize:'1rem',fontWeight:800,color:'#4b4b4b',marginBottom:6,textTransform:'uppercase',letterSpacing:'-0.01em'}}>Start a Conversation</h3>
+              <p style={{fontSize:'.8rem',color:'#8b8b8b',marginBottom:16,maxWidth:260,margin:'0 auto 16px'}}>
+                Chat with <strong style={{color:'#f26522'}}>{assistantName}</strong> to test your AI assistant
               </p>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl text-xs text-indigo-600 dark:text-indigo-400">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'7px 14px',border:'2px solid #f26522',fontSize:'.68rem',fontWeight:700,color:'#f26522',textTransform:'uppercase',letterSpacing:'.06em'}}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Type a message below to get started
+                Type below to get started
               </div>
             </div>
           </div>
@@ -467,84 +448,51 @@ const MessageList: React.FC<MessageListProps> = ({
           </>
         )}
 
-        {/* AI Thinking Indicator - Modern Style */}
+        {/* AI Thinking Indicator */}
         {isAiThinking && (
-          <div className="flex justify-start mb-4 animate-fadeIn">
-            <div className="glass-card rounded-2xl rounded-bl-md px-4 py-3 max-w-xs shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="flex space-x-1.5">
-                  <div
-                    className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse"
-                    style={{ animationDelay: "0ms", animationDuration: "1s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse"
-                    style={{
-                      animationDelay: "0.2s",
-                      animationDuration: "1s",
-                    }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-indigo-500 dark:bg-indigo-400 rounded-full animate-pulse"
-                    style={{
-                      animationDelay: "0.4s",
-                      animationDuration: "1s",
-                    }}
-                  ></div>
-                </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Thinking...</span>
+          <div style={{display:'flex',justifyContent:'flex-start',marginBottom:8}} className="animate-fadeIn">
+            <div style={{display:'flex',alignItems:'center',gap:10,padding:'10px 16px',background:'#fff',border:'2px solid #4b4b4b',boxShadow:'2px 2px 0 #f26522'}}>
+              <div style={{display:'flex',gap:4}}>
+                <span className="inbox-dot" />
+                <span className="inbox-dot" />
+                <span className="inbox-dot" />
               </div>
+              <span style={{fontSize:'.7rem',fontWeight:700,color:'#8b8b8b',textTransform:'uppercase',letterSpacing:'.06em'}}>Thinking...</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Fullscreen Button - Floating Action Button */}
-      <div className="absolute bottom-24 right-5 flex gap-2 z-10">
-        <button
-          onClick={enterFullscreenMode}
-          className="p-3 btn-primary-gradient text-white rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg"
-          title="Open in fullscreen"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-          </svg>
-        </button>
-      </div>
+      {/* Fullscreen FAB */}
+      <button
+        onClick={enterFullscreenMode}
+        className="inbox-action-btn"
+        title="Open in fullscreen"
+        style={{position:'absolute',bottom:80,right:12,zIndex:10,padding:'8px 10px'}}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </button>
 
-      <div className="p-4 border-t border-gray-200/80 dark:border-gray-700/80 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 relative">
-            <textarea
-              className="w-full h-11 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 glass-input rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 resize-none transition-all duration-200"
-              placeholder="Type your message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleSendMessage}
-            />
-          </div>
+      {/* Input bar */}
+      <div style={{padding:'12px 14px',borderTop:'2px solid #e8e8e8',background:'#ffffff',flexShrink:0}}>
+        <div style={{display:'flex',alignItems:'flex-end',gap:8}}>
+          <textarea
+            className="inbox-chat-input"
+            style={{flex:1,height:44,paddingTop:11,paddingBottom:11}}
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleSendMessage}
+          />
           <button
-            onClick={() => onSendMessage(newMessage)}
-            className="h-11 px-5 btn-primary-gradient text-white rounded-xl font-medium active:scale-95 transition-all duration-200 flex items-center gap-2 text-sm shadow-lg"
+            onClick={() => { if (newMessage.trim()) { onSendMessage(newMessage); setNewMessage(""); } }}
+            className="inbox-send-btn"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
             </svg>
-            Send
           </button>
         </div>
       </div>
@@ -2795,156 +2743,231 @@ const Main: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 transition-colors duration-500">
+    <div className="inbox-root flex justify-center h-screen overflow-hidden" style={{background:'#f5f5f5'}}>
       {/* Global Styles for Polish */}
       <style>{`
-        /* Glass Morphism Effects */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        /* ── ADLETIC THEME ── */
+        .inbox-root { font-family: 'Inter', sans-serif; }
+
+        /* Flat card replacing glassmorphism */
         .glass-card {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.4);
+          background: #ffffff;
+          border: 2px solid #4b4b4b;
+          box-shadow: 4px 4px 0 #f26522;
         }
-        .dark .glass-card {
-          background: rgba(31, 41, 55, 0.85);
-          border: 1px solid rgba(75, 85, 99, 0.4);
-        }
-        
+
+        /* Flat input replacing glass-input */
         .glass-input {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(226, 232, 240, 0.6);
+          background: #ffffff;
+          border: 2px solid #e8e8e8 !important;
+          border-radius: 0 !important;
+          transition: border-color .2s, box-shadow .2s;
         }
-        .dark .glass-input {
-          background: rgba(55, 65, 81, 0.95);
-          border: 1px solid rgba(75, 85, 99, 0.6);
+        .glass-input:focus {
+          border-color: #f26522 !important;
+          box-shadow: 3px 3px 0 rgba(242,101,34,.15) !important;
+          outline: none;
         }
-        
-        /* Custom Scrollbar - Matching Chat */
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.05);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(99, 102, 241, 0.3);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(99, 102, 241, 0.5);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(139, 92, 246, 0.3);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(139, 92, 246, 0.5);
-        }
-        
-        /* Floating Orbs - Matching Chat */
-        .floating-orb {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          pointer-events: none;
-          z-index: 0;
-        }
-        .floating-orb-1 {
-          width: 350px;
-          height: 350px;
-          background: rgba(99, 102, 241, 0.08);
-          top: 5%;
-          right: 10%;
-          animation: float-slow 10s ease-in-out infinite;
-        }
-        .floating-orb-2 {
-          width: 280px;
-          height: 280px;
-          background: rgba(139, 92, 246, 0.06);
-          bottom: 15%;
-          left: 5%;
-          animation: float-slow 12s ease-in-out infinite;
-          animation-delay: 3s;
-        }
-        .dark .floating-orb-1 {
-          background: rgba(99, 102, 241, 0.15);
-        }
-        .dark .floating-orb-2 {
-          background: rgba(139, 92, 246, 0.12);
-        }
-        
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0) translateX(0); }
-          25% { transform: translateY(-20px) translateX(10px); }
-          50% { transform: translateY(-10px) translateX(-15px); }
-          75% { transform: translateY(-25px) translateX(5px); }
-        }
-        
+
+        /* Scrollbar – orange accent */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f5f5f5; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(242,101,34,.35); border-radius: 0; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(242,101,34,.6); }
+
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-        
-        /* Primary Button - Indigo/Purple Gradient */
+        .animate-fadeIn { animation: fadeIn .25s ease-out; }
+
+        /* Primary button – orange flat */
         .btn-primary-gradient {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
-          transition: all 0.3s ease;
+          background: #f26522;
+          border: 2px solid #f26522;
+          box-shadow: none;
+          transition: box-shadow .15s, transform .15s;
         }
         .btn-primary-gradient:hover {
-          box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
-          transform: translateY(-1px);
+          box-shadow: 3px 3px 0 #4b4b4b;
+          transform: translate(-1px, -1px);
         }
-        .btn-primary-gradient:active {
-          transform: translateY(0);
-        }
-        
-        /* Message Bubble Enhancement */
+        .btn-primary-gradient:active { transform: none; box-shadow: none; }
+
+        /* Message bubbles */
         .message-bubble-user {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+          background: #f26522;
+          border: 2px solid #f26522;
+          box-shadow: 2px 2px 0 #4b4b4b;
+          border-radius: 12px 12px 2px 12px !important;
         }
         .message-bubble-assistant {
-          background: rgba(255, 255, 255, 0.95);
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+          background: #ffffff;
+          border: 2px solid #4b4b4b;
+          box-shadow: 2px 2px 0 #f26522;
+          border-radius: 12px 12px 12px 2px !important;
+          color: #4b4b4b !important;
         }
-        .dark .message-bubble-assistant {
-          background: rgba(55, 65, 81, 0.95);
-        }
-        
-        /* Header Gradient */
+
+        /* Header bar – charcoal */
         .header-gradient {
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: #4b4b4b;
         }
+
+        /* Section labels */
+        .inbox-label {
+          font-size: .65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .08em;
+          color: #8b8b8b;
+          margin-bottom: 6px;
+        }
+
+        /* Quick action buttons */
+        .inbox-action-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 13px;
+          font-family: 'Inter', sans-serif;
+          font-size: .72rem;
+          font-weight: 700;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+          border: 2px solid #4b4b4b;
+          background: #ffffff;
+          color: #4b4b4b;
+          cursor: pointer;
+          transition: box-shadow .15s, transform .15s;
+        }
+        .inbox-action-btn:hover {
+          box-shadow: 2px 2px 0 #f26522;
+          transform: translate(-1px,-1px);
+        }
+        .inbox-action-btn-orange {
+          background: #f26522;
+          border-color: #f26522;
+          color: #ffffff;
+        }
+        .inbox-action-btn-orange:hover {
+          box-shadow: 2px 2px 0 #4b4b4b;
+          background: #d4581e;
+        }
+
+        /* Save / update button */
+        .inbox-save-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 22px;
+          font-family: 'Inter', sans-serif;
+          font-size: .75rem;
+          font-weight: 700;
+          letter-spacing: .06em;
+          text-transform: uppercase;
+          background: #f26522;
+          color: #ffffff;
+          border: 2px solid #f26522;
+          cursor: pointer;
+          transition: box-shadow .15s, transform .15s;
+        }
+        .inbox-save-btn:hover {
+          box-shadow: 3px 3px 0 #4b4b4b;
+          transform: translate(-1px,-1px);
+        }
+        .inbox-save-btn:disabled { opacity: .45; pointer-events: none; }
+
+        /* Mobile tab */
+        .inbox-tab {
+          flex: 1;
+          padding: 11px 0;
+          font-family: 'Inter', sans-serif;
+          font-size: .72rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: #8b8b8b;
+          background: #fff;
+          border: none;
+          border-bottom: 3px solid transparent;
+          cursor: pointer;
+          transition: color .15s, border-color .15s;
+        }
+        .inbox-tab-active {
+          color: #f26522;
+          border-bottom-color: #f26522;
+        }
+
+        /* Chat input area */
+        .inbox-chat-input {
+          width: 100%;
+          padding: 12px 14px;
+          font-family: 'Inter', sans-serif;
+          font-size: .88rem;
+          color: #4b4b4b;
+          background: #ffffff;
+          border: 2px solid #e8e8e8;
+          border-radius: 0;
+          resize: none;
+          outline: none;
+          transition: border-color .2s, box-shadow .2s;
+        }
+        .inbox-chat-input:focus {
+          border-color: #f26522;
+          box-shadow: 3px 3px 0 rgba(242,101,34,.12);
+        }
+        .inbox-chat-input::placeholder { color: #c0c0c0; }
+
+        /* Send button */
+        .inbox-send-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 42px;
+          background: #f26522;
+          border: 2px solid #f26522;
+          color: #fff;
+          cursor: pointer;
+          flex-shrink: 0;
+          transition: box-shadow .15s, transform .15s;
+        }
+        .inbox-send-btn:hover {
+          box-shadow: 2px 2px 0 #4b4b4b;
+          transform: translate(-1px,-1px);
+        }
+
+        /* AI thinking dots */
+        @keyframes inbox-dot-bounce {
+          0%,80%,100% { transform: scale(0.6); opacity:.4; }
+          40% { transform: scale(1); opacity:1; }
+        }
+        .inbox-dot { width:7px; height:7px; background:#f26522; border-radius:50%; animation: inbox-dot-bounce 1.2s ease-in-out infinite; }
+        .inbox-dot:nth-child(2) { animation-delay:.15s; }
+        .inbox-dot:nth-child(3) { animation-delay:.3s; }
       `}</style>
       
-      {/* Floating Orbs for Visual Interest */}
-      <div className="floating-orb floating-orb-1 hidden md:block"></div>
-      <div className="floating-orb floating-orb-2 hidden md:block"></div>
+      {/* decorative orange accent strip */}
+      <div style={{position:'fixed',top:0,left:0,right:0,height:'3px',background:'#f26522',zIndex:100}} />
       
       <div className={`w-full h-full ${isWideScreen ? "max-w-7xl flex py-4 px-2" : "max-w-lg"} relative z-10`}>
         {isWideScreen ? (
           <>
-            <div className="w-1/2 pl-4 pr-4 ml-2 mr-2 flex flex-col glass-card rounded-2xl custom-scrollbar shadow-xl overflow-hidden">
+            <div className="w-1/2 pl-4 pr-4 ml-2 mr-2 flex flex-col glass-card custom-scrollbar overflow-hidden" style={{borderRadius:0}}>
               {/* Header */}
-              <div className="flex-shrink-0 pt-4 pb-3 px-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl">
+              <div className="flex-shrink-0" style={{background:'#4b4b4b',padding:'14px 20px',borderBottom:'3px solid #f26522'}}>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl header-gradient flex items-center justify-center shadow-lg">
+                  <div style={{width:36,height:36,background:'#f26522',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
                     <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
-                    <h1 className="text-lg font-bold text-gray-800 dark:text-gray-100">AI Assistant</h1>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Configure your assistant</p>
+                    <h1 style={{fontSize:'1rem',fontWeight:800,color:'#ffffff',textTransform:'uppercase',letterSpacing:'-0.01em'}}>AI Assistant</h1>
+                    <p style={{fontSize:'0.65rem',fontWeight:600,color:'rgba(255,255,255,0.5)',textTransform:'uppercase',letterSpacing:'0.06em'}}>Configure your assistant</p>
                   </div>
                 </div>
               </div>
@@ -2953,28 +2976,27 @@ const Main: React.FC = () => {
               <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pb-4">
               {loading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="flex flex-col items-center w-3/4 max-w-lg text-center p-6">
-                    <div className="w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center">
-                      <img alt="Logo" className="w-12 h-12" src={logoUrl} />
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:16,padding:32}}>
+                    <div style={{width:48,height:48,background:'#f26522',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                      <img alt="Logo" style={{width:32,height:32,objectFit:'contain',filter:'brightness(0) invert(1)'}} src={logoUrl} />
                     </div>
-                    <div className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">
+                    <div style={{fontSize:'.72rem',fontWeight:700,color:'#8b8b8b',textTransform:'uppercase',letterSpacing:'.06em'}}>
                       Fetching Assistant...
                     </div>
-                    <LoadingIcon icon="three-dots" className="w-12 h-12 text-indigo-500" />
+                    <LoadingIcon icon="three-dots" className="w-10 h-10" style={{color:'#f26522'}} />
                   </div>
                 </div>
               ) : (
                 <>
                   {/* Assistant Selector */}
                   {assistants.length > 1 && (
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                        Select Assistant
-                      </label>
+                    <div style={{marginBottom:16}}>
+                      <label className="inbox-label">Select Assistant</label>
                       <select
                         value={selectedAssistant}
                         onChange={(e) => handleAssistantChange(e.target.value)}
-                        className="w-full p-3 text-sm font-medium border-0 rounded-xl glass-input text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm transition-all duration-200"
+                        className="glass-input"
+                        style={{width:'100%',padding:'10px 12px',fontSize:'.88rem',fontWeight:600,color:'#4b4b4b',fontFamily:'Inter,sans-serif'}}
                       >
                         {assistants.map((assistant) => (
                           <option key={assistant.id} value={assistant.id}>
@@ -2984,109 +3006,64 @@ const Main: React.FC = () => {
                       </select>
                     </div>
                   )}
-                  
+
                   {/* Name Input */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2" htmlFor="name">
-                      Assistant Name
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        className="w-full p-3 border-0 rounded-xl glass-input text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm transition-all duration-200 font-medium"
-                        placeholder="Name your assistant"
-                        value={assistantInfo.name}
-                        onChange={handleInputChange}
-                        onFocus={handleFocus}
-                        disabled={userRole === "3"}
-                      />
-                    </div>
+                  <div style={{marginBottom:16}}>
+                    <label className="inbox-label" htmlFor="name">Assistant Name</label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      className="glass-input"
+                      style={{width:'100%',padding:'10px 12px',fontSize:'.88rem',fontWeight:600,color:'#4b4b4b',fontFamily:'Inter,sans-serif'}}
+                      placeholder="Name your assistant"
+                      value={assistantInfo.name}
+                      onChange={handleInputChange}
+                      onFocus={handleFocus}
+                      disabled={userRole === "3"}
+                    />
                   </div>
 
-                  {/* AI Tools Section */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">
-                      Quick Actions
-                    </label>
-                    <div className="flex flex-wrap gap-2">
+                  {/* Quick Actions */}
+                  <div style={{marginBottom:16}}>
+                    <label className="inbox-label">Quick Actions</label>
+                    <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
                       <button
                         onClick={handleAutomatedClick}
-                        className="px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/25 active:scale-95 hover:scale-[1.02] transform transition-all duration-200 ease-out flex items-center gap-2 text-xs font-medium"
+                        className="inbox-action-btn inbox-action-btn-orange"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                            clipRule="evenodd"
-                          />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                         </svg>
                         AI Tools
                       </button>
-                      <button
-                        onClick={handleManualClick}
-                        className="px-3 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-xl hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-500/25 active:scale-95 hover:scale-[1.02] transform transition-all duration-200 ease-out flex items-center gap-2 text-xs font-medium"
-                      >
-                        <svg
-                          className="h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
+                      <button onClick={handleManualClick} className="inbox-action-btn">
+                        <svg className="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm7-3h2v6H9V7zm0 8h2v2H9v-2z" />
                         </svg>
                         Keywords
                       </button>
                       <Link to="/follow-ups">
-                        <button className="px-3 py-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 shadow-lg shadow-teal-500/25 active:scale-95 hover:scale-[1.02] transform transition-all duration-200 ease-out flex items-center gap-2 text-xs font-medium">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
+                        <button className="inbox-action-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
                           </svg>
                           Follow-Ups
                         </button>
                       </Link>
                       <Link to="/users-layout-2/builder2">
-                        <button className="px-3 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 shadow-lg shadow-purple-500/25 active:scale-95 hover:scale-[1.02] transform transition-all duration-200 ease-out flex items-center gap-2 text-xs font-medium">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
+                        <button className="inbox-action-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                            <path
-                              fillRule="evenodd"
-                              d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                              clipRule="evenodd"
-                            />
+                            <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
                           </svg>
                           Prompt Builder
                         </button>
                       </Link>
                       <Link to="/split-test">
-                        <button className="px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/25 active:scale-95 hover:scale-[1.02] transform transition-all duration-200 ease-out flex items-center gap-2 text-xs font-medium">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                              clipRule="evenodd"
-                            />
+                        <button className="inbox-action-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clipRule="evenodd" />
                           </svg>
                           Split Test
                         </button>
@@ -3094,29 +3071,26 @@ const Main: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* AI Tools Section - Show when Automated is selected */}
+                  {/* AI Tools Section */}
                   {showAiToolsSection && (
-                    <div className="mb-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800/50 shadow-lg">
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
-                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <div style={{marginBottom:16,padding:16,background:'rgba(242,101,34,.04)',border:'2px solid #4b4b4b',boxShadow:'3px 3px 0 #f26522'}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+                        <div style={{display:'flex',alignItems:'center',gap:8}}>
+                          <div style={{width:28,height:28,background:'#f26522',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                             </svg>
                           </div>
-                          <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">AI Tools</span>
+                          <span style={{fontSize:'.72rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'.06em',color:'#4b4b4b'}}>AI Tools</span>
                         </div>
-                        <button
-                          onClick={() => setShowAiToolsSection(false)}
-                          className="p-1.5 rounded-lg hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <button onClick={() => setShowAiToolsSection(false)} style={{background:'none',border:'none',cursor:'pointer',color:'#8b8b8b',display:'flex'}}>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </button>
                       </div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
-                        Click on any tool category to see examples and copy them directly to your chat
+                      <p style={{fontSize:'.72rem',color:'#8b8b8b',marginBottom:12}}>
+                        Click any category to see examples you can copy to chat
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <button
@@ -3166,7 +3140,7 @@ const Main: React.FC = () => {
                       <textarea
                         id="instructions"
                         name="instructions"
-                        className="w-full p-4 border-0 rounded-2xl h-[280px] text-sm glass-input text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 font-mono shadow-sm custom-scrollbar leading-relaxed"
+                        className="glass-input custom-scrollbar" style={{width:'100%',padding:'12px 14px',height:280,fontSize:'.85rem',fontFamily:'monospace',lineHeight:1.6,color:'#4b4b4b',resize:'none'}}
                         placeholder="Tell your assistant what to do..."
                         value={assistantInfo.instructions}
                         onChange={handleInputChange}
@@ -3179,7 +3153,7 @@ const Main: React.FC = () => {
                           console.log("Opening fullscreen modal");
                           setIsFullscreenModalOpen(true);
                         }}
-                        className="absolute top-3 right-3 p-2.5 bg-white/80 dark:bg-gray-700/80 text-indigo-600 dark:text-indigo-400 rounded-xl hover:bg-white dark:hover:bg-gray-700 shadow-md active:scale-95 transition-all duration-200 backdrop-blur-sm"
+                        className="inbox-action-btn" style={{position:'absolute',top:8,right:8,padding:'6px 8px'}}
                         title="Edit in fullscreen"
                       >
                         <svg
@@ -3200,7 +3174,7 @@ const Main: React.FC = () => {
                       <div className="absolute bottom-3 left-3 flex gap-2">
                         <button
                           onClick={() => setIsTemplateModalOpen(true)}
-                          className="px-3 py-2 bg-white/90 dark:bg-gray-700/90 text-indigo-600 dark:text-indigo-400 rounded-xl hover:bg-white dark:hover:bg-gray-700 shadow-md active:scale-95 transition-all duration-200 flex items-center gap-2 text-xs font-medium backdrop-blur-sm"
+                          className="inbox-action-btn"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -3221,9 +3195,7 @@ const Main: React.FC = () => {
                       <button
                         ref={updateButtonRef}
                         onClick={updateAssistantInfo}
-                        className={`absolute bottom-3 right-3 px-4 py-2.5 btn-primary-gradient text-white rounded-xl font-medium text-sm flex items-center gap-2 ${
-                          userRole === "3" ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
+                        className="inbox-save-btn" style={{position:'absolute',bottom:8,right:8}}
                         onFocus={handleFocus}
                         disabled={userRole === "3"}
                       >
@@ -3266,12 +3238,9 @@ const Main: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mb-4 p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg border border-indigo-100 dark:border-indigo-800 shadow-sm">
-                    <div className="space-y-3">
-                      <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Response Delay (seconds)
-                      </h3>
-
+                  <div style={{marginBottom:16,padding:14,border:'2px solid #e8e8e8',background:'#fafafa'}}>
+                    <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                      <label className="inbox-label" style={{marginBottom:0}}>Response Delay (seconds)</label>
                       <div>
                         <input
                           type="number"
@@ -3279,19 +3248,18 @@ const Main: React.FC = () => {
                           max="300"
                           value={aiDelay}
                           onChange={(e) => setAiDelay(Number(e.target.value))}
-                          className="w-full px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg text-xs bg-white dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          className="glass-input"
+                          style={{width:'100%',padding:'8px 10px',fontSize:'.85rem',color:'#4b4b4b',fontFamily:'Inter,sans-serif'}}
                           disabled={userRole === "3"}
                         />
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          Set how long the AI should wait before responding
-                          (0-300 seconds)
+                        <p style={{fontSize:'.68rem',color:'#8b8b8b',marginTop:4}}>
+                          How long the AI waits before responding (0–300 s)
                         </p>
                       </div>
-
                       <div>
                         <button
                           onClick={handleSaveAiSettings}
-                          className="px-3 py-1.5 bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/50 shadow-sm active:scale-95 transition-all duration-200 flex items-center gap-1.5 text-xs"
+                          className="inbox-action-btn inbox-action-btn-orange"
                           disabled={userRole === "3"}
                         >
                           <svg

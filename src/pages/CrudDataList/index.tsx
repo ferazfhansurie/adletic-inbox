@@ -3837,145 +3837,98 @@ function Main() {
       console.log("Active date filter:", activeDateFilter);
     }
 
+    const searchTerm = searchQuery.toLowerCase();
+    const selTags = selectedTagFilters.map(t => t.toLowerCase());
+    const selUsers = selectedUserFilters.map(t => t.toLowerCase());
+    const excTags = excludedTagFilters.map(t => t.toLowerCase());
+    const excUsers = excludedUserFilters.map(t => t.toLowerCase());
+
+    // pre-evaluate date filter components outside loop
+    let hasDateFilter = false;
+    let startDateStr = "";
+    let endDateStr = "";
+    let dateField = "";
+    if (activeDateFilter) {
+      hasDateFilter = true;
+      dateField = activeDateFilter.field;
+      if (activeDateFilter.start) {
+        startDateStr = new Date(activeDateFilter.start).toISOString().split("T")[0];
+      }
+      if (activeDateFilter.end) {
+        endDateStr = new Date(activeDateFilter.end).toISOString().split("T")[0];
+      }
+    }
+
     return contacts.filter((contact) => {
-      const name = (contact.contactName || "").toLowerCase();
-      const phone = (contact.phone || "").toLowerCase();
-      const tags = (contact.tags || []).map((tag) => tag.toLowerCase());
-      const searchTerm = searchQuery.toLowerCase();
+      const name = contact.contactName ? contact.contactName.toLowerCase() : "";
+      const phone = contact.phone ? contact.phone.toLowerCase() : "";
+      const tags = contact.tags || [];
+      const tagsLower = tags.length > 0 ? tags.map((t) => t.toLowerCase()) : [];
 
-      // Check basic fields
-      const basicFieldMatch =
-        name.includes(searchTerm) ||
-        phone.includes(searchTerm) ||
-        tags.some((tag) => tag.includes(searchTerm));
+      // Check basic search matching with early escape
+      let matchesSearch = true;
+      if (searchTerm) {
+        matchesSearch =
+          name.includes(searchTerm) ||
+          phone.includes(searchTerm) ||
+          tagsLower.some((tag) => tag.includes(searchTerm));
 
-      // Check custom fields
-      const customFieldMatch = contact.customFields
-        ? Object.entries(contact.customFields).some(([key, value]) =>
-          String(value || "")
-            .toLowerCase()
-            .includes(searchTerm)
-        )
-        : false;
-
-      const matchesSearch = basicFieldMatch || customFieldMatch;
-
-      const matchesTagFilters =
-        selectedTagFilters.length === 0 ||
-        selectedTagFilters.every((filter) =>
-          tags.includes(filter.toLowerCase())
-        );
-      const matchesUserFilters =
-        selectedUserFilters.length === 0 ||
-        selectedUserFilters.some((filter) =>
-          tags.includes(filter.toLowerCase())
-        );
-      const notExcluded = !excludedTagFilters.some((tag) =>
-        tags.includes(tag.toLowerCase())
-      );
-      const notExcludedUser = !excludedUserFilters.some((user) =>
-        tags.includes(user.toLowerCase())
-      );
-
-      // Date filter logic
-      let matchesDateFilter = true;
-
-      if (activeDateFilter) {
-        const { field, start, end } = activeDateFilter;
-        const contactDate = contact[field as keyof Contact];
-
-        if (!contactDate) {
-          // If the contact doesn't have the date field we're filtering by
-          matchesDateFilter = false;
-        } else {
-          try {
-            // Handle both Timestamp objects and string dates
-            let date: Date;
-
-            if (typeof contactDate === "string") {
-              // Handle string dates
-              date = new Date(contactDate);
-            } else if (
-              contactDate &&
-              typeof contactDate === "object" &&
-              "seconds" in contactDate
-            ) {
-              // Handle Firestore Timestamp objects
-              const timestamp = contactDate as {
-                seconds: number;
-                nanoseconds: number;
-              };
-              date = new Date(timestamp.seconds * 1000);
-            } else {
-              // Unknown format
-              console.log(
-                `Invalid date format for contact ${contact.id
-                }: ${JSON.stringify(contactDate)}`
-              );
-              matchesDateFilter = false;
-              return (
-                matchesSearch &&
-                matchesTagFilters &&
-                matchesUserFilters &&
-                notExcluded &&
-                matchesDateFilter
-              );
-            }
-
-            // Check if the date is valid
-            if (isNaN(date.getTime())) {
-              console.log(
-                `Invalid date for contact ${contact.id}: ${JSON.stringify(
-                  contactDate
-                )}`
-              );
-              matchesDateFilter = false;
-            } else {
-              // Format dates for comparison - strip time components for consistent comparison
-              const contactDateStr = date.toISOString().split("T")[0];
-
-              if (start && end) {
-                // Both start and end dates provided
-                const startDateStr = new Date(start)
-                  .toISOString()
-                  .split("T")[0];
-                const endDateStr = new Date(end).toISOString().split("T")[0];
-
-                // Compare dates as strings in YYYY-MM-DD format for accurate date-only comparison
-                matchesDateFilter =
-                  contactDateStr >= startDateStr &&
-                  contactDateStr <= endDateStr;
-              } else if (start) {
-                // Only start date
-                const startDateStr = new Date(start)
-                  .toISOString()
-                  .split("T")[0];
-                matchesDateFilter = contactDateStr >= startDateStr;
-              } else if (end) {
-                // Only end date
-                const endDateStr = new Date(end).toISOString().split("T")[0];
-                matchesDateFilter = contactDateStr <= endDateStr;
-              }
-            }
-          } catch (error) {
-            console.error(
-              `Error parsing date for contact ${contact.id}:`,
-              contactDate,
-              error
-            );
-            matchesDateFilter = false;
-          }
+        if (!matchesSearch && contact.customFields) {
+          matchesSearch = Object.values(contact.customFields).some((val) =>
+            String(val || "").toLowerCase().includes(searchTerm)
+          );
         }
       }
 
-      return (
-        matchesSearch &&
-        matchesTagFilters &&
-        matchesUserFilters &&
-        notExcluded &&
-        notExcludedUser &&
-        matchesDateFilter
-      );
+      if (!matchesSearch) return false; // Early Return
+
+      const matchesTagFilters =
+        selTags.length === 0 ||
+        selTags.every((filter) => tagsLower.includes(filter));
+
+      if (!matchesTagFilters) return false; // Early Return
+
+      const matchesUserFilters =
+        selUsers.length === 0 ||
+        selUsers.some((filter) => tagsLower.includes(filter));
+
+      if (!matchesUserFilters) return false; // Early Return
+
+      const notExcluded = excTags.length === 0 || !excTags.some((tag) => tagsLower.includes(tag));
+      if (!notExcluded) return false; // Early Return
+
+      const notExcludedUser = excUsers.length === 0 || !excUsers.some((user) => tagsLower.includes(user));
+      if (!notExcludedUser) return false; // Early Return
+
+      // Date filter logic
+      if (hasDateFilter) {
+        const contactDate = contact[dateField as keyof Contact];
+        if (!contactDate) return false;
+
+        let date: Date;
+        if (typeof contactDate === "string") {
+          date = new Date(contactDate);
+        } else if (typeof contactDate === "object" && "seconds" in contactDate) {
+          const timestamp = contactDate as { seconds: number; nanoseconds: number };
+          date = new Date(timestamp.seconds * 1000);
+        } else {
+          return false;
+        }
+
+        if (isNaN(date.getTime())) return false;
+
+        const contactDateStr = date.toISOString().split("T")[0];
+
+        if (startDateStr && endDateStr) {
+          if (contactDateStr < startDateStr || contactDateStr > endDateStr) return false;
+        } else if (startDateStr) {
+          if (contactDateStr < startDateStr) return false;
+        } else if (endDateStr) {
+          if (contactDateStr > endDateStr) return false;
+        }
+      }
+
+      return true;
     });
   }, [
     contacts,
@@ -6317,26 +6270,99 @@ function Main() {
   };
   return (
     <>
-      {/* Modern Glassmorphism Layout */}
-      <div className="h-screen bg-gradient-to-br from-slate-50/80 via-blue-50/40 to-indigo-50/60 dark:from-slate-900/90 dark:via-slate-800/80 dark:to-slate-700/70 overflow-auto relative">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        .neo-brutalist {
+          font-family: 'Inter', sans-serif;
+        }
+        .neo-border {
+          border: 2px solid #4b4b4b;
+        }
+        .neo-shadow {
+          box-shadow: 4px 4px 0 #4b4b4b;
+        }
+        .neo-shadow-orange {
+          box-shadow: 4px 4px 0 #f26522;
+        }
+        .neo-shadow-green {
+          box-shadow: 4px 4px 0 #10b981;
+        }
+        .neo-shadow-blue {
+          box-shadow: 4px 4px 0 #3b82f6;
+        }
+        .neo-shadow-hover:hover {
+          transform: translate(-4px, -4px);
+          box-shadow: 8px 8px 0 #4b4b4b;
+        }
+        .neo-btn-primary {
+          background: #f26522;
+          color: white;
+          border: 2px solid #f26522;
+          border-radius: 0;
+          font-weight: 700;
+          text-transform: uppercase;
+          transition: all 0.2s ease;
+        }
+        .neo-btn-primary:active {
+          transform: translate(2px, 2px);
+          box-shadow: none;
+        }
+        .neo-btn-primary:hover:not(:disabled) {
+          transform: translate(-2px, -2px);
+          box-shadow: 4px 4px 0 #4b4b4b;
+        }
+        .neo-btn-secondary {
+          background: white;
+          color: #4b4b4b;
+          border: 2px solid #4b4b4b;
+          border-radius: 0;
+          font-weight: 700;
+          text-transform: uppercase;
+          transition: all 0.2s ease;
+        }
+        .neo-btn-secondary:active {
+          transform: translate(2px, 2px);
+          box-shadow: none;
+        }
+        .neo-btn-secondary:hover:not(:disabled) {
+          transform: translate(-2px, -2px);
+          box-shadow: 4px 4px 0 #f26522;
+        }
+        .neo-input {
+          border: 2px solid #e8e8e8;
+          border-radius: 0;
+          transition: all 0.2s ease;
+          outline: none;
+        }
+        .neo-input:focus {
+          border-color: #f26522;
+          box-shadow: 4px 4px 0 rgba(242,101,34,0.15);
+        }
+        .neo-glass {
+          background: white;
+          border: 2px solid #4b4b4b;
+        }
+      `}</style>
+      {/* Modern Neo-Brutalist Layout */}
+      <div className="neo-brutalist h-screen bg-[#ffffff] overflow-auto relative">
         {/* Subtle Background Pattern */}
-        <div className="absolute inset-0 bg-grid-slate-100/[0.02] dark:bg-grid-slate-700/[0.05] pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNlOGU4ZTgiLz48L3N2Zz4=')] opacity-50 pointer-events-none" />
 
-        {/* Top Navigation Bar with Enhanced Glassmorphism */}
-        <div className="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl border-b border-white/30 dark:border-slate-700/40 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/30">
-          <div className="max-w-[96rem] mx-auto px-3 py-6">
+        {/* Top Navigation Bar with Neo-Brutalist Effect */}
+        <div className="sticky top-0 z-50 bg-[#ffffff] border-b-2 border-[#4b4b4b]">
+          <div className="max-w-[96rem] mx-auto px-6 py-6 font-bold">
             <div className="flex items-center justify-between">
               {/* Page Title & Stats */}
               <div className="flex items-center space-x-8">
                 <div>
                   <div className="flex items-center space-x-3 mb-2">
-                    <div className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
+                    <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
                       <Lucide
                         icon="Users"
-                        className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                        className="w-6 h-6"
                       />
                     </div>
-                    <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                    <h1 className="text-3xl font-black text-[#4b4b4b] uppercase tracking-tight">
                       Contacts
                     </h1>
                   </div>
@@ -6347,31 +6373,29 @@ function Main() {
                 </div>
 
                 {/* Enhanced Quick Stats Cards */}
-                <div className="hidden lg:flex items-center space-x-4">
-                  <div className="group relative bg-gradient-to-r from-emerald-500/15 to-green-500/10 dark:from-emerald-400/15 dark:to-green-400/10 backdrop-blur-xl border border-emerald-200/40 dark:border-emerald-700/40 px-5 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-50/30 to-green-50/20 dark:from-emerald-900/20 dark:to-green-900/15 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="hidden lg:flex items-center space-x-6">
+                  <div className="group relative bg-[#ffffff] border-2 border-[#10b981] neo-shadow-green px-5 py-3 transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0px_#10b981]">
                     <div className="relative flex items-center space-x-2">
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500/30 to-green-500/30 dark:from-emerald-400/30 dark:to-green-400/30">
+                      <div className="p-1.5 bg-[#10b981] text-white">
                         <Lucide
                           icon="CheckSquare"
-                          className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400"
+                          className="w-3.5 h-3.5"
                         />
                       </div>
-                      <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
+                      <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-widest">
                         {selectedContacts.length} Selected
                       </span>
                     </div>
                   </div>
-                  <div className="group relative bg-gradient-to-r from-blue-500/15 to-indigo-500/10 dark:from-blue-400/15 dark:to-indigo-400/10 backdrop-blur-xl border border-blue-200/40 dark:border-blue-700/40 px-5 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 transform-gpu">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 to-indigo-50/20 dark:from-blue-900/20 dark:to-indigo-900/15 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="group relative bg-[#ffffff] border-2 border-[#3b82f6] neo-shadow-blue px-5 py-3 transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0px_#3b82f6]">
                     <div className="relative flex items-center space-x-2">
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/30 to-indigo-500/30 dark:from-blue-400/30 dark:to-indigo-400/30">
+                      <div className="p-1.5 bg-[#3b82f6] text-white">
                         <Lucide
                           icon="Calendar"
-                          className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                          className="w-3.5 h-3.5"
                         />
                       </div>
-                      <span className="text-sm font-bold text-blue-700 dark:text-blue-300">
+                      <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-widest">
                         {scheduledMessages.length} Scheduled
                       </span>
                     </div>
@@ -6381,10 +6405,8 @@ function Main() {
 
               {/* Enhanced Primary Actions */}
               <div className="flex items-center space-x-3">
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="hidden sm:flex items-center space-x-2 group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-800/60 dark:to-slate-700/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-orange-300/60 dark:hover:border-orange-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/10 dark:hover:shadow-orange-500/20 rounded-xl px-4 py-2.5 hover:scale-105 transform-gpu"
+                <button
+                  className="hidden sm:flex items-center space-x-2 neo-btn-secondary px-4 py-2.5 disabled:opacity-50"
                   onClick={() => {
                     if (userRole !== "3") {
                       setShowCsvImportModal(true);
@@ -6396,21 +6418,12 @@ function Main() {
                   }}
                   disabled={userRole === "3"}
                 >
-                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:from-orange-400/20 dark:to-amber-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40 group-hover:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Upload"
-                      className="w-4 h-4 text-orange-600 dark:text-orange-400"
-                    />
-                  </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    Import
-                  </span>
-                </Button>
+                  <Lucide icon="Upload" className="w-4 h-4" />
+                  <span>Import</span>
+                </button>
 
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="flex items-center space-x-2 group bg-gradient-to-r from-blue-500/90 to-indigo-500/90 hover:from-blue-600/90 hover:to-indigo-600/90 backdrop-blur-sm border-blue-400/30 shadow-xl shadow-blue-500/30 transition-all duration-300 rounded-xl px-4 py-2.5 hover:scale-105 transform-gpu hover:shadow-2xl hover:shadow-blue-500/40"
+                <button
+                  className="flex items-center space-x-2 neo-btn-primary px-4 py-2.5 disabled:opacity-50"
                   onClick={() => {
                     if (userRole !== "3") {
                       setAddContactModal(true);
@@ -6420,16 +6433,12 @@ function Main() {
                   }}
                   disabled={userRole === "3"}
                 >
-                  <div className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                    <Lucide icon="Plus" className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="font-semibold text-white">Add Contact</span>
-                </Button>
+                  <Lucide icon="Plus" className="w-4 h-4" />
+                  <span>Add Contact</span>
+                </button>
 
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  className="flex items-center space-x-2 group bg-gradient-to-r from-blue-500/15 to-indigo-500/10 dark:from-blue-400/15 dark:to-indigo-400/10 backdrop-blur-xl border border-blue-300/50 dark:border-blue-600/50 hover:border-blue-400/70 dark:hover:border-blue-500/70 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/30 rounded-xl px-4 py-2.5 hover:scale-105 transform-gpu"
+                <button
+                  className="flex items-center space-x-2 neo-btn-secondary px-4 py-2.5 disabled:opacity-50"
                   onClick={() => {
                     if (userRole !== "3") {
                       setBlastMessageModal(true);
@@ -6441,42 +6450,29 @@ function Main() {
                   }}
                   disabled={userRole === "3"}
                 >
-                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-hover:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Send"
-                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                    />
-                  </div>
-                  <span className="font-semibold text-blue-700 dark:text-blue-300">
-                    Blast Message
-                  </span>
-                </Button>
+                  <Lucide icon="Send" className="w-4 h-4" />
+                  <span>Blast Message</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content Area with Enhanced Glassmorphism */}
-        <div className="max-w-[96rem] mx-auto px-3 py-8">
-          {/* Search & Filter Bar with Modern Glass Effect */}
-          <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 p-8 mb-8 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-            {/* Subtle gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-indigo-50/20 dark:from-blue-900/10 dark:via-transparent dark:to-indigo-900/10 rounded-3xl pointer-events-none" />
-
+        {/* Main Content Area with Neo-Brutalist Effect */}
+        <div className="max-w-[96rem] mx-auto px-6 py-8">
+          {/* Search & Filter Bar with Modern Neo-Brutalist Effect */}
+          <div className="relative bg-[#ffffff] border-2 border-[#4b4b4b] neo-shadow p-8 mb-8">
             <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0 lg:space-x-8">
               {/* Enhanced Search Input */}
               <div className="flex-1 max-w-md">
                 <div className="relative group">
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-focus-within:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Search"
-                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                    />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#4b4b4b]">
+                    <Lucide icon="Search" className="w-5 h-5" />
                   </div>
                   <FormInput
                     type="text"
                     placeholder="Search contacts..."
-                    className="pl-16 pr-4 py-4 w-full bg-white/70 dark:bg-slate-700/70 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 rounded-2xl focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400/60 transition-all duration-300 shadow-lg hover:shadow-xl text-slate-800 dark:text-slate-200 font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="neo-input pl-12 pr-4 py-3 w-full text-[#4b4b4b] font-bold placeholder:text-gray-400"
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
@@ -6486,96 +6482,47 @@ function Main() {
               {/* Enhanced Filter Controls */}
               <div className="flex flex-wrap items-center gap-4">
                 {/* Modern Bulk Selection */}
-                <div className="flex items-center space-x-2 bg-gradient-to-r from-slate-100/70 to-slate-200/50 dark:from-slate-700/70 dark:to-slate-600/50 backdrop-blur-xl rounded-2xl p-2 border border-slate-200/50 dark:border-slate-600/50 shadow-lg">
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="text-xs group bg-white/70 dark:bg-slate-600/70 backdrop-blur-sm border border-white/50 dark:border-slate-500/50 hover:bg-white/90 dark:hover:bg-slate-500/90 transition-all duration-300 rounded-xl px-3 py-2 hover:scale-105 transform-gpu hover:shadow-lg"
+                <div className="flex items-center space-x-2 bg-[#ffffff] border-2 border-[#4b4b4b] p-1 neo-shadow">
+                  <button
+                    className="flex items-center space-x-2 neo-btn-secondary px-3 py-2 text-xs"
                     onClick={handleSelectAll}
                   >
-                    <div className="flex items-center space-x-2">
-                      <div className="p-1 rounded-md bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 group-hover:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="CheckSquare"
-                          className="w-3 h-3 text-blue-600 dark:text-blue-400"
-                        />
-                      </div>
-                      <span className="font-semibold text-slate-700 dark:text-slate-300">
-                        All
-                      </span>
-                    </div>
-                  </Button>
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="text-xs group bg-white/70 dark:bg-slate-600/70 backdrop-blur-sm border border-white/50 dark:border-slate-500/50 hover:bg-white/90 dark:hover:bg-slate-500/90 transition-all duration-300 rounded-xl px-3 py-2 hover:scale-105 transform-gpu hover:shadow-lg"
+                    <Lucide icon="CheckSquare" className="w-3.5 h-3.5" />
+                    <span>All</span>
+                  </button>
+                  <button
+                    className="flex items-center space-x-2 neo-btn-secondary px-3 py-2 text-xs border-[#10b981]"
                     onClick={handleSelectCurrentPage}
                   >
-                    <div className="flex items-center space-x-2">
-                      <div className="p-1 rounded-md bg-gradient-to-br from-emerald-500/20 to-green-500/20 dark:from-emerald-400/20 dark:to-green-400/20 group-hover:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="Square"
-                          className="w-3 h-3 text-emerald-600 dark:text-emerald-400"
-                        />
-                      </div>
-                      <span className="font-semibold text-slate-700 dark:text-slate-300">
-                        Page
-                      </span>
-                    </div>
-                  </Button>
+                    <Lucide icon="Square" className="w-3.5 h-3.5 text-[#10b981]" />
+                    <span className="text-[#10b981]">Page</span>
+                  </button>
                 </div>
 
                 {/* Modern Quick Filters */}
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="flex items-center space-x-2 group bg-gradient-to-r from-white/70 to-white/50 dark:from-slate-700/70 dark:to-slate-600/50 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 hover:border-blue-300/60 dark:hover:border-blue-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/20 rounded-2xl px-4 py-3 hover:scale-105 transform-gpu"
+                <button
+                  className="flex items-center space-x-2 neo-btn-secondary px-4 py-2"
                   onClick={() => setShowFiltersModal(true)}
                 >
-                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-hover:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Tag"
-                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                    />
-                  </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    Tags
-                  </span>
-                </Button>
+                  <Lucide icon="Tag" className="w-4 h-4" />
+                  <span>Tags</span>
+                </button>
 
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="flex items-center space-x-2 group bg-gradient-to-r from-white/70 to-white/50 dark:from-slate-700/70 dark:to-slate-600/50 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 hover:border-emerald-300/60 dark:hover:border-emerald-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/20 rounded-2xl px-4 py-3 hover:scale-105 transform-gpu"
+                <button
+                  className="flex items-center space-x-2 neo-btn-secondary px-4 py-2"
                   onClick={() => setShowDateFilterModal(true)}
                 >
-                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-green-500/20 dark:from-emerald-400/20 dark:to-green-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40 group-hover:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Calendar"
-                      className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                    />
-                  </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    Date
-                  </span>
-                </Button>
+                  <Lucide icon="Calendar" className="w-4 h-4" />
+                  <span>Date</span>
+                </button>
 
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  className="flex items-center space-x-2 group bg-gradient-to-r from-white/70 to-white/50 dark:from-slate-700/70 dark:to-slate-600/50 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 hover:border-violet-300/60 dark:hover:border-violet-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/10 dark:hover:shadow-violet-500/20 rounded-2xl px-4 py-3 hover:scale-105 transform-gpu"
+                <button
+                  className="flex items-center space-x-2 neo-btn-secondary px-4 py-2"
                   onClick={() => setShowColumnsModal(true)}
                 >
-                  <div className="p-1.5 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-violet-200/40 dark:border-violet-700/40 group-hover:scale-110 transition-transform duration-300">
-                    <Lucide
-                      icon="Grid2x2"
-                      className="w-4 h-4 text-violet-600 dark:text-violet-400"
-                    />
-                  </div>
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">
-                    Columns
-                  </span>
-                </Button>
+                  <Lucide icon="Grid2x2" className="w-4 h-4" />
+                  <span>Columns</span>
+                </button>
               </div>
             </div>
 
@@ -6723,27 +6670,24 @@ function Main() {
 
           {/* Two-Column Layout */}
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content with Enhanced Glass Effect */}
+            {/* Main Content with Neo-Brutalist Effect */}
             <div className="lg:flex-1 min-w-0">
-              <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60">
-                {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50/20 via-transparent to-blue-50/20 dark:from-slate-900/10 dark:via-transparent dark:to-blue-900/10 pointer-events-none" />
-
+              <div className="relative bg-[#ffffff] border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
                 {/* Enhanced Table Header */}
-                <div className="relative px-8 py-6 border-b border-white/30 dark:border-slate-700/40 bg-gradient-to-r from-slate-50/70 to-slate-100/50 dark:from-slate-800/70 dark:to-slate-700/50 backdrop-blur-xl">
+                <div className="relative px-8 py-6 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2.5 rounded-2xl bg-gradient-to-br from-slate-500/20 to-gray-500/20 dark:from-slate-400/20 dark:to-gray-400/20 backdrop-blur-sm border border-slate-200/40 dark:border-slate-700/40">
+                      <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
                         <Lucide
                           icon="Database"
-                          className="w-5 h-5 text-slate-600 dark:text-slate-400"
+                          className="w-5 h-5"
                         />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+                        <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-tight">
                           Contacts
                         </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                        <p className="text-xs text-[#f26522] font-bold mt-0.5">
                           Manage your contact database
                         </p>
                       </div>
@@ -6751,23 +6695,14 @@ function Main() {
 
                     {/* Enhanced Table Actions */}
                     <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
-                        className="flex items-center space-x-2 group bg-gradient-to-r from-red-500/15 to-pink-500/10 dark:from-red-400/15 dark:to-pink-400/10 backdrop-blur-xl border border-red-300/50 dark:border-red-600/50 hover:border-red-400/70 dark:hover:border-red-500/70 transition-all duration-300 hover:shadow-xl hover:shadow-red-500/20 dark:hover:shadow-red-500/30 rounded-xl px-4 py-2.5 hover:scale-105 transform-gpu"
+                      <button
+                        className="flex items-center space-x-2 px-4 py-2 bg-white text-red-600 border-2 border-red-600 font-bold uppercase disabled:opacity-50 transition-all duration-300 hover:not(:disabled):-translate-y-1 hover:not(:disabled):-translate-x-1 hover:not(:disabled):shadow-[4px_4px_0_#ef4444]"
                         onClick={() => setShowMassDeleteModal(true)}
                         disabled={selectedContacts.length === 0}
                       >
-                        <div className="p-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 backdrop-blur-sm border border-red-200/40 dark:border-red-700/40 group-hover:scale-110 transition-transform duration-300">
-                          <Lucide
-                            icon="Trash2"
-                            className="w-4 h-4 text-red-600 dark:text-red-400"
-                          />
-                        </div>
-                        <span className="font-semibold text-red-700 dark:text-red-300">
-                          Delete
-                        </span>
-                      </Button>
+                        <Lucide icon="Trash2" className="w-4 h-4" />
+                        <span>Delete</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -6779,240 +6714,140 @@ function Main() {
                       <div className="text-center">
                         <LoadingIcon
                           icon="spinning-circles"
-                          className="w-8 h-8 mx-auto text-blue-500"
+                          className="w-8 h-8 mx-auto text-[#f26522]"
                         />
-                        <div className="mt-3 text-sm text-slate-600 dark:text-slate-400 font-medium">
+                        <div className="mt-3 text-sm font-bold text-[#4b4b4b] uppercase tracking-widest">
                           Fetching Data...
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <table className="w-full">
-                      <thead className="relative bg-gradient-to-r from-white/80 via-slate-50/60 to-white/40 dark:from-slate-700/80 dark:via-slate-800/60 dark:to-slate-700/40 backdrop-blur-2xl border-b-2 border-white/30 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                    <table className="w-full text-left border-collapse">
+                      <thead className="bg-[#4b4b4b] text-white border-b-4 border-[#f26522] font-black uppercase text-sm tracking-widest">
                         <tr>
-                          <th className="relative px-6 py-6 text-left group">
-                            <div className="flex items-center justify-center">
-                              <div className="relative">
-                                <input
-                                  type="checkbox"
-                                  className="rounded-xl border-2 border-slate-300/80 dark:border-slate-600/80 h-6 w-6 text-blue-600 focus:ring-3 focus:ring-blue-500/40 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 bg-white/90 dark:bg-slate-700/90 backdrop-blur-sm hover:border-blue-400/90 dark:hover:border-blue-500/90 hover:scale-110 transform-gpu shadow-lg"
-                                  checked={selectAll}
-                                  onChange={handleSelectAll}
-                                />
-                                {selectAll && (
-                                  <div className="absolute inset-0 rounded-xl bg-blue-500/20 dark:bg-blue-400/20 pointer-events-none animate-pulse" />
-                                )}
-                              </div>
-                            </div>
+                          <th className="px-6 py-4 text-left w-16">
+                            <input
+                              type="checkbox"
+                              className="w-5 h-5 border-2 border-white bg-transparent appearance-none checked:bg-[#f26522] checked:border-[#f26522] cursor-pointer transition-colors relative
+                                         before:content-[''] before:absolute before:top-[1px] before:left-[5px] before:w-[6px] before:h-[10px] before:border-r-2 before:border-b-2 before:border-white before:rotate-45 before:opacity-0 checked:before:opacity-100"
+                              checked={selectAll}
+                              onChange={handleSelectAll}
+                            />
                           </th>
                           <th
-                            className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-blue-100/40 dark:hover:from-blue-900/30 dark:hover:to-blue-800/20 transition-all duration-300"
+                            className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                             onClick={() => handleSort("contactName")}
                           >
-                            <div className="flex items-center space-x-3">
-                              <div>
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                                  Contact
-                                </span>
-                              </div>
+                            <div className="flex items-center space-x-2">
+                              <span>Contact</span>
                               {sortField === "contactName" && (
-                                <div className="p-1.5 rounded-lg bg-blue-500/20 dark:bg-blue-400/20 backdrop-blur-sm border border-blue-300/40 dark:border-blue-600/40">
-                                  <Lucide
-                                    icon={
-                                      sortDirection === "asc"
-                                        ? "ChevronUp"
-                                        : "ChevronDown"
-                                    }
-                                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                                  />
-                                </div>
+                                <Lucide
+                                  icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                  className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                />
                               )}
                             </div>
                           </th>
                           <th
-                            className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-emerald-50/60 hover:to-emerald-100/40 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/20 transition-all duration-300"
+                            className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                             onClick={() => handleSort("phone")}
                           >
-                            <div className="flex items-center space-x-3">
-                              <div>
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
-                                  Phone Number
-                                </span>
-                              </div>
+                            <div className="flex items-center space-x-2">
+                              <span>Phone Number</span>
                               {sortField === "phone" && (
-                                <div className="p-1.5 rounded-lg bg-emerald-500/20 dark:bg-emerald-400/20 backdrop-blur-sm border border-emerald-300/40 dark:border-emerald-600/40">
-                                  <Lucide
-                                    icon={
-                                      sortDirection === "asc"
-                                        ? "ChevronUp"
-                                        : "ChevronDown"
-                                    }
-                                    className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                                  />
-                                </div>
+                                <Lucide
+                                  icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                  className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                />
                               )}
                             </div>
                           </th>
-                          <th className="relative px-6 py-6 text-left group">
-                            <div className="flex items-center space-x-3">
-                              <div>
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-                                  Tags
-                                </span>
-                              </div>
-                            </div>
-                          </th>
+                          <th className="px-6 py-4 text-left">Tags</th>
                           {visibleColumns.ic && (
                             <th
-                              className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-orange-50/60 hover:to-orange-100/40 dark:hover:from-orange-900/30 dark:hover:to-orange-800/20 transition-all duration-300"
+                              className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                               onClick={() => handleSort("ic")}
                             >
-                              <div className="flex items-center space-x-3">
-                                <div>
-                                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                                    IC Number
-                                  </span>
-                                </div>
+                              <div className="flex items-center space-x-2">
+                                <span>IC Number</span>
                                 {sortField === "ic" && (
-                                  <div className="p-1.5 bg-orange-500/20 dark:bg-orange-400/20 backdrop-blur-sm border border-orange-300/40 dark:border-orange-600/40">
-                                    <Lucide
-                                      icon={
-                                        sortDirection === "asc"
-                                          ? "ChevronUp"
-                                          : "ChevronDown"
-                                      }
-                                      className="w-4 h-4 text-orange-600 dark:text-orange-400"
-                                    />
-                                  </div>
+                                  <Lucide
+                                    icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                    className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                  />
                                 )}
                               </div>
                             </th>
                           )}
                           {visibleColumns.vehicleNumber && (
                             <th
-                              className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-cyan-50/60 hover:to-cyan-100/40 dark:hover:from-cyan-900/30 dark:hover:to-cyan-800/20 transition-all duration-300"
+                              className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                               onClick={() => handleSort("vehicleNumber")}
                             >
-                              <div className="flex items-center space-x-3">
-                                <div>
-                                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors duration-300">
-                                    Vehicle Number
-                                  </span>
-                                </div>
+                              <div className="flex items-center space-x-2">
+                                <span>Vehicle Number</span>
                                 {sortField === "vehicleNumber" && (
-                                  <div className="p-1.5 bg-cyan-500/20 dark:bg-cyan-400/20 backdrop-blur-sm border border-cyan-300/40 dark:border-cyan-600/40">
-                                    <Lucide
-                                      icon={
-                                        sortDirection === "asc"
-                                          ? "ChevronUp"
-                                          : "ChevronDown"
-                                      }
-                                      className="w-4 h-4 text-cyan-600 dark:text-cyan-400"
-                                    />
-                                  </div>
+                                  <Lucide
+                                    icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                    className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                  />
                                 )}
                               </div>
                             </th>
                           )}
                           {visibleColumns.branch && (
                             <th
-                              className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-pink-50/60 hover:to-pink-100/40 dark:hover:from-pink-900/30 dark:hover:to-pink-800/20 transition-all duration-300"
+                              className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                               onClick={() => handleSort("branch")}
                             >
-                              <div className="flex items-center space-x-3">
-                                <div>
-                                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">
-                                    Branch
-                                  </span>
-                                </div>
+                              <div className="flex items-center space-x-2">
+                                <span>Branch</span>
                                 {sortField === "branch" && (
-                                  <div className="p-1.5 bg-pink-500/20 dark:bg-pink-400/20 backdrop-blur-sm border border-pink-300/40 dark:border-pink-600/40">
-                                    <Lucide
-                                      icon={
-                                        sortDirection === "asc"
-                                          ? "ChevronUp"
-                                          : "ChevronDown"
-                                      }
-                                      className="w-4 h-4 text-pink-600 dark:text-pink-400"
-                                    />
-                                  </div>
+                                  <Lucide
+                                    icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                    className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                  />
                                 )}
                               </div>
                             </th>
                           )}
                           {visibleColumns.expiryDate && (
                             <th
-                              className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-purple-50/60 hover:to-purple-100/40 dark:hover:from-purple-900/30 dark:hover:to-purple-800/20 transition-all duration-300"
+                              className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                               onClick={() => handleSort("expiryDate")}
                             >
-                              <div className="flex items-center space-x-3">
-                                <div>
-                                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
-                                    Expiry Date
-                                  </span>
-                                </div>
+                              <div className="flex items-center space-x-2">
+                                <span>Expiry Date</span>
                                 {sortField === "expiryDate" && (
-                                  <div className="p-1.5 bg-purple-500/20 dark:bg-purple-400/20 backdrop-blur-sm border border-purple-300/40 dark:border-purple-600/40">
-                                    <Lucide
-                                      icon={
-                                        sortDirection === "asc"
-                                          ? "ChevronUp"
-                                          : "ChevronDown"
-                                      }
-                                      className="w-4 h-4 text-purple-600 dark:text-purple-400"
-                                    />
-                                  </div>
+                                  <Lucide
+                                    icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                    className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                  />
                                 )}
                               </div>
                             </th>
                           )}
                           {visibleColumns.notes && (
-                            <th className="relative px-6 py-6 text-left group">
-                              <div className="flex items-center space-x-3">
-                                <div>
-                                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-                                    Notes
-                                  </span>
-                                </div>
-                              </div>
-                            </th>
+                            <th className="px-6 py-4 text-left">Notes</th>
                           )}
                           <th
-                            className="relative px-6 py-6 text-left group cursor-pointer hover:bg-gradient-to-r hover:from-indigo-50/60 hover:to-indigo-100/40 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/20 transition-all duration-300"
+                            className="px-6 py-4 text-left cursor-pointer hover:bg-[#f26522] transition-colors group"
                             onClick={() => handleSort("createdAt")}
                           >
-                            <div className="flex items-center space-x-3">
-                              <div>
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                                  Date Added
-                                </span>
-                              </div>
+                            <div className="flex items-center space-x-2">
+                              <span>Date Added</span>
                               {sortField === "createdAt" && (
-                                <div className="p-1.5 bg-indigo-500/20 dark:bg-indigo-400/20 backdrop-blur-sm border border-indigo-300/40 dark:border-indigo-600/40">
-                                  <Lucide
-                                    icon={
-                                      sortDirection === "asc"
-                                        ? "ChevronUp"
-                                        : "ChevronDown"
-                                    }
-                                    className="w-4 h-4 text-indigo-600 dark:text-indigo-400"
-                                  />
-                                </div>
+                                <Lucide
+                                  icon={sortDirection === "asc" ? "ChevronUp" : "ChevronDown"}
+                                  className="w-4 h-4 text-[#f26522] group-hover:text-white"
+                                />
                               )}
                             </div>
                           </th>
-                          <th className="relative px-6 py-6 text-right group">
-                            <div className="flex items-center justify-end space-x-3">
-                              <div>
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-                                  Actions
-                                </span>
-                              </div>
-                            </div>
-                          </th>
+                          <th className="px-6 py-4 text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white/30 dark:bg-slate-800/30 backdrop-blur-xl divide-y divide-white/20 dark:divide-slate-700/40">
+                      <tbody className="bg-white divide-y-2 divide-[#e8e8e8]">
                         {/* Map through actual contact data */}
                         {currentContacts.map((contact, index) => {
                           const isSelected = selectedContacts.some(
@@ -7023,28 +6858,26 @@ function Main() {
                           return (
                             <tr
                               key={contact.id || index}
-                              className="group relative hover:bg-gradient-to-r hover:from-white/60 hover:to-slate-50/40 dark:hover:from-slate-700/60 dark:hover:to-slate-800/40 transition-all duration-300 hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-slate-900/30 backdrop-blur-sm border-b border-white/10 dark:border-slate-700/20 last:border-b-0"
+                              className="group relative hover:bg-[#f8f9fa] transition-colors duration-150 border-b-2 border-[#e8e8e8] last:border-b-0 font-medium text-[#4b4b4b]"
                             >
-                              <td className="px-6 py-5 whitespace-nowrap">
+                              <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="relative">
                                   <input
                                     type="checkbox"
-                                    className="rounded-lg border-2 border-slate-300/60 dark:border-slate-600/60 h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-200 bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm hover:border-blue-400/80 dark:hover:border-blue-500/80"
+                                    className="w-5 h-5 border-2 border-[#4b4b4b] bg-white appearance-none checked:bg-[#f26522] checked:border-[#f26522] cursor-pointer transition-colors relative
+                                               before:content-[''] before:absolute before:top-[1px] before:left-[5px] before:w-[6px] before:h-[10px] before:border-r-2 before:border-b-2 before:border-white before:rotate-45 before:opacity-0 checked:before:opacity-100"
                                     checked={isSelected}
                                     onChange={() =>
                                       handleContactCheckboxChange(contact)
                                     }
                                   />
-                                  {isSelected && (
-                                    <div className="absolute inset-0 rounded-lg bg-blue-500/10 dark:bg-blue-400/10 pointer-events-none animate-pulse" />
-                                  )}
                                 </div>
                               </td>
-                              <td className="px-6 py-5 whitespace-nowrap">
+                              <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center group/contact">
-                                  <div className="flex-shrink-0 h-12 w-12 relative">
+                                  <div className="flex-shrink-0 h-10 w-10 relative">
                                     {contact.profileUrl ? (
-                                      <div className="h-12 w-12 rounded-2xl overflow-hidden shadow-xl shadow-blue-500/20 dark:shadow-blue-500/30 border border-white/30 dark:border-slate-600/30 group-hover/contact:scale-110 transition-transform duration-300">
+                                      <div className="h-10 w-10 overflow-hidden border-2 border-[#4b4b4b] neo-shadow group-hover/contact:shadow-[4px_4px_0_#f26522] transition-shadow duration-300">
                                         <img
                                           src={contact.profileUrl}
                                           alt={
@@ -7052,53 +6885,40 @@ function Main() {
                                             contact.firstName ||
                                             "Contact"
                                           }
-                                          className="w-full h-full object-cover"
+                                          className="w-full h-full object-cover grayscale group-hover/contact:grayscale-0 transition-all"
                                           onError={(e) => {
-                                            // Fallback to initials if image fails to load
-                                            const target =
-                                              e.currentTarget as HTMLImageElement;
-                                            const fallback =
-                                              target.nextElementSibling as HTMLDivElement;
+                                            const target = e.currentTarget as HTMLImageElement;
+                                            const fallback = target.nextElementSibling as HTMLDivElement;
                                             if (fallback) {
                                               target.style.display = "none";
                                               fallback.style.display = "flex";
                                             }
                                           }}
                                         />
-                                        <div className="hidden h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500/80 via-violet-500/80 to-purple-600/80 backdrop-blur-sm items-center justify-center text-white font-bold text-sm">
+                                        <div className="hidden h-10 w-10 bg-[#e8e8e8] items-center justify-center text-[#4b4b4b] font-black text-sm uppercase">
                                           {contact.contactName
-                                            ? contact.contactName
-                                              .charAt(0)
-                                              .toUpperCase()
-                                            : contact.firstName
-                                              ?.charAt(0)
-                                              ?.toUpperCase() || "U"}
+                                            ? contact.contactName.charAt(0)
+                                            : contact.firstName?.charAt(0) || "U"}
                                         </div>
                                       </div>
                                     ) : (
-                                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500/80 via-violet-500/80 to-purple-600/80 backdrop-blur-sm flex items-center justify-center text-white font-bold text-sm shadow-xl shadow-blue-500/20 dark:shadow-blue-500/30 border border-white/30 dark:border-slate-600/30 group-hover/contact:scale-110 transition-transform duration-300">
+                                      <div className="h-10 w-10 border-2 border-[#4b4b4b] bg-white neo-shadow group-hover/contact:shadow-[4px_4px_0_#f26522] transition-shadow flex items-center justify-center text-[#4b4b4b] font-black text-sm uppercase">
                                         {contact.contactName
-                                          ? contact.contactName
-                                            .charAt(0)
-                                            .toUpperCase()
-                                          : contact.firstName
-                                            ?.charAt(0)
-                                            ?.toUpperCase() || "U"}
+                                          ? contact.contactName.charAt(0)
+                                          : contact.firstName?.charAt(0) || "U"}
                                       </div>
                                     )}
-                                    <div className="absolute -inset-1 bg-gradient-to-br from-blue-400/30 to-violet-600/30 rounded-2xl blur opacity-0 group-hover/contact:opacity-100 transition-opacity duration-300" />
                                   </div>
-                                  <div className="ml-5">
-                                    <div className="text-sm font-bold text-slate-800 dark:text-slate-100 group-hover/contact:text-blue-600 dark:group-hover/contact:text-blue-400 transition-colors duration-200">
+                                  <div className="ml-4">
+                                    <div className="text-sm font-black text-[#4b4b4b] group-hover/contact:text-[#f26522] transition-colors duration-200">
                                       {contact.contactName ||
-                                        `${contact.firstName || ""} ${contact.lastName || ""
-                                          }`.trim() ||
+                                        `${contact.firstName || ""} ${contact.lastName || ""}`.trim() ||
                                         "Unknown"}
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-6 py-5 whitespace-nowrap">
+                              <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="space-y-2">
                                   <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                                     {contact.phone || "No phone"}
@@ -7118,214 +6938,135 @@ function Main() {
                                 </div>
                               </td>
                               <td className="px-6 py-5 whitespace-nowrap">
-                                <div className="flex flex-wrap gap-2.5">
+                                <div className="flex flex-wrap gap-2">
                                   {contact.tags && contact.tags.length > 0 ? (
                                     contact.tags
                                       .slice(0, 2)
                                       .map((tag, tagIndex) => (
                                         <span
                                           key={tagIndex}
-                                          className={`group/tag relative inline-flex items-center px-4 py-2 rounded-2xl text-xs font-bold backdrop-blur-xl transition-all duration-300 hover:scale-110 transform-gpu shadow-lg border-2 ${employeeNames.some(
-                                            (name) =>
-                                              name.toLowerCase() ===
-                                              tag.toLowerCase()
+                                          className={`group/tag relative inline-flex items-center px-2 py-1 border-2 text-[10px] font-black uppercase transition-all shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#4b4b4b] ${employeeNames.some(
+                                            (name) => name.toLowerCase() === tag.toLowerCase()
                                           )
-                                            ? "bg-gradient-to-r from-emerald-400/20 via-emerald-500/15 to-emerald-600/20 dark:from-emerald-400/25 dark:via-emerald-500/20 dark:to-emerald-600/25 text-emerald-700 dark:text-emerald-300 border-emerald-300/60 dark:border-emerald-600/60 shadow-emerald-500/20 dark:shadow-emerald-500/30 hover:shadow-emerald-500/30 dark:hover:shadow-emerald-500/40"
-                                            : "bg-gradient-to-r from-blue-400/20 via-blue-500/15 to-blue-600/20 dark:from-blue-400/25 dark:via-blue-500/20 dark:to-blue-600/25 text-blue-700 dark:text-blue-300 border-blue-300/60 dark:border-blue-600/60 shadow-blue-500/20 dark:shadow-blue-500/30 hover:shadow-blue-500/30 dark:hover:shadow-blue-500/40"
+                                            ? "bg-[#10b981] text-white border-[#4b4b4b]"
+                                            : "bg-white text-[#4b4b4b] border-[#4b4b4b]"
                                             }`}
                                         >
-                                          <span className="relative z-10">
-                                            {tag}
-                                          </span>
+                                          <span className="relative z-10">{tag}</span>
                                           {userRole !== "3" && (
                                             <button
-                                              className="ml-2 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 opacity-0 group-hover/tag:opacity-100 transition-all duration-200 p-1 rounded-full hover:bg-red-500/20 dark:hover:bg-red-400/20 z-20 relative transform hover:scale-125"
+                                              className="ml-1 text-red-600 hover:text-red-800 opacity-0 group-hover/tag:opacity-100 transition-all relative z-20"
                                               onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleRemoveTag(
-                                                  contact.contact_id!,
-                                                  tag
-                                                );
+                                                handleRemoveTag(contact.contact_id!, tag);
                                               }}
                                             >
-                                              <Lucide
-                                                icon="X"
-                                                className="w-3 h-3"
-                                              />
+                                              <Lucide icon="X" className="w-3 h-3" />
                                             </button>
                                           )}
-                                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 to-white/5 dark:from-white/5 dark:to-white/2 opacity-0 group-hover/tag:opacity-100 transition-opacity duration-300" />
                                         </span>
                                       ))
                                   ) : (
-                                    <span className="inline-flex items-center px-4 py-2 rounded-2xl text-xs font-semibold bg-gradient-to-r from-slate-100/60 to-slate-200/40 dark:from-slate-700/60 dark:to-slate-800/40 text-slate-500 dark:text-slate-400 backdrop-blur-xl border border-slate-300/40 dark:border-slate-600/40 shadow-sm">
-                                      <Lucide
-                                        icon="Tag"
-                                        className="w-3 h-3 mr-1.5 opacity-60"
-                                      />
+                                    <span className="inline-flex items-center px-2 py-1 text-[10px] font-bold text-gray-400 border-2 border-dashed border-gray-300">
                                       No tags
                                     </span>
                                   )}
                                   {contact.tags && contact.tags.length > 2 && (
                                     <div className="relative">
                                       <span
-                                        className="inline-flex items-center px-4 py-2 rounded-2xl text-xs font-bold bg-gradient-to-r from-slate-400/20 via-slate-500/15 to-slate-600/20 dark:from-slate-400/25 dark:via-slate-500/20 dark:to-slate-600/25 text-slate-600 dark:text-slate-400 backdrop-blur-xl border-2 border-slate-300/60 dark:border-slate-600/60 shadow-lg shadow-slate-500/20 dark:shadow-slate-500/30 hover:scale-110 transition-transform duration-300 cursor-pointer hover:border-blue-400/70 dark:hover:border-blue-500/70 hover:text-blue-600 dark:hover:text-blue-400"
+                                        className="inline-flex items-center px-2 py-1 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[10px] font-black uppercase text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 cursor-pointer"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           setHoveredContactTags(
-                                            hoveredContactTags ===
-                                              contact.contact_id
+                                            hoveredContactTags === contact.contact_id
                                               ? null
                                               : contact.contact_id
                                           );
                                         }}
                                       >
-                                        +{contact.tags.length - 2} more
+                                        +{contact.tags.length - 2}
                                       </span>
-                                      {/* Custom Tooltip */}
-                                      {hoveredContactTags ===
-                                        contact.contact_id && (
-                                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50">
-                                            <div className="p-3 space-y-2 max-w-xs bg-slate-800 dark:bg-slate-900 rounded-lg shadow-xl border border-slate-600 dark:border-slate-700">
-                                              <div className="text-xs font-semibold text-white mb-2">
-                                                All Tags:
-                                              </div>
-                                              <div className="flex flex-wrap gap-1.5">
-                                                {contact.tags
-                                                  .slice(2)
-                                                  .map((tag, tagIndex) => (
-                                                    <span
-                                                      key={tagIndex + 2}
-                                                      className={`inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium backdrop-blur-sm border ${employeeNames.some(
-                                                        (name) =>
-                                                          name.toLowerCase() ===
-                                                          tag.toLowerCase()
-                                                      )
-                                                        ? "bg-emerald-500/20 text-emerald-200 border-emerald-400/30"
-                                                        : "bg-blue-500/20 text-blue-200 border-blue-400/30"
-                                                        }`}
-                                                    >
-                                                      {tag}
-                                                    </span>
-                                                  ))}
-                                              </div>
-                                            </div>
-                                            {/* Tooltip Arrow */}
-                                            <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-                                              <div className="w-2 h-2 bg-slate-800 dark:bg-slate-900 border-r border-b border-slate-600 dark:border-slate-700 transform rotate-45"></div>
-                                            </div>
-                                          </div>
-                                        )}
                                     </div>
                                   )}
                                 </div>
                               </td>
                               {visibleColumns.ic && (
-                                <td className="px-6 py-5 whitespace-nowrap">
-                                  <div className="inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="font-bold text-[#4b4b4b]">
                                     {contact.ic || "-"}
                                   </div>
                                 </td>
                               )}
                               {visibleColumns.vehicleNumber && (
-                                <td className="px-6 py-5 whitespace-nowrap">
-                                  <div className="inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="font-bold text-[#4b4b4b]">
                                     {contact.vehicleNumber || "-"}
                                   </div>
                                 </td>
                               )}
                               {visibleColumns.branch && (
-                                <td className="px-6 py-5 whitespace-nowrap">
-                                  <div className="inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="font-bold text-[#4b4b4b]">
                                     {contact.branch || "-"}
                                   </div>
                                 </td>
                               )}
                               {visibleColumns.expiryDate && (
-                                <td className="px-6 py-5 whitespace-nowrap">
-                                  <div className="inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-200 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="font-bold text-[#4b4b4b]">
                                     {contact.expiryDate
-                                      ? new Date(
-                                        contact.expiryDate
-                                      ).toLocaleDateString()
+                                      ? new Date(contact.expiryDate).toLocaleDateString()
                                       : "-"}
                                   </div>
                                 </td>
                               )}
                               {visibleColumns.notes && (
-                                <td className="px-6 py-5 max-w-xs">
-                                  <div className="group relative">
-                                    <div
-                                      className="truncate font-semibold text-sm text-slate-700 dark:text-slate-200 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 rounded-2xl px-4 py-2.5 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30 cursor-pointer hover:shadow-xl transition-all duration-300"
-                                      title={contact.notes || ""}
-                                    >
-                                      {contact.notes || "-"}
-                                    </div>
+                                <td className="px-6 py-4 max-w-xs">
+                                  <div className="truncate font-medium text-sm text-gray-500" title={contact.notes || ""}>
+                                    {contact.notes || "-"}
                                   </div>
                                 </td>
                               )}
-                              <td className="px-6 py-5 whitespace-nowrap">
-                                <div className="inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-semibold text-slate-500 dark:text-slate-400 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="font-bold text-[#4b4b4b]">
                                   {contact.createdAt
-                                    ? new Date(
-                                      contact.createdAt
-                                    ).toLocaleDateString()
+                                    ? new Date(contact.createdAt).toLocaleDateString()
                                     : contact.dateAdded
-                                      ? new Date(
-                                        contact.dateAdded
-                                      ).toLocaleDateString()
+                                      ? new Date(contact.dateAdded).toLocaleDateString()
                                       : "Unknown"}
                                 </div>
                               </td>
-                              <td className="px-6 py-5 whitespace-nowrap text-right">
-                                <div className="flex items-center justify-end space-x-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                                  <Button
-                                    variant="outline-secondary"
-                                    size="sm"
-                                    className="group/btn relative bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-blue-300/80 dark:hover:border-blue-500/80 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/30 rounded-2xl p-3 hover:scale-110 transform-gpu overflow-hidden"
+                              <td className="px-6 py-4 whitespace-nowrap text-right">
+                                <div className="flex items-center justify-end space-x-2">
+                                  <button
+                                    className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] hover:bg-[#e8e8e8] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                                     onClick={() => {
                                       setCurrentContact(contact);
                                       setViewContactModal(true);
                                     }}
                                   >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 to-violet-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-                                    <Lucide
-                                      icon="Eye"
-                                      className="w-4 h-4 text-slate-600 dark:text-slate-400 group-hover/btn:text-blue-600 dark:group-hover/btn:text-blue-400 transition-colors duration-300 relative z-10"
-                                    />
-                                  </Button>
-                                  <Button
-                                    variant="outline-secondary"
-                                    size="sm"
-                                    className="group/btn relative bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-emerald-300/80 dark:hover:border-emerald-500/80 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/30 rounded-2xl p-3 hover:scale-110 transform-gpu overflow-hidden"
+                                    <Lucide icon="Eye" className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    className="p-2 border-2 border-[#10b981] bg-white text-[#10b981] hover:bg-[#10b981] hover:text-white hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#10b981] transition-all disabled:opacity-50"
                                     onClick={() => {
                                       setCurrentContact(contact);
                                       setEditContactModal(true);
                                     }}
                                     disabled={userRole === "3"}
                                   >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 to-green-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-                                    <Lucide
-                                      icon="Pencil"
-                                      className="w-4 h-4 text-slate-600 dark:text-slate-400 group-hover/btn:text-emerald-600 dark:group-hover/btn:text-emerald-400 transition-colors duration-300 relative z-10"
-                                    />
-                                  </Button>
-                                  <Button
-                                    variant="outline-danger"
-                                    size="sm"
-                                    className="group/btn relative bg-gradient-to-r from-red-50/80 to-red-100/60 dark:from-red-900/40 dark:to-red-800/40 backdrop-blur-xl border-2 border-red-200/60 dark:border-red-600/60 hover:border-red-400/80 dark:hover:border-red-500/80 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-red-500/20 dark:hover:shadow-red-500/30 rounded-2xl p-3 hover:scale-110 transform-gpu overflow-hidden"
+                                    <Lucide icon="Pencil" className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    className="p-2 border-2 border-red-600 bg-white text-red-600 hover:bg-red-600 hover:text-white hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#ef4444] transition-all disabled:opacity-50"
                                     onClick={() => {
                                       setCurrentContact(contact);
                                       setDeleteConfirmationModal(true);
                                     }}
                                     disabled={userRole === "3"}
                                   >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-red-400/10 to-pink-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-                                    <Lucide
-                                      icon="Trash2"
-                                      className="w-4 h-4 text-red-500 dark:text-red-400 group-hover/btn:text-red-600 dark:group-hover/btn:text-red-300 transition-colors duration-300 relative z-10"
-                                    />
-                                  </Button>
+                                    <Lucide icon="Trash2" className="w-4 h-4" />
+                                  </button>
                                 </div>
                               </td>
                             </tr>
@@ -7337,32 +7078,27 @@ function Main() {
                 </div>
 
                 {/* Enhanced Table Footer with Pagination */}
-                <div className="relative px-8 py-6 border-t-2 border-white/30 dark:border-slate-700/40 bg-gradient-to-r from-white/90 via-slate-50/80 to-white/60 dark:from-slate-800/90 dark:via-slate-700/80 dark:to-slate-800/60 backdrop-blur-2xl shadow-xl shadow-slate-200/20 dark:shadow-slate-900/30">
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-50/30 via-transparent to-blue-50/20 dark:from-slate-900/20 dark:via-transparent dark:to-blue-900/10 pointer-events-none" />
-
+                <div className="relative px-8 py-6 border-t-2 border-[#4b4b4b] bg-white">
                   <div className="relative flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/15 to-violet-500/10 dark:from-blue-400/20 dark:to-violet-400/15 backdrop-blur-xl border border-blue-200/50 dark:border-blue-700/50 shadow-lg">
-                        <Lucide
-                          icon="Database"
-                          className="w-5 h-5 text-blue-600 dark:text-blue-400"
-                        />
+                      <div className="p-3 bg-[#4b4b4b] text-white neo-shadow-orange">
+                        <Lucide icon="Database" className="w-5 h-5" />
                       </div>
-                      <div className="bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 rounded-2xl px-6 py-3 shadow-lg shadow-slate-200/20 dark:shadow-slate-900/30">
-                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                      <div className="bg-white border-2 border-[#4b4b4b] px-6 py-3 shadow-[4px_4px_0_#4b4b4b]">
+                        <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wide">
                           Showing{" "}
-                          <span className="text-blue-600 dark:text-blue-400 font-extrabold">
+                          <span className="text-[#f26522] font-black">
                             {itemOffset + 1}
                           </span>{" "}
                           to{" "}
-                          <span className="text-blue-600 dark:text-blue-400 font-extrabold">
+                          <span className="text-[#f26522] font-black">
                             {Math.min(
                               itemOffset + itemsPerPage,
                               filteredContactsSearch.length
                             )}
                           </span>{" "}
                           of{" "}
-                          <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">
+                          <span className="text-[#10b981] font-black">
                             {filteredContactsSearch.length}
                           </span>{" "}
                           results
@@ -7373,48 +7109,36 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <ReactPaginate
                         breakLabel={
-                          <div className="px-4 py-3 text-sm font-semibold text-slate-500 dark:text-slate-400 bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/50 dark:border-slate-600/50 rounded-xl shadow-lg">
+                          <div className="px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase border-2 border-[#4b4b4b] bg-white shadow-[2px_2px_0_#4b4b4b]">
                             ...
                           </div>
                         }
                         nextLabel={
-                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-blue-300/80 dark:hover:border-blue-500/80 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/30 hover:scale-110 transform-gpu overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            <span className="relative z-10 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                              Next
-                            </span>
-                            <Lucide
-                              icon="ChevronRight"
-                              className="w-4 h-4 relative z-10 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300"
-                            />
+                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 cursor-pointer">
+                            <span>Next</span>
+                            <Lucide icon="ChevronRight" className="w-4 h-4" />
                           </div>
                         }
                         onPageChange={handlePageClick}
                         pageRangeDisplayed={5}
                         pageCount={pageCount}
                         previousLabel={
-                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-emerald-300/80 dark:hover:border-emerald-500/80 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/30 hover:scale-110 transform-gpu overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            <Lucide
-                              icon="ChevronLeft"
-                              className="w-4 h-4 relative z-10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300"
-                            />
-                            <span className="relative z-10 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
-                              Previous
-                            </span>
+                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 cursor-pointer">
+                            <Lucide icon="ChevronLeft" className="w-4 h-4" />
+                            <span>Prev</span>
                           </div>
                         }
                         renderOnZeroPageCount={null}
                         className="flex items-center space-x-2"
                         pageClassName=""
-                        pageLinkClassName="relative group inline-flex items-center justify-center min-w-[44px] h-11 px-4 py-3 text-sm font-bold text-slate-700 dark:text-slate-300 bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-violet-300/80 dark:hover:border-violet-500/80 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/20 dark:hover:shadow-violet-500/30 hover:scale-110 transform-gpu overflow-hidden hover:text-violet-600 dark:hover:text-violet-400"
+                        pageLinkClassName="relative group inline-flex items-center justify-center min-w-[44px] h-11 px-4 py-3 text-sm font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] transition-all duration-300 hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b]"
                         activeClassName=""
-                        activeLinkClassName="!bg-gradient-to-r !from-blue-500/90 !via-violet-500/90 !to-purple-600/90 !text-white !shadow-2xl !shadow-blue-500/40 dark:!shadow-blue-500/50 !border-blue-400/60 dark:!border-blue-500/60 !scale-110 font-extrabold"
+                        activeLinkClassName="!bg-[#f26522] !text-white !shadow-[4px_4px_0_#4b4b4b]"
                         previousClassName="inline-flex"
                         nextClassName="inline-flex"
                         previousLinkClassName=""
                         nextLinkClassName=""
-                        disabledClassName="opacity-40 cursor-not-allowed hover:scale-100 hover:shadow-none"
+                        disabledClassName="opacity-40 cursor-not-allowed hover:shadow-none hover:translate-y-0"
                       />
                     </div>
                   </div>
@@ -7425,25 +7149,19 @@ function Main() {
             {/* Sidebar - Scheduled Messages, Quick Actions & Statistics (30% width) */}
             <div className="lg:w-80 lg:flex-shrink-0 space-y-8">
               {/* Scheduled Messages Panel */}
-              <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60 hover:scale-[1.02]">
-                {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-transparent to-violet-50/20 dark:from-blue-900/10 dark:via-transparent dark:to-violet-900/10 pointer-events-none" />
-
-                <div className="relative px-6 py-6 border-b border-white/20 dark:border-slate-700/30 bg-gradient-to-r from-slate-50/40 to-white/20 dark:from-slate-800/40 dark:to-slate-700/20 backdrop-blur-sm">
-                  <div className="flex items-center justify-between mb-4">
+              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+                <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2.5 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
-                        <Lucide
-                          icon="Calendar"
-                          className="w-5 h-5 text-blue-600 dark:text-blue-400"
-                        />
+                      <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
+                        <Lucide icon="Calendar" className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-                          Scheduled Messages
+                        <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-tight leading-tight">
+                          Scheduled
                         </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                          Manage your automation
+                        <p className="text-xs font-bold text-[#f26522] mt-0.5">
+                          Manage automation
                         </p>
                       </div>
                       {/* Active Filters Indicator */}
@@ -7451,28 +7169,25 @@ function Main() {
                         messageDateFilter ||
                         messageTypeFilter ||
                         messageRecipientFilter) && (
-                          <div className="relative">
-                            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 text-blue-700 dark:text-blue-300 border border-blue-200/40 dark:border-blue-700/40 backdrop-blur-sm">
-                              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2 animate-pulse" />
+                          <div className="relative ml-2">
+                            <span className="inline-flex items-center px-2 py-1 border-2 border-blue-500 bg-blue-100 text-blue-700 text-[10px] font-black uppercase shadow-[2px_2px_0_#3b82f6]">
                               Filtered
                             </span>
                           </div>
                         )}
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        className="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm border-white/40 dark:border-slate-600/40 hover:bg-white/80 dark:hover:bg-slate-600/80 transition-all duration-300 shadow-lg hover:shadow-xl rounded-xl"
+                    <div className="flex items-center">
+                      <button
+                        className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                         onClick={() => setScheduledMessagesModal(true)}
                       >
                         <Lucide icon="ExternalLink" className="w-4 h-4" />
-                      </Button>
+                      </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative p-6 space-y-4">
+                <div className="relative p-6 space-y-4 bg-white">
                   {/* Simplified View - Show max 3 most recent */}
                   {scheduledMessages && scheduledMessages.length > 0 ? (
                     <>
@@ -7488,31 +7203,23 @@ function Main() {
                         .map((message, index) => (
                           <div
                             key={message.id || index}
-                            className="group relative p-5 rounded-2xl bg-gradient-to-br from-white/80 to-white/40 dark:from-slate-700/80 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-blue-300/60 dark:hover:border-blue-500/60 transition-all duration-300 cursor-pointer hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/20 hover:scale-[1.02] transform-gpu"
+                            className="group relative p-4 border-2 border-[#4b4b4b] bg-white transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b]"
                           >
-                            {/* Subtle inner glow */}
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-50/30 via-transparent to-violet-50/30 dark:from-blue-900/10 dark:via-transparent dark:to-violet-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
                             <div className="relative flex items-start justify-between">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-start space-x-3 mb-3">
-                                  <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-hover:scale-110 transition-transform duration-300">
-                                    <Lucide
-                                      icon="MessageSquare"
-                                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                                    />
+                                  <div className="p-2 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[#4b4b4b]">
+                                    <Lucide icon="MessageSquare" className="w-4 h-4" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-relaxed line-clamp-2 overflow-hidden">
+                                    <p className="text-sm font-black text-[#4b4b4b] leading-tight line-clamp-2">
                                       {message.messageContent ||
                                         message.message ||
                                         "Untitled Campaign"}
                                     </p>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">
-                                      <span className="text-slate-400 dark:text-slate-500">
-                                        To{" "}
-                                      </span>
-                                      <span className="text-slate-800 dark:text-slate-200 font-bold bg-gradient-to-r from-blue-600/10 to-violet-600/10 dark:from-blue-400/20 dark:to-violet-400/20 px-2 py-0.5 rounded-md">
+                                    <p className="text-xs text-gray-500 mt-1 font-bold uppercase">
+                                      To{" "}
+                                      <span className="text-[#f26522] border-b-2 border-[#f26522]">
                                         {Array.isArray(message.contactIds) &&
                                           message.contactIds.length > 0
                                           ? message.contactIds.length > 1
@@ -7659,69 +7366,59 @@ function Main() {
               </div>
 
               {/* Quick Actions Panel */}
-              <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60 hover:scale-[1.02]">
-                {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/20 via-transparent to-blue-50/20 dark:from-emerald-900/10 dark:via-transparent dark:to-blue-900/10 pointer-events-none" />
-
-                <div className="relative px-6 py-6 border-b border-white/20 dark:border-slate-700/30 bg-gradient-to-r from-slate-50/40 to-white/20 dark:from-slate-800/40 dark:to-slate-700/20 backdrop-blur-sm">
+              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+                <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 dark:from-emerald-400/20 dark:to-blue-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40">
-                      <Lucide
-                        icon="Zap"
-                        className="w-5 h-5 text-emerald-600 dark:text-emerald-400"
-                      />
+                    <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
+                      <Lucide icon="Zap" className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-tight leading-tight">
                         Quick Actions
                       </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                      <p className="text-xs font-bold text-[#f26522] mt-0.5">
                         Bulk operations & tools
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative p-6 space-y-4">
+                <div className="relative p-6 space-y-4 bg-white">
                   {/* Assign User to Selected Contacts */}
                   <div className="w-full">
-                    <Button
-                      variant="outline-secondary"
-                      className="w-full justify-between group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-blue-300/60 dark:hover:border-blue-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 dark:hover:shadow-blue-500/20 rounded-2xl p-4 hover:scale-[1.02] transform-gpu"
+                    <button
+                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={
                         selectedContacts.length === 0 || userRole === "3"
                       }
                       onClick={() => setShowAssignUserMenu(!showAssignUserMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-hover:scale-110 transition-transform duration-300">
-                          <Lucide
-                            icon="User"
-                            className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                          />
+                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                          <Lucide icon="User" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                          <div className="text-sm font-black uppercase">
                             Assign User
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                          <div className="text-xs font-bold text-[#f26522]">
                             {selectedContacts.length} selected
                           </div>
                         </div>
                       </div>
                       <Lucide
                         icon={showAssignUserMenu ? "ChevronUp" : "ChevronDown"}
-                        className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300"
+                        className="w-5 h-5"
                       />
-                    </Button>
+                    </button>
 
                     {showAssignUserMenu && (
-                      <div className="mt-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl border border-white/40 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-slate-800/50 rounded-2xl p-4 space-y-3 overflow-y-auto max-h-96 transition-all duration-300 animate-in slide-in-from-top-2">
+                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3 overflow-y-auto max-h-96">
                         <div className="mb-3">
                           <div className="relative">
                             <Lucide
                               icon="Search"
-                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400"
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#4b4b4b]"
                             />
                             <input
                               type="text"
@@ -7730,40 +7427,21 @@ function Main() {
                               onChange={(e) =>
                                 setEmployeeSearch(e.target.value)
                               }
-                              className="w-full pl-10 pr-4 py-3 text-sm border border-white/40 dark:border-slate-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400/50 bg-white/80 dark:bg-slate-700/80 backdrop-blur-sm text-slate-800 dark:text-slate-200 transition-all duration-200"
+                              className="neo-input pl-10 pr-4 py-3 w-full text-[#4b4b4b] font-bold placeholder:text-gray-400"
                             />
                           </div>
                         </div>
                         {(() => {
-                          // Use the ref instead of the state
                           const stableEmployeeList = employeeListRef.current;
-                          console.log(
-                            "Using stable employee list:",
-                            stableEmployeeList.length,
-                            "employees"
-                          );
 
                           if (stableEmployeeList.length === 0) {
                             return (
                               <div className="p-6 text-center">
-                                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-100/80 to-slate-200/60 dark:from-slate-700/80 dark:to-slate-800/60 rounded-2xl backdrop-blur-sm border border-slate-200/40 dark:border-slate-600/40 flex items-center justify-center">
-                                  <Lucide
-                                    icon="Users"
-                                    className="w-8 h-8 text-slate-400"
-                                  />
+                                <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-[#4b4b4b] flex items-center justify-center neo-shadow">
+                                  <Lucide icon="Users" className="w-8 h-8 text-[#4b4b4b]" />
                                 </div>
-                                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                                <p className="text-sm font-black text-[#4b4b4b] uppercase">
                                   No employees found
-                                </p>
-                                <p className="text-xs text-slate-500 dark:text-slate-500 mt-2">
-                                  Stable list length:{" "}
-                                  {stableEmployeeList.length}
-                                </p>
-                                <p className="text-xs text-slate-500 dark:text-slate-500">
-                                  Current state length: {employeeList.length}
-                                </p>
-                                <p className="text-xs text-slate-500 dark:text-slate-500">
-                                  Search query: "{employeeSearch}"
                                 </p>
                               </div>
                             );
@@ -7788,7 +7466,7 @@ function Main() {
                           return filteredEmployees.map((employee) => (
                             <button
                               key={employee.id}
-                              className="group flex w-full items-center px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-violet-50/40 dark:hover:from-blue-900/20 dark:hover:to-violet-900/20 rounded-xl backdrop-blur-sm border border-transparent hover:border-blue-200/40 dark:hover:border-blue-700/40 hover:shadow-lg"
+                              className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                               onClick={() => {
                                 if (userRole !== "3") {
                                   selectedContacts.forEach((contact) => {
@@ -7810,11 +7488,8 @@ function Main() {
                                 }
                               }}
                             >
-                              <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                                <Lucide
-                                  icon="User"
-                                  className="h-4 w-4 text-blue-600 dark:text-blue-400"
-                                />
+                              <div className="p-2 bg-white border-2 border-[#4b4b4b] mr-3">
+                                <Lucide icon="User" className="h-4 w-4 text-[#4b4b4b]" />
                               </div>
                               <span className="truncate">{employee.name}</span>
                             </button>
@@ -7826,35 +7501,31 @@ function Main() {
 
                   {/* Add Tags to Selected Contacts */}
                   <div className="w-full">
-                    <Button
-                      variant="outline-secondary"
-                      className="w-full justify-between group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-emerald-300/60 dark:hover:border-emerald-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 dark:hover:shadow-emerald-500/20 rounded-2xl p-4 hover:scale-[1.02] transform-gpu"
+                    <button
+                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={
                         selectedContacts.length === 0 || userRole === "3"
                       }
                       onClick={() => setShowAddTagMenu(!showAddTagMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 dark:from-emerald-400/20 dark:to-green-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40 group-hover:scale-110 transition-transform duration-300">
-                          <Lucide
-                            icon="Tag"
-                            className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                          />
+                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                          <Lucide icon="Tag" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                          <div className="text-sm font-black uppercase">
                             Add Tags
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                          <div className="text-xs font-bold text-[#10b981]">
                             {selectedContacts.length} selected
                           </div>
                         </div>
                       </div>
                       <Lucide
                         icon={showAddTagMenu ? "ChevronUp" : "ChevronDown"}
-                        className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300"
+                        className="w-5 h-5"
                       />
-                    </Button>
+                    </button>
 
                     {showAddTagMenu && (
                       <div className="mt-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl border border-white/40 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-slate-800/50 rounded-2xl p-4 space-y-3 overflow-y-auto max-h-96 transition-all duration-300 animate-in slide-in-from-top-2">
@@ -8038,73 +7709,62 @@ function Main() {
 
                   {/* Database Operations */}
                   <div className="w-full">
-                    <Button
-                      variant="outline-secondary"
-                      className="w-full justify-between group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-violet-300/60 dark:hover:border-violet-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/10 dark:hover:shadow-violet-500/20 rounded-2xl p-4 hover:scale-[1.02] transform-gpu"
+                    <button
+                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={isSyncing || userRole === "3"}
                       onClick={() => setShowSyncMenu(!showSyncMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-violet-200/40 dark:border-violet-700/40 group-hover:scale-110 transition-transform duration-300">
+                        <div className="p-2 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[#4b4b4b]">
                           <Lucide
                             icon={isSyncing ? "Loader2" : "RefreshCw"}
-                            className={`w-4 h-4 text-violet-600 dark:text-violet-400 ${isSyncing ? "animate-spin" : ""
+                            className={`w-4 h-4 ${isSyncing ? "animate-spin" : ""
                               }`}
                           />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                          <div className="text-sm font-black uppercase text-[#4b4b4b]">
                             {isSyncing ? "Syncing..." : "Sync Database"}
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                          <div className="text-xs font-bold text-[#f26522]">
                             {isSyncing ? "In progress..." : "Update data"}
                           </div>
                         </div>
                       </div>
                       <Lucide
                         icon={showSyncMenu ? "ChevronUp" : "ChevronDown"}
-                        className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors duration-300"
+                        className="w-5 h-5"
                       />
-                    </Button>
+                    </button>
 
                     {showSyncMenu && (
-                      <div className="mt-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl border border-white/40 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-slate-800/50 rounded-2xl p-4 space-y-3 transition-all duration-300 animate-in slide-in-from-top-2">
+                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
                         <button
-                          className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-violet-50/60 hover:to-purple-50/40 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-violet-200/40 dark:hover:border-violet-700/40 hover:shadow-lg group"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
                           onClick={() => {
                             setShowSyncConfirmationModal(true);
                             setShowSyncMenu(false);
                           }}
                           disabled={isSyncing}
                         >
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-violet-200/40 dark:border-violet-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                            <Lucide
-                              icon="MessageSquare"
-                              className="w-4 h-4 text-violet-600 dark:text-violet-400"
-                            />
+                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <Lucide icon="MessageSquare" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
-                          <span className="text-sm text-slate-700 dark:text-slate-300">
-                            {isSyncing ? "Syncing..." : "Sync Chats"}
-                          </span>
+                          <span>{isSyncing ? "Syncing..." : "Sync Chats"}</span>
                         </button>
 
                         <button
-                          className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-indigo-50/40 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-blue-200/40 dark:hover:border-blue-700/40 hover:shadow-lg group"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
                           onClick={() => {
                             setShowSyncNamesConfirmationModal(true);
                             setShowSyncMenu(false);
                           }}
                           disabled={isSyncing}
                         >
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                            <Lucide
-                              icon="FolderSync"
-                              className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                            />
+                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <Lucide icon="FolderSync" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
-                          <span className="text-sm text-slate-700 dark:text-slate-300">
-                            {isSyncing ? "Syncing..." : "Sync Contact Names"}
-                          </span>
+                          <span>{isSyncing ? "Syncing..." : "Sync Contact Names"}</span>
                         </button>
                       </div>
                     )}
@@ -8113,37 +7773,33 @@ function Main() {
                   {/* File Operations */}
                   {userRole !== "2" && userRole !== "3" && userRole !== "5" && (
                     <div className="w-full">
-                      <Button
-                        variant="outline-secondary"
-                        className="w-full justify-between group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-indigo-300/60 dark:hover:border-indigo-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 dark:hover:shadow-indigo-500/20 rounded-2xl p-4 hover:scale-[1.02] transform-gpu"
+                      <button
+                        className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
                         onClick={() => setShowExportMenu(!showExportMenu)}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="p-2 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 dark:from-indigo-400/20 dark:to-blue-400/20 backdrop-blur-sm border border-indigo-200/40 dark:border-indigo-700/40 group-hover:scale-110 transition-transform duration-300">
-                            <Lucide
-                              icon="Download"
-                              className="w-4 h-4 text-indigo-600 dark:text-indigo-400"
-                            />
+                          <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                            <Lucide icon="Download" className="w-4 h-4" />
                           </div>
                           <div className="text-left">
-                            <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                            <div className="text-sm font-black uppercase text-[#4b4b4b]">
                               Export Contacts
                             </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                            <div className="text-xs font-bold text-[#10b981]">
                               Download data
                             </div>
                           </div>
                         </div>
                         <Lucide
                           icon={showExportMenu ? "ChevronUp" : "ChevronDown"}
-                          className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300"
+                          className="w-5 h-5"
                         />
-                      </Button>
+                      </button>
 
                       {showExportMenu && (
-                        <div className="mt-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl border border-white/40 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-slate-800/50 rounded-2xl p-4 space-y-3 transition-all duration-300 animate-in slide-in-from-top-2">
+                        <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
                           <button
-                            className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-indigo-50/40 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-blue-200/40 dark:hover:border-blue-700/40 hover:shadow-lg group"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
                             onClick={() => {
                               if (selectedContacts.length > 0) {
                                 exportContactsToCSV(selectedContacts);
@@ -8152,59 +7808,44 @@ function Main() {
                             }}
                             disabled={selectedContacts.length === 0}
                           >
-                            <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                              <Lucide
-                                icon="Users"
-                                className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                              />
+                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                              <Lucide icon="Users" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
-                            <span className="text-sm text-slate-700 dark:text-slate-300">
-                              Export Selected Contacts
-                              <div className="text-xs text-slate-500 dark:text-slate-400">
-                                {selectedContacts.length} selected
-                              </div>
-                            </span>
+                            <div className="text-left flex-1 flex justify-between items-center">
+                              <span>Export Selected</span>
+                              <span className="text-xs text-[#f26522]">{selectedContacts.length}</span>
+                            </div>
                           </button>
 
                           <button
-                            className="flex items-center justify-between p-3 font-semibold hover:bg-gradient-to-r hover:from-emerald-50/60 hover:to-green-50/40 dark:hover:from-emerald-900/20 dark:hover:to-green-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-emerald-200/40 dark:hover:border-emerald-700/40 hover:shadow-lg group"
+                            className="flex w-full items-center justify-between px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                             onClick={() => {
                               setShowTagSelection(!showTagSelection);
                             }}
                           >
-                            <div className="flex items-center space-x-3">
-                              <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-500/20 to-green-500/20 dark:from-emerald-400/20 dark:to-green-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40 group-hover:scale-110 transition-transform duration-300">
-                                <Lucide
-                                  icon="Tag"
-                                  className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                                />
+                            <div className="flex items-center">
+                              <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                                <Lucide icon="Tag" className="w-4 h-4 text-[#4b4b4b]" />
                               </div>
-                              <span className="text-sm text-slate-700 dark:text-slate-300">
-                                Export by Tags
-                              </span>
+                              <span>Export by Tags</span>
                             </div>
                             <Lucide
-                              icon={
-                                showTagSelection ? "ChevronUp" : "ChevronDown"
-                              }
-                              className="w-4 h-4 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300"
+                              icon={showTagSelection ? "ChevronUp" : "ChevronDown"}
+                              className="w-4 h-4 text-[#4b4b4b]"
                             />
                           </button>
 
                           {showTagSelection && (
-                            <div className="ml-6 p-4 bg-gradient-to-br from-slate-50/80 to-gray-50/60 dark:from-slate-700/80 dark:to-gray-800/60 backdrop-blur-sm border border-slate-200/40 dark:border-slate-600/40 rounded-xl space-y-3 max-h-48 overflow-y-auto transition-all duration-300 animate-in slide-in-from-top-1">
-                              <div className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
-                                Select tags to export:
+                            <div className="ml-6 p-4 border-l-2 border-b-2 border-r-2 border-[#e8e8e8] bg-[#f8f9fa] space-y-3 max-h-48 overflow-y-auto">
+                              <div className="text-sm font-black text-[#4b4b4b] mb-3 uppercase">
+                                Select tags:
                               </div>
                               {tagList.length === 0 ? (
                                 <div className="text-center py-4">
-                                  <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-slate-100/80 to-slate-200/60 dark:from-slate-700/80 dark:to-slate-800/60 rounded-xl backdrop-blur-sm border border-slate-200/40 dark:border-slate-600/40 flex items-center justify-center">
-                                    <Lucide
-                                      icon="Tag"
-                                      className="w-6 h-6 text-slate-400"
-                                    />
+                                  <div className="w-12 h-12 mx-auto mb-3 bg-white border-2 border-[#4b4b4b] flex items-center justify-center neo-shadow">
+                                    <Lucide icon="Tag" className="w-6 h-6 text-[#4b4b4b]" />
                                   </div>
-                                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                                  <p className="text-sm font-black text-[#4b4b4b] uppercase">
                                     No tags available
                                   </p>
                                 </div>
@@ -8213,27 +7854,23 @@ function Main() {
                                   {tagList.map((tag) => (
                                     <label
                                       key={tag.id}
-                                      className="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/60 dark:hover:bg-slate-600/60 backdrop-blur-sm transition-all duration-200 cursor-pointer group"
+                                      className="flex items-center space-x-3 p-2 bg-white border-2 border-[#e8e8e8] hover:border-[#f26522] cursor-pointer transition-colors"
                                     >
                                       <input
                                         type="checkbox"
                                         value={tag.name}
-                                        checked={exportSelectedTags.includes(
-                                          tag.name
-                                        )}
+                                        checked={exportSelectedTags.includes(tag.name)}
                                         onChange={(e) => {
                                           const isChecked = e.target.checked;
                                           setExportSelectedTags((prev) =>
                                             isChecked
                                               ? [...prev, tag.name]
-                                              : prev.filter(
-                                                (t) => t !== tag.name
-                                              )
+                                              : prev.filter((t) => t !== tag.name)
                                           );
                                         }}
-                                        className="rounded border-slate-300 dark:border-slate-600 text-indigo-600 focus:ring-indigo-500/30 transition-colors"
+                                        className="w-4 h-4 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-[#f26522]"
                                       />
-                                      <span className="text-sm text-slate-700 dark:text-slate-300 font-medium">
+                                      <span className="text-sm font-bold text-[#4b4b4b]">
                                         {tag.name}
                                       </span>
                                     </label>
@@ -8241,18 +7878,20 @@ function Main() {
                                 </div>
                               )}
                               {exportSelectedTags.length > 0 && (
-                                <div className="pt-3 border-t border-slate-200/50 dark:border-slate-600/50">
+                                <div className="pt-3 border-t-2 border-[#e8e8e8]">
                                   <button
                                     onClick={() => {
-                                      exportContactsByTags(exportSelectedTags);
-                                      setShowTagSelection(false);
+                                      const tagsToExport = exportSelectedTags.map((name) => {
+                                        const tagObj = tagList.find((t) => t.name === name);
+                                        return tagObj ? tagObj.id : name;
+                                      });
+                                      //    handleExportByTags(tagsToExport);
                                       setShowExportMenu(false);
                                       setExportSelectedTags([]);
                                     }}
-                                    className="w-full px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-indigo-500/90 to-blue-500/90 hover:from-indigo-600/90 hover:to-blue-600/90 backdrop-blur-sm border border-indigo-400/30 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] transform-gpu"
+                                    className="w-full py-2 bg-[#f26522] text-white font-black uppercase border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all"
                                   >
-                                    Export {exportSelectedTags.length} Tag
-                                    {exportSelectedTags.length !== 1 ? "s" : ""}
+                                    Export Selected Tags
                                   </button>
                                 </div>
                               )}
@@ -8260,45 +7899,35 @@ function Main() {
                           )}
 
                           <button
-                            className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-violet-50/60 hover:to-purple-50/40 dark:hover:from-violet-900/20 dark:hover:to-purple-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-violet-200/40 dark:hover:border-violet-700/40 hover:shadow-lg group"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                             onClick={() => {
                               exportContactsToCSV(filteredContactsSearch);
                               setShowExportMenu(false);
                             }}
                           >
-                            <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-violet-200/40 dark:border-violet-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                              <Lucide
-                                icon="Filter"
-                                className="w-4 h-4 text-violet-600 dark:text-violet-400"
-                              />
+                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                              <Lucide icon="Filter" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
-                            <span className="text-sm text-slate-700 dark:text-slate-300">
-                              Export Filtered Contacts
-                              <div className="text-xs text-slate-500 dark:text-slate-400">
-                                {filteredContactsSearch.length} contacts
-                              </div>
-                            </span>
+                            <div className="text-left flex-1 flex justify-between items-center">
+                              <span>Export Filtered</span>
+                              <span className="text-xs text-[#10b981]">{filteredContactsSearch.length}</span>
+                            </div>
                           </button>
 
                           <button
-                            className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-slate-50/60 hover:to-gray-50/40 dark:hover:from-slate-900/20 dark:hover:to-gray-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-slate-200/40 dark:hover:border-slate-700/40 hover:shadow-lg group"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                             onClick={() => {
                               exportContactsToCSV(contacts);
                               setShowExportMenu(false);
                             }}
                           >
-                            <div className="p-2 rounded-lg bg-gradient-to-br from-slate-500/20 to-gray-500/20 dark:from-slate-400/20 dark:to-gray-400/20 backdrop-blur-sm border border-slate-200/40 dark:border-slate-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                              <Lucide
-                                icon="Database"
-                                className="w-4 h-4 text-slate-600 dark:text-slate-400"
-                              />
+                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                              <Lucide icon="Database" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
-                            <span className="text-sm text-slate-700 dark:text-slate-300">
-                              Export All Contacts
-                              <div className="text-xs text-slate-500 dark:text-slate-400">
-                                {contacts.length} contacts
-                              </div>
-                            </span>
+                            <div className="text-left flex-1 flex justify-between items-center">
+                              <span>Export All Data</span>
+                              <span className="text-xs text-[#10b981]">{contacts.length}</span>
+                            </div>
                           </button>
                         </div>
                       )}
@@ -8307,70 +7936,56 @@ function Main() {
 
                   {/* Manage Tags */}
                   <div className="w-full">
-                    <Button
-                      variant="outline-secondary"
-                      className="w-full justify-between group bg-gradient-to-r from-white/60 to-white/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 hover:border-orange-300/60 dark:hover:border-orange-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/10 dark:hover:shadow-orange-500/20 rounded-2xl p-4 hover:scale-[1.02] transform-gpu"
+                    <button
+                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       onClick={() => setShowManageTagsMenu(!showManageTagsMenu)}
                       disabled={userRole === "3"}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:from-orange-400/20 dark:to-amber-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40 group-hover:scale-110 transition-transform duration-300">
-                          <Lucide
-                            icon="Settings"
-                            className="w-4 h-4 text-orange-600 dark:text-orange-400"
-                          />
+                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                          <Lucide icon="Settings" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                          <div className="text-sm font-black uppercase text-[#4b4b4b]">
                             Manage Tags
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">
+                          <div className="text-xs font-bold text-[#f26522]">
                             Create & organize
                           </div>
                         </div>
                       </div>
                       <Lucide
                         icon={showManageTagsMenu ? "ChevronUp" : "ChevronDown"}
-                        className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300"
+                        className="w-5 h-5"
                       />
-                    </Button>
+                    </button>
 
                     {showManageTagsMenu && (
-                      <div className="mt-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl border border-white/40 dark:border-slate-700/50 shadow-2xl shadow-slate-200/50 dark:shadow-slate-800/50 rounded-2xl p-4 space-y-3 transition-all duration-300 animate-in slide-in-from-top-2">
+                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
                         <button
-                          className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-orange-50/60 hover:to-amber-50/40 dark:hover:from-orange-900/20 dark:hover:to-amber-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-orange-200/40 dark:hover:border-orange-700/40 hover:shadow-lg group"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
                           onClick={() => {
                             setShowAddTagModal(true);
                             setShowManageTagsMenu(false);
                           }}
                         >
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:from-orange-400/20 dark:to-amber-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                            <Lucide
-                              icon="Plus"
-                              className="w-4 h-4 text-orange-600 dark:text-orange-400"
-                            />
+                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <Lucide icon="Plus" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
-                          <span className="text-sm text-slate-700 dark:text-slate-300">
-                            Add New Tag
-                          </span>
+                          <span>Add New Tag</span>
                         </button>
 
                         <button
-                          className="flex items-center p-3 font-semibold hover:bg-gradient-to-r hover:from-red-50/60 hover:to-pink-50/40 dark:hover:from-red-900/20 dark:hover:to-pink-900/20 w-full rounded-xl transition-all duration-200 backdrop-blur-sm border border-transparent hover:border-red-200/40 dark:hover:border-red-700/40 hover:shadow-lg group"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#f26522] uppercase bg-white border-2 border-transparent hover:border-[#f26522] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#f26522] transition-all"
                           onClick={() => {
                             setShowDeleteTagModal(true);
                             setShowManageTagsMenu(false);
                           }}
                         >
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 backdrop-blur-sm border border-red-200/40 dark:border-red-700/40 mr-3 group-hover:scale-110 transition-transform duration-300">
-                            <Lucide
-                              icon="Trash2"
-                              className="w-4 h-4 text-red-600 dark:text-red-400"
-                            />
+                          <div className="p-2 bg-white border-2 border-[#f26522] mr-3">
+                            <Lucide icon="Trash2" className="w-4 h-4 text-[#f26522]" />
                           </div>
-                          <span className="text-sm text-slate-700 dark:text-slate-300">
-                            Delete Tags
-                          </span>
+                          <span>Delete Tags</span>
                         </button>
                       </div>
                     )}
@@ -8379,94 +7994,76 @@ function Main() {
               </div>
 
               {/* Statistics Panel */}
-              <div className="group relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-slate-200/30 dark:hover:shadow-slate-900/60 hover:scale-[1.02]">
-                {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/20 via-transparent to-amber-50/20 dark:from-orange-900/10 dark:via-transparent dark:to-amber-900/10 pointer-events-none" />
-
-                <div className="relative px-6 py-6 border-b border-white/20 dark:border-slate-700/30 bg-gradient-to-r from-slate-50/40 to-white/20 dark:from-slate-800/40 dark:to-slate-700/20 backdrop-blur-sm">
+              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+                <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2.5 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:from-orange-400/20 dark:to-amber-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40">
-                      <Lucide
-                        icon="BarChart3"
-                        className="w-5 h-5 text-orange-600 dark:text-orange-400"
-                      />
+                    <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
+                      <Lucide icon="BarChart3" className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-tight leading-tight">
                         Statistics
                       </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                      <p className="text-xs font-bold text-[#f26522] mt-0.5">
                         Overview & insights
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="relative p-6 space-y-5">
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-white/60 to-white/30 dark:from-slate-700/60 dark:to-slate-800/30 backdrop-blur-sm border border-white/40 dark:border-slate-600/40 hover:shadow-lg transition-all duration-300 group/stat">
+                <div className="relative p-6 space-y-4 bg-white">
+                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-400/20 dark:to-indigo-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40 group-hover/stat:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="Users"
-                          className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                        />
+                      <div className="p-2 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                        <Lucide icon="Users" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
                         Total Contacts
                       </span>
                     </div>
-                    <span className="text-lg font-bold text-slate-800 dark:text-slate-100 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                    <span className="text-xl font-black text-[#f26522]">
                       {contacts.length.toLocaleString()}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-white/60 to-white/30 dark:from-slate-700/60 dark:to-slate-800/30 backdrop-blur-sm border border-white/40 dark:border-slate-600/40 hover:shadow-lg transition-all duration-300 group/stat">
+                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 dark:from-emerald-400/20 dark:to-green-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40 group-hover/stat:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="Filter"
-                          className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                        />
+                      <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <Lucide icon="Filter" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
                         Filtered Results
                       </span>
                     </div>
-                    <span className="text-lg font-bold bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400 bg-clip-text text-transparent">
+                    <span className="text-xl font-black text-[#f26522]">
                       {filteredContactsSearch.length.toLocaleString()}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-white/60 to-white/30 dark:from-slate-700/60 dark:to-slate-800/30 backdrop-blur-sm border border-white/40 dark:border-slate-600/40 hover:shadow-lg transition-all duration-300 group/stat">
+                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 dark:from-violet-400/20 dark:to-purple-400/20 backdrop-blur-sm border border-violet-200/40 dark:border-violet-700/40 group-hover/stat:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="CheckSquare"
-                          className="w-4 h-4 text-violet-600 dark:text-violet-400"
-                        />
+                      <div className="p-2 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                        <Lucide icon="CheckSquare" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
                         Selected
                       </span>
                     </div>
-                    <span className="text-lg font-bold bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+                    <span className="text-xl font-black text-[#10b981]">
                       {selectedContacts.length.toLocaleString()}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-white/60 to-white/30 dark:from-slate-700/60 dark:to-slate-800/30 backdrop-blur-sm border border-white/40 dark:border-slate-600/40 hover:shadow-lg transition-all duration-300 group/stat">
+                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 dark:from-orange-400/20 dark:to-amber-400/20 backdrop-blur-sm border border-orange-200/40 dark:border-orange-700/40 group-hover/stat:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="Calendar"
-                          className="w-4 h-4 text-orange-600 dark:text-orange-400"
-                        />
+                      <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <Lucide icon="Calendar" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                        Scheduled Messages
+                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
+                        Scheduled Msgs
                       </span>
                     </div>
-                    <span className="text-lg font-bold bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-400 dark:to-amber-400 bg-clip-text text-transparent">
+                    <span className="text-xl font-black text-[#f26522]">
                       {scheduledMessages.length.toLocaleString()}
                     </span>
                   </div>
@@ -8481,327 +8078,303 @@ function Main() {
           open={addContactModal}
           onClose={() => setAddContactModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-2xl relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.005] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-violet-500/5 to-purple-500/10 dark:from-blue-600/10 dark:via-violet-700/5 dark:to-purple-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
-                  <div className="flex items-center space-x-4">
-                    <div className="relative p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-                      <Lucide
-                        icon="UserPlus"
-                        className="w-7 h-7 text-blue-400"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-violet-400/20 rounded-2xl blur-sm" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-2xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                      <Lucide icon="UserPlus" className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-violet-100 bg-clip-text text-transparent">
+                      <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-tight">
                         Add New Contact
                       </h3>
-                      <p className="text-white/60 mt-1">
+                      <p className="text-sm font-bold text-[#f26522] mt-1">
                         Create a new contact record
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setAddContactModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                   >
-                    <Lucide icon="X" className="w-4 h-4" />
+                    <Lucide icon="X" className="w-5 h-5" />
                   </button>
                 </div>
+              </div>
 
-                <div className="mt-8 space-y-8">
-                  {/* Personal Information Section */}
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 pb-4 border-b border-white/10">
-                      <div className="p-2 rounded-xl bg-emerald-500/10 backdrop-blur-sm border border-emerald-400/20">
-                        <Lucide
-                          icon="User"
-                          className="w-5 h-5 text-emerald-400"
-                        />
-                      </div>
-                      <h4 className="text-lg font-semibold bg-gradient-to-r from-emerald-300 to-emerald-100 bg-clip-text text-transparent">
-                        Personal Information
-                      </h4>
+              <div className="p-8 space-y-8 bg-white">
+                {/* Personal Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
+                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                      <Lucide icon="User" className="w-4 h-4" />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Contact Name *
-                        </label>
-                        <FormInput
-                          type="text"
-                          value={newContact.contactName}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              contactName: e.target.value,
-                            })
-                          }
-                          placeholder="Enter contact name"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Last Name
-                        </label>
-                        <FormInput
-                          type="text"
-                          value={newContact.lastName}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              lastName: e.target.value,
-                            })
-                          }
-                          placeholder="Enter last name"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Phone Number *
-                        </label>
-                        <FormInput
-                          type="tel"
-                          value={newContact.phone}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              phone: e.target.value,
-                            })
-                          }
-                          placeholder="e.g., +60123456789"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Email
-                        </label>
-                        <FormInput
-                          type="email"
-                          value={newContact.email}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              email: e.target.value,
-                            })
-                          }
-                          placeholder="Enter email address"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-                    </div>
+                    <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                      Personal Information
+                    </h4>
                   </div>
 
-                  {/* Company Information Section */}
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 pb-4 border-b border-white/10">
-                      <div className="p-2 rounded-xl bg-blue-500/10 backdrop-blur-sm border border-blue-400/20">
-                        <Lucide
-                          icon="Building2"
-                          className="w-5 h-5 text-blue-400"
-                        />
-                      </div>
-                      <h4 className="text-lg font-semibold bg-gradient-to-r from-blue-300 to-blue-100 bg-clip-text text-transparent">
-                        Company Information
-                      </h4>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Company Name
-                        </label>
-                        <FormInput
-                          type="text"
-                          value={newContact.companyName}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              companyName: e.target.value,
-                            })
-                          }
-                          placeholder="Enter company name"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-
-                      {companyId === "079" && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-white/80">
-                            Branch
-                          </label>
-                          <FormInput
-                            type="text"
-                            value={newContact.branch}
-                            onChange={(e) =>
-                              setNewContact({
-                                ...newContact,
-                                branch: e.target.value,
-                              })
-                            }
-                            placeholder="Enter branch"
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200 backdrop-blur-sm"
-                          />
-                        </div>
-                      )}
-
-                      <div className="space-y-2 md:col-span-2">
-                        <label className="block text-sm font-medium text-white/80">
-                          Address
-                        </label>
-                        <FormInput
-                          type="text"
-                          value={newContact.address1}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              address1: e.target.value,
-                            })
-                          }
-                          placeholder="Enter address"
-                          className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200 backdrop-blur-sm"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Additional Details Section */}
-                  {companyId === "079" && (
-                    <div className="space-y-6">
-                      <div className="flex items-center space-x-3 pb-4 border-b border-white/10">
-                        <div className="p-2 rounded-xl bg-purple-500/10 backdrop-blur-sm border border-purple-400/20">
-                          <Lucide
-                            icon="FileText"
-                            className="w-5 h-5 text-purple-400"
-                          />
-                        </div>
-                        <h4 className="text-lg font-semibold bg-gradient-to-r from-purple-300 to-purple-100 bg-clip-text text-transparent">
-                          Additional Details
-                        </h4>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-white/80">
-                            Vehicle Number
-                          </label>
-                          <FormInput
-                            type="text"
-                            value={newContact.vehicleNumber}
-                            onChange={(e) =>
-                              setNewContact({
-                                ...newContact,
-                                vehicleNumber: e.target.value,
-                              })
-                            }
-                            placeholder="Enter vehicle number"
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 backdrop-blur-sm"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-white/80">
-                            IC Number
-                          </label>
-                          <FormInput
-                            type="text"
-                            value={newContact.ic}
-                            onChange={(e) =>
-                              setNewContact({
-                                ...newContact,
-                                ic: e.target.value,
-                              })
-                            }
-                            placeholder="Enter IC number"
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 backdrop-blur-sm"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium text-white/80">
-                            Expiry Date
-                          </label>
-                          <FormInput
-                            type="date"
-                            value={newContact.expiryDate}
-                            onChange={(e) =>
-                              setNewContact({
-                                ...newContact,
-                                expiryDate: e.target.value,
-                              })
-                            }
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 backdrop-blur-sm"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Notes Section */}
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 pb-4 border-b border-white/10">
-                      <div className="p-2 rounded-xl bg-orange-500/10 backdrop-blur-sm border border-orange-400/20">
-                        <Lucide
-                          icon="MessageSquare"
-                          className="w-5 h-5 text-orange-400"
-                        />
-                      </div>
-                      <h4 className="text-lg font-semibold bg-gradient-to-r from-orange-300 to-orange-100 bg-clip-text text-transparent">
-                        Notes
-                      </h4>
-                    </div>
-
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-white/80">
-                        Additional Notes
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Contact Name *
                       </label>
-                      <textarea
-                        value={newContact.notes}
+                      <FormInput
+                        type="text"
+                        value={newContact.contactName}
                         onChange={(e) =>
                           setNewContact({
                             ...newContact,
-                            notes: e.target.value,
+                            contactName: e.target.value,
                           })
                         }
-                        placeholder="Enter any additional notes"
-                        rows={4}
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-white/40 focus:border-orange-400/50 focus:ring-2 focus:ring-orange-400/20 transition-all duration-200 backdrop-blur-sm resize-none"
+                        placeholder="Enter contact name"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Last Name
+                      </label>
+                      <FormInput
+                        type="text"
+                        value={newContact.lastName}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            lastName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter last name"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Phone Number *
+                      </label>
+                      <FormInput
+                        type="tel"
+                        value={newContact.phone}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            phone: e.target.value,
+                          })
+                        }
+                        placeholder="e.g., +60123456789"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Email
+                      </label>
+                      <FormInput
+                        type="email"
+                        value={newContact.email}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            email: e.target.value,
+                          })
+                        }
+                        placeholder="Enter email address"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    onClick={() => setAddContactModal(false)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSaveNewContact}
-                    disabled={
-                      !newContact.contactName || !newContact.phone || isLoading
-                    }
-                    className="px-8 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 hover:from-blue-600 hover:via-violet-600 hover:to-purple-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    {isLoading ? "Adding..." : "Add Contact"}
-                  </button>
+                {/* Company Information Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
+                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                      <Lucide icon="Building2" className="w-4 h-4" />
+                    </div>
+                    <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                      Company Information
+                    </h4>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Company Name
+                      </label>
+                      <FormInput
+                        type="text"
+                        value={newContact.companyName}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            companyName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter company name"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                      />
+                    </div>
+
+                    {companyId === "079" && (
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                          Branch
+                        </label>
+                        <FormInput
+                          type="text"
+                          value={newContact.branch}
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              branch: e.target.value,
+                            })
+                          }
+                          placeholder="Enter branch"
+                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                        />
+                      </div>
+                    )}
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                        Address
+                      </label>
+                      <FormInput
+                        type="text"
+                        value={newContact.address1}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            address1: e.target.value,
+                          })
+                        }
+                        placeholder="Enter address"
+                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                      />
+                    </div>
+                  </div>
                 </div>
+
+                {/* Additional Details Section */}
+                {companyId === "079" && (
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
+                      <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <Lucide icon="FileText" className="w-4 h-4" />
+                      </div>
+                      <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                        Additional Details
+                      </h4>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                          Vehicle Number
+                        </label>
+                        <FormInput
+                          type="text"
+                          value={newContact.vehicleNumber}
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              vehicleNumber: e.target.value,
+                            })
+                          }
+                          placeholder="Enter vehicle number"
+                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                          IC Number
+                        </label>
+                        <FormInput
+                          type="text"
+                          value={newContact.ic}
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              ic: e.target.value,
+                            })
+                          }
+                          placeholder="Enter IC number"
+                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                          Expiry Date
+                        </label>
+                        <FormInput
+                          type="date"
+                          value={newContact.expiryDate}
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              expiryDate: e.target.value,
+                            })
+                          }
+                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Notes Section */}
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
+                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                      <Lucide icon="MessageSquare" className="w-4 h-4" />
+                    </div>
+                    <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                      Notes
+                    </h4>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                      Additional Notes
+                    </label>
+                    <textarea
+                      value={newContact.notes}
+                      onChange={(e) =>
+                        setNewContact({
+                          ...newContact,
+                          notes: e.target.value,
+                        })
+                      }
+                      placeholder="Enter any additional notes"
+                      rows={4}
+                      className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#4b4b4b] transition-all resize-none rounded-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <button
+                  onClick={() => setAddContactModal(false)}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveNewContact}
+                  disabled={!newContact.contactName || !newContact.phone || isLoading}
+                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all"
+                >
+                  {isLoading ? "Adding..." : "Add Contact"}
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -8812,73 +8385,60 @@ function Main() {
           open={viewContactModal}
           onClose={() => setViewContactModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-3xl relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden overflow-y-auto transform hover:scale-[1.005] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-blue-500/5 to-purple-500/10 dark:from-emerald-600/10 dark:via-blue-700/5 dark:to-purple-600/10 pointer-events-none" />
-
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      <Lucide icon="Eye" className="w-6 h-6 text-emerald-400" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-3xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                      <Lucide icon="Eye" className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-emerald-100 to-blue-100 dark:from-white dark:via-emerald-100 dark:to-blue-100 bg-clip-text text-transparent">
+                      <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-tight">
                         Contact Details
                       </h3>
-                      <p className="text-sm text-white/70 dark:text-slate-400 mt-1">
+                      <p className="text-sm font-bold text-[#f26522] mt-1">
                         View contact information
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setViewContactModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                   >
-                    <Lucide icon="X" className="w-4 h-4" />
+                    <Lucide icon="X" className="w-5 h-5" />
                   </button>
                 </div>
+              </div>
 
-                {currentContact && (
-                  <div className="mt-8 space-y-8">
-                    {/* Contact Header */}
-                    <div className="text-center pb-8 border-b border-white/10 dark:border-slate-700/20">
-                      <div className="relative mx-auto mb-6 w-32 h-32">
-                        <div className="w-full h-full rounded-3xl bg-gradient-to-br from-emerald-500/80 via-blue-500/80 to-purple-600/80 backdrop-blur-sm flex items-center justify-center text-white font-bold text-4xl shadow-2xl shadow-emerald-500/20 dark:shadow-emerald-500/30 border border-white/20">
-                          {currentContact.profileUrl ? (
-                            <div className="w-full h-full rounded-2xl overflow-hidden shadow-xl shadow-blue-500/20 dark:shadow-blue-500/30 border border-white/30 dark:border-slate-600/30 group-hover/contact:scale-110 transition-transform duration-300">
-                              <img
-                                src={currentContact.profileUrl}
-                                alt={
-                                  currentContact.contactName ||
-                                  currentContact.firstName ||
-                                  "Contact"
+              {currentContact && (
+                <div className="p-8 space-y-8 bg-white">
+                  {/* Contact Header */}
+                  <div className="text-center pb-8 border-b-2 border-[#4b4b4b]">
+                    <div className="relative mx-auto mb-6 w-32 h-32">
+                      <div className="w-full h-full bg-white border-2 border-[#4b4b4b] flex items-center justify-center text-[#4b4b4b] font-black text-4xl shadow-[8px_8px_0_#f26522]">
+                        {currentContact.profileUrl ? (
+                          <div className="w-full h-full relative group/contact">
+                            <img
+                              src={currentContact.profileUrl}
+                              alt={
+                                currentContact.contactName ||
+                                currentContact.firstName ||
+                                "Contact"
+                              }
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target =
+                                  e.currentTarget as HTMLImageElement;
+                                const fallback =
+                                  target.nextElementSibling as HTMLDivElement;
+                                if (fallback) {
+                                  target.style.display = "none";
+                                  fallback.style.display = "flex";
                                 }
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  const target =
-                                    e.currentTarget as HTMLImageElement;
-                                  const fallback =
-                                    target.nextElementSibling as HTMLDivElement;
-                                  if (fallback) {
-                                    target.style.display = "none";
-                                    fallback.style.display = "flex";
-                                  }
-                                }}
-                              />
-                              <div className="hidden w-full h-full rounded-2xl bg-gradient-to-br from-blue-500/80 via-violet-500/80 to-purple-600/80 backdrop-blur-sm items-center justify-center text-white font-bold text-4xl">
-                                {currentContact.contactName
-                                  ? currentContact.contactName
-                                    .charAt(0)
-                                    .toUpperCase()
-                                  : currentContact.firstName
-                                    ?.charAt(0)
-                                    ?.toUpperCase() || "U"}
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="w-full h-full rounded-2xl bg-gradient-to-br from-blue-500/80 via-violet-500/80 to-purple-600/80 backdrop-blur-sm flex items-center justify-center text-white font-bold text-4xl shadow-xl shadow-blue-500/20 dark:shadow-blue-500/30 border border-white/30 dark:border-slate-600/30 group-hover/contact:scale-110 transition-transform duration-300">
+                              }}
+                            />
+                            <div className="hidden w-full h-full absolute inset-0 bg-white items-center justify-center text-[#4b4b4b] font-black text-4xl">
                               {currentContact.contactName
                                 ? currentContact.contactName
                                   .charAt(0)
@@ -8887,236 +8447,249 @@ function Main() {
                                   ?.charAt(0)
                                   ?.toUpperCase() || "U"}
                             </div>
-                          )}
-                        </div>
-                        <div className="absolute -inset-3 bg-gradient-to-br from-emerald-400/20 to-purple-600/20 rounded-3xl blur-lg opacity-50" />
-                      </div>
-                      <h4 className="text-3xl font-bold bg-gradient-to-r from-white via-emerald-100 to-blue-100 dark:from-white dark:via-emerald-100 dark:to-blue-100 bg-clip-text text-transparent mb-3">
-                        {currentContact.contactName || "Unknown Contact"}
-                      </h4>
-                      <p className="text-white/80 dark:text-slate-300 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-6 py-3 inline-block font-medium">
-                        {currentContact.email || "No email"}
-                      </p>
-                    </div>
-
-                    {/* Contact Information Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-6">
-                        <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                              Phone
-                            </label>
                           </div>
-                          <p className="text-xl font-semibold text-white dark:text-slate-100">
-                            {currentContact.phone || "No phone"}
-                          </p>
-                        </div>
-
-                        <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                              Company
-                            </label>
-                          </div>
-                          <p className="text-xl font-semibold text-white dark:text-slate-100">
-                            {currentContact.companyName || "No company"}
-                          </p>
-                        </div>
-
-                        {companyId === "079" && (
-                          <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                            <div className="flex items-center space-x-3 mb-3">
-                              <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                                Branch
-                              </label>
-                            </div>
-                            <p className="text-xl font-semibold text-white dark:text-slate-100">
-                              {currentContact.branch || "No branch"}
-                            </p>
-                          </div>
-                        )}
-
-                        {companyId === "079" && (
-                          <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                            <div className="flex items-center space-x-3 mb-3">
-                              <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                                Vehicle Number
-                              </label>
-                            </div>
-                            <p className="text-xl font-semibold text-white dark:text-slate-100">
-                              {currentContact.vehicleNumber ||
-                                "No vehicle number"}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="space-y-6">
-                        <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                              Address
-                            </label>
-                          </div>
-                          <p className="text-xl font-semibold text-white dark:text-slate-100">
-                            {currentContact.address1 || "No address"}
-                          </p>
-                        </div>
-
-                        <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                          <div className="flex items-center space-x-3 mb-3">
-                            <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                              Date Added
-                            </label>
-                          </div>
-                          <p className="text-xl font-semibold text-white dark:text-slate-100">
-                            {currentContact.createdAt
-                              ? new Date(
-                                currentContact.createdAt
-                              ).toLocaleDateString()
-                              : currentContact.dateAdded
-                                ? new Date(
-                                  currentContact.dateAdded
-                                ).toLocaleDateString()
-                                : "Unknown"}
-                          </p>
-                        </div>
-
-                        {companyId === "079" && (
-                          <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                            <div className="flex items-center space-x-3 mb-3">
-                              <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                                IC Number
-                              </label>
-                            </div>
-                            <p className="text-xl font-semibold text-white dark:text-slate-100">
-                              {currentContact.ic || "No IC number"}
-                            </p>
-                          </div>
-                        )}
-
-                        {companyId === "079" && (
-                          <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 hover:bg-white/10 dark:hover:bg-slate-700/20 transition-all duration-300 shadow-inner">
-                            <div className="flex items-center space-x-3 mb-3">
-                              <label className="text-sm font-bold text-white/70 dark:text-slate-400 uppercase tracking-wider">
-                                Expiry Date
-                              </label>
-                            </div>
-                            <p className="text-xl font-semibold text-white dark:text-slate-100">
-                              {currentContact.expiryDate
-                                ? new Date(
-                                  currentContact.expiryDate
-                                ).toLocaleDateString()
-                                : "No expiry date"}
-                            </p>
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            {currentContact.contactName
+                              ? currentContact.contactName
+                                .charAt(0)
+                                .toUpperCase()
+                              : currentContact.firstName
+                                ?.charAt(0)
+                                ?.toUpperCase() || "U"}
                           </div>
                         )}
                       </div>
                     </div>
+                    <h4 className="text-3xl font-black text-[#4b4b4b] uppercase mb-3">
+                      {currentContact.contactName || "Unknown Contact"}
+                    </h4>
+                    <p className="text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] px-6 py-3 inline-block font-bold">
+                      {currentContact.email || "No email"}
+                    </p>
+                  </div>
 
-                    {/* Custom Fields Section */}
-                    {currentContact.customFields &&
-                      Object.keys(currentContact.customFields).length > 0 && (
-                        <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 shadow-inner">
-                          <div className="flex items-center space-x-3 mb-4">
-                            <Lucide
-                              icon="Settings"
-                              className="w-5 h-5 text-indigo-400"
-                            />
-                            <label className="text-lg font-bold text-white/90 dark:text-slate-200">
-                              Custom Fields
+                  {/* Contact Information Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
+                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
+                            Phone
+                          </label>
+                        </div>
+                        <p className="text-xl font-black text-[#4b4b4b]">
+                          {currentContact.phone || "No phone"}
+                        </p>
+                      </div>
+
+                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
+                            Company
+                          </label>
+                        </div>
+                        <p className="text-xl font-black text-[#4b4b4b]">
+                          {currentContact.companyName || "No company"}
+                        </p>
+                      </div>
+
+                      {companyId === "079" && (
+                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="flex items-center space-x-3 mb-3">
+                            <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
+                              Branch
                             </label>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {Object.entries(currentContact.customFields).map(
-                              ([key, value]) => (
-                                <div
-                                  key={key}
-                                  className="p-4 rounded-xl bg-white/5 dark:bg-slate-600/10 backdrop-blur-sm border border-white/10 dark:border-slate-500/20 hover:bg-white/10 dark:hover:bg-slate-600/20 transition-all duration-200"
-                                >
-                                  <div className="space-y-2">
-                                    <label className="text-xs font-bold text-indigo-300/80 dark:text-indigo-400/80 uppercase tracking-wider">
-                                      {key.replace(/_/g, " ")}
-                                    </label>
-                                    <p className="text-sm font-medium text-white/90 dark:text-slate-200 break-words">
-                                      {value || "Not specified"}
-                                    </p>
-                                  </div>
-                                </div>
-                              )
-                            )}
-                          </div>
+                          <p className="text-xl font-black text-[#4b4b4b]">
+                            {currentContact.branch || "No branch"}
+                          </p>
                         </div>
                       )}
 
-                    {/* Notes Section */}
-                    {currentContact.notes && (
-                      <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 shadow-inner">
-                        <div className="flex items-center space-x-3 mb-4">
-                          <Lucide
-                            icon="FileText"
-                            className="w-5 h-5 text-indigo-400"
-                          />
-                          <label className="text-lg font-bold text-white/90 dark:text-slate-200">
-                            Notes
+                      {companyId === "079" && (
+                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="flex items-center space-x-3 mb-3">
+                            <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
+                              Vehicle Number
+                            </label>
+                          </div>
+                          <p className="text-xl font-black text-[#4b4b4b]">
+                            {currentContact.vehicleNumber ||
+                              "No vehicle number"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
+                            Address
                           </label>
                         </div>
-                        <p className="text-white/90 dark:text-slate-100 leading-relaxed text-base">
-                          {currentContact.notes}
+                        <p className="text-xl font-black text-[#4b4b4b]">
+                          {currentContact.address1 || "No address"}
                         </p>
                       </div>
-                    )}
 
-                    {/* Tags Section */}
-                    {currentContact.tags && currentContact.tags.length > 0 && (
-                      <div className="p-6 rounded-2xl bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 shadow-inner">
-                        <div className="flex items-center space-x-3 mb-4">
-                          <Lucide
-                            icon="Tags"
-                            className="w-5 h-5 text-rose-400"
-                          />
-                          <label className="text-lg font-bold text-white/90 dark:text-slate-200">
-                            Tags
+                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
+                            Date Added
                           </label>
                         </div>
-                        <div className="flex flex-wrap gap-3">
-                          {currentContact.tags.map((tag, index) => (
-                            <span
-                              key={index}
-                              className="inline-flex items-center px-4 py-2 rounded-2xl text-sm font-semibold bg-gradient-to-r from-rose-500/20 to-pink-500/20 border border-rose-400/30 text-rose-200 backdrop-blur-sm"
-                            >
-                              <Lucide icon="Tag" className="w-3 h-3 mr-2" />
-                              {tag}
-                            </span>
-                          ))}
+                        <p className="text-xl font-black text-[#4b4b4b]">
+                          {currentContact.createdAt
+                            ? new Date(
+                              currentContact.createdAt
+                            ).toLocaleDateString()
+                            : currentContact.dateAdded
+                              ? new Date(
+                                currentContact.dateAdded
+                              ).toLocaleDateString()
+                              : "Unknown"}
+                        </p>
+                      </div>
+
+                      {companyId === "079" && (
+                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="flex items-center space-x-3 mb-3">
+                            <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
+                              IC Number
+                            </label>
+                          </div>
+                          <p className="text-xl font-black text-[#4b4b4b]">
+                            {currentContact.ic || "No IC number"}
+                          </p>
+                        </div>
+                      )}
+
+                      {companyId === "079" && (
+                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="flex items-center space-x-3 mb-3">
+                            <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
+                              Expiry Date
+                            </label>
+                          </div>
+                          <p className="text-xl font-black text-[#4b4b4b]">
+                            {currentContact.expiryDate
+                              ? new Date(
+                                currentContact.expiryDate
+                              ).toLocaleDateString()
+                              : "No expiry date"}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Custom Fields Section */}
+                  {currentContact.customFields &&
+                    Object.keys(currentContact.customFields).length > 0 && (
+                      <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                        <div className="flex items-center space-x-3 mb-4">
+                          <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#e8e8e8]">
+                            <Lucide
+                              icon="Settings"
+                              className="w-4 h-4 text-[#4b4b4b]"
+                            />
+                          </div>
+                          <label className="text-lg font-black text-[#4b4b4b] uppercase">
+                            Custom Fields
+                          </label>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {Object.entries(currentContact.customFields).map(
+                            ([key, value]) => (
+                              <div
+                                key={key}
+                                className="p-4 bg-white border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                              >
+                                <div className="space-y-2">
+                                  <label className="text-xs font-black text-[#f26522] uppercase tracking-wider">
+                                    {key.replace(/_/g, " ")}
+                                  </label>
+                                  <p className="text-sm font-bold text-[#4b4b4b] break-words">
+                                    {value || "Not specified"}
+                                  </p>
+                                </div>
+                              </div>
+                            )
+                          )}
                         </div>
                       </div>
                     )}
-                  </div>
-                )}
 
-                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    onClick={() => setViewContactModal(false)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => {
-                      setViewContactModal(false);
-                      setEditContactModal(true);
-                    }}
-                    disabled={userRole === "3"}
-                    className="px-8 py-3 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 hover:from-emerald-600 hover:via-blue-600 hover:to-purple-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="UserCog" className="w-4 h-4" />
-                      <span>Edit Contact</span>
+                  {/* Notes Section */}
+                  {currentContact.notes && (
+                    <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#e8e8e8]">
+                          <Lucide
+                            icon="FileText"
+                            className="w-4 h-4 text-[#4b4b4b]"
+                          />
+                        </div>
+                        <label className="text-lg font-black text-[#4b4b4b] uppercase">
+                          Notes
+                        </label>
+                      </div>
+                      <p className="text-[#4b4b4b] font-bold leading-relaxed text-base">
+                        {currentContact.notes}
+                      </p>
                     </div>
-                  </button>
+                  )}
+
+                  {/* Tags Section */}
+                  {currentContact.tags && currentContact.tags.length > 0 && (
+                    <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-1.5 border-2 border-[#4b4b4b] bg-rose-100">
+                          <Lucide
+                            icon="Tags"
+                            className="w-4 h-4 text-[#4b4b4b]"
+                          />
+                        </div>
+                        <label className="text-lg font-black text-[#4b4b4b] uppercase">
+                          Tags
+                        </label>
+                      </div>
+                      <div className="flex flex-wrap gap-3">
+                        {currentContact.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-4 py-2 text-sm font-black bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] uppercase"
+                          >
+                            <Lucide icon="Tag" className="w-3 h-3 mr-2" />
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
+              )}
+
+              <div className="flex justify-end space-x-3 p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <button
+                  onClick={() => setViewContactModal(false)}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setViewContactModal(false);
+                    setEditContactModal(true);
+                  }}
+                  disabled={userRole === "3"}
+                  className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all flex items-center space-x-2"
+                >
+                  <Lucide icon="UserCog" className="w-4 h-4" />
+                  <span>Edit Contact</span>
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -9127,47 +8700,35 @@ function Main() {
           open={deleteConfirmationModal}
           onClose={() => setDeleteConfirmationModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden">
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-red-50/20 via-transparent to-pink-50/20 dark:from-red-900/10 dark:via-transparent dark:to-pink-900/10 pointer-events-none" />
-
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
               <div className="relative p-8">
                 <div className="text-center">
-                  <div className="relative mx-auto mb-6">
-                    <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-3xl bg-gradient-to-br from-red-500/20 to-pink-500/20 dark:from-red-400/20 dark:to-pink-400/20 backdrop-blur-xl border border-red-200/50 dark:border-red-700/50 shadow-2xl shadow-red-500/20 dark:shadow-red-500/30">
-                      <Lucide
-                        icon="AlertTriangle"
-                        className="h-8 w-8 text-red-600 dark:text-red-400"
-                      />
-                    </div>
-                    <div className="absolute -inset-2 bg-gradient-to-br from-red-400/20 to-pink-600/20 rounded-3xl blur opacity-50" />
+                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                    <Lucide icon="AlertTriangle" className="h-8 w-8 text-[#dc2626]" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+                  <h3 className="text-xl font-black text-[#4b4b4b] uppercase mb-3">
                     Delete Contact
                   </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 rounded-2xl px-4 py-3">
-                    Are you sure you want to delete this contact? This action
-                    cannot be undone.
+                  <p className="text-[#4b4b4b] font-bold mb-8 bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4 text-left">
+                    Are you sure you want to delete this contact? This action cannot be undone.
                   </p>
                 </div>
 
                 <div className="flex justify-end space-x-4">
-                  <Button
-                    variant="outline-secondary"
+                  <button
                     onClick={() => setDeleteConfirmationModal(false)}
-                    className="px-6 py-3 bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-slate-300/80 dark:hover:border-slate-500/80 rounded-2xl font-bold transition-all duration-300 hover:shadow-xl hover:scale-105 transform-gpu"
+                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                   >
                     Cancel
-                  </Button>
-                  <Button
-                    variant="outline-danger"
+                  </button>
+                  <button
                     onClick={handleDeleteContact}
                     disabled={isLoading}
-                    className="px-6 py-3 bg-gradient-to-r from-red-500/90 via-pink-500/90 to-red-600/90 text-white border-2 border-red-400/60 dark:border-red-500/60 rounded-2xl font-bold transition-all duration-300 hover:shadow-xl hover:shadow-red-500/30 dark:hover:shadow-red-500/40 hover:scale-105 transform-gpu disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 bg-[#dc2626] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     {isLoading ? "Deleting..." : "Delete"}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </Dialog.Panel>
@@ -9179,29 +8740,20 @@ function Main() {
           open={showMassDeleteModal}
           onClose={() => setShowMassDeleteModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/90 dark:bg-slate-800/90 backdrop-blur-2xl rounded-3xl border border-white/30 dark:border-slate-700/30 shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/40 overflow-hidden">
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50/20 via-transparent to-red-50/20 dark:from-orange-900/10 dark:via-transparent dark:to-red-900/10 pointer-events-none" />
-
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
               <div className="relative p-8">
                 <div className="text-center">
-                  <div className="relative mx-auto mb-6">
-                    <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-3xl bg-gradient-to-br from-orange-500/20 to-red-500/20 dark:from-orange-400/20 dark:to-red-400/20 backdrop-blur-xl border border-orange-200/50 dark:border-orange-700/50 shadow-2xl shadow-orange-500/20 dark:shadow-orange-500/30">
-                      <Lucide
-                        icon="AlertTriangle"
-                        className="h-8 w-8 text-orange-600 dark:text-orange-400"
-                      />
-                    </div>
-                    <div className="absolute -inset-2 bg-gradient-to-br from-orange-400/20 to-red-600/20 rounded-3xl blur opacity-50" />
+                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <Lucide icon="AlertTriangle" className="h-8 w-8 text-[#f26522]" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+                  <h3 className="text-xl font-black text-[#4b4b4b] uppercase mb-3">
                     Delete Selected Contacts
                   </h3>
-                  <div className="bg-gradient-to-r from-white/60 to-slate-50/40 dark:from-slate-700/60 dark:to-slate-800/40 backdrop-blur-xl border border-white/40 dark:border-slate-600/40 rounded-2xl px-4 py-4 mb-8">
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <div className="bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4 mb-8 text-left">
+                    <p className="text-[#4b4b4b] font-bold">
                       Are you sure you want to delete{" "}
-                      <span className="font-bold text-orange-600 dark:text-orange-400">
+                      <span className="text-[#f26522] font-black underline underline-offset-4 decoration-2 decoration-[#f26522]">
                         {selectedContacts.length}
                       </span>{" "}
                       selected contacts? This action cannot be undone.
@@ -9210,21 +8762,19 @@ function Main() {
                 </div>
 
                 <div className="flex justify-end space-x-4">
-                  <Button
-                    variant="outline-secondary"
+                  <button
                     onClick={() => setShowMassDeleteModal(false)}
-                    className="px-6 py-3 bg-gradient-to-r from-white/80 to-slate-50/60 dark:from-slate-700/80 dark:to-slate-800/60 backdrop-blur-xl border-2 border-white/60 dark:border-slate-600/60 hover:border-slate-300/80 dark:hover:border-slate-500/80 rounded-2xl font-bold transition-all duration-300 hover:shadow-xl hover:scale-105 transform-gpu"
+                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                   >
                     Cancel
-                  </Button>
-                  <Button
-                    variant="outline-danger"
+                  </button>
+                  <button
                     onClick={handleMassDelete}
                     disabled={isMassDeleting}
-                    className="px-6 py-3 bg-gradient-to-r from-orange-500/90 via-red-500/90 to-pink-600/90 text-white border-2 border-orange-400/60 dark:border-orange-500/60 rounded-2xl font-bold transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-500/40 hover:scale-105 transform-gpu disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     {isMassDeleting ? "Deleting..." : "Delete All"}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </Dialog.Panel>
@@ -9236,61 +8786,54 @@ function Main() {
           open={showAddTagModal}
           onClose={() => setShowAddTagModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-purple-500/5 to-pink-500/10 dark:from-blue-600/10 dark:via-purple-700/5 dark:to-pink-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      <Lucide icon="Tag" className="w-5 h-5 text-blue-400" />
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                      <Lucide icon="Tag" className="w-5 h-5" />
                     </div>
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-white via-blue-100 to-violet-100 dark:from-white dark:via-blue-100 dark:to-violet-100 bg-clip-text text-transparent">
-                      Add New Tag
-                    </h3>
+                    <div>
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase">
+                        Add New Tag
+                      </h3>
+                    </div>
                   </div>
                   <button
                     onClick={() => setShowAddTagModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
 
-                <div className="mt-8 space-y-2">
-                  <label className="block text-sm font-semibold text-white/90 dark:text-slate-200 mb-3">
+              <div className="p-8 space-y-6 bg-white">
+                <div className="space-y-3">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
                     Tag Name
                   </label>
-                  <div className="relative">
-                    <FormInput
-                      type="text"
-                      value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      placeholder="Enter a descriptive tag name..."
-                      className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-4 py-4 text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200 shadow-inner"
-                    />
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-violet-500/5 pointer-events-none" />
-                  </div>
+                  <FormInput
+                    type="text"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    placeholder="Enter a descriptive tag name..."
+                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                  />
                 </div>
 
-                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <Button
-                    variant="outline-secondary"
+                <div className="flex justify-end space-x-3 pt-6 bg-white mt-8 border-t-2 border-[#4b4b4b]">
+                  <button
                     onClick={() => setShowAddTagModal(false)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
+                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                   >
                     Cancel
-                  </Button>
-                  <Button
-                    variant="primary"
+                  </button>
+                  <button
                     onClick={handleSaveNewTag}
                     disabled={!newTag.trim() || isLoading}
-                    className="px-8 py-3 bg-gradient-to-r from-blue-500 via-purple-500 to-violet-500 hover:from-blue-600 hover:via-purple-600 hover:to-violet-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                    className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center space-x-2"
                   >
                     {isLoading ? (
                       <div className="flex items-center space-x-2">
@@ -9298,12 +8841,12 @@ function Main() {
                         <span>Adding...</span>
                       </div>
                     ) : (
-                      <div className="flex items-center space-x-2">
+                      <>
                         <Lucide icon="Plus" className="w-4 h-4" />
                         <span>Add Tag</span>
-                      </div>
+                      </>
                     )}
-                  </Button>
+                  </button>
                 </div>
               </div>
             </Dialog.Panel>
@@ -9315,280 +8858,196 @@ function Main() {
           open={showFiltersModal}
           onClose={() => setShowFiltersModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-lg relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.01] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-teal-500/5 to-cyan-500/10 dark:from-emerald-600/10 dark:via-teal-700/5 dark:to-cyan-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-lg bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-hidden flex flex-col max-h-[90vh]">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      <Lucide
-                        icon="Filter"
-                        className="w-5 h-5 text-emerald-400"
-                      />
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                      <Lucide icon="Filter" className="w-5 h-5" />
                     </div>
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-white via-emerald-100 to-teal-100 dark:from-white dark:via-emerald-100 dark:to-teal-100 bg-clip-text text-transparent">
-                      Filter Contacts
-                    </h3>
+                    <div>
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase">
+                        Filter Contacts
+                      </h3>
+                    </div>
                   </div>
                   <button
                     onClick={() => setShowFiltersModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
 
-                <div className="mt-8 space-y-8">
-                  {/* Tag Filters */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Lucide
-                          icon="Tags"
-                          className="w-5 h-5 text-emerald-400"
-                        />
-                        <h4 className="text-lg font-semibold text-white/90 dark:text-slate-200">
-                          Filter by Tags
-                        </h4>
-                      </div>
-                    </div>
-                    {/* Search Input for Tags */}
-                    <div className="relative group">
-                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2 p-1.5 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-500/20 dark:from-emerald-400/20 dark:to-teal-400/20 backdrop-blur-sm border border-emerald-200/40 dark:border-emerald-700/40 group-focus-within:scale-110 transition-transform duration-300">
-                        <Lucide
-                          icon="Search"
-                          className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                        />
-                      </div>
-                      <input
-                        type="text"
-                        placeholder="Search tags..."
-                        value={tagSearchQuery}
-                        onChange={(e) => setTagSearchQuery(e.target.value)}
-                        className="w-full pl-16 pr-4 py-4 bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-400/60 transition-all duration-300 shadow-lg hover:shadow-xl text-white dark:text-slate-200 font-medium placeholder:text-white/50 dark:placeholder:text-slate-400"
-                      />
-                    </div>
-                    <div className="space-y-3 max-h-60 overflow-y-auto bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-600/20 shadow-inner">
-                      {(() => {
-                        const defaultTags = [
-                          {
-                            id: "built-in-cancelled-appointment",
-                            name: "Cancelled Appointment",
-                          },
-                          {
-                            id: "built-in-booked-appointment",
-                            name: "Booked Appointment",
-                          },
-                          {
-                            id: "built-in-rescheduled-appointment",
-                            name: "Rescheduled Appointment",
-                          },
-                          { id: "built-in-stop-bot", name: "stop bot" },
-                          { id: "built-in-feedback", name: "feedback" },
-                          { id: "built-in-inquiry", name: "inquiry" },
-                          { id: "built-in-ordered", name: "ordered" },
-                          { id: "built-in-CN", name: "CN" },
-                          { id: "built-in-EN", name: "EN" },
-                        ];
-                        const allTags = [...defaultTags, ...tagList];
-                        return allTags
-                          .filter((tag) =>
-                            tag.name
-                              .toLowerCase()
-                              .includes(tagSearchQuery.toLowerCase())
-                          )
-                          .map((tag) => (
-                            <label
-                              key={tag.id}
-                              className="group flex items-center p-3 rounded-xl hover:bg-white/10 dark:hover:bg-slate-600/20 transition-all duration-200 cursor-pointer border border-transparent hover:border-white/10"
-                            >
-                              <div className="relative">
-                                <ThreeStateTagFilter
-                                  tagName={tag.name}
-                                  className="transition-all duration-200"
-                                />
-                                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-emerald-400/20 to-teal-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                              </div>
-                              <span className="ml-4 text-sm font-medium text-white/80 dark:text-slate-300 group-hover:text-white transition-colors duration-200">
-                                {tag.name}
-                              </span>
-                              <div className="ml-auto flex items-center space-x-2 text-xs text-white/50">
-                                {getTagFilterState(tag.name) === "include" && (
-                                  <span className="text-emerald-400">
-                                    Include
-                                  </span>
-                                )}
-                                {getTagFilterState(tag.name) === "exclude" && (
-                                  <span className="text-red-400">Exclude</span>
-                                )}
-                                {getTagFilterState(tag.name) === "none" && (
-                                  <span className="text-gray-400">
-                                    Click to filter
-                                  </span>
-                                )}
-                              </div>
-                            </label>
-                          ));
-                      })()}
-                      {tagList.filter((tag) =>
-                        tag.name
-                          .toLowerCase()
-                          .includes(tagSearchQuery.toLowerCase())
-                      ).length === 0 &&
-                        tagSearchQuery && (
-                          <div className="text-center py-8">
-                            <Lucide
-                              icon="Search"
-                              className="w-12 h-12 mx-auto mb-4 text-white/30"
-                            />
-                            <p className="text-sm text-white/60">
-                              No tags found matching "{tagSearchQuery}"
-                            </p>
-                          </div>
-                        )}
-                    </div>
+              <div className="p-8 space-y-8 overflow-y-auto bg-white">
+                {/* Tag Filters */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2 border-b-2 border-[#4b4b4b] pb-2">
+                    <Lucide icon="Tags" className="w-5 h-5 text-[#f26522]" />
+                    <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                      Filter by Tags
+                    </h4>
                   </div>
-
-                  {/* User Filters */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Lucide
-                          icon="Users"
-                          className="w-5 h-5 text-teal-400"
-                        />
-                        <h4 className="text-lg font-semibold text-white/90 dark:text-slate-200">
-                          Filter by Assigned User
-                        </h4>
-                      </div>
+                  {/* Search Input for Tags */}
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <Lucide icon="Search" className="w-4 h-4 text-[#4b4b4b]" />
                     </div>
-                    <div className="space-y-3 max-h-60 overflow-y-auto bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-600/20 shadow-inner">
-                      {(() => {
-                        // Use the ref instead of the state
-                        const stableEmployeeList = employeeListRef.current;
-                        console.log(
-                          "Filter modal - Using stable employee list:",
-                          stableEmployeeList.length,
-                          "employees"
-                        );
-
-                        if (stableEmployeeList.length === 0) {
-                          return (
-                            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-                              <Lucide
-                                icon="Users"
-                                className="w-8 h-8 mx-auto mb-2 opacity-50"
-                              />
-                              <p>No employees found</p>
-                              <p className="text-xs">
-                                Stable list length: {stableEmployeeList.length}
-                              </p>
-                              <p className="text-xs">
-                                Current state length: {employeeList.length}
-                              </p>
-                            </div>
-                          );
-                        }
-
-                        return stableEmployeeList.map((employee) => (
+                    <input
+                      type="text"
+                      placeholder="Search tags..."
+                      value={tagSearchQuery}
+                      onChange={(e) => setTagSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 rounded-none"
+                    />
+                  </div>
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4">
+                    {(() => {
+                      const defaultTags = [
+                        { id: "built-in-cancelled-appointment", name: "Cancelled Appointment" },
+                        { id: "built-in-booked-appointment", name: "Booked Appointment" },
+                        { id: "built-in-rescheduled-appointment", name: "Rescheduled Appointment" },
+                        { id: "built-in-stop-bot", name: "stop bot" },
+                        { id: "built-in-feedback", name: "feedback" },
+                        { id: "built-in-inquiry", name: "inquiry" },
+                        { id: "built-in-ordered", name: "ordered" },
+                        { id: "built-in-CN", name: "CN" },
+                        { id: "built-in-EN", name: "EN" },
+                      ];
+                      const allTags = [...defaultTags, ...tagList];
+                      return allTags
+                        .filter((tag) =>
+                          tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
+                        )
+                        .map((tag) => (
                           <label
-                            key={employee.id}
-                            className="group flex items-center p-3 rounded-xl hover:bg-white/10 dark:hover:bg-slate-600/20 transition-all duration-200 cursor-pointer border border-transparent hover:border-white/10"
+                            key={tag.id}
+                            className="flex items-center p-2 hover:bg-white border-2 border-transparent hover:border-[#4b4b4b] transition-all cursor-pointer"
                           >
-                            <div className="relative">
-                              <ThreeStateUserFilter
-                                userName={employee.name}
-                                className="transition-all duration-200"
-                              />
-                              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-teal-400/20 to-cyan-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                            </div>
-                            <span className="ml-4 text-sm font-medium text-white/80 dark:text-slate-300 group-hover:text-white transition-colors duration-200">
-                              {employee.name}
+                            <ThreeStateTagFilter tagName={tag.name} />
+                            <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate flex-1">
+                              {tag.name}
                             </span>
-                            <div className="ml-auto flex items-center space-x-2 text-xs text-white/50">
-                              {getUserFilterState(employee.name) ===
-                                "include" && (
-                                  <span className="text-teal-400">Include</span>
-                                )}
-                              {getUserFilterState(employee.name) ===
-                                "exclude" && (
-                                  <span className="text-red-400">Exclude</span>
-                                )}
-                              {getUserFilterState(employee.name) === "none" && (
-                                <span className="text-gray-400">
-                                  Click to filter
-                                </span>
+                            <div className="ml-2 text-xs font-black uppercase text-[#4b4b4b]/60">
+                              {getTagFilterState(tag.name) === "include" && (
+                                <span className="text-emerald-600 bg-emerald-100 border border-emerald-600 px-1">Include</span>
+                              )}
+                              {getTagFilterState(tag.name) === "exclude" && (
+                                <span className="text-rose-600 bg-rose-100 border border-rose-600 px-1">Exclude</span>
+                              )}
+                              {getTagFilterState(tag.name) === "none" && (
+                                <span>Click to filter</span>
                               )}
                             </div>
                           </label>
                         ));
-                      })()}
-                    </div>
+                    })()}
+                    {tagList.filter((tag) =>
+                      tag.name.toLowerCase().includes(tagSearchQuery.toLowerCase())
+                    ).length === 0 &&
+                      tagSearchQuery && (
+                        <div className="text-center py-6">
+                          <p className="text-sm font-bold text-[#4b4b4b]">
+                            No tags found matching "{tagSearchQuery}"
+                          </p>
+                        </div>
+                      )}
+                  </div>
+                </div>
+
+                {/* User Filters */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2 border-b-2 border-[#4b4b4b] pb-2">
+                    <Lucide icon="Users" className="w-5 h-5 text-[#f26522]" />
+                    <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
+                      Filter by Assigned User
+                    </h4>
+                  </div>
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4">
+                    {(() => {
+                      const stableEmployeeList = employeeListRef.current;
+                      if (stableEmployeeList.length === 0) {
+                        return (
+                          <div className="text-center py-4 text-[#4b4b4b]">
+                            <p className="font-bold">No employees found</p>
+                          </div>
+                        );
+                      }
+
+                      return stableEmployeeList.map((employee) => (
+                        <label
+                          key={employee.id}
+                          className="flex items-center p-2 hover:bg-white border-2 border-transparent hover:border-[#4b4b4b] transition-all cursor-pointer"
+                        >
+                          <ThreeStateUserFilter userName={employee.name} />
+                          <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate flex-1">
+                            {employee.name}
+                          </span>
+                          <div className="ml-2 text-xs font-black uppercase text-[#4b4b4b]/60">
+                            {getUserFilterState(employee.name) === "include" && (
+                              <span className="text-emerald-600 bg-emerald-100 border border-emerald-600 px-1">Include</span>
+                            )}
+                            {getUserFilterState(employee.name) === "exclude" && (
+                              <span className="text-rose-600 bg-rose-100 border border-rose-600 px-1">Exclude</span>
+                            )}
+                            {getUserFilterState(employee.name) === "none" && (
+                              <span>Click to filter</span>
+                            )}
+                          </div>
+                        </label>
+                      ));
+                    })()}
                   </div>
                 </div>
 
                 {/* Filter Legend */}
-                <div className="mt-6 p-4 bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-slate-600/20">
-                  <div className="text-xs text-white/70 dark:text-slate-400 space-y-2">
-                    <div className="font-semibold text-white/90 dark:text-slate-200 mb-2">
+                <div className="mt-6 p-4 bg-[#f8f9fa] border-2 border-[#4b4b4b]">
+                  <div className="text-xs text-[#4b4b4b] space-y-2 font-bold">
+                    <div className="font-black uppercase mb-2 text-[#f26522]">
                       Filter Guide:
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded border-2 border-white/30 bg-white/5 flex items-center justify-center">
-                        <span className="text-[8px] text-gray-400">○</span>
-                      </div>
+                      <div className="w-4 h-4 bg-white border-2 border-[#4b4b4b]" />
                       <span>Unfiltered - Shows all contacts</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded border-2 border-emerald-500 bg-emerald-500 flex items-center justify-center">
-                        <Lucide icon="Check" className="w-2 h-2 text-white" />
+                      <div className="w-4 h-4 bg-emerald-500 border-2 border-[#4b4b4b] flex items-center justify-center text-white">
+                        <Lucide icon="Check" className="w-3 h-3" />
                       </div>
-                      <span>
-                        Include - Shows only contacts with this tag/user
-                      </span>
+                      <span>Include - Shows only contacts with this tag/user</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded border-2 border-red-500 bg-red-500 flex items-center justify-center">
-                        <Lucide icon="X" className="w-2 h-2 text-white" />
+                      <div className="w-4 h-4 bg-rose-500 border-2 border-[#4b4b4b] flex items-center justify-center text-white">
+                        <Lucide icon="X" className="w-3 h-3" />
                       </div>
                       <span>Exclude - Hides contacts with this tag/user</span>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex justify-between mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <Button
-                    variant="outline-secondary"
-                    onClick={() => {
-                      setSelectedTagFilters([]);
-                      setSelectedUserFilters([]);
-                      setExcludedTagFilters([]);
-                      setExcludedUserFilters([]);
-                    }}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="RotateCcw" className="w-4 h-4" />
-                      <span>Clear All</span>
-                    </div>
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => setShowFiltersModal(false)}
-                    className="px-8 py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform hover:scale-105"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="Check" className="w-4 h-4" />
-                      <span>Apply Filters</span>
-                    </div>
-                  </Button>
-                </div>
+              <div className="flex justify-between p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
+                <button
+                  onClick={() => {
+                    setSelectedTagFilters([]);
+                    setSelectedUserFilters([]);
+                    setExcludedTagFilters([]);
+                    setExcludedUserFilters([]);
+                  }}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                >
+                  <Lucide icon="RotateCcw" className="w-4 h-4" />
+                  <span>Clear All</span>
+                </button>
+                <button
+                  onClick={() => setShowFiltersModal(false)}
+                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                >
+                  <Lucide icon="Check" className="w-4 h-4" />
+                  <span>Apply Filters</span>
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -9599,109 +9058,77 @@ function Main() {
           open={showDateFilterModal}
           onClose={() => setShowDateFilterModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-400/10 via-pink-500/5 to-rose-500/10 dark:from-purple-600/10 dark:via-pink-700/5 dark:to-rose-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      <Lucide
-                        icon="Calendar"
-                        className="w-5 h-5 text-purple-400"
-                      />
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                      <Lucide icon="Calendar" className="w-5 h-5" />
                     </div>
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-white via-purple-100 to-pink-100 dark:from-white dark:via-purple-100 dark:to-pink-100 bg-clip-text text-transparent">
-                      Filter by Date
-                    </h3>
+                    <div>
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase">
+                        Filter by Date
+                      </h3>
+                    </div>
                   </div>
                   <button
                     onClick={() => setShowDateFilterModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
 
-                <div className="mt-8 space-y-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Lucide
-                        icon="Calendar"
-                        className="w-4 h-4 text-purple-400"
-                      />
-                      <label className="block text-sm font-semibold text-white/90 dark:text-slate-200">
-                        Start Date
-                      </label>
-                    </div>
-                    <div className="relative group">
-                      <FormInput
-                        type="date"
-                        value={dateFilterStart}
-                        onChange={(e) => setDateFilterStart(e.target.value)}
-                        className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-4 py-4 text-white dark:text-slate-200 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 shadow-inner"
-                      />
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <Lucide
-                        icon="Calendar"
-                        className="w-4 h-4 text-pink-400"
-                      />
-                      <label className="block text-sm font-semibold text-white/90 dark:text-slate-200">
-                        End Date
-                      </label>
-                    </div>
-                    <div className="relative group">
-                      <FormInput
-                        type="date"
-                        value={dateFilterEnd}
-                        onChange={(e) => setDateFilterEnd(e.target.value)}
-                        className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-4 py-4 text-white dark:text-slate-200 focus:border-pink-400/50 focus:ring-2 focus:ring-pink-400/20 transition-all duration-200 shadow-inner"
-                      />
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/5 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                    </div>
-                  </div>
+              <div className="p-8 space-y-6 bg-white">
+                <div className="space-y-3">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                    Start Date
+                  </label>
+                  <FormInput
+                    type="date"
+                    value={dateFilterStart}
+                    onChange={(e) => setDateFilterStart(e.target.value)}
+                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                  />
                 </div>
 
-                <div className="flex justify-between mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <Button
-                    variant="outline-secondary"
-                    onClick={clearDateFilter}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
+                <div className="space-y-3">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                    End Date
+                  </label>
+                  <FormInput
+                    type="date"
+                    value={dateFilterEnd}
+                    onChange={(e) => setDateFilterEnd(e.target.value)}
+                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <button
+                  onClick={clearDateFilter}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                >
+                  <Lucide icon="RotateCcw" className="w-4 h-4" />
+                  <span>Clear Filter</span>
+                </button>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setShowDateFilterModal(false)}
+                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                   >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="RotateCcw" className="w-4 h-4" />
-                      <span>Clear Filter</span>
-                    </div>
-                  </Button>
-                  <div className="flex space-x-3">
-                    <Button
-                      variant="outline-secondary"
-                      onClick={() => setShowDateFilterModal(false)}
-                      className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      variant="primary"
-                      onClick={applyDateFilter}
-                      className="px-8 py-3 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 hover:from-purple-600 hover:via-pink-600 hover:to-rose-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transform hover:scale-105"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Lucide icon="Check" className="w-4 h-4" />
-                        <span>Apply Filter</span>
-                      </div>
-                    </Button>
-                  </div>
+                    Cancel
+                  </button>
+                  <button
+                    onClick={applyDateFilter}
+                    className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all flex items-center space-x-2"
+                  >
+                    <Lucide icon="Check" className="w-4 h-4" />
+                    <span>Apply Settings</span>
+                  </button>
                 </div>
               </div>
             </Dialog.Panel>
@@ -9713,147 +9140,114 @@ function Main() {
           open={showColumnsModal}
           onClose={() => setShowColumnsModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-sm relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-teal-500/5 to-blue-500/10 dark:from-cyan-600/10 dark:via-teal-700/5 dark:to-blue-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center space-x-3 pb-6 border-b border-white/10 dark:border-slate-700/20">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                    <Lucide icon="Grid2x2" className="w-5 h-5 text-cyan-400" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <Lucide icon="Grid2x2" className="w-5 h-5" />
                   </div>
-                  <Dialog.Title className="text-xl font-bold bg-gradient-to-r from-white via-cyan-100 to-teal-100 dark:from-white dark:via-cyan-100 dark:to-teal-100 bg-clip-text text-transparent">
+                  <Dialog.Title className="text-xl font-black text-[#4b4b4b] uppercase">
                     Manage Columns
                   </Dialog.Title>
                 </div>
+              </div>
 
-                <div className="space-y-3 max-h-60 overflow-y-auto mt-8">
-                  {Object.entries(visibleColumns)
-                    .filter(([column]) => {
-                      // Filter out company-specific fields if not companyId 079
-                      if (
-                        companyId !== "079" &&
-                        [
-                          "branch",
-                          "vehicleNumber",
-                          "ic",
-                          "expiryDate",
-                        ].includes(column)
-                      ) {
-                        return false;
-                      }
-                      return true;
-                    })
-                    .map(([column, isVisible]) => {
-                      // Check if this is a custom field
-                      const isCustomField = column.startsWith("customField_");
-                      const displayName = isCustomField
-                        ? column.replace("customField_", "")
-                        : column;
+              <div className="p-8 space-y-3 max-h-60 overflow-y-auto bg-white border-b-2 border-[#4b4b4b]">
+                {Object.entries(visibleColumns)
+                  .filter(([column]) => {
+                    // Filter out company-specific fields if not companyId 079
+                    if (
+                      companyId !== "079" &&
+                      ["branch", "vehicleNumber", "ic", "expiryDate"].includes(column)
+                    ) {
+                      return false;
+                    }
+                    return true;
+                  })
+                  .map(([column, isVisible]) => {
+                    // Check if this is a custom field
+                    const isCustomField = column.startsWith("customField_");
+                    const displayName = isCustomField
+                      ? column.replace("customField_", "")
+                      : column;
 
-                      // Don't allow deletion of essential columns
-                      const isEssentialColumn = [
-                        "checkbox",
-                        "contact",
-                        "phone",
-                        "actions",
-                      ].includes(column);
+                    // Don't allow deletion of essential columns
+                    const isEssentialColumn = [
+                      "checkbox",
+                      "contact",
+                      "phone",
+                      "actions",
+                    ].includes(column);
 
-                      return (
-                        <div
-                          key={column}
-                          className="group flex items-center px-4 py-4 hover:bg-white/10 dark:hover:bg-slate-600/20 rounded-2xl transition-all duration-200 border border-white/10 dark:border-slate-600/20 bg-white/5 dark:bg-slate-700/10 backdrop-blur-sm"
-                        >
-                          <label className="flex items-center text-left w-full cursor-pointer">
-                            <div className="relative">
-                              <input
-                                type="checkbox"
-                                checked={isVisible}
-                                onChange={() => {
-                                  setVisibleColumns((prev) => ({
-                                    ...prev,
-                                    [column]: !isVisible,
-                                  }));
-                                }}
-                                className="w-5 h-5 rounded-lg border-2 border-white/30 text-cyan-500 focus:ring-cyan-500/20 focus:ring-2 bg-white/5 backdrop-blur-sm transition-all duration-200"
-                              />
-                              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-cyan-400/20 to-teal-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                            </div>
-                            <span className="ml-4 text-sm font-medium capitalize text-white/80 dark:text-slate-300 group-hover:text-white transition-colors duration-200">
-                              {isCustomField
-                                ? `${displayName} (Custom)`
-                                : displayName}
+                    return (
+                      <div
+                        key={column}
+                        className="flex items-center p-2 hover:bg-[#f8f9fa] border-2 border-transparent hover:border-[#4b4b4b] transition-all cursor-pointer group"
+                      >
+                        <label className="flex items-center text-left w-full cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isVisible}
+                            onChange={() => {
+                              setVisibleColumns((prev) => ({
+                                ...prev,
+                                [column]: !isVisible,
+                              }));
+                            }}
+                            className="w-5 h-5 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
+                          />
+                          <span className="ml-3 text-sm font-bold text-[#4b4b4b] capitalize truncate">
+                            {isCustomField ? `${displayName} (Custom)` : displayName}
+                          </span>
+                        </label>
+                        <div className="flex items-center ml-auto">
+                          {!isEssentialColumn && (
+                            <button
+                              onClick={() => {
+                                setVisibleColumns((prev) => {
+                                  const newColumns = { ...prev };
+                                  delete newColumns[column];
+                                  return newColumns;
+                                });
+                              }}
+                              className="ml-3 p-1.5 text-rose-500 hover:text-white hover:bg-rose-500 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                              title="Delete column"
+                            >
+                              <Lucide icon="Trash2" className="w-4 h-4" />
+                            </button>
+                          )}
+                          {isEssentialColumn && (
+                            <span className="text-xs font-black uppercase text-emerald-600 bg-emerald-100 border border-emerald-600 px-2 py-0.5">
+                              Required
                             </span>
-                          </label>
-                          <div className="flex items-center ml-auto">
-                            {!isEssentialColumn && (
-                              <button
-                                onClick={() => {
-                                  setVisibleColumns((prev) => {
-                                    const newColumns = { ...prev };
-                                    delete newColumns[column];
-                                    return newColumns;
-                                  });
-                                }}
-                                className="ml-3 p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 focus:outline-none transition-all duration-200 rounded-xl backdrop-blur-sm border border-red-400/20 hover:border-red-400/40"
-                                title="Delete column"
-                              >
-                                <Lucide icon="Trash2" className="w-4 h-4" />
-                              </button>
-                            )}
-                            {isEssentialColumn && (
-                              <span className="text-xs text-cyan-400 font-medium bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-400/20">
-                                Required
-                              </span>
-                            )}
-                          </div>
+                          )}
                         </div>
-                      );
-                    })}
-                </div>
+                      </div>
+                    );
+                  })}
+              </div>
 
-                <div className="mt-10 flex justify-end space-x-3 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    onClick={() => setShowColumnsModal(false)}
-                    className="px-6 py-3 text-sm font-medium text-white/90 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 rounded-2xl hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/20"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => {
-                      // Show confirmation dialog before resetting
-                      if (
-                        window.confirm(
-                          "This will restore all default columns. Are you sure?"
-                        )
-                      ) {
-                        // Reset to default columns
-                        setVisibleColumns({
-                          checkbox: true,
-                          contact: true,
-                          phone: true,
-                          tags: true,
-                          ic: true,
-                          expiryDate: true,
-                          vehicleNumber: true,
-                          branch: true,
-                          notes: true,
-                          // Add any other default columns you want to include
-                        });
-                      }
-                    }}
-                    className="px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-500 hover:from-cyan-600 hover:via-teal-600 hover:to-blue-600 rounded-2xl border-0 shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/20 transform hover:scale-105"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="RotateCcw" className="w-4 h-4" />
-                      <span>Reset to Default</span>
-                    </div>
-                  </button>
-                </div>
+              <div className="flex justify-between items-center p-6 bg-[#f8f9fa]">
+                <button
+                  onClick={() => setShowColumnsModal(false)}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm("This will restore all default columns. Are you sure?")) {
+                      setVisibleColumns({
+                        checkbox: true, contact: true, phone: true, tags: true, ic: true, expiryDate: true, vehicleNumber: true, branch: true, notes: true
+                      });
+                    }
+                  }}
+                  className="px-6 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all flex items-center space-x-2"
+                >
+                  <Lucide icon="RotateCcw" className="w-4 h-4" />
+                  <span>Reset</span>
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -9865,153 +9259,120 @@ function Main() {
             open={showDeleteTagModal}
             onClose={() => setShowDeleteTagModal(false)}
           >
-            <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-              <Dialog.Panel className="w-full max-w-2xl relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.005] transition-all duration-300 max-h-[90vh]">
-                {/* Enhanced Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-red-400/10 via-pink-500/5 to-rose-500/10 dark:from-red-600/10 dark:via-pink-700/5 dark:to-rose-600/10 pointer-events-none" />
-
-                {/* Top Shine Effect */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-                <div className="relative p-8">
-                  <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+            <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+              <Dialog.Panel className="w-full max-w-2xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 flex flex-col max-h-[90vh]">
+                <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-rose-100/50 shrink-0">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-500/20 to-pink-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                        <Lucide
-                          icon="Trash2"
-                          className="w-5 h-5 text-red-400"
-                        />
+                      <div className="p-2 border-2 border-rose-500 bg-white text-rose-500 shadow-[4px_4px_0_#f43f5e]">
+                        <Lucide icon="Trash2" className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-red-100 to-pink-100 dark:from-white dark:via-red-100 dark:to-pink-100 bg-clip-text text-transparent">
+                        <h3 className="text-xl font-black text-[#4b4b4b] uppercase">
                           Delete Tags
                         </h3>
-                        <p className="text-white/70 text-sm mt-1">
+                        <p className="text-[#4b4b4b]/70 font-bold text-sm mt-1">
                           Select tags to delete from your system
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => setShowDeleteTagModal(false)}
-                      className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-white/80 hover:text-white transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg hover:shadow-xl"
+                      className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
                     >
-                      <Lucide icon="X" className="w-5 h-5" />
+                      <Lucide icon="X" className="w-4 h-4" />
                     </button>
                   </div>
+                </div>
 
-                  <div className="mt-8">
-                    {tagList.length === 0 ? (
-                      <div className="text-center py-12">
-                        <div className="relative mx-auto mb-6 w-20 h-20">
-                          <div className="absolute inset-0 bg-gradient-to-br from-slate-500/20 to-gray-500/20 rounded-3xl backdrop-blur-sm border border-white/10" />
-                          <div className="absolute inset-2 bg-gradient-to-br from-slate-400/10 to-gray-400/10 rounded-2xl" />
-                          <Lucide
-                            icon="Tag"
-                            className="w-10 h-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-slate-400"
-                          />
-                        </div>
-                        <h4 className="text-lg font-semibold text-white/90 mb-2">
-                          No Tags Found
-                        </h4>
-                        <p className="text-white/60 text-sm">
-                          There are no tags available to delete.
+                <div className="p-8 overflow-y-auto bg-white flex-1">
+                  {tagList.length === 0 ? (
+                    <div className="text-center py-12 border-2 border-dashed border-[#4b4b4b]/30">
+                      <div className="p-4 bg-gray-100 border-2 border-[#4b4b4b] inline-block mb-4 shadow-[4px_4px_0_#4b4b4b]">
+                        <Lucide icon="Tag" className="w-8 h-8 text-[#4b4b4b]" />
+                      </div>
+                      <h4 className="text-lg font-black text-[#4b4b4b] uppercase mb-2">
+                        No Tags Found
+                      </h4>
+                      <p className="text-[#4b4b4b]/60 font-bold text-sm">
+                        There are no tags available to delete.
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-6">
+                        <p className="text-[#4b4b4b] text-sm font-bold bg-amber-100 border-2 border-amber-500 p-4 shadow-[4px_4px_0_#f59e0b]">
+                          <span className="text-amber-600 font-black uppercase tracking-wide mr-2">
+                            ⚠️ Warning:
+                          </span>
+                          Deleting tags will remove them from all contacts. This action cannot be undone.
                         </p>
                       </div>
-                    ) : (
-                      <>
-                        <div className="mb-6">
-                          <p className="text-white/80 text-sm leading-relaxed bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl rounded-2xl p-4 border border-white/10">
-                            <span className="text-red-300 font-medium">
-                              ⚠️ Warning:
-                            </span>{" "}
-                            Deleting tags will remove them from all contacts.
-                            This action cannot be undone.
-                          </p>
-                        </div>
 
-                        <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
-                          {tagList.map((tag) => (
-                            <div
-                              key={tag.id}
-                              className="group relative p-4 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-slate-600/20 hover:border-red-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10"
+                      <div className="space-y-3 overflow-y-auto border-2 border-[#4b4b4b] p-4 bg-[#f8f9fa]">
+                        {tagList.map((tag) => (
+                          <div
+                            key={tag.id}
+                            className="flex items-center justify-between p-3 bg-white border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:border-rose-500 transition-all group"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <div className="p-2 border-2 border-[#4b4b4b] bg-blue-100 text-[#4b4b4b]">
+                                <Lucide icon="Tag" className="w-4 h-4" />
+                              </div>
+                              <h4 className="text-[#4b4b4b] font-black group-hover:text-rose-600 transition-colors">
+                                {tag.name}
+                              </h4>
+                            </div>
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete the tag "${tag.name}"? This action cannot be undone.`)) {
+                                  handleConfirmDeleteTag(tag);
+                                }
+                              }}
+                              className="px-4 py-2 bg-rose-50 border-2 border-rose-500 text-rose-600 font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:bg-rose-500 hover:text-white transition-all flex items-center space-x-2"
                             >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-4">
-                                  <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 dark:from-blue-400/20 dark:to-violet-400/20 backdrop-blur-sm border border-blue-200/40 dark:border-blue-700/40">
-                                    <Lucide
-                                      icon="Tag"
-                                      className="w-4 h-4 text-blue-400"
-                                    />
-                                  </div>
-                                  <div>
-                                    <h4 className="text-white/90 font-semibold">
-                                      {tag.name}
-                                    </h4>
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() => {
-                                    if (
-                                      window.confirm(
-                                        `Are you sure you want to delete the tag "${tag.name}"? This will remove it from all contacts and cannot be undone.`
-                                      )
-                                    ) {
-                                      handleConfirmDeleteTag(tag);
-                                    }
-                                  }}
-                                  className="px-4 py-2 bg-gradient-to-r from-red-500/80 to-pink-600/80 hover:from-red-600/90 hover:to-pink-700/90 text-white rounded-xl transition-all duration-200 font-semibold shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transform hover:scale-105 flex items-center space-x-2 group-hover:scale-110"
-                                >
-                                  <Lucide icon="Trash2" className="w-4 h-4" />
-                                  <span>Delete</span>
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
-                        {tagList.length > 0 && (
-                          <div className="mt-6 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                            <div className="flex items-center justify-between">
-                              <div className="text-white/70 text-sm">
-                                <span className="font-medium">
-                                  {tagList.length}
-                                </span>{" "}
-                                tag{tagList.length !== 1 ? "s" : ""} available
-                              </div>
-                              <button
-                                onClick={() => {
-                                  if (
-                                    window.confirm(
-                                      `Are you sure you want to delete ALL ${tagList.length} tags? This will remove them from all contacts and cannot be undone.`
-                                    )
-                                  ) {
-                                    // Handle bulk delete - you'll need to implement this function
-                                    handleBulkDeleteTags();
-                                  }
-                                }}
-                                className="px-6 py-3 bg-gradient-to-r from-red-600/90 to-rose-700/90 hover:from-red-700 hover:to-rose-800 text-white rounded-2xl transition-all duration-200 font-bold shadow-lg shadow-red-600/30 hover:shadow-red-600/50 transform hover:scale-105 flex items-center space-x-2"
-                              >
-                                <Lucide icon="Trash" className="w-4 h-4" />
-                                <span>Delete All Tags</span>
-                              </button>
-                            </div>
+                              <Lucide icon="Trash2" className="w-4 h-4" />
+                              <span>Delete</span>
+                            </button>
                           </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  <div className="flex justify-end mt-8 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                    <button
-                      onClick={() => setShowDeleteTagModal(false)}
-                      className="px-8 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Lucide icon="X" className="w-4 h-4" />
-                        <span>Close</span>
+                        ))}
                       </div>
-                    </button>
-                  </div>
+
+                      {tagList.length > 0 && (
+                        <div className="mt-8 pt-6 border-t-2 border-[#4b4b4b]">
+                          <div className="flex items-center justify-between bg-rose-50 border-2 border-rose-500 p-4 shadow-[4px_4px_0_#f43f5e]">
+                            <div className="text-[#4b4b4b] font-bold text-sm">
+                              <span className="font-black text-rose-600">
+                                {tagList.length}
+                              </span>{" "}
+                              tag{tagList.length !== 1 ? "s" : ""} available
+                            </div>
+                            <button
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete ALL ${tagList.length} tags? This action cannot be undone.`)) {
+                                  // handleBulkDeleteTags();
+                                }
+                              }}
+                              className="px-6 py-3 bg-rose-600 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                            >
+                              <Lucide icon="AlertTriangle" className="w-4 h-4" />
+                              <span>Delete All Tags</span>
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="flex justify-end p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
+                  <button
+                    onClick={() => setShowDeleteTagModal(false)}
+                    className="px-8 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                  >
+                    <Lucide icon="X" className="w-4 h-4" />
+                    <span>Close</span>
+                  </button>
                 </div>
               </Dialog.Panel>
             </div>
@@ -10023,133 +9384,123 @@ function Main() {
           open={showCsvImportModal}
           onClose={() => setShowCsvImportModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/10 via-blue-500/5 to-cyan-500/10 dark:from-indigo-600/10 dark:via-blue-700/5 dark:to-cyan-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="flex items-center space-x-3 pb-6 border-b border-white/10 dark:border-slate-700/20">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                    <Lucide icon="Upload" className="w-5 h-5 text-indigo-400" />
-                  </div>
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-white via-indigo-100 to-blue-100 dark:from-white dark:via-indigo-100 dark:to-blue-100 bg-clip-text text-transparent">
-                    Import CSV
-                  </h3>
-                </div>
-
-                <div className="mt-8 space-y-6">
-                  <div className="space-y-3">
-                    <label className="block text-sm font-semibold text-white/90 dark:text-slate-200">
-                      Select CSV File
-                    </label>
-                    <div className="relative group">
-                      <input
-                        type="file"
-                        accept=".csv"
-                        onChange={handleCsvFileSelect}
-                        className="block w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-4 py-4 text-white dark:text-slate-200 focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 shadow-inner file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-indigo-500/20 file:text-indigo-300 hover:file:bg-indigo-500/30"
-                      />
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 flex flex-col max-h-[90vh]">
+              <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                      <Lucide icon="Upload" className="w-5 h-5" />
                     </div>
+                    <div>
+                      <h3 className="text-xl font-black text-[#4b4b4b] uppercase">
+                        Import CSV
+                      </h3>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowCsvImportModal(false)}
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                  >
+                    <Lucide icon="X" className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-8 space-y-6 overflow-y-auto bg-white flex-1">
+                <div className="space-y-3">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                    Select CSV File
+                  </label>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleCsvFileSelect}
+                    className="w-full bg-white border-2 border-[#4b4b4b] p-[0.65rem] text-[#4b4b4b] transition-all rounded-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:bg-[#4b4b4b] file:text-white file:font-black file:uppercase file:cursor-pointer hover:file:-translate-y-0.5 hover:file:shadow-[2px_2px_0_#f26522] file:transition-all"
+                  />
+                  <div className="pt-2">
                     <button
                       onClick={handleDownloadSampleCsv}
-                      className="text-sm text-indigo-300 hover:text-indigo-200 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-medium underline underline-offset-2"
+                      className="text-sm border-b-2 border-[#f26522] text-[#f26522] font-bold pb-0.5 hover:text-[#4b4b4b] hover:border-[#4b4b4b] transition-colors"
                     >
                       ↓ Download Sample CSV
                     </button>
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    <label className="block text-sm font-semibold text-white/90 dark:text-slate-200">
-                      Select Tags
-                    </label>
-                    <div className="max-h-40 overflow-y-auto bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-2xl p-4 border border-white/20 dark:border-slate-600/20 shadow-inner space-y-2">
-                      {tagList.map((tag) => (
-                        <label
-                          key={tag.id}
-                          className="group flex items-center p-3 rounded-xl hover:bg-white/10 dark:hover:bg-slate-600/20 transition-all duration-200 cursor-pointer border border-transparent hover:border-white/10"
-                        >
-                          <div className="relative">
-                            <input
-                              type="checkbox"
-                              value={tag.name}
-                              checked={selectedImportTags.includes(tag.name)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedImportTags([
-                                    ...selectedImportTags,
-                                    tag.name,
-                                  ]);
-                                } else {
-                                  setSelectedImportTags(
-                                    selectedImportTags.filter(
-                                      (t) => t !== tag.name
-                                    )
-                                  );
-                                }
-                              }}
-                              className="w-5 h-5 rounded-lg border-2 border-white/30 text-indigo-500 focus:ring-indigo-500/20 focus:ring-2 bg-white/5 backdrop-blur-sm transition-all duration-200"
-                            />
-                            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-indigo-400/20 to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                          </div>
-                          <span className="ml-4 text-sm font-medium text-white/80 dark:text-slate-300 group-hover:text-white transition-colors duration-200">
-                            {tag.name}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="block text-sm font-semibold text-white/90 dark:text-slate-200">
-                      Add New Tags (comma-separated)
-                    </label>
-                    <div className="relative group">
-                      <input
-                        type="text"
-                        value={importTags.join(", ")}
-                        onChange={(e) =>
-                          setImportTags(
-                            e.target.value.split(",").map((tag) => tag.trim())
-                          )
-                        }
-                        className="block w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl px-4 py-4 text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 shadow-inner"
-                        placeholder="Enter new tags separated by commas..."
-                      />
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                    </div>
+                <div className="space-y-3 pt-4 border-t-2 border-[#4b4b4b]/20">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                    Select Tags to Apply
+                  </label>
+                  <div className="max-h-40 overflow-y-auto border-2 border-[#4b4b4b] bg-[#f8f9fa] p-4 space-y-2">
+                    {tagList.map((tag) => (
+                      <label
+                        key={tag.id}
+                        className="flex items-center p-2 hover:bg-white border-2 border-transparent hover:border-[#4b4b4b] transition-all cursor-pointer group"
+                      >
+                        <input
+                          type="checkbox"
+                          value={tag.name}
+                          checked={selectedImportTags.includes(tag.name)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedImportTags([...selectedImportTags, tag.name]);
+                            } else {
+                              setSelectedImportTags(selectedImportTags.filter((t) => t !== tag.name));
+                            }
+                          }}
+                          className="w-5 h-5 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
+                        />
+                        <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate">
+                          {tag.name}
+                        </span>
+                      </label>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                    onClick={() => setShowCsvImportModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="px-8 py-3 bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-500 hover:from-indigo-600 hover:via-blue-600 hover:to-cyan-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    onClick={handleCsvImport}
-                    disabled={!selectedCsvFile || isLoading}
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Importing...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <Lucide icon="Upload" className="w-4 h-4" />
-                        <span>Import</span>
-                      </div>
-                    )}
-                  </button>
+                <div className="space-y-3">
+                  <label className="block text-sm font-black text-[#4b4b4b] uppercase">
+                    Add New Tags (comma-separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={importTags.join(", ")}
+                    onChange={(e) =>
+                      setImportTags(
+                        e.target.value.split(",").map((tag) => tag.trim())
+                      )
+                    }
+                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none placeholder-[#4b4b4b]/40 font-bold"
+                    placeholder="Enter new tags separated by commas..."
+                  />
                 </div>
+              </div>
+
+              <div className="flex justify-end p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0 space-x-3">
+                <button
+                  onClick={() => setShowCsvImportModal(false)}
+                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCsvImport}
+                  disabled={!selectedCsvFile || isLoading}
+                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Importing...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Lucide icon="Upload" className="w-4 h-4" />
+                      <span>Import Data</span>
+                    </div>
+                  )}
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -10160,65 +9511,49 @@ function Main() {
           open={showSyncConfirmationModal}
           onClose={() => setShowSyncConfirmationModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-yellow-500/10 dark:from-amber-600/10 dark:via-orange-700/5 dark:to-yellow-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="text-center">
-                  <div className="relative mx-auto mb-6 w-20 h-20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-3xl backdrop-blur-sm border border-white/10" />
-                    <div className="absolute inset-2 bg-gradient-to-br from-amber-400/10 to-orange-400/10 rounded-2xl" />
-                    <Lucide
-                      icon="AlertTriangle"
-                      className="w-10 h-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-amber-400"
-                    />
-                  </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-amber-100 to-orange-100 dark:from-white dark:via-amber-100 dark:to-orange-100 bg-clip-text text-transparent mb-4">
-                    Sync Database?
-                  </h3>
-                  <div className="text-white/80 dark:text-slate-300 text-sm leading-relaxed space-y-2">
-                    <p className="text-amber-300 font-medium">
-                      This action will sync the database <br />
-                      and may take some time.
-                    </p>
-                    <p className="text-xs text-white/60 mt-3 bg-white/5 rounded-xl p-3 border border-white/10">
-                      It may affect your current data.
-                    </p>
-                  </div>
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 text-center">
+              <div className="p-8 pb-0">
+                <div className="w-20 h-20 mx-auto bg-amber-100 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f59e0b] flex items-center justify-center mb-6">
+                  <Lucide icon="AlertTriangle" className="w-10 h-10 text-amber-500" />
                 </div>
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                    onClick={() => setShowSyncConfirmationModal(false)}
-                  >
+                <h3 className="text-2xl font-black text-[#4b4b4b] uppercase mb-4">
+                  Sync Database?
+                </h3>
+                <div className="text-[#4b4b4b]/80 text-sm font-bold space-y-3">
+                  <p className="text-amber-600">
+                    This action will sync the database<br />and may take some time.
+                  </p>
+                  <p className="p-3 bg-gray-100 border-2 border-[#4b4b4b] mt-4">
+                    It may affect your current data.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row p-6 gap-3 bg-white mt-6">
+                <button
+                  onClick={() => setShowSyncConfirmationModal(false)}
+                  className="w-full px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmSync}
+                  disabled={isSyncing}
+                  className="w-full px-6 py-3 bg-amber-500 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                >
+                  {isSyncing ? (
                     <div className="flex items-center space-x-2">
-                      <Lucide icon="X" className="w-4 h-4" />
-                      <span>Cancel</span>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Syncing...</span>
                     </div>
-                  </button>
-                  <button
-                    className="px-8 py-3 bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 hover:from-yellow-600 hover:via-amber-600 hover:to-orange-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    onClick={handleConfirmSync}
-                    disabled={isSyncing}
-                  >
-                    {isSyncing ? (
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Syncing...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center space-x-2">
-                        <Lucide icon="RefreshCw" className="w-4 h-4" />
-                        <span>Confirm Sync</span>
-                      </div>
-                    )}
-                  </button>
-                </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Lucide icon="RefreshCw" className="w-4 h-4" />
+                      <span>Sync Now</span>
+                    </div>
+                  )}
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -10229,57 +9564,39 @@ function Main() {
           open={showSyncNamesConfirmationModal}
           onClose={() => setShowSyncNamesConfirmationModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-md relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-400/10 via-purple-500/5 to-indigo-500/10 dark:from-violet-600/10 dark:via-purple-700/5 dark:to-indigo-600/10 pointer-events-none" />
-
-              {/* Top Shine Effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-
-              <div className="relative p-8">
-                <div className="text-center">
-                  <div className="relative mx-auto mb-6 w-20 h-20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-3xl backdrop-blur-sm border border-white/10" />
-                    <div className="absolute inset-2 bg-gradient-to-br from-violet-400/10 to-purple-400/10 rounded-2xl" />
-                    <Lucide
-                      icon="Users"
-                      className="w-10 h-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-violet-400"
-                    />
-                  </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-violet-100 to-purple-100 dark:from-white dark:via-violet-100 dark:to-purple-100 bg-clip-text text-transparent mb-4">
-                    Sync Contact Names?
-                  </h3>
-                  <div className="text-white/80 dark:text-slate-300 text-sm leading-relaxed space-y-2">
-                    <p>
-                      This action will sync all contact names and may take some
-                      time.
-                    </p>
-                    <p className="text-violet-300 font-medium">
-                      It may affect your current contact data.
-                    </p>
-                  </div>
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 text-center">
+              <div className="p-8 pb-0">
+                <div className="w-20 h-20 mx-auto bg-violet-100 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] flex items-center justify-center mb-6">
+                  <Lucide icon="Users" className="w-10 h-10 text-violet-500" />
                 </div>
-                <div className="flex justify-center space-x-4 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <button
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
-                    onClick={() => setShowSyncNamesConfirmationModal(false)}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="X" className="w-4 h-4" />
-                      <span>Cancel</span>
-                    </div>
-                  </button>
-                  <button
-                    className="px-8 py-3 bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 hover:from-violet-600 hover:via-purple-600 hover:to-indigo-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transform hover:scale-105"
-                    onClick={handleConfirmSyncNames}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Lucide icon="RefreshCw" className="w-4 h-4" />
-                      <span>Confirm Sync</span>
-                    </div>
-                  </button>
+                <h3 className="text-2xl font-black text-[#4b4b4b] uppercase mb-4">
+                  Sync Contact Names?
+                </h3>
+                <div className="text-[#4b4b4b]/80 text-sm font-bold space-y-3">
+                  <p>
+                    This action will sync all contact names<br />and may take some time.
+                  </p>
+                  <p className="text-violet-600 bg-violet-50 border-2 border-[#4b4b4b] p-3 mt-4">
+                    It may affect your current contact data.
+                  </p>
                 </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row p-6 gap-3 bg-white mt-6">
+                <button
+                  onClick={() => setShowSyncNamesConfirmationModal(false)}
+                  className="w-full px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmSyncNames}
+                  className="w-full px-6 py-3 bg-violet-500 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center justify-center space-x-2"
+                >
+                  <Lucide icon="RefreshCw" className="w-4 h-4" />
+                  <span>Sync Names</span>
+                </button>
               </div>
             </Dialog.Panel>
           </div>
@@ -10290,39 +9607,38 @@ function Main() {
           open={blastMessageModal}
           onClose={() => setBlastMessageModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-4xl relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden overflow-y-auto transform hover:scale-[1.005] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-violet-500/5 to-purple-500/10 dark:from-blue-600/10 dark:via-violet-700/5 dark:to-purple-600/10 pointer-events-none" />
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm z-50">
+            <Dialog.Panel className="w-full max-w-4xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh] flex flex-col">
 
-              <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
-                      <Lucide icon="Send" className="w-6 h-6 text-blue-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-violet-100 dark:from-white dark:via-blue-100 dark:to-violet-100 bg-clip-text text-transparent">
-                      Blast Message
-                    </h3>
+              <div className="p-6 border-b-2 border-[#4b4b4b] bg-[#FFE0B2] flex items-center justify-between shrink-0">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 flex items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                    <Lucide icon="Send" className="w-6 h-6 text-[#4b4b4b]" />
                   </div>
-                  <button
-                    onClick={() => setBlastMessageModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
-                  >
-                    <Lucide icon="X" className="w-4 h-4" />
-                  </button>
+                  <Dialog.Title className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                    Blast Message
+                  </Dialog.Title>
                 </div>
+                <button
+                  onClick={() => setBlastMessageModal(false)}
+                  className="w-8 h-8 flex items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                >
+                  <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
+                </button>
+              </div>
+
+              <div className="p-8 space-y-8 flex-1 overflow-y-auto">
 
                 <div className="mt-8 space-y-8">
                   {/* Recipients Selection */}
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Lucide icon="Users" className="w-5 h-5 text-blue-400" />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <Lucide icon="Users" className="w-5 h-5 text-[#f26522]" />
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Recipients ({selectedContacts.length} selected)
                       </label>
                     </div>
-                    <div className="bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-2xl p-6 max-h-48 overflow-y-auto border border-white/20 dark:border-slate-600/20 shadow-inner">
+                    <div className="bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-6 max-h-48 overflow-y-auto">
                       {selectedContacts.length > 0 ? (
                         <div className="space-y-3">
                           {selectedContacts
@@ -10330,15 +9646,15 @@ function Main() {
                             .map((contact, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between p-3 bg-white/10 dark:bg-slate-600/20 rounded-xl backdrop-blur-sm border border-white/10"
+                                className="flex items-center justify-between p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
                               >
                                 <div className="flex items-center">
-                                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-sm font-medium mr-3 shadow-lg">
+                                  <div className="w-10 h-10 bg-[#f26522] border-2 border-[#4b4b4b] flex items-center justify-center text-white text-sm font-bold mr-3 shadow-[2px_2px_0_#4b4b4b]">
                                     {contact.contactName
                                       ?.charAt(0)
                                       ?.toUpperCase() || "U"}
                                   </div>
-                                  <span className="text-white/90 dark:text-slate-200 font-medium">
+                                  <span className="text-[#4b4b4b] font-bold">
                                     {contact.contactName || contact.phone}
                                   </span>
                                 </div>
@@ -10346,32 +9662,32 @@ function Main() {
                                   onClick={() =>
                                     handleContactCheckboxChange(contact)
                                   }
-                                  className="w-8 h-8 rounded-full bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-red-400/20 hover:border-red-400/40"
+                                  className="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-200 flex items-center justify-center"
                                   title="Remove contact"
                                 >
-                                  <Lucide icon="X" className="w-4 h-4" />
+                                  <Lucide icon="X" className="w-5 h-5" />
                                 </button>
                               </div>
                             ))}
                           {selectedContacts.length > 10 && (
-                            <div className="text-sm text-white/70 dark:text-slate-400 bg-white/5 dark:bg-slate-600/10 rounded-xl p-3 text-center backdrop-blur-sm border border-white/10">
+                            <div className="text-sm text-[#4b4b4b] font-bold border-2 border-[#4b4b4b] bg-gray-50 p-3 text-center shadow-[2px_2px_0_#4b4b4b]">
                               ... and {selectedContacts.length - 10} more
                               contacts
                             </div>
                           )}
                         </div>
                       ) : (
-                        <div className="text-center text-white/60 dark:text-slate-400 py-8">
-                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-white/10 to-slate-500/20 dark:from-slate-700/50 dark:to-slate-600/50 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/10">
+                        <div className="text-center text-[#4b4b4b] py-8">
+                          <div className="w-16 h-16 bg-white border-2 border-[#4b4b4b] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.1)]">
                             <Lucide
                               icon="Users"
-                              className="w-8 h-8 opacity-50"
+                              className="w-8 h-8 opacity-50 text-[#4b4b4b]"
                             />
                           </div>
-                          <p className="font-medium text-white/80">
+                          <p className="font-bold">
                             No contacts selected
                           </p>
-                          <p className="text-xs mt-1 text-white/60">
+                          <p className="text-xs mt-1 opacity-70">
                             Please select contacts first to send messages
                           </p>
                         </div>
@@ -10381,16 +9697,16 @@ function Main() {
 
                   {/* Official API Notice */}
                   {isOfficialApi && (
-                    <div className="bg-amber-500/10 backdrop-blur-xl rounded-2xl p-6 border border-amber-400/20">
+                    <div className="bg-[#fef3c7] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#d97706] p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-                          <Lucide icon="AlertTriangle" className="w-5 h-5 text-amber-400" />
+                        <div className="w-10 h-10 bg-[#f59e0b] border-2 border-[#4b4b4b] flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b]">
+                          <Lucide icon="AlertTriangle" className="w-5 h-5 text-[#4b4b4b]" />
                         </div>
                         <div>
-                          <h4 className="text-lg font-semibold text-amber-300">Official WhatsApp API</h4>
-                          <p className="text-sm text-amber-200/80 mt-1">
+                          <h4 className="text-lg font-black text-[#4b4b4b] uppercase">Official WhatsApp API</h4>
+                          <p className="text-sm text-[#4b4b4b] font-medium mt-1">
                             You're using the Official WhatsApp Business API. Due to Meta's policies,
-                            you can only send <strong>approved message templates</strong> for bulk messaging.
+                            you can only send <strong className="font-black text-black">approved message templates</strong> for bulk messaging.
                             Please select a template below.
                           </p>
                         </div>
@@ -10403,9 +9719,9 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <Lucide
                         icon="Smartphone"
-                        className="w-5 h-5 text-violet-400"
+                        className="w-5 h-5 text-[#8b5cf6]"
                       />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Select Phone
                       </label>
                     </div>
@@ -10421,9 +9737,9 @@ function Main() {
                               : Number(e.target.value)
                           )
                         }
-                        className="w-full px-4 py-4 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 shadow-inner"
+                        className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all appearance-none"
                       >
-                        <option value="" className="bg-slate-800 text-white">
+                        <option value="" className="bg-white text-[#4b4b4b]">
                           Select a phone
                         </option>
                         {Object.keys(phoneNames).length > 0 ? (
@@ -10438,21 +9754,19 @@ function Main() {
                               : isLoadingStatus
                                 ? {
                                   text: "Checking...",
-                                  color:
-                                    "bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200",
+                                  color: "text-yellow-600",
                                   icon: "RefreshCw",
                                 }
                                 : {
                                   text: "Not Connected",
-                                  color:
-                                    "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200",
+                                  color: "text-red-600",
                                   icon: "XCircle",
                                 };
                             return (
                               <option
                                 key={phoneIndexOption}
                                 value={phoneIndexOption}
-                                className="bg-slate-800 text-white"
+                                className="bg-white text-[#4b4b4b] font-bold"
                               >
                                 {`${getPhoneName(
                                   phoneIndexOption
@@ -10465,25 +9779,24 @@ function Main() {
                           <option
                             value=""
                             disabled
-                            className="bg-slate-800 text-white"
+                            className="bg-white text-[#4b4b4b]"
                           >
                             No phones available - Please check your
                             configuration
                           </option>
                         )}
                       </select>
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
                       {isLoadingStatus && (
                         <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                          <LoadingIcon icon="three-dots" className="w-5 h-5" />
+                          <LoadingIcon icon="three-dots" className="w-5 h-5 text-[#4b4b4b]" />
                         </div>
                       )}
                     </div>
                     {phoneIndex !== null && phoneNames[phoneIndex] && (
                       <div
-                        className={`inline-flex items-center px-4 py-2 rounded-full text-xs font-medium backdrop-blur-sm border border-white/10 ${qrCodes[phoneIndex]
-                          ? "bg-emerald-500/20 text-emerald-300"
-                          : "bg-red-500/20 text-red-300"
+                        className={`inline-flex items-center px-4 py-2 text-xs font-bold border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] ${qrCodes[phoneIndex]
+                          ? "bg-[#dcfce7] text-[#166534]"
+                          : "bg-[#fee2e2] text-[#991b1b]"
                           }`}
                       >
                         <Lucide
@@ -10511,10 +9824,10 @@ function Main() {
                             qr.status?.toLowerCase()
                           )
                       ) && (
-                        <div className="text-xs text-amber-300 bg-amber-500/10 backdrop-blur-sm p-4 rounded-2xl border border-amber-400/20">
+                        <div className="text-xs text-[#b45309] bg-[#fef3c7] font-bold p-4 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#b45309]">
                           <div className="flex items-center gap-2 mb-2">
                             <Lucide icon="AlertTriangle" className="w-4 h-4" />
-                            <span className="font-medium">
+                            <span className="font-black uppercase">
                               Connection Required
                             </span>
                           </div>
@@ -10531,22 +9844,22 @@ function Main() {
                   {isOfficialApi ? (
                     <div className="space-y-4">
                       <div className="flex items-center space-x-3">
-                        <Lucide icon="FileText" className="w-5 h-5 text-blue-400" />
-                        <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                        <Lucide icon="FileText" className="w-5 h-5 text-[#3b82f6]" />
+                        <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                           Select Message Template
                         </label>
                       </div>
 
                       {isLoadingBlastTemplates ? (
                         <div className="flex items-center justify-center py-8">
-                          <LoadingIcon icon="oval" className="w-8 h-8" />
-                          <span className="ml-2 text-white/70">Loading templates...</span>
+                          <LoadingIcon icon="oval" className="w-8 h-8 text-[#4b4b4b]" />
+                          <span className="ml-2 font-bold text-[#4b4b4b]">Loading templates...</span>
                         </div>
                       ) : blastTemplates.length === 0 ? (
-                        <div className="text-center py-8 bg-white/5 rounded-2xl border border-white/10">
-                          <Lucide icon="FileX" className="w-12 h-12 text-white/40 mx-auto mb-3" />
-                          <p className="text-white/70">No approved templates found</p>
-                          <p className="text-xs text-white/50 mt-1">
+                        <div className="text-center py-8 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#3b82f6]">
+                          <Lucide icon="FileX" className="w-12 h-12 text-[#4b4b4b] opacity-50 mx-auto mb-3" />
+                          <p className="font-bold text-[#4b4b4b]">No approved templates found</p>
+                          <p className="text-xs font-medium text-[#4b4b4b] opacity-70 mt-1">
                             Create templates in the Message Templates page first
                           </p>
                         </div>
@@ -10557,23 +9870,23 @@ function Main() {
                               <div
                                 key={template.id}
                                 onClick={() => handleSelectBlastTemplate(template)}
-                                className={`p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${selectedBlastTemplate?.id === template.id
-                                  ? 'bg-blue-500/20 border-blue-400/50'
-                                  : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                                className={`p-4 border-2 border-[#4b4b4b] cursor-pointer transition-all duration-200 ${selectedBlastTemplate?.id === template.id
+                                  ? 'bg-[#dbeafe] shadow-[4px_4px_0_#3b82f6] -translate-y-0.5 -translate-x-0.5'
+                                  : 'bg-white shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#3b82f6] hover:-translate-y-0.5 hover:-translate-x-0.5'
                                   }`}
                               >
                                 <div className="flex items-center justify-between mb-2">
-                                  <span className="font-semibold text-white/90">{template.name}</span>
-                                  <span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-300">
+                                  <span className="font-black text-[#4b4b4b] uppercase">{template.name}</span>
+                                  <span className="text-xs px-2 py-1 font-bold bg-[#dcfce7] text-[#166534] border-2 border-[#4b4b4b]">
                                     Approved
                                   </span>
                                 </div>
-                                <p className="text-xs text-white/60 mb-2">Language: {template.language}</p>
-                                <p className="text-sm text-white/70 line-clamp-2">
+                                <p className="text-xs font-bold text-[#4b4b4b] mb-2">Language: {template.language}</p>
+                                <p className="text-sm font-medium text-[#4b4b4b] line-clamp-2">
                                   {getTemplatePreviewText(template)}
                                 </p>
                                 {getTemplateVariableCount(template) > 0 && (
-                                  <p className="text-xs text-amber-300 mt-2">
+                                  <p className="text-xs font-bold text-[#d97706] mt-2">
                                     <Lucide icon="AlertCircle" className="w-3 h-3 inline mr-1" />
                                     {getTemplateVariableCount(template)} variable(s) required
                                   </p>
@@ -10584,15 +9897,15 @@ function Main() {
 
                           {/* Template Variables Input */}
                           {selectedBlastTemplate && getTemplateVariableCount(selectedBlastTemplate) > 0 && (
-                            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                              <h4 className="text-md font-semibold text-white/90 mb-4 flex items-center gap-2">
-                                <Lucide icon="Pencil" className="w-5 h-5 text-violet-400" />
+                            <div className="bg-[#f3f4f6] p-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6]">
+                              <h4 className="text-md font-black text-[#4b4b4b] uppercase mb-4 flex items-center gap-2">
+                                <Lucide icon="Pencil" className="w-5 h-5 text-[#8b5cf6]" />
                                 Fill Template Variables
                               </h4>
                               <div className="space-y-3">
                                 {blastTemplateVariables.map((value, idx) => (
                                   <div key={idx} className="flex items-center gap-3">
-                                    <span className="text-sm text-white/60 w-16">{`{{${idx + 1}}}`}:</span>
+                                    <span className="text-sm font-bold text-[#4b4b4b] w-16">{`{{${idx + 1}}}`}:</span>
                                     <input
                                       type="text"
                                       value={value}
@@ -10602,12 +9915,12 @@ function Main() {
                                         setBlastTemplateVariables(newVars);
                                       }}
                                       placeholder={`Value for variable ${idx + 1}`}
-                                      className="flex-1 px-4 py-2 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20"
+                                      className="flex-1 px-4 py-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-medium focus:outline-none focus:shadow-[2px_2px_0_#8b5cf6] transition-all"
                                     />
                                   </div>
                                 ))}
                               </div>
-                              <p className="text-xs text-white/50 mt-3">
+                              <p className="text-xs font-bold text-[#4b4b4b] opacity-70 mt-3">
                                 These values will be the same for all recipients
                               </p>
                             </div>
@@ -10615,16 +9928,16 @@ function Main() {
 
                           {/* Template Preview */}
                           {selectedBlastTemplate && (
-                            <div className="bg-[#e5ddd5] rounded-2xl p-4">
-                              <p className="text-xs text-gray-600 mb-2 font-medium">Preview:</p>
-                              <div className="bg-white rounded-lg shadow max-w-sm mx-auto p-4">
+                            <div className="bg-[#e5ddd5] p-4 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                              <p className="text-xs text-[#4b4b4b] mb-2 font-black uppercase">Preview:</p>
+                              <div className="bg-white border-2 border-[#4b4b4b] max-w-sm mx-auto p-4 shadow-[2px_2px_0_#4b4b4b]">
                                 {selectedBlastTemplate.components?.map((comp: any, idx: number) => (
                                   <div key={idx}>
                                     {comp.type === 'HEADER' && comp.text && (
-                                      <p className="font-semibold text-gray-800 mb-2">{comp.text}</p>
+                                      <p className="font-bold text-[#4b4b4b] mb-2">{comp.text}</p>
                                     )}
                                     {comp.type === 'BODY' && comp.text && (
-                                      <p className="text-gray-700 whitespace-pre-wrap text-sm">
+                                      <p className="text-[#4b4b4b] whitespace-pre-wrap text-sm font-medium">
                                         {blastTemplateVariables.reduce(
                                           (text, val, i) => text.replace(`{{${i + 1}}}`, val || `{{${i + 1}}}`),
                                           comp.text
@@ -10632,7 +9945,7 @@ function Main() {
                                       </p>
                                     )}
                                     {comp.type === 'FOOTER' && comp.text && (
-                                      <p className="text-xs text-gray-500 mt-2">{comp.text}</p>
+                                      <p className="text-xs font-bold text-[#4b4b4b] opacity-70 mt-2">{comp.text}</p>
                                     )}
                                   </div>
                                 ))}
@@ -10648,9 +9961,9 @@ function Main() {
                       <div className="flex items-center space-x-3">
                         <Lucide
                           icon="MessageSquare"
-                          className="w-5 h-5 text-blue-400"
+                          className="w-5 h-5 text-[#f26522]"
                         />
-                        <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                        <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                           Message Content
                         </label>
                       </div>
@@ -10660,19 +9973,18 @@ function Main() {
                           onChange={(e) => setBlastMessage(e.target.value)}
                           placeholder="Enter your message here..."
                           rows={6}
-                          className="w-full px-4 py-4 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200 resize-none shadow-inner"
+                          className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-medium focus:outline-none focus:shadow-[4px_4px_0_#f26522] transition-all shadow-[2px_2px_0_#4b4b4b] resize-none"
                         />
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/5 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/60 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
+                        <span className="text-xs font-bold text-[#4b4b4b] bg-gray-100 px-4 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                           Character count: {blastMessage.length}
                         </span>
                         <Button
                           variant="outline-secondary"
                           size="sm"
                           onClick={() => setShowPlaceholders(!showPlaceholders)}
-                          className="bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
+                          className="bg-white hover:bg-gray-50 text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 font-black uppercase tracking-wider rounded-none"
                         >
                           <Lucide icon="Code" className="w-4 h-4 mr-2" />
                           Placeholders
@@ -10680,15 +9992,15 @@ function Main() {
                       </div>
 
                       {showPlaceholders && (
-                        <div className="p-6 bg-blue-500/10 backdrop-blur-xl rounded-2xl border border-blue-400/20">
-                          <p className="text-sm font-medium text-blue-300 mb-4 flex items-center gap-2">
+                        <div className="p-6 bg-gray-50 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                          <p className="text-sm font-black text-[#4b4b4b] mb-4 flex items-center gap-2 uppercase">
                             <Lucide icon="Code" className="w-4 h-4" />
                             Available Placeholders:
                           </p>
 
                           {/* Standard Placeholders */}
                           <div className="mb-6">
-                            <h4 className="text-xs font-semibold text-blue-200 mb-3 uppercase tracking-wider">
+                            <h4 className="text-xs font-black text-[#f26522] mb-3 uppercase tracking-wider">
                               Standard Fields
                             </h4>
                             <div className="grid grid-cols-2 gap-3 text-xs">
@@ -10707,7 +10019,7 @@ function Main() {
                                 <button
                                   key={placeholder}
                                   onClick={() => insertPlaceholder(placeholder)}
-                                  className="text-left p-3 rounded-xl bg-white/10 dark:bg-blue-800/30 text-blue-200 dark:text-blue-200 hover:bg-white/20 dark:hover:bg-blue-700/50 transition-all duration-200 border border-blue-400/20 backdrop-blur-sm font-mono"
+                                  className="text-left p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] font-bold hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all font-mono"
                                 >
                                   @{"{"}${placeholder}
                                   {"}"}
@@ -10745,7 +10057,7 @@ function Main() {
                             if (customFieldsArray.length > 0) {
                               return (
                                 <div>
-                                  <h4 className="text-xs font-semibold text-blue-200 mb-3 uppercase tracking-wider">
+                                  <h4 className="text-xs font-black text-[#8b5cf6] mb-3 uppercase tracking-wider">
                                     Custom Fields
                                   </h4>
                                   <div className="grid grid-cols-2 gap-3 text-xs">
@@ -10772,9 +10084,9 @@ function Main() {
                                                 : null
                                             }
                                             disabled={!isAvailableForAll}
-                                            className={`text-left p-3 rounded-xl transition-all duration-200 border backdrop-blur-sm font-mono w-full ${isAvailableForAll
-                                              ? "bg-white/10 dark:bg-blue-800/30 text-blue-200 dark:text-blue-200 hover:bg-white/20 dark:hover:bg-blue-700/50 border-blue-400/20 cursor-pointer"
-                                              : "bg-gray-500/10 dark:bg-gray-800/20 text-gray-400 dark:text-gray-500 border-gray-500/20 cursor-not-allowed opacity-60"
+                                            className={`text-left p-3 font-bold transition-all border-2 border-[#4b4b4b] font-mono w-full ${isAvailableForAll
+                                              ? "bg-white text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#8b5cf6] hover:-translate-y-0.5 hover:-translate-x-0.5 cursor-pointer"
+                                              : "bg-gray-200 text-[#4b4b4b] cursor-not-allowed opacity-60"
                                               }`}
                                           >
                                             @{"{"}
@@ -10797,22 +10109,22 @@ function Main() {
 
                                           {/* Tooltip */}
                                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
-                                            <div className="bg-slate-800 text-white text-xs rounded-lg px-3 py-2 shadow-lg border border-slate-600 max-w-48">
-                                              <div className="font-medium">
+                                            <div className="bg-white text-[#4b4b4b] font-bold text-xs p-3 shadow-[4px_4px_0_#4b4b4b] border-2 border-[#4b4b4b] max-w-48">
+                                              <div className="font-black uppercase">
                                                 {fieldKey}
                                               </div>
-                                              <div className="mt-1 text-slate-300">
+                                              <div className="mt-1">
                                                 {isAvailableForAll
                                                   ? "Available in all selected contacts"
                                                   : `Available in ${availableCount} of ${totalSelectedContacts} contacts (${availabilityPercentage}%)`}
                                               </div>
                                               {!isAvailableForAll && (
-                                                <div className="mt-1 text-amber-300 text-xs">
+                                                <div className="mt-1 text-[#d97706] text-xs">
                                                   ⚠️ Not available for all
                                                   contacts
                                                 </div>
                                               )}
-                                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-800"></div>
+                                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#4b4b4b]"></div>
                                             </div>
                                           </div>
                                         </div>
@@ -10821,17 +10133,17 @@ function Main() {
                                   </div>
 
                                   {/* Legend */}
-                                  <div className="mt-4 p-3 bg-blue-900/20 rounded-lg border border-blue-400/20">
-                                    <div className="flex items-center justify-between text-xs">
+                                  <div className="mt-4 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                                    <div className="flex items-center justify-between text-xs font-bold">
                                       <div className="flex items-center gap-2">
-                                        <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-                                        <span className="text-blue-200">
+                                        <div className="w-3 h-3 bg-[#8b5cf6] border border-[#4b4b4b]"></div>
+                                        <span className="text-[#4b4b4b]">
                                           Available for all
                                         </span>
                                       </div>
                                       <div className="flex items-center gap-2">
-                                        <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                                        <span className="text-gray-400">
+                                        <div className="w-3 h-3 bg-gray-400 border border-[#4b4b4b]"></div>
+                                        <span className="text-[#4b4b4b]">
                                           Partially available
                                         </span>
                                       </div>
@@ -10854,9 +10166,9 @@ function Main() {
                         <div className="flex items-center space-x-3">
                           <Lucide
                             icon="Image"
-                            className="w-5 h-5 text-emerald-400"
+                            className="w-5 h-5 text-[#f26522]"
                           />
-                          <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                          <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                             Media File (Optional)
                           </label>
                         </div>
@@ -10865,17 +10177,16 @@ function Main() {
                             type="file"
                             accept="image/*,video/*"
                             onChange={handleMediaUpload}
-                            className="w-full text-sm text-white/80 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl p-4 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-blue-500 file:to-violet-600 file:text-white hover:file:from-blue-600 hover:file:to-violet-700 file:transition-all file:duration-200 shadow-inner"
+                            className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                           />
-                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
                           {selectedMedia && (
-                            <div className="mt-3 flex items-center justify-between bg-emerald-500/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-emerald-400/20">
+                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                               <div className="flex items-center space-x-3 min-w-0 flex-1">
                                 <Lucide
                                   icon="Image"
-                                  className="w-4 h-4 text-emerald-400 flex-shrink-0"
+                                  className="w-4 h-4 text-[#4b4b4b] flex-shrink-0"
                                 />
-                                <span className="text-xs text-emerald-300 truncate font-medium">
+                                <span className="text-xs text-[#4b4b4b] truncate font-bold">
                                   {selectedMedia.name.length > 30
                                     ? `${selectedMedia.name.substring(0, 30)}...`
                                     : selectedMedia.name}
@@ -10883,9 +10194,9 @@ function Main() {
                               </div>
                               <button
                                 onClick={() => setSelectedMedia(null)}
-                                className="ml-2 w-6 h-6 rounded-full bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center flex-shrink-0"
+                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border-2 border-[#4b4b4b] text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5"
                               >
-                                <Lucide icon="X" className="w-3 h-3" />
+                                <Lucide icon="X" className="w-3 h-3 font-bold" />
                               </button>
                             </div>
                           )}
@@ -10896,9 +10207,9 @@ function Main() {
                         <div className="flex items-center space-x-3">
                           <Lucide
                             icon="FileText"
-                            className="w-5 h-5 text-orange-400"
+                            className="w-5 h-5 text-[#8b5cf6]"
                           />
-                          <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                          <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                             Document File (Optional)
                           </label>
                         </div>
@@ -10907,17 +10218,16 @@ function Main() {
                             type="file"
                             accept=".pdf,.doc,.docx,.txt"
                             onChange={handleDocumentUpload}
-                            className="w-full text-sm text-white/80 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl p-4 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-emerald-500 file:to-teal-600 file:text-white hover:file:from-emerald-600 hover:file:to-teal-700 file:transition-all file:duration-200 shadow-inner"
+                            className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                           />
-                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
                           {selectedDocument && (
-                            <div className="mt-3 flex items-center justify-between bg-orange-500/10 backdrop-blur-sm px-4 py-3 rounded-xl border border-orange-400/20">
+                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                               <div className="flex items-center space-x-3 min-w-0 flex-1">
                                 <Lucide
                                   icon="FileText"
-                                  className="w-4 h-4 text-orange-400 flex-shrink-0"
+                                  className="w-4 h-4 text-[#4b4b4b] flex-shrink-0"
                                 />
-                                <span className="text-xs text-orange-300 truncate font-medium">
+                                <span className="text-xs text-[#4b4b4b] truncate font-bold">
                                   {selectedDocument.name.length > 30
                                     ? `${selectedDocument.name.substring(
                                       0,
@@ -10928,9 +10238,9 @@ function Main() {
                               </div>
                               <button
                                 onClick={() => setSelectedDocument(null)}
-                                className="ml-2 w-6 h-6 rounded-full bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 transition-all duration-200 flex items-center justify-center flex-shrink-0"
+                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border-2 border-[#4b4b4b] text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5"
                               >
-                                <Lucide icon="X" className="w-3 h-3" />
+                                <Lucide icon="X" className="w-3 h-3 font-bold" />
                               </button>
                             </div>
                           )}
@@ -10940,34 +10250,34 @@ function Main() {
                   )}
 
                   {/* Scheduling Options */}
-                  <div className="bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 dark:border-slate-600/20 shadow-inner space-y-6">
+                  <div className="bg-[#f0f9ff] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#0284c7] space-y-6">
                     <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
+                      <div className="w-10 h-10 bg-[#0ea5e9] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                         <Lucide
                           icon="Calendar"
-                          className="w-5 h-5 text-violet-400"
+                          className="w-5 h-5 text-white"
                         />
                       </div>
-                      <h4 className="text-xl font-bold text-white/90 dark:text-slate-200">
+                      <h4 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                         Scheduling Options
                       </h4>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-3">
-                        <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                           Schedule Date
                         </label>
                         <DatePickerComponent
                           selected={blastStartDate}
                           onChange={(date: Date) => setBlastStartDate(date)}
                           dateFormat="MMMM d, yyyy"
-                          className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-sm text-white dark:text-slate-200 shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200"
+                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
                         />
                       </div>
 
                       <div className="space-y-3">
-                        <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                           Schedule Time
                         </label>
                         <DatePickerComponent
@@ -10978,14 +10288,14 @@ function Main() {
                           timeIntervals={15}
                           timeCaption="Time"
                           dateFormat="h:mm aa"
-                          className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-sm text-white dark:text-slate-200 shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200"
+                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-3">
-                        <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                           Batch Size
                         </label>
                         <FormInput
@@ -10996,12 +10306,12 @@ function Main() {
                           }
                           min="1"
                           max="100"
-                          className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 text-white"
+                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         />
                       </div>
 
                       <div className="space-y-3">
-                        <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                           Delay (Minutes)
                         </label>
                         <FormInput
@@ -11011,12 +10321,12 @@ function Main() {
                             setRepeatInterval(Number(e.target.value))
                           }
                           min="0"
-                          className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 text-white"
+                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         />
                       </div>
 
                       <div className="space-y-3">
-                        <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                        <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                           Delay Unit
                         </label>
                         <FormSelect
@@ -11026,23 +10336,23 @@ function Main() {
                               e.target.value as "minutes" | "hours" | "days"
                             )
                           }
-                          className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 text-white"
+                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         >
                           <option
                             value="minutes"
-                            className="bg-slate-800 text-white"
+                            className="bg-white text-[#4b4b4b]"
                           >
                             Minutes
                           </option>
                           <option
                             value="hours"
-                            className="bg-slate-800 text-white"
+                            className="bg-white text-[#4b4b4b]"
                           >
                             Hours
                           </option>
                           <option
                             value="days"
-                            className="bg-slate-800 text-white"
+                            className="bg-white text-[#4b4b4b]"
                           >
                             Days
                           </option>
@@ -11051,14 +10361,14 @@ function Main() {
                     </div>
 
                     {/* Active Time Range */}
-                    <div className="mt-6 p-6 bg-gradient-to-br from-violet-500/10 to-purple-500/10 backdrop-blur-xl rounded-2xl border border-violet-400/20">
+                    <div className="mt-6 p-6 bg-[#f3f4f6] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-3">
                           <Lucide
                             icon="Clock"
-                            className="w-5 h-5 text-violet-400"
+                            className="w-5 h-5 text-[#8b5cf6]"
                           />
-                          <h5 className="text-lg font-bold text-white/90 dark:text-slate-200">
+                          <h5 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                             Active Time Range
                           </h5>
                         </div>
@@ -11067,19 +10377,19 @@ function Main() {
                             type="checkbox"
                             checked={enableActiveHours}
                             onChange={(e) => setEnableActiveHours(e.target.checked)}
-                            className="mr-2 rounded"
+                            className="mr-2 w-5 h-5 border-2 border-[#4b4b4b] checked:bg-[#8b5cf6] appearance-none"
                           />
-                          <span className="text-sm text-white/70">Enable</span>
+                          <span className="text-sm font-bold text-[#4b4b4b] uppercase tracking-wider">Enable</span>
                         </label>
                       </div>
-                      <p className="text-sm text-white/70 dark:text-slate-400 mb-4">
+                      <p className="text-sm font-bold text-[#4b4b4b] opacity-70 mb-4">
                         {enableActiveHours
                           ? "Messages will only be sent during this time window each day"
                           : "Messages will be sent at any time (no time restrictions)"}
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-3">
-                          <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                          <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             Start Time
                           </label>
                           <FormInput
@@ -11087,11 +10397,11 @@ function Main() {
                             value={activeTimeStart}
                             onChange={(e) => setActiveTimeStart(e.target.value)}
                             disabled={!enableActiveHours}
-                            className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           />
                         </div>
                         <div className="space-y-3">
-                          <label className="block text-sm font-semibold text-white/80 dark:text-slate-400">
+                          <label className="block text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             End Time
                           </label>
                           <FormInput
@@ -11099,12 +10409,12 @@ function Main() {
                             value={activeTimeEnd}
                             onChange={(e) => setActiveTimeEnd(e.target.value)}
                             disabled={!enableActiveHours}
-                            className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl shadow-inner focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           />
                         </div>
                       </div>
-                      <div className="mt-3 flex items-center space-x-2 text-xs text-violet-300 bg-violet-500/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-violet-400/20">
-                        <Lucide icon="Info" className="w-4 h-4" />
+                      <div className="mt-4 flex items-center space-x-2 text-xs font-bold text-[#4b4b4b] bg-white px-3 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                        <Lucide icon="Info" className="w-4 h-4 text-[#8b5cf6]" />
                         <span>
                           Current range: {activeTimeStart} - {activeTimeEnd}
                         </span>
@@ -11114,24 +10424,24 @@ function Main() {
 
                   {/* Progress Bar (shown during sending) */}
                   {(isScheduling || isSendingBlastTemplate) && (
-                    <div className="bg-blue-500/10 backdrop-blur-xl rounded-3xl p-6 border border-blue-400/20 shadow-inner">
+                    <div className="bg-[#fef3c7] p-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#d97706]">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm font-medium text-blue-300 flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                        <span className="text-sm font-black text-[#4b4b4b] uppercase flex items-center gap-3">
+                          <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
                             <Lucide
                               icon="Clock"
-                              className="w-4 h-4 text-white"
+                              className="w-4 h-4 text-[#4b4b4b]"
                             />
                           </div>
                           {isSendingBlastTemplate ? "Sending templates..." : "Scheduling messages..."}
                         </span>
-                        <span className="text-sm text-blue-300 font-semibold bg-blue-500/20 px-4 py-2 rounded-full backdrop-blur-sm border border-blue-400/20">
+                        <span className="text-sm text-[#4b4b4b] font-black uppercase bg-white px-4 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                           {Math.round(progress)}%
                         </span>
                       </div>
-                      <div className="w-full bg-blue-900/30 rounded-full h-4 backdrop-blur-sm border border-blue-400/20">
+                      <div className="w-full bg-white border-2 border-[#4b4b4b] h-6 shadow-[2px_2px_0_#4b4b4b]">
                         <div
-                          className="bg-gradient-to-r from-blue-500 to-violet-600 h-4 rounded-full transition-all duration-500 shadow-lg"
+                          className="bg-[#f59e0b] h-full"
                           style={{ width: `${progress}%` }}
                         />
                       </div>
@@ -11139,10 +10449,10 @@ function Main() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-center mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
-                  <div className="text-sm text-white/70 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-sm px-4 py-3 rounded-full border border-white/10">
+                <div className="flex justify-between items-center mt-10 p-6 bg-[#f3f4f6] border-t-2 border-[#4b4b4b]">
+                  <div className="text-sm font-black text-[#4b4b4b] bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] uppercase tracking-wider">
                     <div className="flex items-center space-x-2">
-                      <Lucide icon="Users" className="w-4 h-4" />
+                      <Lucide icon="Users" className="w-4 h-4 text-[#f26522]" />
                       <span>{selectedContacts.length} recipients selected</span>
                     </div>
                   </div>
@@ -11155,7 +10465,7 @@ function Main() {
                         setBlastTemplateVariables([]);
                       }}
                       disabled={isScheduling || isSendingBlastTemplate}
-                      className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
+                      className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] font-black uppercase tracking-wider hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none rounded-none"
                     >
                       Cancel
                     </Button>
@@ -11174,11 +10484,11 @@ function Main() {
                           (getTemplateVariableCount(selectedBlastTemplate) > 0 &&
                             blastTemplateVariables.some(v => !v.trim()))
                         }
-                        className="px-8 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 hover:from-blue-600 hover:via-violet-600 hover:to-purple-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                        className="px-8 py-3 bg-[#3b82f6] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
                       >
                         {isSendingBlastTemplate ? (
                           <div className="flex items-center space-x-2">
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             <span>Sending...</span>
                           </div>
                         ) : (
@@ -11200,11 +10510,11 @@ function Main() {
                           !phoneNames[phoneIndex] ||
                           isScheduling
                         }
-                        className="px-8 py-3 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 hover:from-blue-600 hover:via-violet-600 hover:to-purple-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                        className="px-8 py-3 bg-[#f26522] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
                       >
                         {isScheduling ? (
                           <div className="flex items-center space-x-2">
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             <span>Scheduling...</span>
                           </div>
                         ) : (
@@ -11227,29 +10537,26 @@ function Main() {
           open={editScheduledMessageModal}
           onClose={() => setEditScheduledMessageModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-lg relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden overflow-y-auto transform hover:scale-[1.005] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/10 via-purple-500/5 to-blue-500/10 dark:from-indigo-600/10 dark:via-purple-700/5 dark:to-blue-600/10 pointer-events-none" />
-
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 z-[60]">
+            <Dialog.Panel className="w-full max-w-lg relative bg-white border-2 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
               <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+                <div className="flex items-center justify-between pb-6 border-b-2 border-[#4b4b4b]">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
+                    <div className="w-12 h-12 bg-[#8b5cf6] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                       <Lucide
                         icon="PenTool"
-                        className="w-6 h-6 text-indigo-400"
+                        className="w-6 h-6 text-white"
                       />
                     </div>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-indigo-100 to-purple-100 dark:from-white dark:via-indigo-100 dark:to-purple-100 bg-clip-text text-transparent">
+                    <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
                       Edit Scheduled Message
                     </h3>
                   </div>
                   <button
                     onClick={() => setEditScheduledMessageModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                   >
-                    <Lucide icon="X" className="w-4 h-4" />
+                    <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
                   </button>
                 </div>
 
@@ -11259,9 +10566,9 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <Lucide
                         icon="MessageSquare"
-                        className="w-5 h-5 text-indigo-400"
+                        className="w-5 h-5 text-[#8b5cf6]"
                       />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Message Content
                       </label>
                     </div>
@@ -11269,7 +10576,7 @@ function Main() {
                       value={blastMessage}
                       onChange={(e) => setBlastMessage(e.target.value)}
                       rows={4}
-                      className="w-full px-4 py-4 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200 resize-none shadow-inner"
+                      className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] hover:shadow-[4px_4px_0_#4b4b4b] transition-all outline-none resize-none"
                     />
                   </div>
 
@@ -11278,19 +10585,19 @@ function Main() {
                     <button
                       type="button"
                       onClick={() => setShowPlaceholders(!showPlaceholders)}
-                      className="flex items-center space-x-2 text-indigo-300 hover:text-indigo-200 transition-colors duration-200"
+                      className="flex items-center space-x-2 text-[#4b4b4b] font-black uppercase hover:text-[#8b5cf6] transition-colors"
                     >
                       <Lucide icon="Code" className="w-4 h-4" />
-                      <span className="text-sm font-medium">
+                      <span className="text-sm">
                         {showPlaceholders
                           ? "Hide Placeholders"
                           : "Show Placeholders"}
                       </span>
                     </button>
                     {showPlaceholders && (
-                      <div className="p-6 bg-indigo-500/10 backdrop-blur-xl rounded-2xl border border-indigo-400/20 space-y-4">
-                        <p className="text-sm font-medium text-indigo-300 flex items-center gap-2">
-                          <Lucide icon="Info" className="w-4 h-4" />
+                      <div className="p-6 bg-[#f3f4f6] border-2 border-[#4b4b4b] space-y-4">
+                        <p className="text-sm font-black text-[#4b4b4b] uppercase flex items-center gap-2">
+                          <Lucide icon="Info" className="w-4 h-4 text-[#8b5cf6]" />
                           Click to insert:
                         </p>
                         <div className="grid grid-cols-2 gap-2 text-xs">
@@ -11310,7 +10617,7 @@ function Main() {
                               key={field}
                               type="button"
                               onClick={() => insertPlaceholder(field)}
-                              className="text-left p-3 rounded-xl bg-white/10 dark:bg-indigo-800/30 text-indigo-200 dark:text-indigo-200 hover:bg-white/20 dark:hover:bg-indigo-700/50 transition-all duration-200 border border-indigo-400/20 backdrop-blur-sm font-mono"
+                              className="text-left p-2 bg-white text-[#4b4b4b] font-bold border-2 border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                             >
                               @{"{"}${field}
                               {"}"}
@@ -11348,9 +10655,9 @@ function Main() {
 
                           if (allCustomFields.size > 0) {
                             return (
-                              <div className="space-y-3 pt-3 border-t border-indigo-400/20">
-                                <p className="text-sm font-medium text-emerald-300 flex items-center gap-2">
-                                  <Lucide icon="Settings" className="w-4 h-4" />
+                              <div className="space-y-3 pt-3 border-t-2 border-[#4b4b4b]">
+                                <p className="text-sm font-black text-[#4b4b4b] uppercase flex items-center gap-2">
+                                  <Lucide icon="Settings" className="w-4 h-4 text-[#10b981]" />
                                   Custom Fields:
                                 </p>
                                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -11384,7 +10691,7 @@ function Main() {
                                           );
                                         }
                                       }}
-                                      className="text-left p-3 rounded-xl bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30 transition-all duration-200 border border-emerald-400/20 backdrop-blur-sm font-mono"
+                                      className="text-left p-2 bg-[#d1fae5] text-[#065f46] font-bold border-2 border-[#065f46] hover:shadow-[2px_2px_0_#065f46] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                                     >
                                       @{"{"}${field}
                                       {"}"}
@@ -11405,9 +10712,9 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <Lucide
                         icon="Clock"
-                        className="w-5 h-5 text-purple-400"
+                        className="w-5 h-5 text-[#8b5cf6]"
                       />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Scheduled Time
                       </label>
                     </div>
@@ -11427,7 +10734,7 @@ function Main() {
                       timeFormat="HH:mm"
                       timeIntervals={15}
                       dateFormat="MMMM d, yyyy h:mm aa"
-                      className="w-full px-4 py-3 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-sm text-white dark:text-slate-200 shadow-inner focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200"
+                      className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                     />
                   </div>
 
@@ -11436,9 +10743,9 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <Lucide
                         icon="Image"
-                        className="w-5 h-5 text-emerald-400"
+                        className="w-5 h-5 text-[#f26522]"
                       />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Attach Media (Image/Video)
                       </label>
                     </div>
@@ -11466,7 +10773,7 @@ function Main() {
                           }
                         }
                       }}
-                      className="w-full text-sm text-white/80 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl p-4 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-emerald-500 file:to-teal-600 file:text-white hover:file:from-emerald-600 hover:file:to-teal-700 file:transition-all file:duration-200 shadow-inner"
+                      className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                     />
                   </div>
 
@@ -11475,9 +10782,9 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <Lucide
                         icon="FileText"
-                        className="w-5 h-5 text-orange-400"
+                        className="w-5 h-5 text-[#8b5cf6]"
                       />
-                      <label className="text-lg font-semibold text-white/90 dark:text-slate-200">
+                      <label className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                         Attach Document
                       </label>
                     </div>
@@ -11485,21 +10792,21 @@ function Main() {
                       type="file"
                       accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                       onChange={(e) => handleEditDocumentUpload(e)}
-                      className="w-full text-sm text-white/80 dark:text-slate-400 bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl p-4 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-gradient-to-r file:from-orange-500 file:to-amber-600 file:text-white hover:file:from-orange-600 hover:file:to-amber-700 file:transition-all file:duration-200 shadow-inner"
+                      className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                     />
                   </div>
                 </div>
 
-                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t border-white/10 dark:border-slate-700/20">
+                <div className="flex justify-end space-x-3 mt-10 pt-6 border-t-2 border-[#4b4b4b]">
                   <button
                     onClick={() => setEditScheduledMessageModal(false)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 backdrop-blur-sm border border-white/20 dark:border-slate-600/20 text-white/90 hover:text-white rounded-2xl transition-all duration-200 font-medium"
+                    className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] font-black uppercase tracking-wider hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveScheduledMessage}
-                    className="px-8 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-600 border-0 text-white rounded-2xl transition-all duration-200 font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transform hover:scale-105"
+                    className="px-8 py-3 bg-[#3b82f6] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                   >
                     <div className="flex items-center space-x-2">
                       <Lucide icon="Save" className="w-4 h-4" />
@@ -11517,49 +10824,48 @@ function Main() {
           open={editContactModal}
           onClose={() => setEditContactModal(false)}
         >
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-slate-900/80 via-slate-800/70 to-slate-900/80 backdrop-blur-xl">
-            <Dialog.Panel className="w-full max-w-4xl relative bg-white/10 dark:bg-slate-800/10 backdrop-blur-3xl rounded-3xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden overflow-y-auto transform hover:scale-[1.005] transition-all duration-300">
-              {/* Enhanced Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/10 via-blue-500/5 to-purple-500/10 dark:from-emerald-600/10 dark:via-blue-700/5 dark:to-purple-600/10 pointer-events-none" />
-
+          <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 z-[60]">
+            <Dialog.Panel className="w-full max-w-4xl relative bg-white border-2 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
               <div className="relative p-8">
-                <div className="flex items-center justify-between pb-6 border-b border-white/10 dark:border-slate-700/20">
+                <div className="flex items-center justify-between pb-6 border-b-2 border-[#4b4b4b]">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 backdrop-blur-sm flex items-center justify-center border border-white/10">
+                    <div className="w-12 h-12 bg-[#10b981] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                       <Lucide
                         icon="UserCog"
-                        className="w-6 h-6 text-emerald-400"
+                        className="w-6 h-6 text-white"
                       />
                     </div>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-white via-emerald-100 to-blue-100 dark:from-white dark:via-emerald-100 dark:to-blue-100 bg-clip-text text-transparent">
+                    <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
                       Edit Contact
                     </h3>
                   </div>
                   <button
                     onClick={() => setEditContactModal(false)}
-                    className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 dark:bg-slate-700/20 dark:hover:bg-slate-600/30 text-slate-400 hover:text-white dark:hover:text-slate-200 transition-all duration-200 flex items-center justify-center backdrop-blur-sm border border-white/10"
+                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
                   >
-                    <Lucide icon="X" className="w-4 h-4" />
+                    <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
                   </button>
                 </div>
 
                 {currentContact && (
                   <div className="mt-8 space-y-8">
                     {/* Basic Contact Information */}
-                    <div className="bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 dark:border-slate-600/20 shadow-inner space-y-6">
+                    <div className="bg-[#f0fdf4] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#10b981] space-y-6">
                       <div className="flex items-center space-x-3 mb-6">
-                        <Lucide
-                          icon="User"
-                          className="w-6 h-6 text-emerald-400"
-                        />
-                        <h4 className="text-xl font-semibold text-white/90 dark:text-slate-200">
+                        <div className="w-10 h-10 bg-[#34d399] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                          <Lucide
+                            icon="User"
+                            className="w-5 h-5 text-white"
+                          />
+                        </div>
+                        <h4 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                           Basic Information
                         </h4>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Contact Name</span>
                           </label>
                           <FormInput
@@ -11577,12 +10883,12 @@ function Main() {
                               })
                             }
                             placeholder="Enter contact name"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-emerald-400/50 focus:ring-2 focus:ring-emerald-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
                           />
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Last Name</span>
                           </label>
                           <FormInput
@@ -11595,12 +10901,12 @@ function Main() {
                               })
                             }
                             placeholder="Enter last name"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
                           />
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Phone Number</span>
                           </label>
                           <FormInput
@@ -11613,12 +10919,12 @@ function Main() {
                               })
                             }
                             placeholder="e.g., +60123456789"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-violet-400/50 focus:ring-2 focus:ring-violet-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                           />
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Email</span>
                           </label>
                           <FormInput
@@ -11631,12 +10937,12 @@ function Main() {
                               })
                             }
                             placeholder="Enter email address"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-orange-400/50 focus:ring-2 focus:ring-orange-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
                           />
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Company Name</span>
                           </label>
                           <FormInput
@@ -11649,12 +10955,12 @@ function Main() {
                               })
                             }
                             placeholder="Enter company name"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
                           />
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <span>Address</span>
                           </label>
                           <FormInput
@@ -11667,13 +10973,13 @@ function Main() {
                               })
                             }
                             placeholder="Enter address"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-pink-400/50 focus:ring-2 focus:ring-pink-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ec4899] transition-all outline-none"
                           />
                         </div>
 
                         {companyId === "079" && (
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Branch</span>
                             </label>
                             <FormInput
@@ -11686,14 +10992,14 @@ function Main() {
                                 })
                               }
                               placeholder="Enter branch"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-teal-400/50 focus:ring-2 focus:ring-teal-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#14b8a6] transition-all outline-none"
                             />
                           </div>
                         )}
 
                         {companyId === "079" && (
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Vehicle Number</span>
                             </label>
                             <FormInput
@@ -11706,14 +11012,14 @@ function Main() {
                                 })
                               }
                               placeholder="Enter vehicle number"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                             />
                           </div>
                         )}
 
                         {companyId === "079" && (
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>IC Number</span>
                             </label>
                             <FormInput
@@ -11726,14 +11032,14 @@ function Main() {
                                 })
                               }
                               placeholder="Enter IC number"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f59e0b] transition-all outline-none"
                             />
                           </div>
                         )}
 
                         {companyId === "079" && (
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Expiry Date</span>
                             </label>
                             <FormInput
@@ -11745,7 +11051,7 @@ function Main() {
                                   expiryDate: e.target.value,
                                 })
                               }
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-rose-400/50 focus:ring-2 focus:ring-rose-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f43f5e] transition-all outline-none"
                             />
                           </div>
                         )}
@@ -11754,20 +11060,22 @@ function Main() {
 
                     {/* Company-specific fields */}
                     {companyId === "095" && (
-                      <div className="bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 dark:border-slate-600/20 shadow-inner space-y-6">
+                      <div className="bg-[#f5f3ff] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] space-y-6">
                         <div className="flex items-center space-x-3 mb-6">
-                          <Lucide
-                            icon="GraduationCap"
-                            className="w-6 h-6 text-violet-400"
-                          />
-                          <h4 className="text-xl font-semibold text-white/90 dark:text-slate-200">
+                          <div className="w-10 h-10 bg-[#8b5cf6] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                            <Lucide
+                              icon="GraduationCap"
+                              className="w-5 h-5 text-white"
+                            />
+                          </div>
+                          <h4 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                             Education Information
                           </h4>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Country</span>
                             </label>
                             <FormInput
@@ -11780,12 +11088,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter country"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Nationality</span>
                             </label>
                             <FormInput
@@ -11798,12 +11106,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter nationality"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-red-400/50 focus:ring-2 focus:ring-red-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ef4444] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Highest Educational Qualification</span>
                             </label>
                             <FormInput
@@ -11816,12 +11124,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter highest education"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Program Of Study</span>
                             </label>
                             <FormInput
@@ -11834,12 +11142,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter program of study"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#a855f7] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Intake Preference</span>
                             </label>
                             <FormInput
@@ -11852,12 +11160,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter intake preference"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-orange-400/50 focus:ring-2 focus:ring-orange-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>English Proficiency</span>
                             </label>
                             <FormInput
@@ -11870,12 +11178,12 @@ function Main() {
                                 })
                               }
                               placeholder="Enter English proficiency"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
                             />
                           </div>
 
                           <div className="space-y-3">
-                            <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                            <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                               <span>Validity of Passport</span>
                             </label>
                             <FormInput
@@ -11888,7 +11196,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter passport validity"
-                              className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-indigo-400/50 focus:ring-2 focus:ring-indigo-400/20 transition-all duration-200"
+                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#6366f1] transition-all outline-none"
                             />
                           </div>
                         </div>
@@ -11897,22 +11205,24 @@ function Main() {
 
                     {/* Points System */}
                     {(companyId === "079" || companyId === "001") && (
-                      <div className="bg-white/5 dark:bg-slate-700/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 dark:border-slate-600/20 shadow-inner space-y-6">
+                      <div className="bg-[#fefce8] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#eab308] space-y-6">
                         <div className="flex items-center space-x-3 mb-6">
-                          <Lucide
-                            icon="Star"
-                            className="w-6 h-6 text-yellow-400"
-                          />
-                          <h4 className="text-xl font-semibold text-white/90 dark:text-slate-200">
+                          <div className="w-10 h-10 bg-[#eab308] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                            <Lucide
+                              icon="Star"
+                              className="w-5 h-5 text-white"
+                            />
+                          </div>
+                          <h4 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                             Points System
                           </h4>
                         </div>
 
                         <div className="space-y-3">
-                          <label className="flex items-center space-x-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                          <label className="flex items-center space-x-2 text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
                             <Lucide
                               icon="Award"
-                              className="w-4 h-4 text-yellow-400"
+                              className="w-4 h-4 text-[#eab308]"
                             />
                             <span>Points</span>
                           </label>
@@ -11926,7 +11236,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter points"
-                            className="w-full bg-white/5 dark:bg-slate-700/20 backdrop-blur-xl border border-white/20 dark:border-slate-600/20 rounded-2xl text-white dark:text-slate-200 placeholder-white/50 dark:placeholder-slate-400 focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 transition-all duration-200"
+                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#eab308] transition-all outline-none"
                           />
                         </div>
                       </div>

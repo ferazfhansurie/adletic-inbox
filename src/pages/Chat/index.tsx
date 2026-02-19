@@ -241,25 +241,25 @@ interface QuickReply {
   type?: string;
   category?: string;
   documents?:
-    | {
-        name: string;
-        type: string;
-        size: number;
-        url: string;
-        lastModified: number;
-      }[]
-    | null;
+  | {
+    name: string;
+    type: string;
+    size: number;
+    url: string;
+    lastModified: number;
+  }[]
+  | null;
   images?: string[] | null;
   videos?:
-    | {
-        name: string;
-        type: string;
-        size: number;
-        url: string;
-        lastModified: number;
-        thumbnail?: string;
-      }[]
-    | null;
+  | {
+    name: string;
+    type: string;
+    size: number;
+    url: string;
+    lastModified: number;
+    thumbnail?: string;
+  }[]
+  | null;
   created_by?: string;
   created_at?: string;
   updated_at?: string;
@@ -757,19 +757,19 @@ function Main() {
   >([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const baseMessageClass =
-    "flex flex-col max-w-[auto] min-w-[auto] px-2 py-1.5 text-white";
-  const myMessageClass = `flex flex-col max-w-[auto] min-w-[auto] px-2 py-1.5 self-end ml-auto text-left mb-0.5 mr-6 group`;
-  const otherMessageClass = `${baseMessageClass} bg-white/20 dark:bg-gray-800/80 self-start text-left mt-0.5 ml-2 group`;
-  const myFirstMessageClass = `${myMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl mt-1`;
-  const myMiddleMessageClass = `${myMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl`;
-  const myLastMessageClass = `${myMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl mb-1`;
-  const otherFirstMessageClass = `${otherMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl mt-1`;
-  const otherMiddleMessageClass = `${otherMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl`;
-  const otherLastMessageClass = `${otherMessageClass} rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl mb-1`;
-  const privateNoteClass = `${baseMessageClass} bg-yellow-500 dark:bg-yellow-900 self-start text-left mt-1 ml-2 group rounded-tr-2xl rounded-tl-2xl rounded-br-2xl rounded-bl-2xl`;
+    "flex flex-col max-w-[auto] min-w-[auto] px-2 py-1.5 font-['Inter']";
+  const myMessageClass = `flex flex-col max-w-[auto] min-w-[auto] px-2 py-1.5 self-end ml-auto text-left mb-1 mr-6 group font-['Inter']`;
+  const otherMessageClass = `${baseMessageClass} self-start text-left mt-0.5 ml-2 group`;
+  const myFirstMessageClass = `${myMessageClass} mt-2`;
+  const myMiddleMessageClass = `${myMessageClass}`;
+  const myLastMessageClass = `${myMessageClass} mb-2`;
+  const otherFirstMessageClass = `${otherMessageClass} mt-2`;
+  const otherMiddleMessageClass = `${otherMessageClass}`;
+  const otherLastMessageClass = `${otherMessageClass} mb-2`;
+  const privateNoteClass = `${baseMessageClass} self-start text-left mt-1 ml-2 mb-2 group`;
   const [messageMode, setMessageMode] = useState("reply");
-  const myMessageTextClass = "text-black dark:text-white";
-  const otherMessageTextClass = "text-gray-800 dark:text-white";
+  const myMessageTextClass = "text-white dark:text-white font-medium";
+  const otherMessageTextClass = "text-[#4b4b4b] dark:text-gray-100 font-medium";
   const [activeTags, setActiveTags] = useState<string[]>(["all"]);
   const [tagList, setTagList] = useState<Tag[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -1099,9 +1099,8 @@ function Main() {
         } else {
           // Development mode or no payment URL
           toast.success(
-            `Top-up created successfully! ${
-              data.message ||
-              "You will receive " + data.aiResponses + " AI responses."
+            `Top-up created successfully! ${data.message ||
+            "You will receive " + data.aiResponses + " AI responses."
             }`
           );
         }
@@ -1208,7 +1207,7 @@ function Main() {
       console.error("Error syncing contacts:", error);
       toast.error(
         "An error occurred while syncing contacts: " +
-          (error instanceof Error ? error.message : String(error))
+        (error instanceof Error ? error.message : String(error))
       );
     } finally {
       setFetching(false);
@@ -1546,8 +1545,7 @@ function Main() {
         setHasMoreMessages(endIndex < allMessages.length);
 
         console.log(
-          `🔍 Successfully loaded more messages. Next page: ${
-            nextPage + 1
+          `🔍 Successfully loaded more messages. Next page: ${nextPage + 1
           }, hasMore: ${endIndex < allMessages.length}`
         );
       } else {
@@ -1601,10 +1599,8 @@ function Main() {
       setHasMoreMessages(allMessages.length > MESSAGES_PER_PAGE);
 
       console.log(
-        `🔍 Initialized lazy loading: ${
-          recentMessages.length
-        } messages shown, ${allMessages.length} total, page: 0, hasMore: ${
-          allMessages.length > MESSAGES_PER_PAGE
+        `🔍 Initialized lazy loading: ${recentMessages.length
+        } messages shown, ${allMessages.length} total, page: 0, hasMore: ${allMessages.length > MESSAGES_PER_PAGE
         }`
       );
     } else {
@@ -2095,7 +2091,7 @@ function Main() {
             contact.id === contactId ||
             contact.contact_id === contactId ||
             contact.phone?.replace(/\D/g, "") ===
-              extractedNumber?.replace(/\D/g, "") ||
+            extractedNumber?.replace(/\D/g, "") ||
             contact.chat_id === extractedNumber + "@c.us" ||
             contact.phone === extractedNumber;
 
@@ -2285,7 +2281,7 @@ function Main() {
       if (userDataStr) {
         try {
           userData = JSON.parse(userDataStr);
-        } catch {}
+        } catch { }
       }
 
       // Derive chatIds from contactIds/contactId
@@ -2808,21 +2804,21 @@ function Main() {
       allContacts.push(
         ...data.contacts.map(
           (contact: any) =>
-            ({
-              ...contact,
-              id: contact.id,
-              chat_id: contact.chat_id,
-              contactName: contact.name,
-              phone: contact.phone,
-              email: contact.email,
-              profile: contact.profile,
-              profilePicUrl: contact.profileUrl,
-              tags: contact.tags,
-              createdAt: contact.createdAt,
-              lastUpdated: contact.lastUpdated,
-              last_message: contact.last_message,
-              isIndividual: contact.isIndividual,
-            } as Contact)
+          ({
+            ...contact,
+            id: contact.id,
+            chat_id: contact.chat_id,
+            contactName: contact.name,
+            phone: contact.phone,
+            email: contact.email,
+            profile: contact.profile,
+            profilePicUrl: contact.profileUrl,
+            tags: contact.tags,
+            createdAt: contact.createdAt,
+            lastUpdated: contact.lastUpdated,
+            last_message: contact.last_message,
+            isIndividual: contact.isIndividual,
+          } as Contact)
         )
       );
 
@@ -2857,10 +2853,10 @@ function Main() {
       console.log(
         "Starting background message caching for first page contacts..."
       );
-      
+
       // Proactive cleanup before caching
       cleanupOldMessageCaches();
-      
+
       const contactsToCache = sortedContacts.slice(0, 10); // Only cache first 10 contacts to prevent quota issues
       console.log(
         `Caching messages for ${contactsToCache.length} contacts (first page only)`
@@ -2869,10 +2865,8 @@ function Main() {
       const messagePromises = contactsToCache.map(async (contact, index) => {
         try {
           console.log(
-            `Caching messages for contact ${index + 1}/${
-              contactsToCache.length
-            }: ${contact.contactName} (chat_id: ${
-              contact.chat_id
+            `Caching messages for contact ${index + 1}/${contactsToCache.length
+            }: ${contact.contactName} (chat_id: ${contact.chat_id
             }, contact_id: ${contact.id})`
           );
           // Use contact.id for cache key and contact.chat_id for API call
@@ -2880,7 +2874,7 @@ function Main() {
           console.log(
             `✅ Successfully cached messages for ${contact.contactName}`
           );
-          
+
           // Update progress as each contact is cached (75% -> 90%)
           const progressIncrement = 15 / contactsToCache.length; // 15% total for message caching
           setRealLoadingProgress(prev => Math.min(90, prev + progressIncrement));
@@ -2910,7 +2904,7 @@ function Main() {
         console.log(
           `📦 ${cachedContacts.length} contacts now have cached messages`
         );
-        
+
         // Complete loading after message caching
         setRealLoadingProgress(100);
         setLoadingSteps((prev) => ({ ...prev, complete: true }));
@@ -2931,7 +2925,7 @@ function Main() {
         contactsProcess: false,
         messageCaching: false,
         complete: false,
-        });
+      });
     }
   };
 
@@ -2955,15 +2949,15 @@ function Main() {
   useEffect(() => {
     const setupOneSignalListener = () => {
       if (typeof window !== 'undefined' && window.OneSignal) {
-        window.OneSignal.on('notificationDisplay', function(event: any) {
+        window.OneSignal.on('notificationDisplay', function (event: any) {
           console.log('OneSignal notification received:', event);
-          
+
           // Check if this is a message notification that should trigger contact refresh
           const notificationData = event.additionalData;
           if (notificationData && notificationData.type === 'message') {
             console.log('Message notification received, refreshing contacts...');
             fetchContactsWithLazyLoading();
-            
+
             // If the notification is for the currently selected chat, refresh messages too
             if (notificationData.chat_id && selectedChatId && notificationData.chat_id === selectedChatId && whapiToken) {
               console.log('Notification matches selected chat, refreshing messages...');
@@ -2972,15 +2966,15 @@ function Main() {
           }
         });
 
-        window.OneSignal.on('notificationClick', function(event: any) {
+        window.OneSignal.on('notificationClick', function (event: any) {
           console.log('OneSignal notification clicked:', event);
-          
+
           // Also refresh on notification click for any message-related notifications
           const notificationData = event.additionalData;
           if (notificationData && notificationData.type === 'message') {
             console.log('Message notification clicked, refreshing contacts...');
             fetchContactsWithLazyLoading();
-            
+
             // If the notification is for the currently selected chat, refresh messages too
             if (notificationData.chat_id && selectedChatId && notificationData.chat_id === selectedChatId && whapiToken) {
               console.log('Notification click matches selected chat, refreshing messages...');
@@ -3712,7 +3706,7 @@ function Main() {
           if (isAssistantAvailable && ai.length > 0) {
             const assistantId = ai[0];
             console.log("assistantId:", assistantId);
-            
+
             // Fetch API key from the correct endpoint
             try {
               const response2 = await axios.get(
@@ -3720,7 +3714,7 @@ function Main() {
               );
               const { openaiApiKey } = response2.data;
               console.log("API Key fetched:", openaiApiKey ? "Present" : "Missing");
-              
+
               if (assistantId && openaiApiKey) {
                 fetchAssistantInfo(assistantId, openaiApiKey);
               } else {
@@ -4081,8 +4075,8 @@ function Main() {
       activeTags.length > 0
         ? contacts // Always use all contacts when filtering by tags (including "all")
         : loadedContacts.length > 0
-        ? loadedContacts
-        : contacts; // Use loaded contacts for regular browsing
+          ? loadedContacts
+          : contacts; // Use loaded contacts for regular browsing
 
     let fil = filterContactsByUserRole(
       contactsToFilter,
@@ -4347,80 +4341,80 @@ function Main() {
           tag === "all"
             ? !isSnoozed // Show all non-snoozed conversations
             : tag === "unread"
-            ? !isSnoozed && contact.unreadCount && contact.unreadCount > 0
-            : tag === "mine"
-            ? (() => {
-                // Check if the user is assigned to this contact in multiple ways
-                const hasMineTag = contact.tags?.some(
-                  (t: string) =>
-                    (typeof t === "string" ? t : String(t)).toLowerCase() ===
-                    currentUserName.toLowerCase()
-                );
-
-                // Also check if the user is in the assignedTo array
-                const isAssignedToMe = contact.assignedTo?.some(
-                  (assigned: string) =>
-                    assigned.toLowerCase() === currentUserName.toLowerCase()
-                );
-
-                const isMine = hasMineTag || isAssignedToMe;
-
-                if (tag === "mine") {
-                  console.log(
-                    "🔍 Mine filter - contact:",
-                    contact.contactName,
-                    "tags:",
-                    contact.tags,
-                    "assignedTo:",
-                    contact.assignedTo,
-                    "currentUserName:",
-                    currentUserName,
-                    "hasMineTag:",
-                    hasMineTag,
-                    "isAssignedToMe:",
-                    isAssignedToMe,
-                    "isMine:",
-                    isMine
+              ? !isSnoozed && contact.unreadCount && contact.unreadCount > 0
+              : tag === "mine"
+                ? (() => {
+                  // Check if the user is assigned to this contact in multiple ways
+                  const hasMineTag = contact.tags?.some(
+                    (t: string) =>
+                      (typeof t === "string" ? t : String(t)).toLowerCase() ===
+                      currentUserName.toLowerCase()
                   );
-                }
-                return !isSnoozed && isMine;
-              })()
-            : tag === "unassigned"
-            ? !isSnoozed &&
-              !contact.tags?.some((t: string) =>
-                employeeList.some(
-                  (e) =>
-                    (e.name?.toLowerCase() || "") ===
-                    (typeof t === "string" ? t : String(t)).toLowerCase()
-                )
-              )
-            : tag === "snooze"
-            ? isSnoozed // Show snoozed contacts only in snooze filter
-            : tag === "resolved"
-            ? !isSnoozed && contact.tags?.includes("resolved")
-            : tag === "group"
-            ? !isSnoozed && isGroup
-            : tag === "stop bot"
-            ? !isSnoozed && contact.tags?.includes("stop bot")
-            : tag === "active bot"
-            ? (() => {
-                const hasStopBotTag = contact.tags?.includes("stop bot");
-                const isActiveBot = !hasStopBotTag;
-                if (tag === "active bot") {
-                  console.log(
-                    "🔍 Active Bot filter - contact:",
-                    contact.contactName,
-                    "tags:",
-                    contact.tags,
-                    "hasStopBotTag:",
-                    hasStopBotTag,
-                    "isActiveBot:",
-                    isActiveBot
+
+                  // Also check if the user is in the assignedTo array
+                  const isAssignedToMe = contact.assignedTo?.some(
+                    (assigned: string) =>
+                      assigned.toLowerCase() === currentUserName.toLowerCase()
                   );
-                }
-                return !isSnoozed && isActiveBot;
-              })()
-            : !isSnoozed && contactTags.includes(tag);
+
+                  const isMine = hasMineTag || isAssignedToMe;
+
+                  if (tag === "mine") {
+                    console.log(
+                      "🔍 Mine filter - contact:",
+                      contact.contactName,
+                      "tags:",
+                      contact.tags,
+                      "assignedTo:",
+                      contact.assignedTo,
+                      "currentUserName:",
+                      currentUserName,
+                      "hasMineTag:",
+                      hasMineTag,
+                      "isAssignedToMe:",
+                      isAssignedToMe,
+                      "isMine:",
+                      isMine
+                    );
+                  }
+                  return !isSnoozed && isMine;
+                })()
+                : tag === "unassigned"
+                  ? !isSnoozed &&
+                  !contact.tags?.some((t: string) =>
+                    employeeList.some(
+                      (e) =>
+                        (e.name?.toLowerCase() || "") ===
+                        (typeof t === "string" ? t : String(t)).toLowerCase()
+                    )
+                  )
+                  : tag === "snooze"
+                    ? isSnoozed // Show snoozed contacts only in snooze filter
+                    : tag === "resolved"
+                      ? !isSnoozed && contact.tags?.includes("resolved")
+                      : tag === "group"
+                        ? !isSnoozed && isGroup
+                        : tag === "stop bot"
+                          ? !isSnoozed && contact.tags?.includes("stop bot")
+                          : tag === "active bot"
+                            ? (() => {
+                              const hasStopBotTag = contact.tags?.includes("stop bot");
+                              const isActiveBot = !hasStopBotTag;
+                              if (tag === "active bot") {
+                                console.log(
+                                  "🔍 Active Bot filter - contact:",
+                                  contact.contactName,
+                                  "tags:",
+                                  contact.tags,
+                                  "hasStopBotTag:",
+                                  hasStopBotTag,
+                                  "isActiveBot:",
+                                  isActiveBot
+                                );
+                              }
+                              return !isSnoozed && isActiveBot;
+                            })()
+                            : !isSnoozed && contactTags.includes(tag);
 
         // console.log("🔍 Contact matches tag:", matchesTag);
         return matchesTag;
@@ -4511,8 +4505,7 @@ function Main() {
         }
 
         console.log(
-          `📊 ${index + 1}. ${
-            contact.contactName || contact.firstName || "Unknown"
+          `📊 ${index + 1}. ${contact.contactName || contact.firstName || "Unknown"
           }${isGroup} - ${timeAgo} (${timestamp}) [${timestampSource}]`
         );
       });
@@ -4524,8 +4517,8 @@ function Main() {
       if (
         contactListRef.current &&
         contactListRef.current.scrollTop +
-          contactListRef.current.clientHeight >=
-          contactListRef.current.scrollHeight
+        contactListRef.current.clientHeight >=
+        contactListRef.current.scrollHeight
       ) {
         // loadMoreContacts();
       }
@@ -4855,8 +4848,7 @@ function Main() {
               successCount++;
             } else {
               console.error(
-                `Failed to forward ${messageType} message to ${
-                  contact.contactName || contact.firstName
+                `Failed to forward ${messageType} message to ${contact.contactName || contact.firstName
                 }:`,
                 response.status
               );
@@ -4864,8 +4856,7 @@ function Main() {
             }
           } catch (error) {
             console.error(
-              `Error forwarding message to ${
-                contact.contactName || contact.firstName
+              `Error forwarding message to ${contact.contactName || contact.firstName
               }:`,
               error
             );
@@ -5080,7 +5071,7 @@ function Main() {
           `${baseUrl}/api/templates/connection-type/${companyId}?phoneIndex=${userData?.phone || 0}`,
           { credentials: "include" }
         );
-        
+
         if (connectionResponse.ok) {
           const connectionData = await connectionResponse.json();
           setConnectionType(connectionData.connectionType || 'wwebjs');
@@ -5612,7 +5603,7 @@ function Main() {
               console.log("📱 [WEBSOCKET] Received auth_status:", data);
               console.log("📱 [WEBSOCKET] data.phones:", data.phones, "Array.isArray:", Array.isArray(data.phones));
               console.log("📱 [WEBSOCKET] data.phoneCount:", data.phoneCount, "data.phoneInfo:", data.phoneInfo);
-              
+
               // Handle phone status updates
               if (data.phones && Array.isArray(data.phones)) {
                 const qrCodesData = data.phones.map((phone: any) => ({
@@ -5699,8 +5690,7 @@ function Main() {
               30000
             ); // Exponential backoff, max 30s
             console.log(
-              `Attempting to reconnect in ${delay}ms (attempt ${
-                wsReconnectAttempts + 1
+              `Attempting to reconnect in ${delay}ms (attempt ${wsReconnectAttempts + 1
               }/${maxReconnectAttempts})`
             );
 
@@ -5869,7 +5859,7 @@ function Main() {
         if (userPhone === null && Object.keys(phoneNamesObject).length > 0) {
           setUserPhone(0);
         }
-        
+
         // Mark phone data as loaded
         setIsPhoneDataLoaded(true);
       } else {
@@ -5883,17 +5873,17 @@ function Main() {
           for (let i = 0; i < data.companyData.phoneCount; i++) {
             defaultPhoneNames[i] = `Phone ${i + 1}`;
           }
-                  console.log("Created default phone names:", defaultPhoneNames);
-        setPhoneNames(defaultPhoneNames);
+          console.log("Created default phone names:", defaultPhoneNames);
+          setPhoneNames(defaultPhoneNames);
+        }
+        // Set default userPhone if no phoneNames available
+        if (userPhone === null) {
+          setUserPhone(0);
+        }
+
+        // Mark phone data as loaded
+        setIsPhoneDataLoaded(true);
       }
-      // Set default userPhone if no phoneNames available
-      if (userPhone === null) {
-        setUserPhone(0);
-      }
-      
-      // Mark phone data as loaded
-      setIsPhoneDataLoaded(true);
-    }
       setToken(data.companyData.whapiToken);
 
       // Set message usage for all plans (including free plan)
@@ -5994,7 +5984,7 @@ function Main() {
       }
       console.log("🔍 DEBUGGING: Setting default phone names:", defaultPhoneNames);
       setPhoneNames(defaultPhoneNames);
-      
+
       // Initialize userPhone with first phone if not set
       if (userPhone === null) {
         setUserPhone(0);
@@ -6012,17 +6002,17 @@ function Main() {
       // Check if there are any phones configured
       const hasPhoneNames = Object.keys(phoneNames).length > 0;
       const hasPhoneCount = phoneCount > 0;
-      
+
       // Check if any phones are actually connected (ready/authenticated)
       const hasConnectedPhones = Object.entries(phoneNames).some(([index]) => {
         const phoneStatus = qrCodes[parseInt(index)]?.status || "unknown";
         const isConnected = phoneStatus === "ready" || phoneStatus === "authenticated";
         return isConnected;
       });
-      
+
       const shouldShowNoPhones = !hasPhoneNames || !hasConnectedPhones;
       setHasNoPhones(shouldShowNoPhones);
-      
+
       console.log("🔍 Phone data loaded - hasPhoneNames:", hasPhoneNames, "hasPhoneCount:", hasPhoneCount, "hasConnectedPhones:", hasConnectedPhones, "phoneNames:", phoneNames, "phoneCount:", phoneCount, "qrCodes:", qrCodes, "shouldShowNoPhones:", shouldShowNoPhones);
     }
   }, [phoneNames, phoneCount, qrCodes, isPhoneDataLoaded]);
@@ -6490,7 +6480,7 @@ function Main() {
         }
       } catch (quotaError) {
         console.warn("LocalStorage quota exceeded, attempting to clear space...");
-        
+
         // If still getting quota error, clear old caches
         clearOldCaches();
 
@@ -6590,7 +6580,7 @@ function Main() {
       const key = `cached_messages_${chatId}`;
       const stored = localStorage.getItem(key);
       if (!stored) return null;
-      
+
       // Try to decompress first (new format)
       try {
         const decompressed = LZString.decompress(stored);
@@ -6608,17 +6598,17 @@ function Main() {
   const setCachedMessages = (chatId: string, messages: any[]) => {
     try {
       const key = `cached_messages_${chatId}`;
-      
+
       // Limit messages to prevent quota issues (keep only last 50 messages per contact)
       const limitedMessages = messages.slice(-50);
-      
+
       // Compress the messages using LZString
       const compressedMessages = LZString.compress(JSON.stringify(limitedMessages));
-      
+
       // Check if we have enough space
       const estimatedSize = compressedMessages.length;
       const maxSize = 1024 * 1024; // 1MB limit per contact
-      
+
       if (estimatedSize > maxSize) {
         console.warn(`Message cache too large for ${chatId}, reducing to last 25 messages`);
         const furtherLimitedMessages = messages.slice(-25);
@@ -6627,19 +6617,19 @@ function Main() {
       } else {
         localStorage.setItem(key, compressedMessages);
       }
-      
+
       // Store timestamp for cleanup purposes
       localStorage.setItem(key + '_timestamp', Date.now().toString());
-      
+
       console.log(`💾 Cached ${limitedMessages.length} messages for ${chatId} (compressed: ${estimatedSize} bytes)`);
     } catch (error) {
       console.error("Error setting cached messages to localStorage:", error);
-      
+
       // If quota exceeded, try to clean up old caches and retry
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         console.log("🔄 Quota exceeded, cleaning up old message caches...");
         cleanupOldMessageCaches();
-        
+
         // Retry with fewer messages
         try {
           const key = `cached_messages_${chatId}`;
@@ -6667,7 +6657,7 @@ function Main() {
     let totalSize = 0;
     let messageCacheSize = 0;
     let messageCacheCount = 0;
-    
+
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key) {
@@ -6681,7 +6671,7 @@ function Main() {
         }
       }
     }
-    
+
     return {
       totalSize,
       messageCacheSize,
@@ -6696,9 +6686,9 @@ function Main() {
       console.log("🧹 Starting cleanup of old message caches...");
       const usage = getLocalStorageUsage();
       console.log(`📊 Current localStorage usage: ${usage.totalSizeMB}MB total, ${usage.messageCacheSizeMB}MB message caches (${usage.messageCacheCount} contacts)`);
-      
+
       const keysToRemove: string[] = [];
-      
+
       // Get all message cache keys
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -6706,7 +6696,7 @@ function Main() {
           keysToRemove.push(key);
         }
       }
-      
+
       // Remove oldest caches first (keep only the most recent 8)
       if (keysToRemove.length > 8) {
         const sortedKeys = keysToRemove.sort((a, b) => {
@@ -6714,15 +6704,15 @@ function Main() {
           const bTime = localStorage.getItem(b + '_timestamp') || '0';
           return parseInt(aTime) - parseInt(bTime);
         });
-        
+
         const keysToDelete = sortedKeys.slice(0, keysToRemove.length - 8);
         keysToDelete.forEach(key => {
           localStorage.removeItem(key);
           localStorage.removeItem(key + '_timestamp');
         });
-        
+
         console.log(`🗑️ Removed ${keysToDelete.length} old message caches`);
-        
+
         // Log new usage after cleanup
         const newUsage = getLocalStorageUsage();
         console.log(`📊 After cleanup: ${newUsage.totalSizeMB}MB total, ${newUsage.messageCacheSizeMB}MB message caches`);
@@ -6972,7 +6962,7 @@ function Main() {
       // Show all messages if no phone filtering is needed
       setMessages(allMessages);
     }
-    
+
   }, [allMessages, userPhone, phoneNames]);
   async function fetchMessages(
     selectedChatId: string,
@@ -7080,11 +7070,11 @@ function Main() {
         messagesByType[msg.message_type].push(msg);
       });
       console.log("📊 Messages by type:", Object.keys(messagesByType));
-      
+
       // Log details for problematic types
       ['album', 'unknown', 'image', 'document'].forEach(type => {
         if (messagesByType[type]) {
-          console.log(`📷 ${type.toUpperCase()} messages (${messagesByType[type].length}):`, 
+          console.log(`📷 ${type.toUpperCase()} messages (${messagesByType[type].length}):`,
             messagesByType[type].map((m: any) => ({
               id: m.message_id,
               type: m.message_type,
@@ -7410,17 +7400,17 @@ function Main() {
         formattedByType[msg.type].push(msg);
       });
       console.log("📊 FORMATTED Messages by type:", Object.keys(formattedByType));
-      
+
       // Log formatted messages for problematic types
       ['album', 'unknown', 'image', 'document'].forEach(type => {
         if (formattedByType[type]) {
-          console.log(`✅ FORMATTED ${type.toUpperCase()} (${formattedByType[type].length}):`, 
+          console.log(`✅ FORMATTED ${type.toUpperCase()} (${formattedByType[type].length}):`,
             formattedByType[type].map((m: any) => ({
               id: m.id,
               type: m.type,
-              image: m.image ? { 
-                hasData: !!m.image.data, 
-                hasLink: !!m.image.link, 
+              image: m.image ? {
+                hasData: !!m.image.data,
+                hasLink: !!m.image.link,
                 hasUrl: !!m.image.url,
                 mimetype: m.image.mimetype,
                 caption: m.image.caption
@@ -7474,7 +7464,7 @@ function Main() {
   // Add polling function to check for new messages every 5 seconds for better real-time updates
   const pollForNewMessages = useCallback(async () => {
     if (!selectedChatId || !userData) return;
-   
+
     try {
       const userEmail = localStorage.getItem("userEmail");
       if (!userEmail) return;
@@ -7512,7 +7502,7 @@ function Main() {
 
       if (newMessages.length > 0) {
         console.log(`Found ${newMessages.length} new messages`);
-      setIsFetchingMessages(false);
+        setIsFetchingMessages(false);
         // Format new messages using the same logic as fetchMessages
         const formattedNewMessages: any[] = [];
         const reactionsMap: Record<string, any[]> = {};
@@ -7818,8 +7808,8 @@ function Main() {
             //storeMessagesInLocalStorage(selectedChatId, mergedMessages);
 
             // Cache the updated messages for faster loading
-          //  setCachedMessages(selectedChatId, mergedMessages);
-         
+            //  setCachedMessages(selectedChatId, mergedMessages);
+
 
             // Update last message timestamp only for unique new messages
             const latestMessage =
@@ -8185,7 +8175,7 @@ function Main() {
 
       setAllMessages(mergedMessages); // Store all messages for filtering
       setMessages(mergedMessages); // Update the main messages state
-    
+
     } catch (error) {
       console.error("Failed to fetch messages:", error);
     }
@@ -8265,7 +8255,7 @@ function Main() {
 
     try {
       const cleanPhone = selectedContact.phone.replace(/[^\d]/g, '');
-      
+
       const response = await fetch(`${baseUrl}/api/whatsapp/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -8287,7 +8277,7 @@ function Main() {
       }
 
       const data = await response.json();
-      
+
       // Refresh messages to show the sent template
       if (whapiToken) {
         await fetchMessages(selectedChatId, whapiToken);
@@ -8600,11 +8590,11 @@ function Main() {
         prevMessages.map((msg) =>
           msg.id === tempMessage.id
             ? {
-                ...msg,
-                status: "failed",
-                error:
-                  error instanceof Error ? error.message : "Failed to send",
-              }
+              ...msg,
+              status: "failed",
+              error:
+                error instanceof Error ? error.message : "Failed to send",
+            }
             : msg
         )
       );
@@ -8613,11 +8603,11 @@ function Main() {
         prevAllMessages.map((msg) =>
           msg.id === tempMessage.id
             ? {
-                ...msg,
-                status: "failed",
-                error:
-                  error instanceof Error ? error.message : "Failed to send",
-              }
+              ...msg,
+              status: "failed",
+              error:
+                error instanceof Error ? error.message : "Failed to send",
+            }
             : msg
         )
       );
@@ -8627,10 +8617,10 @@ function Main() {
       const updatedMessages = currentMessages.map((msg) =>
         msg.id === tempMessage.id
           ? {
-              ...msg,
-              status: "failed",
-              error: error instanceof Error ? error.message : "Failed to send",
-            }
+            ...msg,
+            status: "failed",
+            error: error instanceof Error ? error.message : "Failed to send",
+          }
           : msg
       );
       storeMessagesInLocalStorage(selectedChatId, updatedMessages);
@@ -8810,7 +8800,7 @@ function Main() {
       console.error("Error creating new chat:", error);
       toast.error(
         "An error occurred while creating the chat: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
     }
   };
@@ -8998,8 +8988,7 @@ function Main() {
 
         // Show a success toast
         toast.success(
-          `Bot ${!hasLabel ? "disabled" : "enabled"} for ${
-            contact.contactName || contact.firstName || contact.phone
+          `Bot ${!hasLabel ? "disabled" : "enabled"} for ${contact.contactName || contact.firstName || contact.phone
           }`
         );
       } catch (error) {
@@ -9030,7 +9019,7 @@ function Main() {
       if (
         updatedSelectedContact &&
         JSON.stringify(updatedSelectedContact) !==
-          JSON.stringify(selectedContact)
+        JSON.stringify(selectedContact)
       ) {
         console.log(
           "📝 [REALTIME] Updating selectedContact from contacts array changes"
@@ -9068,7 +9057,7 @@ function Main() {
       if (
         updatedSelectedContact &&
         JSON.stringify(updatedSelectedContact) !==
-          JSON.stringify(selectedContact)
+        JSON.stringify(selectedContact)
       ) {
         console.log(
           "📝 [REALTIME] Updating selectedContact from filteredContacts array changes"
@@ -9683,8 +9672,7 @@ function Main() {
             const nextBatch = contacts.slice(batchStart, batchEnd);
 
             console.log(
-              `Loading batch ${i + 1}/${batchesNeeded}: ${
-                nextBatch.length
+              `Loading batch ${i + 1}/${batchesNeeded}: ${nextBatch.length
               } contacts`
             );
 
@@ -10286,8 +10274,7 @@ function Main() {
           } catch (error) {
             console.error("Error forwarding message:", error);
             toast.error(
-              `Failed to forward a message: ${
-                error instanceof Error ? error.message : "Unknown error"
+              `Failed to forward a message: ${error instanceof Error ? error.message : "Unknown error"
               }`
             );
           }
@@ -10301,8 +10288,7 @@ function Main() {
     } catch (error) {
       console.error("Error in forward process:", error);
       toast.error(
-        `Error in forward process: ${
-          error instanceof Error ? error.message : "Unknown error"
+        `Error in forward process: ${error instanceof Error ? error.message : "Unknown error"
         }`
       );
     }
@@ -10523,11 +10509,11 @@ function Main() {
           prevMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  status: "failed",
-                  error:
-                    error instanceof Error ? error.message : "Unknown error",
-                }
+                ...msg,
+                status: "failed",
+                error:
+                  error instanceof Error ? error.message : "Unknown error",
+              }
               : msg
           )
         );
@@ -10536,11 +10522,11 @@ function Main() {
           prevAllMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  status: "failed",
-                  error:
-                    error instanceof Error ? error.message : "Unknown error",
-                }
+                ...msg,
+                status: "failed",
+                error:
+                  error instanceof Error ? error.message : "Unknown error",
+              }
               : msg
           )
         );
@@ -10550,10 +10536,10 @@ function Main() {
         const updatedMessages = currentMessages.map((msg) =>
           msg.id === tempMessage.id
             ? {
-                ...msg,
-                status: "failed",
-                error: error instanceof Error ? error.message : "Unknown error",
-              }
+              ...msg,
+              status: "failed",
+              error: error instanceof Error ? error.message : "Unknown error",
+            }
             : msg
         );
         storeMessagesInLocalStorage(chatId, updatedMessages);
@@ -10569,10 +10555,10 @@ function Main() {
           prevMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  id: data.message_id || tempMessage.id,
-                  status: "sent",
-                }
+                ...msg,
+                id: data.message_id || tempMessage.id,
+                status: "sent",
+              }
               : msg
           )
         );
@@ -10581,10 +10567,10 @@ function Main() {
           prevAllMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  id: data.message_id || tempMessage.id,
-                  status: "sent",
-                }
+                ...msg,
+                id: data.message_id || tempMessage.id,
+                status: "sent",
+              }
               : msg
           )
         );
@@ -10702,11 +10688,11 @@ function Main() {
           prevMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  status: "failed",
-                  error:
-                    error instanceof Error ? error.message : "Unknown error",
-                }
+                ...msg,
+                status: "failed",
+                error:
+                  error instanceof Error ? error.message : "Unknown error",
+              }
               : msg
           )
         );
@@ -10715,11 +10701,11 @@ function Main() {
           prevAllMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  status: "failed",
-                  error:
-                    error instanceof Error ? error.message : "Unknown error",
-                }
+                ...msg,
+                status: "failed",
+                error:
+                  error instanceof Error ? error.message : "Unknown error",
+              }
               : msg
           )
         );
@@ -10729,10 +10715,10 @@ function Main() {
         const updatedMessages = currentMessages.map((msg) =>
           msg.id === tempMessage.id
             ? {
-                ...msg,
-                status: "failed",
-                error: error instanceof Error ? error.message : "Unknown error",
-              }
+              ...msg,
+              status: "failed",
+              error: error instanceof Error ? error.message : "Unknown error",
+            }
             : msg
         );
         storeMessagesInLocalStorage(chatId, updatedMessages);
@@ -10748,10 +10734,10 @@ function Main() {
           prevMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  id: data.message_id || tempMessage.id,
-                  status: "sent",
-                }
+                ...msg,
+                id: data.message_id || tempMessage.id,
+                status: "sent",
+              }
               : msg
           )
         );
@@ -10760,10 +10746,10 @@ function Main() {
           prevAllMessages.map((msg) =>
             msg.id === tempMessage.id
               ? {
-                  ...msg,
-                  id: data.message_id || tempMessage.id,
-                  status: "sent",
-                }
+                ...msg,
+                id: data.message_id || tempMessage.id,
+                status: "sent",
+              }
               : msg
           )
         );
@@ -11101,10 +11087,10 @@ function Main() {
         prevContacts.map((contact) =>
           contact.id === contactId || contact.contact_id === contactId
             ? {
-                ...contact,
-                tags: contact.tags!.filter((tag) => tag !== tagName),
-                assignedTo: undefined,
-              }
+              ...contact,
+              tags: contact.tags!.filter((tag) => tag !== tagName),
+              assignedTo: undefined,
+            }
             : contact
         );
 
@@ -11254,10 +11240,10 @@ function Main() {
           prevMessages.map((msg) =>
             msg.id === editingMessage.id
               ? {
-                  ...msg,
-                  text: { ...msg.text, body: editedMessageText },
-                  edited: true,
-                }
+                ...msg,
+                text: { ...msg.text, body: editedMessageText },
+                edited: true,
+              }
               : msg
           )
         );
@@ -11564,8 +11550,8 @@ function Main() {
         typeof uData.phone === "number"
           ? uData.phone
           : typeof uData.phone === "string"
-          ? parseInt(uData.phone, 10)
-          : 0;
+            ? parseInt(uData.phone, 10)
+            : 0;
 
       // For now, simplified bot toggle logic until we have full company data structure
       const newStopBot = !companyStopBot;
@@ -11845,8 +11831,8 @@ function Main() {
         mimeType: selectedMedia
           ? selectedMedia.type
           : selectedDocument
-          ? selectedDocument.type
-          : null,
+            ? selectedDocument.type
+            : null,
         repeatInterval: repeatInterval,
         repeatUnit: repeatUnit,
         scheduledTime: scheduledTime.toISOString(), // Use ISO string instead of Firebase Timestamp
@@ -12713,345 +12699,306 @@ function Main() {
 
       <div
         className="flex flex-col md:flex-row overflow-y-auto page-transition dark:bg-gray-900"
-        style={{ 
+        style={{
           height: "100vh",
         }}
       >
         {/* Background */}
         <div className="fixed inset-0 -z-10 bg-[#F5F5F5] dark:bg-[#111111]"></div>
-        
+
         {/* Floating Orbs for Visual Interest */}
         <div className="floating-orb floating-orb-1 hidden md:block"></div>
         <div className="floating-orb floating-orb-2 hidden md:block"></div>
-        
+
         <audio ref={audioRef} src={noti} />
-        
+
         {/* Sidebar Container */}
         <div
-          className={`flex flex-col w-full md:min-w-[30%] md:max-w-[30%] glass-sidebar custom-scrollbar animate-slide-up ${
-            selectedChatId ? "hidden md:flex" : "flex"
-          }`}
+          className={`flex flex-col w-full md:min-w-[30%] md:max-w-[30%] glass-sidebar custom-scrollbar animate-slide-up ${selectedChatId ? "hidden md:flex" : "flex"
+            }`}
         >
           {/* Header Section */}
-          <div className="flex items-center justify-between pl-4 pr-4 pt-5 pb-3 sticky top-0 z-10 glass-header">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between pl-3 pr-3 pt-3 pb-2 sticky top-0 z-10 glass-header border-b-4 border-[#4b4b4b]">
+            <div className="flex items-center gap-2">
               <div>
-                <div className="text-start text-xl font-bold capitalize text-gray-800 dark:text-gray-100 mb-1 tracking-tight">
+                <div className="text-start text-xl font-black uppercase text-[#4b4b4b] tracking-wider mb-0.5">
                   {companyName}
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="text-start text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Total Contacts: <span className="font-semibold text-[#f26522] dark:text-[#ff7744]">{totalContacts}</span>
+                  <div className="text-start text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
+                    Contacts: <span className="font-black text-[#f26522]">{totalContacts}</span>
                   </div>
 
-                {/* Error Message - Animated Badge */}
-                {wsError && (
-                  <div className="text-xs text-red-500 dark:text-red-400 bg-red-50/80 dark:bg-red-900/30 backdrop-blur-sm px-2 py-1 rounded-lg font-medium animate-slide-up border border-red-200/50 dark:border-red-800/50">
-                    {wsError}
-                  </div>
-                )}
+                  {/* Error Message - Animated Badge */}
+                  {wsError && (
+                    <div className="text-[10px] text-white bg-[#ef4444] px-1.5 py-0.5 border-2 border-[#4b4b4b] font-bold uppercase tracking-wider animate-slide-up shadow-[2px_2px_0_#4b4b4b]">
+                      {wsError}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-2">
-            {/* Phone Connection Status Indicator */}
-            {!phoneStatusLoading && Object.entries(phoneNames).some(([index]) => {
-              const phoneStatus = qrCodes[parseInt(index)]?.status || "unknown";
-              const isConnected = phoneStatus === "ready" || phoneStatus === "authenticated";
-              console.log('Banner check - phoneStatus:', phoneStatus, 'isConnected:', isConnected, 'qrCodes:', qrCodes, 'phoneNames:', phoneNames);
-              return !isConnected;
-            }) && (
-              <div className="flex items-center justify-center space-x-1.5 text-xs text-orange-600 dark:text-orange-400 bg-orange-50/80 dark:bg-orange-900/30 backdrop-blur-sm px-2.5 py-1.5 rounded-xl border border-orange-200/60 dark:border-orange-800/50 animate-slide-up shadow-sm">
-                <Lucide icon="AlertTriangle" className="w-3.5 h-3.5" />
-                <span className="font-medium">Phone Connection Needed</span>
-              </div>
-            )}
-            
-            {/* Phone Selection Button - Polished */}
-            <button
-              onClick={() => setShowPhoneModal(true)}
-              className="flex items-center space-x-2 text-sm font-semibold btn-chat-secondary px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f26522]/30 transition-all duration-300"
-            >
-              <Lucide
-                icon="Phone"
-                className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
-              />
-              <span className="text-gray-700 dark:text-gray-200">
-                {userData?.phone !== undefined
-                  ? (() => {
+            <div className="flex flex-col gap-1.5">
+              {/* Phone Connection Status Indicator */}
+              {!phoneStatusLoading && Object.entries(phoneNames).some(([index]) => {
+                const phoneStatus = qrCodes[parseInt(index)]?.status || "unknown";
+                const isConnected = phoneStatus === "ready" || phoneStatus === "authenticated";
+                console.log('Banner check - phoneStatus:', phoneStatus, 'isConnected:', isConnected, 'qrCodes:', qrCodes, 'phoneNames:', phoneNames);
+                return !isConnected;
+              }) && (
+                  <div className="flex items-center justify-center space-x-1.5 text-[10px] text-[#f97316] bg-[#ffedd5] px-2 py-1 border-2 border-[#4b4b4b] animate-slide-up shadow-[2px_2px_0_#4b4b4b]">
+                    <Lucide icon="AlertTriangle" className="w-3 h-3 text-[#f97316]" />
+                    <span className="font-black uppercase tracking-wider">Connection Needed</span>
+                  </div>
+                )}
+
+              {/* Phone Selection Button - Polished */}
+              <button
+                onClick={() => setShowPhoneModal(true)}
+                className="flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] px-2 py-1.5 transition-all duration-300"
+              >
+                <Lucide
+                  icon="Phone"
+                  className="w-3.5 h-3.5 text-[#f26522]"
+                />
+                <span className="text-[#4b4b4b]">
+                  {userData?.phone !== undefined
+                    ? (() => {
                       const phoneIndex = parseInt(userData.phone);
                       return phoneNames[phoneIndex] || `Phone ${phoneIndex + 1}`;
                     })()
-                  : qrCodes && qrCodes.length === 1
-                  ? phoneNames[qrCodes[0].phoneIndex] || `Phone ${qrCodes[0].phoneIndex + 1}`
-                  : qrCodes && qrCodes.length > 1
-                  ? "Select phone"
-                  : "Phone 1"}
-              </span>
-              <Lucide
-                icon="ChevronDown"
-                className="w-3 h-3 text-gray-400 dark:text-gray-500"
-              />
-            </button>
-
-            {/* WebSocket Status - Polished */}
-            <div className="flex items-center gap-2 w-full">
-              <div
-                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl shadow-sm border transition-all duration-300 w-full ${
-                  wsConnected
-                    ? "bg-emerald-50/80 dark:bg-emerald-900/20 border-emerald-200/60 dark:border-emerald-700/40"
-                    : "bg-red-50/80 dark:bg-red-900/20 border-red-200/60 dark:border-red-700/40"
-                }`}
-              >
-                {wsConnected ? (
-                  <>
-                    <div className="w-2 h-2 rounded-full status-online"></div>
-                    <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                      Live
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-2 h-2 rounded-full status-offline"></div>
-                    <span className="text-xs font-semibold text-red-600 dark:text-red-400">
-                      Offline
-                    </span>
-                  </>
-                )}
-              </div>
-
-              {/* Reconnect Button - Only show when disconnected */}
-              {!wsConnected && (
-                <button
-                  onClick={() => {
-                    if (wsConnection) {
-                      wsConnection.close(1000, "Manual reconnect");
-                    }
-                    setWsReconnectAttempts(0);
-                    setWsConnected(false);
-                    setWsConnection(null);
-                    setWsError(null);
-                    // This will trigger the useEffect to re-run and create a new connection
-                    setWsVersion((prev) => prev + 1);
-                  }}
-                  className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold btn-chat-primary text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed w-full"
-                  disabled={wsReconnectAttempts >= maxReconnectAttempts}
-                >
-                  <svg
-                    className="w-2 h-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                    />
-                  </svg>
-                  {wsReconnectAttempts >= maxReconnectAttempts
-                    ? "Max retries"
-                    : "Reconnect"}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-        {(companyPlan === "enterprise" || companyPlan === "free") && (
-          <div className="w-full pr-3 py-1.5">
-            <div
-              className="px-3 py-2 rounded-xl bg-gradient-to-br from-white/20 to-white/40 dark:from-gray-800/30 dark:to-gray-700/40 backdrop-blur-md shadow-lg border border-white/30 dark:border-gray-600/50 cursor-pointer hover:shadow-xl transition-all duration-300 ease-out hover:scale-[1.02]"
-              onClick={openUsageDashboard}
-              title="Click to view detailed usage analytics"
-            >
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
-                  <Lucide
-                    icon="Sparkles"
-                    className="w-2.5 h-2.5 text-primary"
-                  />
-                  AI Messages
+                    : qrCodes && qrCodes.length === 1
+                      ? phoneNames[qrCodes[0].phoneIndex] || `Phone ${qrCodes[0].phoneIndex + 1}`
+                      : qrCodes && qrCodes.length > 1
+                        ? "Select phone"
+                        : "Phone 1"}
                 </span>
-                <div className="flex items-center gap-2">
-                  {quotaLoading ? (
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      Loading...
-                    </span>
-                  ) : (
-                    <span className="text-xs font-bold text-gray-900 dark:text-gray-100">
-                      {aiMessageUsage || 0}
-                      <span className="opacity-70 font-normal">
-                        /{currentPlanLimits.aiMessages || quotaData?.limit || 100}
-                      </span>
-                    </span>
-                  )}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsTopUpModalOpen(true);
-                    }}
-                    className="px-2 py-1 text-xs bg-[#f26522]/90 hover:bg-[#f26522] backdrop-blur-sm text-white rounded-lg transition-all duration-300 ease-out hover:scale-105 active:scale-95 font-medium border border-[#f26522]/50 shadow-sm hover:shadow-md"
-                  >
-                    Top-up
-                  </button>
-                </div>
-              </div>
-
-              <div className="w-full h-1.5 rounded-full bg-gradient-to-r from-primary/10 to-gray-200 dark:from-primary/20 dark:to-gray-700 mb-1 overflow-hidden">
-                <div
-                  className={`h-1.5 rounded-full transition-all duration-500 ease-in-out ${
-                    (aiMessageUsage || 0) >
-                    (currentPlanLimits.aiMessages || quotaData?.limit || 100)
-                      ? "bg-gradient-to-r from-red-600 to-red-800"
-                      : (quotaData?.limit ||
-                          currentPlanLimits.aiMessages ||
-                          0) -
-                          (aiMessageUsage || 0) <
-                        (quotaData?.limit ||
-                          currentPlanLimits.aiMessages ||
-                          0) *
-                          0.1
-                      ? "bg-gradient-to-r from-red-500 to-red-700"
-                      : (quotaData?.limit ||
-                          currentPlanLimits.aiMessages ||
-                          0) -
-                          (aiMessageUsage || 0) <
-                        (quotaData?.limit ||
-                          currentPlanLimits.aiMessages ||
-                          0) *
-                          0.3
-                      ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
-                      : "bg-gradient-to-r from-green-500 to-green-700"
-                  }`}
-                  style={{
-                    width: `${Math.min(
-                      Math.max(
-                        (((quotaData?.limit ||
-                          currentPlanLimits.aiMessages ||
-                          100) -
-                          (aiMessageUsage || 0)) /
-                          (quotaData?.limit ||
-                            currentPlanLimits.aiMessages ||
-                            1)) *
-                          100,
-                        0
-                      ),
-                      100
-                    )}%`,
-                  }}
-                ></div>
-                {(aiMessageUsage || 0) >
-                  (currentPlanLimits.aiMessages || quotaData?.limit || 0) && (
-                  <div className="text-xs text-red-600 dark:text-red-400 text-center mt-0.5 font-medium">
-                    ⚠️ Limit exceeded by{" "}
-                    {(aiMessageUsage || 0) -
-                      (quotaData?.limit ||
-                        currentPlanLimits.aiMessages ||
-                        0)}{" "}
-                    responses
-                  </div>
-                )}
-              </div>
-          
-
-              <div className="flex items-center justify-between mt-1"></div>
-
-              {/* Analytics button */}
-              <div className="flex items-center justify-center mt-1 pt-1 border-t border-gray-200 dark:border-gray-600">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openUsageDashboard();
-                  }}
-                  className="text-xs text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary flex items-center gap-1 transition-all duration-300 ease-out hover:scale-105 active:scale-95 font-medium bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm rounded-lg px-2 py-1 hover:bg-white/30 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-600/30"
-                >
-                  <Lucide icon="BarChart3" className="w-3 h-3" />
-                  View Analytics
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Search Bar Section - Polished */}
-        <div className="sticky top-20 glass-header p-3 z-30">
-          <div className="flex items-center space-x-2">
-            {notifications.length > 0 && (
-              <NotificationPopup notifications={notifications} />
-            )}
-
-            {/* Polished Search Bar */}
-            <div className="relative flex-grow">
-              <button
-                onClick={() => setIsSearchModalOpen(true)}
-                className="flex items-center w-full h-10 py-2 pl-10 pr-4 glass-input text-gray-500 dark:text-gray-400 rounded-xl focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md group"
-              >
-                <Lucide icon="Search" className="absolute left-3 w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-[#f26522] dark:group-hover:text-[#ff7744] transition-colors" />
-                <span className="ml-2 text-sm font-medium">Search contacts...</span>
+                <Lucide
+                  icon="ChevronDown"
+                  className="w-3 h-3 text-[#4b4b4b]"
+                />
               </button>
 
-              <SearchModal
-                isOpen={isSearchModalOpen}
-                onClose={() => setIsSearchModalOpen(false)}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                companyId={currentCompanyId || ""}
-                initial={contacts}
-                onSelectResult={(type, id, contactId) => {
-                  if (type === "contact") {
-                    const contact = contacts.find((c) => c.id === id);
-                    if (contact) {
-                      selectChat(contact.contact_id!, contact.id!, contact);
-                    }
-                  } else if (type === "message") {
-                    const contact = contacts.find(
-                      (c) => c.contact_id === contactId
-                    );
-                    if (contact) {
-                      selectChat(
-                        contact.contact_id!,
-                        contact.id!,
-                        contact
-                      ).then(() => {
-                        setTimeout(() => {
-                          scrollToMessage(id);
-                        }, 5000);
-                      });
-                    }
-                  }
-                  setSearchQuery("");
-                  setIsSearchModalOpen(false);
-                }}
-                contacts={contacts}
-              />
+              {/* WebSocket Status - Polished */}
+              <div className="flex items-center gap-1.5 w-full">
+                <div
+                  className={`flex items-center justify-center gap-1 px-2 py-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 w-full bg-white`}
+                >
+                  {wsConnected ? (
+                    <>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10b981] border border-[#4b4b4b]"></div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#10b981]">
+                        Live
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] border border-[#4b4b4b]"></div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ef4444]">
+                        Offline
+                      </span>
+                    </>
+                  )}
+                </div>
 
-              {/* Sync Database Confirmation Modal */}
-              <Dialog
-                open={isSyncModalOpen}
-                onClose={() => setIsSyncModalOpen(false)}
-                className="relative z-50"
+                {/* Reconnect Button - Only show when disconnected */}
+                {!wsConnected && (
+                  <button
+                    onClick={() => {
+                      if (wsConnection) {
+                        wsConnection.close(1000, "Manual reconnect");
+                      }
+                      setWsReconnectAttempts(0);
+                      setWsConnected(false);
+                      setWsConnection(null);
+                      setWsError(null);
+                      // This will trigger the useEffect to re-run and create a new connection
+                      setWsVersion((prev) => prev + 1);
+                    }}
+                    className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-bold btn-chat-primary text-white border-2 border-[#4b4b4b] disabled:opacity-50 disabled:cursor-not-allowed w-full"
+                    disabled={wsReconnectAttempts >= maxReconnectAttempts}
+                  >
+                    <svg
+                      className="w-2.5 h-2.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                    {wsReconnectAttempts >= maxReconnectAttempts
+                      ? "Max retries"
+                      : "Reconnect"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          {(companyPlan === "enterprise" || companyPlan === "free") && (
+            <div className="w-full px-3 py-1.5">
+              <div
+                className="bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-2 cursor-pointer hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] transition-all duration-300"
+                onClick={openUsageDashboard}
+                title="Click to view detailed usage analytics"
               >
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-                <div className="fixed inset-0 flex items-center justify-center p-4">
-                  <Dialog.Panel className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-auto border border-gray-200/50 dark:border-gray-600/50">
-                    <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase text-[#4b4b4b] tracking-wider flex items-center gap-1">
+                    <Lucide icon="Sparkles" className="w-3 h-3 text-[#f26522]" />
+                    AI Msgs
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {quotaLoading ? (
+                      <span className="text-[10px] font-bold text-[#8b8b8b] uppercase tracking-wider">
+                        Load...
+                      </span>
+                    ) : (
+                      <span className="text-xs font-black text-[#4b4b4b]">
+                        {aiMessageUsage || 0}
+                        <span className="text-[10px] text-[#8b8b8b]">
+                          /{currentPlanLimits.aiMessages || quotaData?.limit || 100}
+                        </span>
+                      </span>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsTopUpModalOpen(true);
+                      }}
+                      className="px-1.5 py-0.5 text-[9px] bg-[#f26522] text-white font-black uppercase tracking-wider border-[1.5px] border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[0px_0px_0_#4b4b4b] transition-all"
+                    >
+                      Top-up
+                    </button>
+                  </div>
+                </div>
+
+                <div className="w-full h-1.5 border-[1.5px] border-[#4b4b4b] bg-white mt-1.5 relative">
+                  <div
+                    className={`h-full border-r-[1.5px] border-[#4b4b4b] transition-all duration-500 ease-in-out ${(aiMessageUsage || 0) >
+                      (currentPlanLimits.aiMessages || quotaData?.limit || 100)
+                      ? "bg-[#ef4444]"
+                      : (quotaData?.limit ||
+                        currentPlanLimits.aiMessages ||
+                        0) -
+                        (aiMessageUsage || 0) <
+                        (quotaData?.limit ||
+                          currentPlanLimits.aiMessages ||
+                          0) *
+                        0.1
+                        ? "bg-[#ef4444]"
+                        : (quotaData?.limit ||
+                          currentPlanLimits.aiMessages ||
+                          0) -
+                          (aiMessageUsage || 0) <
+                          (quotaData?.limit ||
+                            currentPlanLimits.aiMessages ||
+                            0) *
+                          0.3
+                          ? "bg-[#f59e0b]"
+                          : "bg-[#10b981]"
+                      }`}
+                    style={{
+                      width: `${Math.min(
+                        Math.max(
+                          (((aiMessageUsage || 0)) /
+                            (quotaData?.limit ||
+                              currentPlanLimits.aiMessages ||
+                              1)) *
+                          100,
+                          0
+                        ),
+                        100
+                      )}%`,
+                    }}
+                  ></div>
+                  {(aiMessageUsage || 0) >
+                    (currentPlanLimits.aiMessages || quotaData?.limit || 0) && (
+                      <div className="absolute top-0 right-0 text-[9px] font-bold text-[#ef4444] uppercase tracking-wider">
+                        Limit Exceeded!
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Search Bar Section - Polished */}
+          <div className="sticky top-[86px] bg-white p-3 z-30 border-b-4 border-[#4b4b4b]">
+            <div className="flex items-center space-x-1.5">
+              {notifications.length > 0 && (
+                <NotificationPopup notifications={notifications} />
+              )}
+
+              {/* Polished Search Bar */}
+              <div className="relative flex-grow">
+                <button
+                  onClick={() => setIsSearchModalOpen(true)}
+                  className="flex items-center w-full bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all px-3 py-1.5"
+                >
+                  <Lucide icon="Search" className="w-4 h-4 text-[#8b8b8b]" />
+                  <span className="ml-1.5 text-xs font-bold text-[#8b8b8b] uppercase tracking-wider">Search...</span>
+                </button>
+
+                <SearchModal
+                  isOpen={isSearchModalOpen}
+                  onClose={() => setIsSearchModalOpen(false)}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  companyId={currentCompanyId || ""}
+                  initial={contacts}
+                  onSelectResult={(type, id, contactId) => {
+                    if (type === "contact") {
+                      const contact = contacts.find((c) => c.id === id);
+                      if (contact) {
+                        selectChat(contact.contact_id!, contact.id!, contact);
+                      }
+                    } else if (type === "message") {
+                      const contact = contacts.find(
+                        (c) => c.contact_id === contactId
+                      );
+                      if (contact) {
+                        selectChat(
+                          contact.contact_id!,
+                          contact.id!,
+                          contact
+                        ).then(() => {
+                          setTimeout(() => {
+                            scrollToMessage(id);
+                          }, 5000);
+                        });
+                      }
+                    }
+                    setSearchQuery("");
+                    setIsSearchModalOpen(false);
+                  }}
+                  contacts={contacts}
+                />
+
+                {/* Sync Database Confirmation Modal */}
+                <Dialog
+                  open={isSyncModalOpen}
+                  onClose={() => setIsSyncModalOpen(false)}
+                  className="relative z-50"
+                >
+                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+                    <Dialog.Panel className="w-full max-w-md bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6">
                       <div className="flex items-center space-x-4 mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                        <div className="w-12 h-12 bg-[#10b981] border-2 border-[#4b4b4b] flex items-center justify-center shadow-[2px_2px_0_#4b4b4b]">
                           <Lucide icon="RefreshCw" className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                          <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
                             Sync Database
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Synchronize your contacts with the database
-                          </p>
                         </div>
                       </div>
-                      
+
                       <div className="mb-6">
-                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                        <p className="font-bold text-[#8b8b8b] uppercase tracking-wider text-sm">
                           This will synchronize all your contacts with the database. This process may take a few minutes to complete. Are you sure you want to continue?
                         </p>
                       </div>
@@ -13059,7 +13006,7 @@ function Main() {
                       <div className="flex space-x-3">
                         <button
                           onClick={() => setIsSyncModalOpen(false)}
-                          className="flex-1 px-4 py-3 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl font-medium transition-all duration-200"
+                          className="flex-1 px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                         >
                           Cancel
                         </button>
@@ -13069,7 +13016,7 @@ function Main() {
                             handleSyncContact();
                           }}
                           disabled={fetching}
-                          className="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+                          className="flex-1 px-4 py-2 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50"
                         >
                           {fetching ? (
                             <div className="flex items-center justify-center space-x-2">
@@ -13081,143 +13028,138 @@ function Main() {
                           )}
                         </button>
                       </div>
-                    </div>
-                  </Dialog.Panel>
-                </div>
-              </Dialog>
-            </div>
+                    </Dialog.Panel>
+                  </div>
+                </Dialog>
+              </div>
 
-            {/* Action buttons - Polished */}
-            <div className="flex items-center space-x-2">
-              {isAssistantAvailable && (
+              {/* Action buttons - Polished */}
+              <div className="flex items-center space-x-1.5">
+                {isAssistantAvailable && (
+                  <button
+                    className={`flex items-center justify-center p-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all ${companyStopBot
+                      ? "bg-[#ef4444] text-white"
+                      : "bg-[#10b981] text-white"
+                      } ${userRole === "3" ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={toggleBot}
+                    disabled={userRole === "3"}
+                    title={companyStopBot ? "Stop Bot" : "Start Bot"}
+                  >
+                    <Lucide
+                      icon={companyStopBot ? "PowerOff" : "Power"}
+                      className="w-4 h-4"
+                    />
+                  </button>
+                )}
+
+                {/* Employee assignment button - Polished */}
+                <Menu as="div" className="relative inline-block text-left">
+                  <Menu.Button className="flex items-center justify-center p-1.5 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                    <Lucide
+                      icon="Users"
+                      className="w-4 h-4 text-[#f26522]"
+                    />
+                  </Menu.Button>
+                  <Menu.Items className="absolute right-0 mt-2 w-56 bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] z-50 max-h-64 overflow-y-auto">
+                    <div className="p-2 border-b-2 border-[#4b4b4b]">
+                      <input
+                        type="text"
+                        placeholder="Search employees..."
+                        className="w-full p-2 bg-[#f9f9f9] border-2 border-[#4b4b4b] font-bold text-[#4b4b4b] focus:outline-none focus:shadow-[2px_2px_0_#4b4b4b] transition-all text-sm"
+                        value={employeeSearch}
+                        onChange={(e) => setEmployeeSearch(e.target.value)}
+                      />
+                    </div>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          className={`flex items-center w-full text-left p-2 border-b-2 border-[#4b4b4b] last:border-b-0 font-black uppercase tracking-wider text-xs transition-all ${!selectedEmployee
+                            ? "bg-[#f26522] text-white"
+                            : active
+                              ? "bg-[#f9f9f9] text-[#4b4b4b]"
+                              : "text-[#8b8b8b] hover:bg-[#f9f9f9]"
+                            }`}
+                          onClick={() => setSelectedEmployee(null)}
+                        >
+                          <span>All Contacts</span>
+                        </button>
+                      )}
+                    </Menu.Item>
+                    {employeeList
+                      .filter(
+                        (employee) =>
+                          (employee.name?.toLowerCase() || "").includes(
+                            (employeeSearch || "").toLowerCase()
+                          ) &&
+                          (userRole === "1" || employee.name === currentUserName)
+                      )
+                      .sort((a, b) => {
+                        if (!a.name && !b.name) return 0;
+                        if (!a.name) return 1;
+                        if (!b.name) return 1;
+                        return a.name.localeCompare(b.name);
+                      })
+                      .map((employee) => (
+                        <Menu.Item key={employee.id}>
+                          {({ active }) => (
+                            <button
+                              className={`flex items-center justify-between w-full text-left p-2 border-b-2 border-[#4b4b4b] last:border-b-0 font-bold text-xs transition-all ${selectedEmployee === employee.name
+                                ? "bg-[#f26522] text-white"
+                                : active
+                                  ? "bg-[#f9f9f9] text-[#4b4b4b]"
+                                  : "text-[#4b4b4b] hover:bg-[#f9f9f9]"
+                                }`}
+                              onClick={() =>
+                                setSelectedEmployee(
+                                  employee.name === selectedEmployee
+                                    ? null
+                                    : employee.name
+                                )
+                              }
+                            >
+                              <span className="truncate">{employee.name}</span>
+                              <div className="flex items-center space-x-1.5 text-[10px]">
+                                {employee.quotaLeads !== undefined && (
+                                  <span className={`${selectedEmployee === employee.name ? 'text-white' : 'text-[#8b8b8b]'}`}>
+                                    {employee.assignedContacts || 0}/
+                                    {employee.quotaLeads}
+                                  </span>
+                                )}
+                              </div>
+                            </button>
+                          )}
+                        </Menu.Item>
+                      ))}
+                  </Menu.Items>
+                </Menu>
+
+                {/* Tags expansion toggle - Polished */}
                 <button
-                  className={`flex items-center justify-center p-2.5 rounded-xl transition-all duration-300 ease-out hover:scale-105 active:scale-95 shadow-md hover:shadow-lg ${
-                    companyStopBot
-                      ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
-                      : "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
-                  } ${userRole === "3" ? "opacity-50 cursor-not-allowed" : ""}`}
-                  onClick={toggleBot}
-                  disabled={userRole === "3"}
-                  title={companyStopBot ? "Stop Bot" : "Start Bot"}
+                  className="p-1.5 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  onClick={toggleTagsExpansion}
+                  title={isTagsExpanded ? "Show Less Tags" : "Show More Tags"}
                 >
                   <Lucide
-                    icon={companyStopBot ? "PowerOff" : "Power"}
-                    className="w-4 h-4"
+                    icon={isTagsExpanded ? "ChevronUp" : "ChevronDown"}
+                    className="w-4 h-4 text-[#f26522]"
                   />
                 </button>
-              )}
-
-              {/* Employee assignment button - Polished */}
-              <Menu as="div" className="relative inline-block text-left">
-                <Menu.Button className="flex items-center justify-center p-2.5 btn-chat-secondary rounded-xl transition-all duration-300 shadow-sm hover:shadow-md">
-                  <Lucide
-                    icon="Users"
-                    className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
-                  />
-                </Menu.Button>
-                <Menu.Items className="absolute right-0 mt-2 w-48 glass-card rounded-xl p-2 z-10 max-h-64 overflow-y-auto custom-scrollbar animate-slide-up">
-                  <div className="p-2">
-                    <input
-                      type="text"
-                      placeholder="Search employees..."
-                      className="w-full p-2 glass-input rounded-lg text-gray-900 dark:text-gray-100 text-sm"
-                      value={employeeSearch}
-                      onChange={(e) => setEmployeeSearch(e.target.value)}
-                    />
-                  </div>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        className={`flex items-center w-full text-left p-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
-                          !selectedEmployee
-                            ? "bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white shadow-md"
-                            : active
-                            ? "bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100"
-                            : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30"
-                        }`}
-                        onClick={() => setSelectedEmployee(null)}
-                      >
-                        <span>All Contacts</span>
-                      </button>
-                    )}
-                  </Menu.Item>
-                  {employeeList
-                    .filter(
-                      (employee) =>
-                        (employee.name?.toLowerCase() || "").includes(
-                          (employeeSearch || "").toLowerCase()
-                        ) &&
-                        (userRole === "1" || employee.name === currentUserName)
-                    )
-                    .sort((a, b) => {
-                      if (!a.name && !b.name) return 0;
-                      if (!a.name) return 1;
-                      if (!b.name) return 1;
-                      return a.name.localeCompare(b.name);
-                    })
-                    .map((employee) => (
-                      <Menu.Item key={employee.id}>
-                        {({ active }) => (
-                          <button
-                            className={`flex items-center justify-between w-full text-left p-2.5 rounded-lg transition-all duration-200 text-sm ${
-                              selectedEmployee === employee.name
-                                ? "bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white shadow-md"
-                                : active
-                                ? "bg-gray-100 dark:bg-gray-700/50 text-gray-900 dark:text-gray-100"
-                                : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30"
-                            }`}
-                            onClick={() =>
-                              setSelectedEmployee(
-                                employee.name === selectedEmployee
-                                  ? null
-                                  : employee.name
-                              )
-                            }
-                          >
-                            <span className="font-medium">{employee.name}</span>
-                            <div className="flex items-center space-x-1.5 text-xs">
-                              {employee.quotaLeads !== undefined && (
-                                <span className={`${selectedEmployee === employee.name ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
-                                  {employee.assignedContacts || 0}/
-                                  {employee.quotaLeads} leads
-                                </span>
-                              )}
-                            </div>
-                          </button>
-                        )}
-                      </Menu.Item>
-                    ))}
-                </Menu.Items>
-              </Menu>
-
-              {/* Tags expansion toggle - Polished */}
-              <button
-                className="p-2.5 btn-chat-secondary rounded-xl transition-all duration-300 shadow-sm hover:shadow-md"
-                onClick={toggleTagsExpansion}
-                title={isTagsExpanded ? "Show Less Tags" : "Show More Tags"}
-              >
-                <Lucide
-                  icon={isTagsExpanded ? "ChevronUp" : "ChevronDown"}
-                  className="w-4 h-4 text-[#f26522] dark:text-[#ff7744]"
-                />
-              </button>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {/* Tags Section - Polished */}
-        <div
-          className={`mt-2 mb-2 px-4 py-3 transition-all duration-500 ease-in-out ${
-            isTagsExpanded ? "max-h-96 pb-3" : "max-h-24"
-          } overflow-y-auto custom-scrollbar mx-3 rounded-xl glass-card`}
-        >
-          <div className="flex flex-wrap gap-2 justify-center">
-            {[
-              "Mine",
-              "All",
-              "Unassigned",
-              ...(isTagsExpanded
-                ? [
+
+          {/* Tags Section - Polished */}
+          <div
+            className={`mt-1.5 mb-1.5 px-3 py-2 transition-all duration-500 ease-in-out ${isTagsExpanded ? "max-h-96 pb-2" : "max-h-24"
+              } overflow-y-auto custom-scrollbar mx-2 bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]`}
+          >
+            <div className="flex flex-wrap gap-1.5 justify-center">
+              {[
+                "Mine",
+                "All",
+                "Unassigned",
+                ...(isTagsExpanded
+                  ? [
                     "Group",
                     "Unread",
                     "Snooze",
@@ -13240,421 +13182,404 @@ function Main() {
                         !visiblePhoneTags.includes(tag.name)
                     ),
                   ]
-                : []),
-            ].map((tag) => {
-              const tagName =
-                typeof tag === "string" ? tag : tag.name || String(tag);
-              const tagLower = tagName.toLowerCase();
-              let newfilter = contacts;
-              if (userData?.phone !== undefined && userData.phone !== -1) {
-                const userPhoneIndex = parseInt(userData.phone, 10);
-                newfilter = contacts.filter(
-                  (contact) => contact.phoneIndex === userPhoneIndex
-                );
-              }
-              const unreadCount = newfilter.filter((contact) => {
-                const contactTags =
-                  contact.tags?.map((t) =>
-                    typeof t === "string" ? t.toLowerCase() : ""
-                  ) || [];
-                const isGroup = contact.chat_id?.endsWith("@g.us");
-                const isSnoozed = contact.tags?.includes("snooze");
-                // Try to find a phone index that matches the tag
-                let phoneIndex = -1;
-
-                // First, try exact match
-                phoneIndex = Object.entries(phoneNames).findIndex(
-                  ([_, name]) => name.toLowerCase() === tagLower
-                );
-
-                // If no exact match, try partial match
-                if (phoneIndex === -1) {
-                  phoneIndex = Object.entries(phoneNames).findIndex(
-                    ([_, name]) =>
-                      name.toLowerCase().includes(tagLower) ||
-                      tagLower.includes(name.toLowerCase())
+                  : []),
+              ].map((tag) => {
+                const tagName =
+                  typeof tag === "string" ? tag : tag.name || String(tag);
+                const tagLower = tagName.toLowerCase();
+                let newfilter = contacts;
+                if (userData?.phone !== undefined && userData.phone !== -1) {
+                  const userPhoneIndex = parseInt(userData.phone, 10);
+                  newfilter = contacts.filter(
+                    (contact) => contact.phoneIndex === userPhoneIndex
                   );
                 }
+                const unreadCount = newfilter.filter((contact) => {
+                  const contactTags =
+                    contact.tags?.map((t) =>
+                      typeof t === "string" ? t.toLowerCase() : ""
+                    ) || [];
+                  const isGroup = contact.chat_id?.endsWith("@g.us");
+                  const isSnoozed = contact.tags?.includes("snooze");
+                  // Try to find a phone index that matches the tag
+                  let phoneIndex = -1;
 
-                // If still no match, try to parse the phone number from the tag
-                if (phoneIndex === -1 && tagLower.includes("phone")) {
-                  const phoneMatch = tagLower.match(/phone\s*(\d+)/i);
-                  if (phoneMatch) {
-                    const phoneNum = parseInt(phoneMatch[1]) - 1; // Convert to 0-based index
-                    if (phoneNames[phoneNum] !== undefined) {
-                      phoneIndex = phoneNum;
+                  // First, try exact match
+                  phoneIndex = Object.entries(phoneNames).findIndex(
+                    ([_, name]) => name.toLowerCase() === tagLower
+                  );
+
+                  // If no exact match, try partial match
+                  if (phoneIndex === -1) {
+                    phoneIndex = Object.entries(phoneNames).findIndex(
+                      ([_, name]) =>
+                        name.toLowerCase().includes(tagLower) ||
+                        tagLower.includes(name.toLowerCase())
+                    );
+                  }
+
+                  // If still no match, try to parse the phone number from the tag
+                  if (phoneIndex === -1 && tagLower.includes("phone")) {
+                    const phoneMatch = tagLower.match(/phone\s*(\d+)/i);
+                    if (phoneMatch) {
+                      const phoneNum = parseInt(phoneMatch[1]) - 1; // Convert to 0-based index
+                      if (phoneNames[phoneNum] !== undefined) {
+                        phoneIndex = phoneNum;
+                      }
                     }
                   }
-                }
+
+                  return (
+                    (tagLower === "all"
+                      ? !isGroup && !isSnoozed
+                      : tagLower === "unread"
+                        ? !isSnoozed &&
+                        contact.unreadCount &&
+                        contact.unreadCount > 0
+                        : tagLower === "mine"
+                          ? (() => {
+                            // Check if the user is assigned to this contact in multiple ways
+                            const hasMineTag = contact.tags?.some(
+                              (t) =>
+                                (typeof t === "string"
+                                  ? t
+                                  : String(t)
+                                ).toLowerCase() === currentUserName.toLowerCase()
+                            );
+
+                            // Also check if the user is in the assignedTo array
+                            const isAssignedToMe = contact.assignedTo?.some(
+                              (assigned: string) =>
+                                assigned.toLowerCase() ===
+                                currentUserName.toLowerCase()
+                            );
+
+                            return !isSnoozed && (hasMineTag || isAssignedToMe);
+                          })()
+                          : tagLower === "unassigned"
+                            ? !isSnoozed &&
+                            !contact.tags?.some((t: string) =>
+                              employeeList.some(
+                                (e) =>
+                                  (e.name?.toLowerCase() || "") ===
+                                  (typeof t === "string"
+                                    ? t
+                                    : String(t)
+                                  ).toLowerCase()
+                              )
+                            )
+                            : tagLower === "snooze"
+                              ? contactTags.includes("snooze")
+                              : tagLower === "resolved"
+                                ? contactTags.includes("resolved")
+                                : tagLower === "group"
+                                  ? isGroup
+                                  : tagLower === "stop bot"
+                                    ? contactTags.includes("stop bot")
+                                    : tagLower === "active bot"
+                                      ? !contactTags.includes("stop bot")
+                                      : phoneIndex !== -1
+                                        ? (() => {
+                                          // Check multiple ways a contact might be associated with this phone
+                                          let hasPhone = false;
+
+                                          // Method 1: Check phoneIndexes array
+                                          if (
+                                            contact.phoneIndexes &&
+                                            Array.isArray(contact.phoneIndexes)
+                                          ) {
+                                            hasPhone = contact.phoneIndexes.includes(phoneIndex);
+                                          }
+
+                                          // Method 2: Check phoneIndex field
+                                          if (
+                                            !hasPhone &&
+                                            contact.phoneIndex !== undefined &&
+                                            contact.phoneIndex !== null
+                                          ) {
+                                            hasPhone = contact.phoneIndex === phoneIndex;
+                                          }
+
+                                          // Method 3: Check if contact has messages from this phone
+                                          if (
+                                            !hasPhone &&
+                                            contact.chat &&
+                                            Array.isArray(contact.chat)
+                                          ) {
+                                            hasPhone = contact.chat.some(
+                                              (message: any) => message.phoneIndex === phoneIndex
+                                            );
+                                          }
+
+                                          // Method 4: Check last_message phoneIndex
+                                          if (
+                                            !hasPhone &&
+                                            contact.last_message &&
+                                            contact.last_message.phoneIndex !== undefined
+                                          ) {
+                                            hasPhone =
+                                              contact.last_message.phoneIndex === phoneIndex;
+                                          }
+
+                                          return hasPhone;
+                                        })()
+                                        : contactTags.includes(tagLower)) &&
+                    (tagLower !== "all" && tagLower !== "unassigned"
+                      ? contact.unreadCount && contact.unreadCount > 0
+                      : true)
+                  );
+                }).length;
 
                 return (
-                  (tagLower === "all"
-                    ? !isGroup && !isSnoozed
-                    : tagLower === "unread"
-                    ? !isSnoozed &&
-                      contact.unreadCount &&
-                      contact.unreadCount > 0
-                    : tagLower === "mine"
-                    ? (() => {
-                        // Check if the user is assigned to this contact in multiple ways
-                        const hasMineTag = contact.tags?.some(
-                          (t) =>
-                            (typeof t === "string"
-                              ? t
-                              : String(t)
-                            ).toLowerCase() === currentUserName.toLowerCase()
-                        );
-
-                        // Also check if the user is in the assignedTo array
-                        const isAssignedToMe = contact.assignedTo?.some(
-                          (assigned: string) =>
-                            assigned.toLowerCase() ===
-                            currentUserName.toLowerCase()
-                        );
-
-                        return !isSnoozed && (hasMineTag || isAssignedToMe);
-                      })()
-                    : tagLower === "unassigned"
-                    ? !isSnoozed &&
-                      !contact.tags?.some((t: string) =>
-                        employeeList.some(
-                          (e) =>
-                            (e.name?.toLowerCase() || "") ===
-                            (typeof t === "string"
-                              ? t
-                              : String(t)
-                            ).toLowerCase()
-                        )
-                      )
-                    : tagLower === "snooze"
-                    ? contactTags.includes("snooze")
-                    : tagLower === "resolved"
-                    ? contactTags.includes("resolved")
-                    : tagLower === "group"
-                    ? isGroup
-                    : tagLower === "stop bot"
-                    ? contactTags.includes("stop bot")
-                    : tagLower === "active bot"
-                    ? !contactTags.includes("stop bot")
-                    : phoneIndex !== -1
-                    ? (() => {
-                        // Check multiple ways a contact might be associated with this phone
-                        let hasPhone = false;
-
-                        // Method 1: Check phoneIndexes array
-                        if (
-                          contact.phoneIndexes &&
-                          Array.isArray(contact.phoneIndexes)
-                        ) {
-                          hasPhone = contact.phoneIndexes.includes(phoneIndex);
-                        }
-
-                        // Method 2: Check phoneIndex field
-                        if (
-                          !hasPhone &&
-                          contact.phoneIndex !== undefined &&
-                          contact.phoneIndex !== null
-                        ) {
-                          hasPhone = contact.phoneIndex === phoneIndex;
-                        }
-
-                        // Method 3: Check if contact has messages from this phone
-                        if (
-                          !hasPhone &&
-                          contact.chat &&
-                          Array.isArray(contact.chat)
-                        ) {
-                          hasPhone = contact.chat.some(
-                            (message: any) => message.phoneIndex === phoneIndex
-                          );
-                        }
-
-                        // Method 4: Check last_message phoneIndex
-                        if (
-                          !hasPhone &&
-                          contact.last_message &&
-                          contact.last_message.phoneIndex !== undefined
-                        ) {
-                          hasPhone =
-                            contact.last_message.phoneIndex === phoneIndex;
-                        }
-
-                        return hasPhone;
-                      })()
-                    : contactTags.includes(tagLower)) &&
-                  (tagLower !== "all" && tagLower !== "unassigned"
-                    ? contact.unreadCount && contact.unreadCount > 0
-                    : true)
-                );
-              }).length;
-
-              return (
-                <button
-                  key={typeof tag === "string" ? tag : tag.id}
-                  onClick={() => filterTagContact(tagName)}
-                  className={`tag-pill px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ease-out hover:scale-105 active:scale-95 ${
-                    tagLower === activeTags[0]
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5">
-                    <span>{tagName}</span>
-                    {userData?.role === "1" && unreadCount > 0 && (
-                      <span
-                        className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold unread-badge ${
-                          tagName.toLowerCase() === "stop bot"
-                            ? "bg-red-500 text-white"
+                  <button
+                    key={typeof tag === "string" ? tag : tag.id}
+                    onClick={() => filterTagContact(tagName)}
+                    className={`tag-pill px-2 py-1 text-[10px] font-black uppercase tracking-wider transition-all duration-300 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 ${tagLower === activeTags[0]
+                      ? "bg-[#f26522] text-white shadow-[3px_3px_0_#4b4b4b]"
+                      : "bg-white text-[#4b4b4b] hover:shadow-[3px_3px_0_#4b4b4b]"
+                      }`}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <span>{tagName}</span>
+                      {userData?.role === "1" && unreadCount > 0 && (
+                        <span
+                          className={`px-1 py-0.5 text-[9px] font-black border-2 border-[#4b4b4b] uppercase tracking-wider ${tagName.toLowerCase() === "stop bot"
+                            ? "bg-[#ef4444] text-white"
                             : tagName.toLowerCase() === "active bot"
-                            ? "bg-emerald-500 text-white"
-                            : "bg-[#f26522] text-white"
-                        }`}
-                      >
-                        {unreadCount}
-                      </span>
-                    )}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Contact List Section - Polished */}
-        <div
-          className="flex-1 overflow-y-auto h-full relative px-2 py-3 custom-scrollbar"
-          ref={contactListRef}
-        >
-          {isLoadingMoreContacts && (
-            <div className="absolute inset-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md flex items-center justify-center z-10 animate-fade-in">
-              <div className="flex flex-col items-center glass-card p-6 rounded-2xl shadow-xl">
-                <div className="w-10 h-10 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
-                <span className="mt-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                  Loading more contacts...
-                </span>
-              </div>
-            </div>
-          )}
-          {loadedContacts.length === 0 ? (
-            <div className="flex items-center justify-center h-full min-h-[400px] animate-fade-in">
-              {loadedContacts.length === 0 && (
-                <div className="flex flex-col items-center text-center max-w-md mx-auto p-6">
-                  {/* Animated Icon */}
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#f26522] to-[#ff7744] rounded-2xl flex items-center justify-center mb-4 shadow-lg animate-float-slow">
-                    <Lucide
-                      icon="MessageCircle"
-                      className="h-8 w-8 text-white"
-                    />
-                  </div>
-
-                  {/* Heading */}
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 tracking-tight">
-                    {isInitialLoading
-                      ? "Loading contacts..."
-                      : isTagFiltering
-                      ? "Searching contacts..."
-                      : "No contacts found"}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-gray-500 dark:text-gray-400 mb-4 text-center text-sm leading-relaxed">
-                    {isInitialLoading
-                      ? "Please wait while we load your contacts"
-                      : isTagFiltering
-                      ? "Searching through all your contacts..."
-                      : "Start by adding your first contact or importing from your phone"}
-                  </p>
-
-                  {/* Loading Progress Card */}
-                  {isInitialLoading && (
-                    <div className="w-full max-w-sm glass-card rounded-2xl p-5 animate-slide-up">
-                      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        <span className="font-medium">Loading progress</span>
-                        <span className="font-bold text-[#f26522] dark:text-[#ff7744]">
-                          {realLoadingProgress}%
+                              ? "bg-[#10b981] text-white"
+                              : tagLower === activeTags[0]
+                                ? "bg-white text-[#f26522]"
+                                : "bg-[#f26522] text-white"
+                            }`}
+                        >
+                          {unreadCount}
                         </span>
-                      </div>
-
-                      {/* Progress Bar */}
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
-                        <div
-                          className="bg-gradient-to-r from-[#f26522] to-[#ff7744] h-2.5 rounded-full transition-all duration-500 ease-out"
-                          style={{ width: `${realLoadingProgress}%` }}
-                        ></div>
-                      </div>
-
-                      {/* Loading Steps */}
-                      <div className="mt-4 space-y-2">
-                        {loadingSteps.userConfig && (
-                          <div className="flex items-center text-xs text-emerald-600 dark:text-emerald-400 animate-slide-up">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                            <span>User configuration loaded</span>
-                          </div>
-                        )}
-                        {loadingSteps.contactsFetch && (
-                          <div className="flex items-center text-xs text-emerald-600 dark:text-emerald-400 animate-slide-up">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                            <span>Contacts fetched</span>
-                          </div>
-                        )}
-                        {loadingSteps.contactsProcess && (
-                          <div className="flex items-center text-xs text-[#f26522] dark:text-[#ff7744] animate-slide-up">
-                            <div className="w-2 h-2 bg-[#f26522] rounded-full mr-2 animate-pulse"></div>
-                            <span>Processing contacts...</span>
-                          </div>
-                        )}
-                        {loadingSteps.complete && (
-                          <div className="flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-medium animate-slide-up">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
-                            <span>Loading complete!</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tag Filtering State */}
-                  {isTagFiltering && (
-                    <div className="w-full max-w-sm glass-card rounded-2xl p-6 animate-slide-up">
-                      <div className="flex items-center justify-center mb-4">
-                        <div className="w-10 h-10 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
-                      </div>
-                      <p className="text-sm text-[#f26522] dark:text-[#ff7744] font-medium text-center">
-                        Searching through {contacts.length.toLocaleString()}{" "}
-                        contacts...
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          ) : !isInitialLoading ? (
-            paginatedContacts.map((contact, index) => (
-              <React.Fragment
-                key={
-                  `${contact.contact_id}-${index}` ||
-                  `${contact.phone}-${index}`
-                }
-              >
-                {/* Contact Item - Polished */}
-                <div
-                  className={`contact-item px-4 py-3 cursor-pointer transition-all duration-300 ease-out group mx-1 my-1.5 select-none rounded-2xl ${
-                    selectedChatId === contact.contact_id
-                      ? "selected"
-                      : ""
-                  }`}
-                  onClick={() => selectChat(contact.contact_id!, contact.id!)}
-                  onContextMenu={(e) => handleContextMenu(e, contact)}
-                  title="Right-click for more options"
+          </div>
+
+          {/* Contact List Section - Polished */}
+          <div
+            className="flex-1 overflow-y-auto h-full relative px-2 py-3 custom-scrollbar"
+            ref={contactListRef}
+          >
+            {isLoadingMoreContacts && (
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 animate-fade-in">
+                <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-pulse">
+                  <LoadingIcon icon="rings" className="w-10 h-10 text-[#f26522] mb-3" />
+                  <span className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">
+                    Loading more...
+                  </span>
+                </div>
+              </div>
+            )}
+            {loadedContacts.length === 0 ? (
+              <div className="flex items-center justify-center h-full min-h-[400px] animate-fade-in">
+                {loadedContacts.length === 0 && (
+                  <div className="flex flex-col items-center text-center max-w-md mx-auto p-6">
+                    {/* Animated Icon */}
+                    <div className="w-16 h-16 bg-[#f26522] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center mb-6 animate-pulse">
+                      <Lucide
+                        icon="MessageCircle"
+                        className="h-8 w-8 text-white stroke-[3]"
+                      />
+                    </div>
+
+                    {/* Heading */}
+                    <h2 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                      {isInitialLoading
+                        ? "Loading contacts..."
+                        : isTagFiltering
+                          ? "Searching contacts..."
+                          : "No contacts found"}
+                    </h2>
+
+                    {/* Description */}
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-6 text-center">
+                      {isInitialLoading
+                        ? "Please wait while we load your contacts"
+                        : isTagFiltering
+                          ? "Searching through all your contacts..."
+                          : "Start by adding your first contact or importing from your phone"}
+                    </p>
+
+                    {/* Loading Progress Card */}
+                    {isInitialLoading && (
+                      <div className="w-full max-w-sm bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-slide-up">
+                        <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-[#4b4b4b] mb-4">
+                          <span>Loading progress</span>
+                          <span className="text-[#f26522]">
+                            {realLoadingProgress}%
+                          </span>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="w-full h-4 bg-gray-200 border-2 border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)] p-0.5">
+                          <div
+                            className="bg-[#f26522] h-full border-r-2 border-[#4b4b4b] transition-all duration-500 ease-out"
+                            style={{ width: `${realLoadingProgress}%` }}
+                          ></div>
+                        </div>
+
+                        {/* Loading Steps */}
+                        <div className="mt-6 space-y-3 text-left">
+                          {loadingSteps.userConfig && (
+                            <div className="flex items-center text-xs font-black text-[#10b981] uppercase tracking-wider animate-slide-up">
+                              <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-3"></div>
+                              <span>User config loaded</span>
+                            </div>
+                          )}
+                          {loadingSteps.contactsFetch && (
+                            <div className="flex items-center text-xs font-black text-[#10b981] uppercase tracking-wider animate-slide-up">
+                              <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-3"></div>
+                              <span>Contacts fetched</span>
+                            </div>
+                          )}
+                          {loadingSteps.contactsProcess && (
+                            <div className="flex items-center text-xs font-black text-[#f26522] uppercase tracking-wider animate-slide-up">
+                              <div className="w-3 h-3 bg-[#f26522] border-2 border-[#4b4b4b] mr-3 animate-pulse"></div>
+                              <span>Processing...</span>
+                            </div>
+                          )}
+                          {loadingSteps.complete && (
+                            <div className="flex items-center text-xs font-black text-[#3b82f6] uppercase tracking-wider animate-slide-up">
+                              <div className="w-3 h-3 bg-[#3b82f6] border-2 border-[#4b4b4b] mr-3"></div>
+                              <span>Complete!</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tag Filtering State */}
+                    {isTagFiltering && (
+                      <div className="w-full max-w-sm bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-slide-up">
+                        <div className="flex items-center justify-center mb-6">
+                          <LoadingIcon icon="rings" className="w-12 h-12 text-[#f26522]" />
+                        </div>
+                        <p className="text-xs font-black text-[#f26522] uppercase tracking-wider text-center">
+                          Searching through {contacts.length.toLocaleString()}{" "}
+                          contacts...
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : !isInitialLoading ? (
+              paginatedContacts.map((contact, index) => (
+                <React.Fragment
+                  key={
+                    `${contact.contact_id}-${index}` ||
+                    `${contact.phone}-${index}`
+                  }
                 >
-                  <div className="flex items-center space-x-3">
-                    {/* Avatar */}
-                    <div className="relative flex-shrink-0 avatar-glow">
-                      <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300 ${
-                          selectedChatId === contact.contact_id
-                            ? "ring-2 ring-[#f26522] dark:ring-[#ff7744] ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
-                            : "ring-1 ring-gray-200 dark:ring-gray-700"
-                        }`}
-                      >
-                        {contact &&
-                          (contact.chat_id &&
-                          contact.chat_id.includes("@g.us") ? (
-                            contact.profilePicUrl ? (
+                  {/* Contact Item - Polished */}
+                  <div
+                    className={`contact-item px-3 py-1.5 cursor-pointer transition-all duration-300 ease-out mx-1 my-1 select-none bg-white border-2 border-[#4b4b4b] ${selectedChatId === contact.contact_id
+                      ? "shadow-[6px_6px_0_#f26522] -translate-y-1 -translate-x-1"
+                      : "shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]"
+                      }`}
+                    onClick={() => selectChat(contact.contact_id!, contact.id!)}
+                    onContextMenu={(e) => handleContextMenu(e, contact)}
+                    title="Right-click for more options"
+                  >
+                    <div className="flex items-center space-x-2.5">
+                      {/* Avatar */}
+                      <div className="relative flex-shrink-0 avatar-glow">
+                        <div
+                          className={`w-9 h-9 flex items-center justify-center overflow-hidden transition-all duration-300 border-2 border-[#4b4b4b] ${selectedChatId === contact.contact_id
+                            ? "shadow-[2px_2px_0_#4b4b4b]"
+                            : ""
+                            }`}
+                        >
+                          {contact &&
+                            (contact.chat_id &&
+                              contact.chat_id.includes("@g.us") ? (
+                              contact.profilePicUrl ? (
+                                <img
+                                  src={contact.profilePicUrl}
+                                  alt="Profile"
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const originalSrc = e.currentTarget.src;
+                                    if (originalSrc !== logoImage) {
+                                      e.currentTarget.src = logoImage;
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-[#f26522]">
+                                  <Lucide
+                                    icon="Users"
+                                    className="w-4 h-4 text-white"
+                                  />
+                                </div>
+                              )
+                            ) : contact.profilePicUrl ? (
                               <img
                                 src={contact.profilePicUrl}
-                                alt="Profile"
+                                alt={contact.contactName || "Profile"}
                                 className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  const originalSrc = e.currentTarget.src;
-                                  if (originalSrc !== logoImage) {
-                                    e.currentTarget.src = logoImage;
-                                  }
-                                }}
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#f26522] to-[#ff7744]">
-                                <Lucide
-                                  icon="Users"
-                                  className="w-5 h-5 text-white"
-                                />
+                              <div className="w-full h-full flex items-center justify-center bg-[#f26522] text-white">
+                                <Lucide icon="User" className="w-4 h-4" />
                               </div>
-                            )
-                          ) : contact.profilePicUrl ? (
-                            <img
-                              src={contact.profilePicUrl}
-                              alt={contact.contactName || "Profile"}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#f26522] to-[#ff7744] text-white">
-                              <Lucide icon="User" className="w-5 h-5" />
-                            </div>
-                          ))}
+                            ))}
+                        </div>
+
+                        {/* Unread Badge - Polished */}
+                        {contact.unreadCount !== undefined && (
+                          <>
+                            {(contact.unreadCount ?? 0) > 0 && (
+                              <span className="absolute -top-1 -right-1 bg-[#ef4444] text-white text-xs border-2 border-[#4b4b4b] w-6 h-6 flex items-center justify-center font-bold shadow-[2px_2px_0_#4b4b4b] unread-badge">
+                                {(contact.unreadCount ?? 0) > 99
+                                  ? "99+"
+                                  : contact.unreadCount ?? 0}
+                              </span>
+                            )}
+                          </>
+                        )}
                       </div>
 
-                      {/* Unread Badge - Polished */}
-                      {contact.unreadCount !== undefined && (
-                        <>
-                          {(contact.unreadCount ?? 0) > 0 && (
-                            <span className="absolute -top-0.5 -right-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md unread-badge">
-                              {(contact.unreadCount ?? 0) > 99
-                                ? "99+"
-                                : contact.unreadCount ?? 0}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
+                      {/* Contact Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1 min-w-0">
+                              <h3
+                                className={`text-xs font-black uppercase tracking-wider truncate transition-all duration-300 ${selectedChatId === contact.contact_id
+                                  ? "text-[#f26522]"
+                                  : "text-[#4b4b4b]"
+                                  }`}
+                              >
+                                {(
+                                  contact.contactName ??
+                                  contact.firstName ??
+                                  contact.phone ??
+                                  ""
+                                ).slice(0, 25)}
+                                {(
+                                  contact.contactName ??
+                                  contact.firstName ??
+                                  contact.phone ??
+                                  ""
+                                ).length > 25
+                                  ? "..."
+                                  : ""}
+                              </h3>
 
-                    {/* Contact Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col gap-0.5">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1 min-w-0">
-                            <h3
-                              className={`text-sm font-semibold truncate transition-all duration-300 ${
-                                selectedChatId === contact.contact_id
-                                  ? "text-[#f26522] dark:text-[#ff7744]"
-                                  : "text-gray-800 dark:text-gray-100 group-hover:text-[#f26522] dark:group-hover:text-[#ff7744]"
-                              }`}
-                            >
-                              {(
-                                contact.contactName ??
-                                contact.firstName ??
-                                contact.phone ??
-                                ""
-                              ).slice(0, 25)}
-                              {(
-                                contact.contactName ??
-                                contact.firstName ??
-                                contact.phone ??
-                                ""
-                              ).length > 25
-                                ? "..."
-                                : ""}
-                            </h3>
-
-                            <div className="flex items-center space-x-0.5 text-xs text-gray-600 dark:text-gray-400">
-                              <div className="flex flex-grow items-center">
-                                {(() => {
-                                  const employeeTags =
-                                    contact.tags?.filter((tag) =>
-                                      employeeList.some(
-                                        (employee) =>
-                                          (employee.name?.toLowerCase() ||
-                                            "") ===
-                                          (typeof tag === "string"
-                                            ? tag
-                                            : String(tag)
-                                          ).toLowerCase()
-                                      )
-                                    ) || [];
-
-                                  const otherTags =
-                                    contact.tags?.filter(
-                                      (tag) =>
-                                        !employeeList.some(
+                              <div className="flex items-center space-x-0.5 text-xs text-gray-600 dark:text-gray-400">
+                                <div className="flex flex-grow items-center">
+                                  {(() => {
+                                    const employeeTags =
+                                      contact.tags?.filter((tag) =>
+                                        employeeList.some(
                                           (employee) =>
                                             (employee.name?.toLowerCase() ||
                                               "") ===
@@ -13663,898 +13588,824 @@ function Main() {
                                               : String(tag)
                                             ).toLowerCase()
                                         )
-                                    ) || [];
+                                      ) || [];
 
-                                  const uniqueTags = Array.from(
-                                    new Set([...otherTags])
-                                  );
+                                    const otherTags =
+                                      contact.tags?.filter(
+                                        (tag) =>
+                                          !employeeList.some(
+                                            (employee) =>
+                                              (employee.name?.toLowerCase() ||
+                                                "") ===
+                                              (typeof tag === "string"
+                                                ? tag
+                                                : String(tag)
+                                              ).toLowerCase()
+                                          )
+                                      ) || [];
 
-                                  return (
-                                    <>
-                                      <button
-                                        className={`text-sm ${
-                                          contact.pinned
-                                            ? "text-blue-600 dark:text-blue-400 font-bold"
-                                            : "text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:font-bold mr-1"
-                                        }`}
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          togglePinConversation(
-                                            contact.chat_id!
-                                          );
-                                        }}
-                                      >
-                                        {contact.pinned ? (
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="9"
-                                            height="9"
-                                            viewBox="0 0 48 48"
-                                            className="text-blue-600 dark:text-blue-400 fill-current mr-0.5"
-                                          >
-                                            <mask id="ipSPin0">
+                                    const uniqueTags = Array.from(
+                                      new Set([...otherTags])
+                                    );
+
+                                    return (
+                                      <>
+                                        <button
+                                          className={`text-sm font-bold flex-shrink-0 border-2 border-[#4b4b4b] p-0.5 mr-1 bg-white ${contact.pinned
+                                            ? "text-[#3b82f6] shadow-[2px_2px_0_#3b82f6]"
+                                            : "text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:text-[#3b82f6] hover:shadow-[2px_2px_0_#3b82f6]"
+                                            }`}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            togglePinConversation(
+                                              contact.chat_id!
+                                            );
+                                          }}
+                                        >
+                                          {contact.pinned ? (
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="12"
+                                              height="12"
+                                              viewBox="0 0 48 48"
+                                              className="fill-current"
+                                            >
+                                              <mask id="ipSPin0">
+                                                <path
+                                                  fill="#fff"
+                                                  stroke="#fff"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth="4"
+                                                  d="M10.696 17.504c2.639-2.638 5.774-2.565 9.182-.696L32.62 9.745l-.721-4.958L43.213 16.1l-4.947-.71l-7.074 12.73c1.783 3.638 1.942 6.544-.697 9.182l-7.778-7.778L6.443 41.556l11.995-16.31l-7.742-7.742Z"
+                                                />
+                                              </mask>
                                               <path
-                                                fill="#fff"
-                                                stroke="#fff"
+                                                fill="currentColor"
+                                                d="M0 0h48v48H0z"
+                                                mask="url(#ipSPin0)"
+                                              />
+                                            </svg>
+                                          ) : (
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="12"
+                                              height="12"
+                                              viewBox="0 0 48 48"
+                                              className="block opacity-50 hover:opacity-100"
+                                            >
+                                              <path
+                                                fill="none"
+                                                stroke="currentColor"
                                                 strokeLinejoin="round"
                                                 strokeWidth="4"
                                                 d="M10.696 17.504c2.639-2.638 5.774-2.565 9.182-.696L32.62 9.745l-.721-4.958L43.213 16.1l-4.947-.71l-7.074 12.73c1.783 3.638 1.942 6.544-.697 9.182l-7.778-7.778L6.443 41.556l11.995-16.31l-7.742-7.742Z"
                                               />
-                                            </mask>
-                                            <path
-                                              fill="currentColor"
-                                              d="M0 0h48v48H0z"
-                                              mask="url(#ipSPin0)"
-                                            />
-                                          </svg>
-                                        ) : (
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="18"
-                                            height="18"
-                                            viewBox="0 0 48 48"
-                                            className="group-hover:block hidden"
-                                          >
-                                            <path
-                                              fill="none"
-                                              stroke="currentColor"
-                                              strokeLinejoin="round"
-                                              strokeWidth="4"
-                                              d="M10.696 17.504c2.639-2.638 5.774-2.565 9.182-.696L32.62 9.745l-.721-4.958L43.213 16.1l-4.947-.71l-7.074 12.73c1.783 3.638 1.942 6.544-.697 9.182l-7.778-7.778L6.443 41.556l11.995-16.31l-7.742-7.742Z"
-                                            />
-                                          </svg>
-                                        )}
-                                      </button>
-                                      {uniqueTags.filter(
-                                        (tag) =>
-                                          (typeof tag === "string"
-                                            ? tag
-                                            : String(tag)
-                                          ).toLowerCase() !== "stop bot"
-                                      ).length > 0 && (
-                                        <div className="flex flex-nowrap gap-1 mr-1 overflow-hidden">
-                                          {uniqueTags
-                                            .filter(
-                                              (tag) =>
-                                                (typeof tag === "string"
-                                                  ? tag
-                                                  : String(tag)
-                                                ).toLowerCase() !== "stop bot"
-                                            )
-                                            .slice(0, 3) // Show first 3 tags to avoid overflow
-                                            .map((tag, tagIndex) => (
-                                              <span
-                                                key={tagIndex}
-                                                className={`text-[10px] font-medium px-1 py-0.5 rounded-full flex items-center backdrop-blur-sm border shadow-sm flex-shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-blue-500/20 dark:group-hover:shadow-blue-400/20 group-hover:bg-blue-200/90 dark:group-hover:bg-blue-500/50 ${
-                                                  selectedChatId ===
-                                                  contact.contact_id
-                                                    ? "bg-blue-200/90 dark:bg-blue-500/60 text-blue-800 dark:text-blue-200 border-blue-300/70 dark:border-blue-400/70 shadow-md shadow-blue-500/30 dark:shadow-blue-400/30 scale-105"
-                                                    : "bg-blue-100/80 dark:bg-blue-600/40 text-blue-700 dark:text-blue-300 border-blue-200/50 dark:border-blue-500/30"
-                                                }`}
-                                                title={
-                                                  typeof tag === "string"
-                                                    ? tag
-                                                    : String(tag)
-                                                }
-                                              >
-                                                <Lucide
-                                                  icon="Tag"
-                                                  className="w-3 h-3 inline-block mr-0.5"
-                                                />
-                                                <span className="truncate max-w-[60px]">
-                                                  {typeof tag === "string"
-                                                    ? tag
-                                                    : String(tag)}
-                                                </span>
-                                              </span>
-                                            ))}
-                                          {uniqueTags.filter(
-                                            (tag) =>
-                                              (typeof tag === "string"
-                                                ? tag
-                                                : String(tag)
-                                              ).toLowerCase() !== "stop bot"
-                                          ).length > 3 && (
-                                            <span className="bg-blue-100/80 dark:bg-blue-600/40 text-blue-700 dark:text-blue-300 text-[10px] font-medium px-1 py-0.5 rounded-full backdrop-blur-sm border border-blue-200/50 dark:border-blue-500/30 shadow-sm flex-shrink-0">
-                                              +
+                                            </svg>
+                                          )}
+                                        </button>
+                                        {uniqueTags.filter(
+                                          (tag) =>
+                                            (typeof tag === "string"
+                                              ? tag
+                                              : String(tag)
+                                            ).toLowerCase() !== "stop bot"
+                                        ).length > 0 && (
+                                            <div className="flex flex-nowrap gap-1 mr-1 overflow-hidden">
+                                              {uniqueTags
+                                                .filter(
+                                                  (tag) =>
+                                                    (typeof tag === "string"
+                                                      ? tag
+                                                      : String(tag)
+                                                    ).toLowerCase() !== "stop bot"
+                                                )
+                                                .slice(0, 3) // Show first 3 tags to avoid overflow
+                                                .map((tag, tagIndex) => (
+                                                  <span
+                                                    key={tagIndex}
+                                                    className={`text-[10px] font-bold px-1 py-0.5 flex items-center border-2 border-[#4b4b4b] flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
+                                                      ? "bg-[#3b82f6] text-white shadow-[2px_2px_0_#4b4b4b]"
+                                                      : "bg-[#bfdbfe] text-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b]"
+                                                      }`}
+                                                    title={
+                                                      typeof tag === "string"
+                                                        ? tag
+                                                        : String(tag)
+                                                    }
+                                                  >
+                                                    <Lucide
+                                                      icon="Tag"
+                                                      className="w-3 h-3 inline-block mr-0.5"
+                                                    />
+                                                    <span className="truncate max-w-[60px]">
+                                                      {typeof tag === "string"
+                                                        ? tag
+                                                        : String(tag)}
+                                                    </span>
+                                                  </span>
+                                                ))}
                                               {uniqueTags.filter(
                                                 (tag) =>
                                                   (typeof tag === "string"
                                                     ? tag
                                                     : String(tag)
                                                   ).toLowerCase() !== "stop bot"
-                                              ).length - 3}
-                                            </span>
+                                              ).length > 3 && (
+                                                  <span className="bg-[#bfdbfe] text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider">
+                                                    +
+                                                    {uniqueTags.filter(
+                                                      (tag) =>
+                                                        (typeof tag === "string"
+                                                          ? tag
+                                                          : String(tag)
+                                                        ).toLowerCase() !== "stop bot"
+                                                    ).length - 3}
+                                                  </span>
+                                                )}
+                                            </div>
                                           )}
-                                        </div>
-                                      )}
-                                      {employeeTags.length > 0 && (
-                                        <div className="flex flex-nowrap gap-1 mr-1 overflow-hidden">
-                                          {employeeTags
-                                            .slice(0, 2)
-                                            .map((tag, tagIndex) => (
-                                              <span
-                                                key={tagIndex}
-                                                className={`text-[10px] font-medium px-1 py-0.5 rounded-full flex items-center backdrop-blur-sm border shadow-sm flex-shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-green-500/20 dark:group-hover:shadow-green-400/20 group-hover:bg-green-200/90 dark:group-hover:bg-green-500/50 ${
-                                                  selectedChatId ===
-                                                  contact.contact_id
-                                                    ? "bg-green-200/90 dark:bg-green-500/60 text-green-800 dark:text-green-200 border-green-300/70 dark:border-green-400/70 shadow-md shadow-green-500/30 dark:shadow-green-400/30 scale-105"
-                                                    : "bg-green-100/80 dark:bg-green-600/40 text-green-700 dark:text-green-300 border-green-200/50 dark:border-green-500/30"
-                                                }`}
-                                                title={
-                                                  typeof tag === "string"
-                                                    ? tag
-                                                    : String(tag)
-                                                }
-                                              >
-                                                <Lucide
-                                                  icon="Users"
-                                                  className="w-3 h-3 inline-block mr-0.5"
-                                                />
-                                                <span className="truncate max-w-[60px]">
-                                                  {employeeList.find(
-                                                    (e) =>
-                                                      (e.name?.toLowerCase() ||
-                                                        "") ===
+                                        {employeeTags.length > 0 && (
+                                          <div className="flex flex-nowrap gap-1 mr-1 overflow-hidden">
+                                            {employeeTags
+                                              .slice(0, 2)
+                                              .map((tag, tagIndex) => (
+                                                <span
+                                                  key={tagIndex}
+                                                  className={`text-[10px] font-bold px-1 py-0.5 flex items-center border-2 border-[#4b4b4b] flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
+                                                    ? "bg-[#10b981] text-white shadow-[2px_2px_0_#4b4b4b]"
+                                                    : "bg-[#bbf7d0] text-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b]"
+                                                    }`}
+                                                  title={
+                                                    typeof tag === "string"
+                                                      ? tag
+                                                      : String(tag)
+                                                  }
+                                                >
+                                                  <Lucide
+                                                    icon="Users"
+                                                    className="w-3 h-3 inline-block mr-0.5"
+                                                  />
+                                                  <span className="truncate max-w-[60px]">
+                                                    {employeeList.find(
+                                                      (e) =>
+                                                        (e.name?.toLowerCase() ||
+                                                          "") ===
+                                                        (typeof tag === "string"
+                                                          ? tag
+                                                          : String(tag)
+                                                        ).toLowerCase()
+                                                    )?.employeeId ||
                                                       (typeof tag === "string"
                                                         ? tag
-                                                        : String(tag)
-                                                      ).toLowerCase()
-                                                  )?.employeeId ||
-                                                    (typeof tag === "string"
-                                                      ? tag
-                                                      : String(tag))}
+                                                        : String(tag))}
+                                                  </span>
                                                 </span>
+                                              ))}
+                                            {employeeTags.length > 2 && (
+                                              <span className="bg-[#bbf7d0] border-2 border-[#4b4b4b] text-[#4b4b4b] text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider shadow-[1px_1px_0_#4b4b4b]">
+                                                +{employeeTags.length - 2}
                                               </span>
-                                            ))}
-                                          {employeeTags.length > 2 && (
-                                            <span className="bg-green-100/80 dark:bg-green-600/40 text-green-700 dark:text-green-300 text-[10px] font-medium px-1 py-0.5 rounded-full backdrop-blur-sm border border-green-200/50 dark:border-green-500/30 shadow-sm flex-shrink-0">
-                                              +{employeeTags.length - 2}
-                                            </span>
-                                          )}
-                                        </div>
-                                      )}
-                                    </>
-                                  );
-                                })()}
+                                            )}
+                                          </div>
+                                        )}
+                                      </>
+                                    );
+                                  })()}
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className="flex flex-col items-end space-y-0 ml-1">
-                            <span
-                              className={`text-xs transition-all duration-300 ${
-                                contact.unreadCount && contact.unreadCount > 0
-                                  ? "text-green-600 dark:text-green-400 font-medium group-hover:text-green-700 dark:group-hover:text-green-300"
-                                  : selectedChatId === contact.contact_id
-                                  ? "text-blue-600 dark:text-blue-400 font-bold"
-                                  : "text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:font-medium"
-                              }`}
-                            >
-                              {contact.last_message?.createdAt ||
-                              contact.last_message?.timestamp
-                                ? formatDate(
-                                    contact.last_message.createdAt ||
-                                      (contact.last_message.timestamp &&
-                                        contact.last_message.timestamp * 1000)
-                                  )
-                                : "New"}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1 min-w-0">
-                            <div className="mt-0.5">
+                            <div className="flex flex-col items-end space-y-0 ml-1">
                               <span
-                                className={`text-sm truncate block transition-all duration-300 group-hover:text-gray-800 dark:group-hover:text-gray-200 group-hover:font-medium ${
-                                  selectedChatId === contact.contact_id
-                                    ? "text-blue-600 dark:text-blue-400 font-semibold"
-                                    : "text-gray-700 dark:text-gray-400"
-                                }`}
+                                className={`text-[10px] font-black uppercase tracking-wider border-2 border-[#4b4b4b] px-1 py-0.5 bg-white transition-all duration-300 text-[#4b4b4b]`}
                               >
-                                {contact.last_message ? (
-                                  <>
-                                    {contact.last_message.from_me && (
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="inline-block w-3 h-3 text-blue-600 dark:text-blue-400 mr-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                          clipRule="evenodd"
-                                        />
-                                      </svg>
-                                    )}
-                                    {(() => {
-                                      const message = contact.last_message;
-                                      if (!message) return "No Messages";
-
-                                      const getMessageContent = () => {
-                                        switch (message.type) {
-                                          case "text":
-                                          case "chat":
-                                            return (
-                                              message.text?.body || "Message"
-                                            );
-                                          case "image":
-                                            return message.text?.body
-                                              ? `📷 ${message.text?.body}`
-                                              : "📷 Photo";
-                                          case "album":
-                                            return message.text?.body
-                                              ? `📷 ${message.text?.body}`
-                                              : "📷 Album";
-                                          case "document":
-                                            return `📄 ${
-                                              message.document?.filename ||
-                                              message.text?.body ||
-                                              "Document"
-                                            }`;
-                                          case "audio":
-                                          case "ptt":
-                                            return "🎵 Audio";
-                                          case "video":
-                                            return message.text?.body
-                                              ? `🎥 ${message.text?.body}`
-                                              : "🎥 Video";
-                                          case "voice":
-                                            return "🎤 Voice message";
-                                          case "sticker":
-                                            return "😊 Sticker";
-                                          case "location":
-                                            return "📍 Location";
-                                          case "call_log":
-                                            return `📞 ${
-                                              message.call_log?.status || "Call"
-                                            }`;
-                                          case "order":
-                                            return "🛒 Order";
-                                          case "gif":
-                                            return "🎞️ GIF";
-                                          case "link_preview":
-                                            return "🔗 Link";
-                                          case "privateNote":
-                                            return "📝 Private note";
-                                          default:
-                                            return (
-                                              message.text?.body || "Message"
-                                            );
-                                        }
-                                      };
-
-                                      const content = getMessageContent();
-                                      return message.from_me
-                                        ? content
-                                        : content;
-                                    })()}
-                                  </>
-                                ) : (
-                                  "No Messages"
-                                )}
+                                {contact.last_message?.createdAt ||
+                                  contact.last_message?.timestamp
+                                  ? formatDate(
+                                    contact.last_message.createdAt ||
+                                    (contact.last_message.timestamp &&
+                                      contact.last_message.timestamp * 1000)
+                                  )
+                                  : "New"}
                               </span>
                             </div>
                           </div>
 
-                          {isAssistantAvailable && (
-                            <div
-                              onClick={(e) =>
-                                toggleStopBotLabel(contact, index, e)
-                              }
-                              className="cursor-pointer ml-2"
-                              title={
-                                contact.tags?.includes("stop bot")
-                                  ? "Bot Disabled"
-                                  : "Bot Enabled"
-                              }
-                            >
-                              <label className="inline-flex items-center cursor-pointer group">
-                                <input
-                                  type="checkbox"
-                                  className="sr-only peer"
-                                  checked={contact.tags?.includes("stop bot")}
-                                  readOnly
-                                />
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1 min-w-0">
+                              <div className="mt-0.5">
                                 <span
-                                  className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300 ${
-                                    contact.tags?.includes("stop bot")
+                                  className={`text-sm truncate block font-bold transition-all duration-300 text-[#4b4b4b]`}
+                                >
+                                  {contact.last_message ? (
+                                    <>
+                                      {contact.last_message.from_me && (
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="inline-block w-3 h-3 text-blue-600 dark:text-blue-400 mr-1"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
+                                      {(() => {
+                                        const message = contact.last_message;
+                                        if (!message) return "No Messages";
+
+                                        const getMessageContent = () => {
+                                          switch (message.type) {
+                                            case "text":
+                                            case "chat":
+                                              return (
+                                                message.text?.body || "Message"
+                                              );
+                                            case "image":
+                                              return message.text?.body
+                                                ? `📷 ${message.text?.body}`
+                                                : "📷 Photo";
+                                            case "album":
+                                              return message.text?.body
+                                                ? `📷 ${message.text?.body}`
+                                                : "📷 Album";
+                                            case "document":
+                                              return `📄 ${message.document?.filename ||
+                                                message.text?.body ||
+                                                "Document"
+                                                }`;
+                                            case "audio":
+                                            case "ptt":
+                                              return "🎵 Audio";
+                                            case "video":
+                                              return message.text?.body
+                                                ? `🎥 ${message.text?.body}`
+                                                : "🎥 Video";
+                                            case "voice":
+                                              return "🎤 Voice message";
+                                            case "sticker":
+                                              return "😊 Sticker";
+                                            case "location":
+                                              return "📍 Location";
+                                            case "call_log":
+                                              return `📞 ${message.call_log?.status || "Call"
+                                                }`;
+                                            case "order":
+                                              return "🛒 Order";
+                                            case "gif":
+                                              return "🎞️ GIF";
+                                            case "link_preview":
+                                              return "🔗 Link";
+                                            case "privateNote":
+                                              return "📝 Private note";
+                                            default:
+                                              return (
+                                                message.text?.body || "Message"
+                                              );
+                                          }
+                                        };
+
+                                        const content = getMessageContent();
+                                        return message.from_me
+                                          ? content
+                                          : content;
+                                      })()}
+                                    </>
+                                  ) : (
+                                    "No Messages"
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+
+                            {isAssistantAvailable && (
+                              <div
+                                onClick={(e) =>
+                                  toggleStopBotLabel(contact, index, e)
+                                }
+                                className="cursor-pointer ml-2"
+                                title={
+                                  contact.tags?.includes("stop bot")
+                                    ? "Bot Disabled"
+                                    : "Bot Enabled"
+                                }
+                              >
+                                <label className="inline-flex items-center cursor-pointer group">
+                                  <input
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                    checked={contact.tags?.includes("stop bot")}
+                                    readOnly
+                                  />
+                                  <span
+                                    className={`relative w-12 h-6 flex items-center rounded-full transition-colors duration-300 ${contact.tags?.includes("stop bot")
                                       ? "bg-gradient-to-r from-red-500 to-red-700"
                                       : "bg-gradient-to-r from-green-500 to-green-700"
-                                  }`}
-                                >
-                                  <span
-                                    className={`absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${
-                                      contact.tags?.includes("stop bot")
+                                      }`}
+                                  >
+                                    <span
+                                      className={`absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${contact.tags?.includes("stop bot")
                                         ? "translate-x-6"
                                         : "translate-x-0"
-                                    }`}
-                                  ></span>
-                                </span>
-                              </label>
-                            </div>
-                          )}
+                                        }`}
+                                    ></span>
+                                  </span>
+                                </label>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </React.Fragment>
-            ))
-          ) : null}
-        </div>
-        {/* Pagination - Polished */}
-        <div
-          className={`flex flex-col justify-center items-center gap-2 py-3 px-3 glass-header ${
-            isLoadingMoreContacts ? "opacity-50" : ""
-          }`}
-        >
-          <div className="flex justify-center items-center">
-            <ReactPaginate
-              breakLabel="…"
-              nextLabel="Next"
-              onPageChange={isLoadingMoreContacts ? () => {} : handlePageChange}
-              pageRangeDisplayed={2}
-              marginPagesDisplayed={2}
-              pageCount={Math.ceil(
-                filteredContactsSearch.length / contactsPerPage
-              )}
-              previousLabel="Previous"
-              renderOnZeroPageCount={null}
-              containerClassName="flex justify-center items-center flex-wrap gap-1 p-2 rounded-2xl glass-card"
-              pageClassName="mx-0.5"
-              pageLinkClassName="px-3 py-1.5 rounded-xl bg-white/60 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 hover:bg-white/90 dark:hover:bg-gray-600/60 text-xs min-w-[32px] text-center font-medium transition-all duration-300 border border-gray-200/50 dark:border-gray-600/50 hover:scale-105"
-              previousClassName="mx-0.5"
-              nextClassName="mx-0.5"
-              previousLinkClassName="px-3 py-1.5 rounded-xl bg-white/60 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 hover:bg-white/90 dark:hover:bg-gray-600/60 text-xs font-medium transition-all duration-300 border border-gray-200/50 dark:border-gray-600/50 hover:scale-105"
-              nextLinkClassName="px-3 py-1.5 rounded-xl bg-white/60 dark:bg-gray-700/40 text-gray-700 dark:text-gray-300 hover:bg-white/90 dark:hover:bg-gray-600/60 text-xs font-medium transition-all duration-300 border border-gray-200/50 dark:border-gray-600/50 hover:scale-105"
-              disabledClassName="opacity-40 cursor-not-allowed hover:scale-100"
-              activeClassName="font-bold"
-              activeLinkClassName="bg-gradient-to-r from-[#f26522] to-[#ff7744] text-white hover:from-[#d94e1a] hover:to-[#f26522] border-transparent shadow-md"
-              forcePage={currentPage}
-            />
+                </React.Fragment>
+              ))
+            ) : null}
           </div>
-        </div>
-        {isLoadingMoreContacts && (
-          <div className="flex flex-col items-center justify-center py-4 px-4 glass-card mx-3 mb-3 rounded-2xl animate-slide-up">
-            <div className="w-8 h-8 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
-            <span className="mt-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
-              Loading more contacts...
-            </span>
-            <div className="mt-2 w-full max-w-xs">
-              <div className="w-full bg-white/20 dark:bg-gray-700/40 rounded-full h-2 backdrop-blur-md border border-white/30 dark:border-gray-600/50 shadow-lg">
-                <div className="bg-gradient-to-r from-[#f26522]/80 to-[#ff7744]/80 h-2 rounded-full animate-pulse shadow-xl"></div>
-              </div>
+          {/* Pagination - Polished */}
+          <div
+            className={`flex flex-col justify-center items-center gap-2 py-4 px-4 bg-white border-t-4 border-[#4b4b4b] ${isLoadingMoreContacts ? "opacity-50" : ""
+              }`}
+          >
+            <div className="flex justify-center items-center w-full">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="Next"
+                onPageChange={isLoadingMoreContacts ? () => { } : handlePageChange}
+                pageRangeDisplayed={2}
+                marginPagesDisplayed={2}
+                pageCount={Math.ceil(
+                  filteredContactsSearch.length / contactsPerPage
+                )}
+                previousLabel="Previous"
+                renderOnZeroPageCount={null}
+                containerClassName="flex justify-center items-center flex-wrap gap-2 w-full"
+                pageClassName="mx-0.5"
+                pageLinkClassName="px-3 py-1 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[1px_1px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                previousClassName="mr-2"
+                nextClassName="ml-2"
+                previousLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                nextLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                disabledClassName="opacity-50 cursor-not-allowed filter grayscale"
+                activeClassName="font-bold scale-110 z-10"
+                activeLinkClassName="bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                forcePage={currentPage}
+              />
             </div>
           </div>
-        )}
-      </div>
-      <div className="flex flex-col w-full sm:w-3/4 relative flex-1 overflow-hidden bg-gradient-to-br from-slate-50/80 to-slate-100/60 dark:from-gray-900 dark:via-gray-800/95 dark:to-gray-900 backdrop-blur-sm">
-        {selectedChatId ? (
-          <>
-            <div
-              className="flex items-center justify-between p-3 bg-white/80 dark:bg-gray-800/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-gray-700/50 shadow-lg shadow-black/5 dark:shadow-black/30 cursor-pointer transition-all duration-300 hover:bg-white/90 dark:hover:bg-gray-800/95"
-              onClick={handleEyeClick}
-            >
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBack();
-                  }}
-                  className="p-2 hover:bg-slate-100 dark:hover:bg-gray-700/60 rounded-xl transition-all duration-300 backdrop-blur-sm border border-slate-200/80 dark:border-gray-600/50 hover:scale-105 hover:shadow-lg hover:shadow-[#f26522]/20 dark:hover:shadow-[#ff7744]/20"
-                >
-                  <Lucide
-                    icon="ChevronLeft"
-                    className="w-4 h-4 text-gray-700 dark:text-gray-300"
-                  />
-                </button>
+          {isLoadingMoreContacts && (
+            <div className="flex flex-col items-center justify-center py-4 px-4 glass-card mx-3 mb-3 rounded-2xl animate-slide-up">
+              <div className="w-8 h-8 border-3 border-[#f26522]/20 dark:border-[#f26522]/20 border-t-[#f26522] dark:border-t-[#ff7744] rounded-full animate-spin"></div>
+              <span className="mt-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                Loading more contacts...
+              </span>
+              <div className="mt-2 w-full max-w-xs">
+                <div className="w-full bg-white/20 dark:bg-gray-700/40 rounded-full h-2 backdrop-blur-md border border-white/30 dark:border-gray-600/50 shadow-lg">
+                  <div className="bg-gradient-to-r from-[#f26522]/80 to-[#ff7744]/80 h-2 rounded-full animate-pulse shadow-xl"></div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col w-full sm:w-3/4 relative flex-1 overflow-hidden bg-gradient-to-br from-slate-50/80 to-slate-100/60 dark:from-gray-900 dark:via-gray-800/95 dark:to-gray-900 backdrop-blur-sm">
+          {selectedChatId ? (
+            <>
+              <div
+                className="flex items-center justify-between p-3 bg-white border-b-2 border-[#4b4b4b] shadow-[0_4px_0_#f26522] cursor-pointer transition-all duration-300 z-10 relative"
+                onClick={handleEyeClick}
+              >
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBack();
+                    }}
+                    className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                  >
+                    <Lucide
+                      icon="ChevronLeft"
+                      className="w-4 h-4 text-[#4b4b4b]"
+                    />
+                  </button>
 
-                <div className="relative group profile-pic-container">
-                  <div className="w-9 h-9 overflow-hidden rounded-full shadow-lg bg-gradient-to-br from-[#f26522] via-[#ff7744] to-[#ff9966] flex items-center justify-center text-white border-2 border-white/40 dark:border-gray-500/40 transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-[#f26522]/30 relative">
-                    {/* Animated gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#f26522] via-[#ff7744] to-[#ff9966] animate-pulse opacity-80"></div>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent"></div>
+                  <div className="relative group profile-pic-container ml-2">
+                    <div className="w-10 h-10 overflow-hidden bg-[#f26522] flex items-center justify-center text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 relative">
+                      {selectedContact?.profilePicUrl ? (
+                        <img
+                          src={selectedContact.profilePicUrl}
+                          alt={selectedContact.contactName || "Profile"}
+                          className="w-full h-full object-cover relative z-10 transition-all duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <span className="text-xl font-black relative z-10 uppercase">
+                          {selectedContact?.contactName
+                            ? selectedContact.contactName.charAt(0)
+                            : "?"}
+                        </span>
+                      )}
+                    </div>
 
-                    {selectedContact?.profilePicUrl ? (
-                      <img
-                        src={selectedContact.profilePicUrl}
-                        alt={selectedContact.contactName || "Profile"}
-                        className="w-9 h-9 rounded-full object-cover relative z-10 transition-all duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <span className="text-sm font-bold relative z-10">
-                        {selectedContact?.contactName
-                          ? selectedContact.contactName.charAt(0).toUpperCase()
-                          : "?"}
-                      </span>
-                    )}
-
-                    {/* Glowing ring effect */}
-                    <div className="absolute inset-0 rounded-full ring-2 ring-white/30 dark:ring-gray-400/30 group-hover:ring-4 group-hover:ring-purple-400/50 dark:group-hover:ring-purple-300/50 transition-all duration-300"></div>
+                    {/* Online status indicator */}
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] transition-all duration-300 z-20"></div>
                   </div>
 
-                  {/* Online status indicator with enhanced effects */}
-                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full animate-pulse shadow-lg shadow-green-500/50 group-hover:scale-125 group-hover:shadow-xl group-hover:shadow-green-500/70 transition-all duration-300 status-indicator"></div>
-
-                  {/* Subtle glow effect */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150"></div>
-                </div>
-
-                <div className="flex flex-col">
-                  <div className="text-sm font-semibold text-gray-800 dark:text-gray-100 capitalize leading-tight">
-                    {selectedContact.contactName && selectedContact.lastName
-                      ? `${selectedContact.contactName} ${selectedContact.lastName}`
-                      : selectedContact.contactName ||
+                  <div className="flex flex-col ml-2">
+                    <div className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider leading-tight">
+                      {selectedContact.contactName && selectedContact.lastName
+                        ? `${selectedContact.contactName} ${selectedContact.lastName}`
+                        : selectedContact.contactName ||
                         selectedContact.firstName ||
                         selectedContact.phone}
+                    </div>
+
+                    {userRole === "1" && (
+                      <div className="text-xs text-[#4b4b4b] font-bold flex items-center mt-0.5">
+                        <Lucide icon="Phone" className="w-3 h-3 mr-1" />
+                        <span>{selectedContact.phone}</span>
+                      </div>
+                    )}
                   </div>
-
-                  {userRole === "1" && (
-                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium flex items-center space-x-1">
-                      <Lucide icon="Phone" className="w-3 h-3" />
-                      <span>{selectedContact.phone}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-1.5">
-                <div className="hidden sm:flex space-x-1.5">
-                  {/* Employee Assignment Button */}
-                  <button
-                    className="group relative p-2.5 hover:scale-110 transition-all duration-300"
-                    onClick={() => setIsEmployeeModalOpen(true)}
-                  >
-                    <span className="flex items-center justify-center w-5 h-5">
-                      <Lucide
-                        icon="Users"
-                        className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300"
-                      />
-                    </span>
-                    <div className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-lg border border-gray-700/50">
-                      Assign Employee
-                    </div>
-                  </button>
-
-                  {/* Tag Assignment Button */}
-                  <button
-                    className="group relative p-2.5 hover:scale-110 transition-all duration-300"
-                    onClick={() => setIsTagModalOpen(true)}
-                  >
-                    <span className="flex items-center justify-center w-5 h-5">
-                      <Lucide
-                        icon="Tag"
-                        className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300"
-                      />
-                    </span>
-                    <div className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-lg border border-gray-700/50">
-                      Add Tag
-                    </div>
-                  </button>
-
-                  {/* Message Search Button */}
-                  <button
-                    className="group relative p-2.5 hover:scale-110 transition-all duration-300"
-                    onClick={handleMessageSearchClick}
-                  >
-                    <span className="flex items-center justify-center w-5 h-5">
-                      <Lucide
-                        icon={isMessageSearchOpen ? "X" : "Search"}
-                        className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300"
-                      />
-                    </span>
-                    <div className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-lg border border-gray-700/50">
-                      {isMessageSearchOpen ? "Close" : "Open"} Search
-                    </div>
-                  </button>
                 </div>
 
-                {/* Mobile Menu Button */}
-                <Menu
-                  as="div"
-                  className="sm:hidden relative inline-block text-left"
-                >
-                  <Menu.Button
-                    as={Button}
-                    className="p-2.5 hover:scale-110 transition-all duration-300"
-                  >
-                    <span className="flex items-center justify-center w-5 h-5">
-                      <Lucide
-                        icon="MoreVertical"
-                        className="w-5 h-5 text-gray-600 dark:text-gray-400"
-                      />
-                    </span>
-                  </Menu.Button>
-                  <Menu.Items className="absolute right-0 mt-2 w-44 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-2xl rounded-xl p-2 z-10 border border-white/30 dark:border-gray-600/50">
-                    <Menu.Item>
-                      <button
-                        className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
-                        onClick={() => setIsEmployeeModalOpen(true)}
-                      >
+                <div className="flex items-center space-x-1.5">
+                  <div className="hidden sm:flex space-x-2">
+                    {/* Employee Assignment Button */}
+                    <button
+                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      onClick={() => setIsEmployeeModalOpen(true)}
+                    >
+                      <span className="flex items-center justify-center w-5 h-5">
                         <Lucide
                           icon="Users"
-                          className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          className="w-4 h-4 text-[#4b4b4b]"
                         />
-                        <span className="text-gray-700 dark:text-gray-300 font-medium">
-                          Assign Employee
-                        </span>
-                      </button>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <button
-                        className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
-                        onClick={() => setIsTagModalOpen(true)}
-                      >
+                      </span>
+                    </button>
+
+                    {/* Tag Assignment Button */}
+                    <button
+                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      onClick={() => setIsTagModalOpen(true)}
+                    >
+                      <span className="flex items-center justify-center w-5 h-5">
                         <Lucide
                           icon="Tag"
-                          className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          className="w-4 h-4 text-[#4b4b4b]"
                         />
-                        <span className="text-gray-700 dark:text-gray-300 font-medium">
-                          Add Tag
-                        </span>
-                      </button>
-                    </Menu.Item>
+                      </span>
+                    </button>
 
-                    <Menu.Item>
-                      <button
-                        className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
-                        onClick={handleMessageSearchClick}
-                      >
+                    {/* Message Search Button */}
+                    <button
+                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      onClick={handleMessageSearchClick}
+                    >
+                      <span className="flex items-center justify-center w-5 h-5">
                         <Lucide
                           icon={isMessageSearchOpen ? "X" : "Search"}
-                          className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          className="w-4 h-4 text-[#4b4b4b]"
                         />
-                        <span className="text-gray-700 dark:text-gray-300 font-medium">
-                          {isMessageSearchOpen ? "Close" : "Open"} Search
-                        </span>
-                      </button>
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Mobile Menu Button */}
+                  <Menu
+                    as="div"
+                    className="sm:hidden relative inline-block text-left"
+                  >
+                    <Menu.Button
+                      as={Button}
+                      className="p-2.5 hover:scale-110 transition-all duration-300"
+                    >
+                      <span className="flex items-center justify-center w-5 h-5">
+                        <Lucide
+                          icon="MoreVertical"
+                          className="w-5 h-5 text-gray-600 dark:text-gray-400"
+                        />
+                      </span>
+                    </Menu.Button>
+                    <Menu.Items className="absolute right-0 mt-2 w-44 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-2xl rounded-xl p-2 z-10 border border-white/30 dark:border-gray-600/50">
+                      <Menu.Item>
+                        <button
+                          className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
+                          onClick={() => setIsEmployeeModalOpen(true)}
+                        >
+                          <Lucide
+                            icon="Users"
+                            className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          />
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            Assign Employee
+                          </span>
+                        </button>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <button
+                          className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
+                          onClick={() => setIsTagModalOpen(true)}
+                        >
+                          <Lucide
+                            icon="Tag"
+                            className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          />
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            Add Tag
+                          </span>
+                        </button>
+                      </Menu.Item>
+
+                      <Menu.Item>
+                        <button
+                          className="flex items-center w-full text-left p-2.5 hover:bg-white/20 dark:hover:bg-gray-700/40 rounded-lg text-sm transition-all duration-200"
+                          onClick={handleMessageSearchClick}
+                        >
+                          <Lucide
+                            icon={isMessageSearchOpen ? "X" : "Search"}
+                            className="w-4 h-4 mr-2.5 text-gray-700 dark:text-gray-300"
+                          />
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            {isMessageSearchOpen ? "Close" : "Open"} Search
+                          </span>
+                        </button>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Menu>
+                </div>
               </div>
-            </div>
-            <div
-              className="flex-1 overflow-y-auto p-2 bg-gradient-to-b from-slate-50/90 via-slate-100/80 to-slate-50/90 dark:from-gray-900/95 dark:via-gray-800/90 dark:to-gray-900/95"
-              style={{
-                paddingBottom: "75px",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-              }}
-              ref={messageListRef}
-            >
-              {selectedChatId && (
-                <>
-                  {/* Lazy loading indicator */}
-                  {isFetchingMessages && (
-                    <div className="flex justify-center py-4">
-                      <div className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-blue-500/20 dark:bg-blue-600/20 border border-blue-400/30 dark:border-blue-500/30 text-blue-700 dark:text-blue-300 font-medium text-sm">
-                        <LoadingIcon
-                          icon="rings"
-                          className="w-4 h-4 animate-spin"
-                        />
-                        <span>Loading messages...</span>
-                      </div>
-                    </div>
-                  )}
-                  {(hasMoreMessages || (allMessages.length === 0 && displayedMessages.length === 0 && selectedChatId && !isFetchingMessages)) && (
-                    <div className="flex justify-center py-4">
-                      {allMessages.length === 0 && displayedMessages.length === 0 ? (
-                        // Show loading animation when initially fetching messages
-                        <div className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-blue-500/20 dark:bg-blue-600/20 border border-blue-400/30 dark:border-blue-500/30 text-blue-700 dark:text-blue-300 font-medium text-sm">
+              <div
+                className="flex-1 overflow-y-auto p-2 bg-gradient-to-b from-slate-50/90 via-slate-100/80 to-slate-50/90 dark:from-gray-900/95 dark:via-gray-800/90 dark:to-gray-900/95"
+                style={{
+                  paddingBottom: "75px",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
+                ref={messageListRef}
+              >
+                {selectedChatId && (
+                  <>
+                    {/* Lazy loading indicator */}
+                    {isFetchingMessages && (
+                      <div className="flex justify-center py-6">
+                        <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-4 animate-pulse">
                           <LoadingIcon
                             icon="rings"
-                            className="w-4 h-4 animate-spin"
+                            className="w-10 h-10 text-[#f26522] mb-2"
                           />
-                          <span>Loading messages...</span>
+                          <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">Loading messages...</span>
                         </div>
-                      ) : hasMoreMessages ? (
-                        // Show load all messages button when there are more messages
-                        <button
-                          onClick={handleLoadAllMessages}
-                          disabled={isLoadingMoreMessages}
-                          className="relative overflow-hidden px-6 py-3 rounded-xl bg-blue-500/90 dark:bg-blue-600/90 backdrop-blur-xl border border-blue-400/50 dark:border-blue-500/50 text-white font-medium text-sm transition-all duration-300 hover:bg-blue-600 dark:hover:bg-blue-700 hover:border-blue-500 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-500/90 disabled:hover:border-blue-400/50"
-                        >
-                          {isFetchingMessages  ? (
-                            <>
-                              <LoadingIcon
-                                icon="rings"
-                                className="w-4 h-4 mr-2 inline-block"
-                              />
-                              Loading...
-                            </>
-                          ) : (
-                            <>
-                              <span className="relative z-10">
-                                Load All Messages
-                              </span>
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full animate-shimmer"></div>
-                            </>
-                          )}
-                        </button>
-                      ) : null}
-                    </div>
-                  )}
-                  {displayedMessages
-                    .filter(
-                      (message) =>
-                        message.type !== "action" &&
-                        message.type !== "e2e_notification" &&
-                        message.type !== "notification_template" &&
-                        (userData?.company !== "Revotrend" ||
-                          userData?.phone === undefined ||
-                          phoneCount === undefined ||
-                          phoneCount === 0 ||
-                          message.phoneIndex === undefined ||
-                          message.phoneIndex === null ||
-                          message.phoneIndex.toString() ===
+                      </div>
+                    )}
+                    {(hasMoreMessages || (allMessages.length === 0 && displayedMessages.length === 0 && selectedChatId && !isFetchingMessages)) && (
+                      <div className="flex justify-center py-6">
+                        {allMessages.length === 0 && displayedMessages.length === 0 ? (
+                          // Show loading animation when initially fetching messages
+                          <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-4 animate-pulse">
+                            <LoadingIcon
+                              icon="rings"
+                              className="w-10 h-10 text-[#f26522] mb-2"
+                            />
+                            <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">Loading messages...</span>
+                          </div>
+                        ) : hasMoreMessages ? (
+                          // Show load all messages button when there are more messages
+                          <button
+                            onClick={handleLoadAllMessages}
+                            disabled={isLoadingMoreMessages}
+                            className="relative overflow-hidden px-6 py-3 bg-[#3b82f6] border-2 border-[#4b4b4b] text-white font-black text-sm uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-[4px_4px_0_#4b4b4b]"
+                          >
+                            {isFetchingMessages ? (
+                              <>
+                                <LoadingIcon
+                                  icon="rings"
+                                  className="w-4 h-4 mr-2 inline-block text-white"
+                                />
+                                LOADING...
+                              </>
+                            ) : (
+                              <>
+                                <span className="relative z-10">
+                                  Load All Messages
+                                </span>
+                              </>
+                            )}
+                          </button>
+                        ) : null}
+                      </div>
+                    )}
+                    {displayedMessages
+                      .filter(
+                        (message) =>
+                          message.type !== "action" &&
+                          message.type !== "e2e_notification" &&
+                          message.type !== "notification_template" &&
+                          (userData?.company !== "Revotrend" ||
+                            userData?.phone === undefined ||
+                            phoneCount === undefined ||
+                            phoneCount === 0 ||
+                            message.phoneIndex === undefined ||
+                            message.phoneIndex === null ||
+                            message.phoneIndex.toString() ===
                             userData?.phone.toString())
-                    )
-                    .map((message, index, array) => {
-                      //
-                      const previousMessage =
-                        index > 0 ? array[index - 1] : null;
+                      )
+                      .map((message, index, array) => {
+                        //
+                        const previousMessage =
+                          index > 0 ? array[index - 1] : null;
 
-                      // Get the current message date
-                      const currentDate = new Date(
-                        (message.timestamp ?? message.createdAt ?? 0) * 1000
-                      );
+                        // Get the current message date
+                        const currentDate = new Date(
+                          (message.timestamp ?? message.createdAt ?? 0) * 1000
+                        );
 
-                      // Get the previous message date
-                      const previousDate = previousMessage
-                        ? new Date(
+                        // Get the previous message date
+                        const previousDate = previousMessage
+                          ? new Date(
                             (previousMessage.timestamp ??
                               previousMessage.createdAt ??
                               0) * 1000
                           )
-                        : null;
+                          : null;
 
-                      const showDateHeader =
-                        index === 0 ||
-                        !previousMessage ||
-                        !previousDate ||
-                        isNaN(previousDate.getTime()) ||
-                        isNaN(currentDate.getTime()) ||
-                        !isSameDay(previousDate, currentDate);
+                        const showDateHeader =
+                          index === 0 ||
+                          !previousMessage ||
+                          !previousDate ||
+                          isNaN(previousDate.getTime()) ||
+                          isNaN(currentDate.getTime()) ||
+                          !isSameDay(previousDate, currentDate);
 
-                      const isMyMessage = message.from_me;
-                      const prevMessage = messages[index - 1];
-                      const nextMessage = messages[index + 1];
+                        const isMyMessage = message.from_me;
+                        const prevMessage = messages[index - 1];
+                        const nextMessage = messages[index + 1];
 
-                      const isFirstInSequence =
-                        !prevMessage || prevMessage.from_me !== message.from_me;
-                      const isLastInSequence =
-                        !nextMessage || nextMessage.from_me !== message.from_me;
+                        const isFirstInSequence =
+                          !prevMessage || prevMessage.from_me !== message.from_me;
+                        const isLastInSequence =
+                          !nextMessage || nextMessage.from_me !== message.from_me;
 
-                      let messageClass;
-                      if (isMyMessage) {
-                        messageClass = isFirstInSequence
-                          ? myFirstMessageClass
-                          : isLastInSequence
-                          ? myLastMessageClass
-                          : myMiddleMessageClass;
-                      } else {
-                        messageClass = isFirstInSequence
-                          ? otherFirstMessageClass
-                          : isLastInSequence
-                          ? otherLastMessageClass
-                          : otherMiddleMessageClass;
-                      }
+                        let messageClass;
+                        if (isMyMessage) {
+                          messageClass = isFirstInSequence
+                            ? myFirstMessageClass
+                            : isLastInSequence
+                              ? myLastMessageClass
+                              : myMiddleMessageClass;
+                        } else {
+                          messageClass = isFirstInSequence
+                            ? otherFirstMessageClass
+                            : isLastInSequence
+                              ? otherLastMessageClass
+                              : otherMiddleMessageClass;
+                        }
 
-                      return (
-                        <React.Fragment
-                          key={`${message.id}-${index}-${
-                            message.timestamp || message.createdAt || index
-                          }`}
-                        >
-                          {showDateHeader && (
-                            <div className="flex justify-center my-4">
-                              <div className="inline-block bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-blue-600/30 dark:via-purple-600/30 dark:to-pink-600/30 text-blue-900 dark:text-blue-100 font-semibold py-2.5 px-4 rounded-2xl shadow-2xl backdrop-blur-3xl border border-blue-300/40 dark:border-blue-400/40 text-sm relative overflow-hidden group hover:scale-105 transition-all duration-500 date-header-container">
-                                {/* Animated gradient background */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-pink-400/10 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 animate-pulse opacity-60"></div>
-                                {/* Subtle inner glow */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-                                {/* Content with relative positioning */}
-                                <span className="relative z-10">
-                                  {(() => {
-                                    const messageDate = new Date(
-                                      (message.timestamp ||
-                                        message.createdAt ||
-                                        0) * 1000
-                                    );
-                                    const today = new Date();
+                        return (
+                          <React.Fragment
+                            key={`${message.id}-${index}-${message.timestamp || message.createdAt || index
+                              }`}
+                          >
+                            {showDateHeader && (
+                              <div className="flex justify-center my-4">
+                                <div className="inline-block bg-[#bfdbfe] text-[#4b4b4b] font-black py-2.5 px-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] uppercase tracking-widest text-sm relative transition-all duration-300 date-header-container hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]">
+                                  {/* Content with relative positioning */}
+                                  <span className="relative z-10">
+                                    {(() => {
+                                      const messageDate = new Date(
+                                        (message.timestamp ||
+                                          message.createdAt ||
+                                          0) * 1000
+                                      );
+                                      const today = new Date();
 
-                                    if (isSameDay(messageDate, today)) {
-                                      return "Today";
-                                    } else if (
-                                      isSameDay(
-                                        messageDate,
-                                        new Date(
-                                          today.getTime() - 24 * 60 * 60 * 1000
+                                      if (isSameDay(messageDate, today)) {
+                                        return "Today";
+                                      } else if (
+                                        isSameDay(
+                                          messageDate,
+                                          new Date(
+                                            today.getTime() - 24 * 60 * 60 * 1000
+                                          )
                                         )
-                                      )
-                                    ) {
-                                      return "Yesterday";
-                                    } else {
-                                      return formatDateHeader(
-                                        message.timestamp ||
+                                      ) {
+                                        return "Yesterday";
+                                      } else {
+                                        return formatDateHeader(
+                                          message.timestamp ||
                                           message.createdAt ||
                                           ""
-                                      );
-                                    }
-                                  })()}
-                                </span>
-                                {/* Enhanced border glow */}
-                                <div className="absolute inset-0 rounded-2xl ring-2 ring-blue-400/20 dark:ring-blue-300/30 group-hover:ring-4 group-hover:ring-blue-400/40 dark:group-hover:ring-blue-300/50 transition-all duration-500"></div>
+                                        );
+                                      }
+                                    })()}
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          <div className="flex items-center gap-1 relative">
-                            <div
-                              data-message-id={message.id}
-                              className={`p-3 mr-2 mb-1 chat-message-bubble ${
-                                message.type === "privateNote"
+                            )}
+                            <div className="flex items-center gap-1 relative">
+                              <div
+                                data-message-id={message.id}
+                                className={`p-3 mr-2 mb-2 chat-message-bubble ${message.type === "privateNote"
                                   ? privateNoteClass
                                   : messageClass
-                              } relative backdrop-blur-3xl border transition-all duration-500 rounded-2xl hover:scale-[1.01] ${
-                                message.from_me
-                                  ? "border-white/20 dark:border-gray-500/30 shadow-lg hover:shadow-2xl shadow-blue-500/15 dark:shadow-blue-400/20 hover:shadow-blue-500/25 dark:hover:shadow-blue-400/30"
-                                  : "border-white/40 dark:border-gray-500/30 shadow-lg hover:shadow-2xl shadow-gray-400/15 dark:shadow-gray-500/20 hover:shadow-gray-400/25 dark:hover:shadow-gray-500/30"
-                              }`}
-                              style={{
-                                maxWidth:
-                                  message.type === "document"
-                                    ? "75%"
-                                    : message.type === "image"
-                                    ? "85%"
-                                    : "60%",
-                                width: `${
-                                  message.type === "document"
+                                  } relative transition-all duration-300 rounded-none ${message.type === "privateNote"
+                                    ? "bg-[#fff9e6] border-2 border-[#eab308] text-[#854d0e] shadow-[4px_4px_0_#eab308]"
+                                    : message.from_me
+                                      ? "bg-[#f26522] border-2 border-[#f26522] text-white shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
+                                      : "bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#f26522]"
+                                  }`}
+                                style={{
+                                  maxWidth:
+                                    message.type === "document"
+                                      ? "75%"
+                                      : message.type === "image"
+                                        ? "85%"
+                                        : "60%",
+                                  width: `${message.type === "document"
                                     ? "350"
                                     : message.type === "image"
-                                    ? "400"
-                                    : message.type !== "text"
-                                    ? "280"
-                                    : message.text?.body
-                                    ? Math.min(
-                                        Math.max(
-                                          message.text.body.length,
-                                          message.text?.context?.quoted_content
-                                            ?.body?.length || 0
-                                        ) * 16,
-                                        300
-                                      )
-                                    : "160"
-                                }px`,
-                                minWidth:
-                                  message.type === "image" ? "300px" : "180px",
-                                backgroundColor: message.from_me
-                                  ? "rgba(59, 130, 246, 0.08)"
-                                  : "rgba(255, 255, 255, 0.15)",
-                                color: message.from_me ? "white" : "inherit",
-                                backdropFilter: "blur(32px)",
-                                WebkitBackdropFilter: "blur(32px)",
-                              }}
-                              onMouseEnter={() =>
-                                setHoveredMessageId(message.id)
-                              }
-                              onMouseLeave={() => setHoveredMessageId(null)}
-                            >
-                              {/* Sender name display */}
-                              {!message.isPrivateNote && (
-                                <div
-                                  className={`relative mb-1 -mx-3 -mt-2 px-3 py-1.5 rounded-t-2xl flex items-center ${
-                                    message.from_me
-                                      ? "bg-gradient-to-r from-blue-500/15 via-blue-400/10 to-transparent dark:from-blue-400/20 dark:via-blue-300/15 dark:to-transparent"
-                                      : "bg-gradient-to-r from-gray-400/15 via-gray-300/10 to-transparent dark:from-gray-500/20 dark:via-gray-400/15 dark:to-transparent"
-                                  }`}
-                                  style={{ minHeight: '24px' }}
-                                >
+                                      ? "400"
+                                      : message.type !== "text"
+                                        ? "280"
+                                        : message.text?.body
+                                          ? Math.min(
+                                            Math.max(
+                                              message.text.body.length,
+                                              message.text?.context?.quoted_content
+                                                ?.body?.length || 0
+                                            ) * 16,
+                                            300
+                                          )
+                                          : "160"
+                                    }px`,
+                                  minWidth:
+                                    message.type === "image" ? "300px" : "180px",
+                                  backgroundColor: undefined,
+                                  color: undefined,
+                                  backdropFilter: "none",
+                                  WebkitBackdropFilter: "none",
+                                }}
+                                onMouseEnter={() =>
+                                  setHoveredMessageId(message.id)
+                                }
+                                onMouseLeave={() => setHoveredMessageId(null)}
+                              >
+                                {/* Sender name display */}
+                                {!message.isPrivateNote && (
                                   <div
-                                    className={`text-xs font-semibold ${
-                                      message.from_me
-                                        ? "text-blue-700 dark:text-blue-300"
-                                        : "text-gray-700 dark:text-gray-300"
-                                    }`}
+                                    className={`relative mb-2 -mx-3 -mt-3 px-3 py-2 border-b-2 flex items-center ${message.from_me
+                                      ? "border-[#4b4b4b] bg-[#f26522] text-white"
+                                      : "border-[#4b4b4b] bg-[#f9f9f9] text-[#4b4b4b]"
+                                      }`}
+                                    style={{ minHeight: '24px' }}
                                   >
-                                    {message.from_me
-                                      ? message.author &&
-                                        !/^\d+/.test(message.author)
-                                        ? message.author
-                                        : "Me"
-                                      : selectedContact?.contactName ||
+                                    <div
+                                      className={`text-xs font-black uppercase tracking-wider ${message.from_me
+                                        ? "text-white"
+                                        : "text-[#4b4b4b]"
+                                        }`}
+                                    >
+                                      {message.from_me
+                                        ? message.author &&
+                                          !/^\d+/.test(message.author)
+                                          ? message.author
+                                          : "Me"
+                                        : selectedContact?.contactName ||
                                         selectedContact?.firstName ||
                                         selectedContact?.phone ||
                                         "Contact"}
+                                    </div>
                                   </div>
-                                  {/* Subtle bottom border */}
-                                  <div
-                                    className={`absolute bottom-0 left-0 right-0 h-px ${
-                                      message.from_me
-                                        ? "bg-gradient-to-r from-blue-300/30 via-blue-200/20 to-transparent dark:from-blue-400/40 dark:via-blue-300/25 dark:to-transparent"
-                                        : "bg-gradient-to-r from-gray-300/30 via-gray-200/20 to-transparent dark:from-gray-400/40 dark:via-gray-300/25 dark:to-transparent"
-                                    }`}
-                                  />
-                                </div>
-                              )}
-                              {message.isPrivateNote && (
-                                <div className="flex items-center mb-1 p-1.5 bg-amber-500/15 dark:bg-amber-400/25 rounded-lg border border-amber-400/30 dark:border-amber-300/40 shadow-md backdrop-blur-2xl">
-                                  <Lock
-                                    size={10}
-                                    className="mr-1.5 text-amber-500 dark:text-amber-400"
-                                  />
-                                  <span className="text-xs font-medium text-amber-700 dark:text-amber-300">
-                                    Private Note
-                                  </span>
-                                </div>
-                              )}
+                                )}
+                                {message.isPrivateNote && (
+                                  <div className="flex items-center mb-1 p-1.5 bg-[#fef08a] rounded-none border-2 border-[#854d0e] shadow-[2px_2px_0_#854d0e] backdrop-blur-none">
+                                    <Lock
+                                      size={10}
+                                      className="mr-1.5 text-[#854d0e]"
+                                    />
+                                    <span className="text-xs font-black uppercase tracking-wider text-[#854d0e]">
+                                      Private Note
+                                    </span>
+                                  </div>
+                                )}
 
-                              {message.type === "text" &&
-                                message.text?.context && (
-                                  <div
-                                    className="p-2 mb-2 rounded-lg bg-white/20 dark:bg-gray-700/40 cursor-pointer hover:bg-white/30 dark:hover:bg-gray-600/50 transition-all duration-300 backdrop-blur-xl border-l-4 border-blue-500 dark:border-blue-400 shadow-md"
-                                    onClick={() => {
-                                      const quotedMessageId =
-                                        message.text?.context?.id;
-                                      const quotedContent =
-                                        message.text?.context?.body;
+                                {message.type === "text" &&
+                                  message.text?.context && (
+                                    <div
+                                      className="p-2 mb-2 rounded-none bg-white/20 cursor-pointer transition-all duration-300 border-l-4 border-l-[#4b4b4b] border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 shadow-[2px_2px_0_#4b4b4b]"
+                                      onClick={() => {
+                                        const quotedMessageId =
+                                          message.text?.context?.id;
+                                        const quotedContent =
+                                          message.text?.context?.body;
 
-                                      // First try by ID if available
-                                      if (quotedMessageId) {
-                                        scrollToMessage(quotedMessageId);
-                                        const element =
-                                          messageListRef.current?.querySelector(
-                                            `[data-message-id="${quotedMessageId}"]`
-                                          );
-                                        if (element) {
-                                          element.classList.add(
-                                            "highlight-message"
-                                          );
-                                          setTimeout(() => {
-                                            element.classList.remove(
-                                              "highlight-message"
-                                            );
-                                          }, 2000);
-                                          return;
-                                        }
-                                      }
-                                      //
-
-                                      // If ID not found or no match, search by content
-                                      if (quotedContent) {
-                                        const matchingMessage = messages.find(
-                                          (msg) =>
-                                            msg.type === "text" &&
-                                            msg.text?.body === quotedContent
-                                        );
-
-                                        if (matchingMessage) {
-                                          scrollToMessage(matchingMessage.id);
+                                        // First try by ID if available
+                                        if (quotedMessageId) {
+                                          scrollToMessage(quotedMessageId);
                                           const element =
                                             messageListRef.current?.querySelector(
-                                              `[data-message-id="${matchingMessage.id}"]`
+                                              `[data-message-id="${quotedMessageId}"]`
                                             );
                                           if (element) {
                                             element.classList.add(
@@ -14565,146 +14416,301 @@ function Main() {
                                                 "highlight-message"
                                               );
                                             }, 2000);
+                                            return;
                                           }
                                         }
-                                      }
-                                    }}
-                                  >
-                                    <div className="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">
-                                      {message.text.context.from || "You"}
-                                    </div>
-                                    <div className="text-xs text-slate-800 dark:text-gray-200">
-                                      {message.text.context.body || ""}
-                                    </div>
-                                  </div>
-                                )}
-                              {message.type === "privateNote" && (
-                                <div className="inline-block whitespace-pre-wrap break-words text-slate-800 dark:text-white text-sm">
-                                  {(() => {
-                                    const text =
-                                      typeof message.text === "string"
-                                        ? message.text
-                                        : message.text?.body || "No content";
-                                    const parts = text.split(/(@\w+)/g);
-                                    return parts.map((part, index) =>
-                                      part.startsWith("@") ? (
-                                        <span key={index} className="underline">
-                                          {part}
-                                        </span>
-                                      ) : (
-                                        part
-                                      )
-                                    );
-                                  })()}
-                                </div>
-                              )}
-                              {(message.type === "text" ||
-                                message.type === "chat") &&
-                                message.text?.body && (
-                                  <div>
-                                    {message.from_me &&
-                                      message.userName &&
-                                      message.userName !== "" &&
-                                      message.chat_id &&
-                                      message.chat_id.includes("@g.us") && (
-                                        <div className="text-sm text-gray-300 dark:text-gray-300 mb-1.5 capitalize font-medium">
-                                          {message.userName}
-                                        </div>
-                                      )}
-                                    <div
-                                      className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                        message.from_me
-                                          ? `${myMessageTextClass}`
-                                          : `${otherMessageTextClass}`
-                                      }`}
-                                      style={{
-                                        wordBreak: "break-word",
-                                        overflowWrap: "break-word",
-                                        lineHeight: "1.4",
-                                        letterSpacing: "0.01em",
+                                        //
+
+                                        // If ID not found or no match, search by content
+                                        if (quotedContent) {
+                                          const matchingMessage = messages.find(
+                                            (msg) =>
+                                              msg.type === "text" &&
+                                              msg.text?.body === quotedContent
+                                          );
+
+                                          if (matchingMessage) {
+                                            scrollToMessage(matchingMessage.id);
+                                            const element =
+                                              messageListRef.current?.querySelector(
+                                                `[data-message-id="${matchingMessage.id}"]`
+                                              );
+                                            if (element) {
+                                              element.classList.add(
+                                                "highlight-message"
+                                              );
+                                              setTimeout(() => {
+                                                element.classList.remove(
+                                                  "highlight-message"
+                                                );
+                                              }, 2000);
+                                            }
+                                          }
+                                        }
                                       }}
                                     >
-                                      {formatText(message.text.body)}
-                                    </div>
-                                    {message.edited && (
-                                      <div className="text-sm text-gray-500 mt-1.5 italic">
-                                        Edited
+                                      <div className={`text-xs font-black uppercase tracking-wider mb-1 ${message.from_me ? "text-white" : "text-[#f26522]"}`}>
+                                        {message.text.context.from || "You"}
                                       </div>
-                                    )}
+                                      <div className={`text-xs ${message.from_me ? "text-white" : "text-[#4b4b4b]"}`}>
+                                        {message.text.context.body || ""}
+                                      </div>
+                                    </div>
+                                  )}
+                                {message.type === "privateNote" && (
+                                  <div className="inline-block whitespace-pre-wrap break-words text-slate-800 dark:text-white text-sm">
+                                    {(() => {
+                                      const text =
+                                        typeof message.text === "string"
+                                          ? message.text
+                                          : message.text?.body || "No content";
+                                      const parts = text.split(/(@\w+)/g);
+                                      return parts.map((part, index) =>
+                                        part.startsWith("@") ? (
+                                          <span key={index} className="underline">
+                                            {part}
+                                          </span>
+                                        ) : (
+                                          part
+                                        )
+                                      );
+                                    })()}
                                   </div>
                                 )}
-                              {message.type === "image" && message.image && (
-                                <>
-                                  {/* Check if media is available or expired */}
-                                  {(message.image.data || message.image.url || message.image.link) ? (
-                                    <div className="p-0 message-content image-message">
+                                {(message.type === "text" ||
+                                  message.type === "chat") &&
+                                  message.text?.body && (
+                                    <div>
+                                      {message.from_me &&
+                                        message.userName &&
+                                        message.userName !== "" &&
+                                        message.chat_id &&
+                                        message.chat_id.includes("@g.us") && (
+                                          <div className="text-sm text-gray-300 dark:text-gray-300 mb-1.5 capitalize font-medium">
+                                            {message.userName}
+                                          </div>
+                                        )}
+                                      <div
+                                        className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-medium ${message.from_me
+                                          ? "text-white"
+                                          : "text-[#4b4b4b]"
+                                          }`}
+                                        style={{
+                                          wordBreak: "break-word",
+                                          overflowWrap: "break-word",
+                                          lineHeight: "1.4",
+                                          letterSpacing: "0.01em",
+                                        }}
+                                      >
+                                        {formatText(message.text.body)}
+                                      </div>
+                                      {message.edited && (
+                                        <div className="text-sm text-gray-500 mt-1.5 italic">
+                                          Edited
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                {message.type === "image" && message.image && (
+                                  <>
+                                    {/* Check if media is available or expired */}
+                                    {(message.image.data || message.image.url || message.image.link) ? (
+                                      <div className="p-0 message-content image-message">
+                                        <img
+                                          src={(() => {
+                                            // Priority: base64 data > url > link
+                                            if (
+                                              message.image.data &&
+                                              message.image.mimetype
+                                            ) {
+                                              return `data:${message.image.mimetype};base64,${message.image.data}`;
+                                            }
+                                            if (message.image.url) {
+                                              const fullUrl = getFullImageUrl(
+                                                message.image.url
+                                              );
+                                              console.log(
+                                                "Using image URL:",
+                                                fullUrl
+                                              );
+                                              return fullUrl;
+                                            }
+                                            if (message.image.link) {
+                                              const fullUrl = getFullImageUrl(
+                                                message.image.link
+                                              );
+                                              console.log(
+                                                "Using image link:",
+                                                fullUrl
+                                              );
+                                              return fullUrl;
+                                            }
+
+                                            return logoImage; // Fallback to placeholder
+                                          })()}
+                                          alt="Image"
+                                          className="rounded-2xl message-image cursor-pointer"
+                                          style={{
+                                            maxWidth: "300px",
+                                            maxHeight: "300px",
+                                            objectFit: "contain",
+                                            display: "block", // Ensure image is displayed as block
+                                            width: "auto", // Allow natural width
+                                            height: "auto", // Allow natural height
+                                          }}
+                                          onClick={() => {
+                                            const imageUrl =
+                                              message.image?.data &&
+                                                message.image?.mimetype
+                                                ? `data:${message.image.mimetype};base64,${message.image.data}`
+                                                : message.image?.url
+                                                  ? getFullImageUrl(message.image.url)
+                                                  : message.image?.link
+                                                    ? getFullImageUrl(
+                                                      message.image.link
+                                                    )
+                                                    : "";
+                                            if (imageUrl) {
+                                              openImageModal(imageUrl);
+                                            }
+                                          }}
+                                          onError={(e) => {
+                                            const originalSrc = e.currentTarget.src;
+                                            console.error(
+                                              "Error loading image:",
+                                              originalSrc
+                                            );
+                                            console.error(
+                                              "Image object:",
+                                              message.image
+                                            );
+                                            // Prevent infinite loop by checking if we're already showing the fallback
+                                            if (originalSrc !== logoImage) {
+                                              e.currentTarget.src = logoImage;
+                                            }
+                                          }}
+                                        />
+                                      </div>
+                                    ) : (
+                                      /* Media expired or unavailable */
+                                      <div className="p-3 message-content rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center gap-2">
+                                        <Lucide icon="ImageOff" className="w-8 h-8 text-gray-400" />
+                                        <div>
+                                          <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            Image not available
+                                          </div>
+                                          <div className="text-xs text-gray-400 dark:text-gray-500">
+                                            {(message.image as any)?.expired ? "Media has expired" : "Media data unavailable"}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
+                                    {message.image?.caption && (
+                                      <div className="mt-2">
+                                        <div
+                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                            ? `${myMessageTextClass}`
+                                            : `${otherMessageTextClass}`
+                                            }`}
+                                          style={{
+                                            wordBreak: "break-word",
+                                            overflowWrap: "break-word",
+                                            lineHeight: "1.4",
+                                            letterSpacing: "0.01em",
+                                          }}
+                                        >
+                                          {formatText(message.image.caption)}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                                {/* Album type - multiple images/videos from WhatsApp */}
+                                {message.type === "album" && (message.image || (message as any).album) && (
+                                  <>
+                                    <div className="p-0 message-content image-message relative">
+                                      <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full z-10">
+                                        📷 Album
+                                      </div>
                                       <img
                                         src={(() => {
+                                          const albumData = message.image || (message as any).album;
                                           // Priority: base64 data > url > link
-                                          if (
-                                            message.image.data &&
-                                            message.image.mimetype
-                                          ) {
-                                            return `data:${message.image.mimetype};base64,${message.image.data}`;
+                                          if (albumData?.data && albumData?.mimetype) {
+                                            return `data:${albumData.mimetype};base64,${albumData.data}`;
                                           }
-                                          if (message.image.url) {
-                                            const fullUrl = getFullImageUrl(
-                                              message.image.url
-                                            );
-                                            console.log(
-                                              "Using image URL:",
-                                              fullUrl
-                                            );
-                                            return fullUrl;
+                                          if (albumData?.url) {
+                                            return getFullImageUrl(albumData.url);
                                           }
-                                          if (message.image.link) {
-                                            const fullUrl = getFullImageUrl(
-                                              message.image.link
-                                            );
-                                            console.log(
-                                              "Using image link:",
-                                              fullUrl
-                                            );
-                                            return fullUrl;
+                                          if (albumData?.link) {
+                                            return getFullImageUrl(albumData.link);
                                           }
-
                                           return logoImage; // Fallback to placeholder
                                         })()}
-                                        alt="Image"
+                                        alt="Album"
                                         className="rounded-2xl message-image cursor-pointer"
                                         style={{
                                           maxWidth: "300px",
                                           maxHeight: "300px",
                                           objectFit: "contain",
-                                          display: "block", // Ensure image is displayed as block
-                                          width: "auto", // Allow natural width
-                                          height: "auto", // Allow natural height
+                                          display: "block",
+                                          width: "auto",
+                                          height: "auto",
                                         }}
                                         onClick={() => {
+                                          const albumData = message.image || (message as any).album;
                                           const imageUrl =
-                                            message.image?.data &&
-                                            message.image?.mimetype
-                                              ? `data:${message.image.mimetype};base64,${message.image.data}`
-                                              : message.image?.url
-                                              ? getFullImageUrl(message.image.url)
-                                              : message.image?.link
-                                              ? getFullImageUrl(
-                                                  message.image.link
-                                                )
-                                              : "";
+                                            albumData?.data && albumData?.mimetype
+                                              ? `data:${albumData.mimetype};base64,${albumData.data}`
+                                              : albumData?.url
+                                                ? getFullImageUrl(albumData.url)
+                                                : albumData?.link
+                                                  ? getFullImageUrl(albumData.link)
+                                                  : "";
                                           if (imageUrl) {
                                             openImageModal(imageUrl);
                                           }
                                         }}
                                         onError={(e) => {
                                           const originalSrc = e.currentTarget.src;
+                                          if (originalSrc !== logoImage) {
+                                            e.currentTarget.src = logoImage;
+                                          }
+                                        }}
+                                      />
+                                    </div>
+                                    {(message.image?.caption || (message as any).album?.caption) && (
+                                      <div className="mt-2">
+                                        <div
+                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                            ? `${myMessageTextClass}`
+                                            : `${otherMessageTextClass}`
+                                            }`}
+                                          style={{
+                                            wordBreak: "break-word",
+                                            overflowWrap: "break-word",
+                                            lineHeight: "1.4",
+                                            letterSpacing: "0.01em",
+                                          }}
+                                        >
+                                          {formatText(message.image?.caption || (message as any).album?.caption)}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                                {message.type === "order" && message.order && (
+                                  <div className="p-0 message-content">
+                                    <div className="flex items-center space-x-2.5 bg-emerald-800 rounded-lg p-2.5">
+                                      <img
+                                        src={`data:image/jpeg;base64,${message.order.thumbnail}`}
+                                        alt="Order"
+                                        className="w-5 h-5 rounded-lg object-cover"
+                                        onError={(e) => {
+                                          const originalSrc = e.currentTarget.src;
                                           console.error(
-                                            "Error loading image:",
+                                            "Error loading order image:",
                                             originalSrc
-                                          );
-                                          console.error(
-                                            "Image object:",
-                                            message.image
                                           );
                                           // Prevent infinite loop by checking if we're already showing the fallback
                                           if (originalSrc !== logoImage) {
@@ -14712,278 +14718,47 @@ function Main() {
                                           }
                                         }}
                                       />
-                                    </div>
-                                  ) : (
-                                    /* Media expired or unavailable */
-                                    <div className="p-3 message-content rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center gap-2">
-                                      <Lucide icon="ImageOff" className="w-8 h-8 text-gray-400" />
-                                      <div>
-                                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                          Image not available
+                                      <div className="text-white">
+                                        <div className="flex items-center mb-1">
+                                          <Lucide
+                                            icon="ShoppingCart"
+                                            className="w-3 h-3 mr-1.5"
+                                          />
+                                          <span className="text-sm">
+                                            {message.order.itemCount} item
+                                          </span>
                                         </div>
-                                        <div className="text-xs text-gray-400 dark:text-gray-500">
-                                          {(message.image as any)?.expired ? "Media has expired" : "Media data unavailable"}
-                                        </div>
+                                        <p className="text-sm opacity-90">
+                                          MYR{" "}
+                                          {(
+                                            message.order.totalAmount1000 / 1000
+                                          ).toFixed(2)}
+                                        </p>
                                       </div>
-                                    </div>
-                                  )}
-                                  {message.image?.caption && (
-                                    <div className="mt-2">
-                                      <div
-                                        className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                          message.from_me
-                                            ? `${myMessageTextClass}`
-                                            : `${otherMessageTextClass}`
-                                        }`}
-                                        style={{
-                                          wordBreak: "break-word",
-                                          overflowWrap: "break-word",
-                                          lineHeight: "1.4",
-                                          letterSpacing: "0.01em",
-                                        }}
-                                      >
-                                        {formatText(message.image.caption)}
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                              {/* Album type - multiple images/videos from WhatsApp */}
-                              {message.type === "album" && (message.image || (message as any).album) && (
-                                <>
-                                  <div className="p-0 message-content image-message relative">
-                                    <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full z-10">
-                                      📷 Album
-                                    </div>
-                                    <img
-                                      src={(() => {
-                                        const albumData = message.image || (message as any).album;
-                                        // Priority: base64 data > url > link
-                                        if (albumData?.data && albumData?.mimetype) {
-                                          return `data:${albumData.mimetype};base64,${albumData.data}`;
-                                        }
-                                        if (albumData?.url) {
-                                          return getFullImageUrl(albumData.url);
-                                        }
-                                        if (albumData?.link) {
-                                          return getFullImageUrl(albumData.link);
-                                        }
-                                        return logoImage; // Fallback to placeholder
-                                      })()}
-                                      alt="Album"
-                                      className="rounded-2xl message-image cursor-pointer"
-                                      style={{
-                                        maxWidth: "300px",
-                                        maxHeight: "300px",
-                                        objectFit: "contain",
-                                        display: "block",
-                                        width: "auto",
-                                        height: "auto",
-                                      }}
-                                      onClick={() => {
-                                        const albumData = message.image || (message as any).album;
-                                        const imageUrl =
-                                          albumData?.data && albumData?.mimetype
-                                            ? `data:${albumData.mimetype};base64,${albumData.data}`
-                                            : albumData?.url
-                                            ? getFullImageUrl(albumData.url)
-                                            : albumData?.link
-                                            ? getFullImageUrl(albumData.link)
-                                            : "";
-                                        if (imageUrl) {
-                                          openImageModal(imageUrl);
-                                        }
-                                      }}
-                                      onError={(e) => {
-                                        const originalSrc = e.currentTarget.src;
-                                        if (originalSrc !== logoImage) {
-                                          e.currentTarget.src = logoImage;
-                                        }
-                                      }}
-                                    />
-                                  </div>
-                                  {(message.image?.caption || (message as any).album?.caption) && (
-                                    <div className="mt-2">
-                                      <div
-                                        className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                          message.from_me
-                                            ? `${myMessageTextClass}`
-                                            : `${otherMessageTextClass}`
-                                        }`}
-                                        style={{
-                                          wordBreak: "break-word",
-                                          overflowWrap: "break-word",
-                                          lineHeight: "1.4",
-                                          letterSpacing: "0.01em",
-                                        }}
-                                      >
-                                        {formatText(message.image?.caption || (message as any).album?.caption)}
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                              {message.type === "order" && message.order && (
-                                <div className="p-0 message-content">
-                                  <div className="flex items-center space-x-2.5 bg-emerald-800 rounded-lg p-2.5">
-                                    <img
-                                      src={`data:image/jpeg;base64,${message.order.thumbnail}`}
-                                      alt="Order"
-                                      className="w-5 h-5 rounded-lg object-cover"
-                                      onError={(e) => {
-                                        const originalSrc = e.currentTarget.src;
-                                        console.error(
-                                          "Error loading order image:",
-                                          originalSrc
-                                        );
-                                        // Prevent infinite loop by checking if we're already showing the fallback
-                                        if (originalSrc !== logoImage) {
-                                          e.currentTarget.src = logoImage;
-                                        }
-                                      }}
-                                    />
-                                    <div className="text-white">
-                                      <div className="flex items-center mb-1">
-                                        <Lucide
-                                          icon="ShoppingCart"
-                                          className="w-3 h-3 mr-1.5"
-                                        />
-                                        <span className="text-sm">
-                                          {message.order.itemCount} item
-                                        </span>
-                                      </div>
-                                      <p className="text-sm opacity-90">
-                                        MYR{" "}
-                                        {(
-                                          message.order.totalAmount1000 / 1000
-                                        ).toFixed(2)}
-                                      </p>
                                     </div>
                                   </div>
-                                </div>
-                              )}
-                              {message.type === "video" && message.video && (
-                                <>
-                                  <div className="video-content p-0 message-content image-message">
-                                    <video
-                                      controls
-                                      src={message.video.link}
-                                      className="rounded-lg message-image cursor-pointer"
-                                      style={{
-                                        width: "auto",
-                                        height: "auto",
-                                        maxWidth: "100%",
-                                      }}
-                                    />
-                                  </div>
-                                  {message.video?.caption && (
-                                    <div className="mt-2">
-                                      <div
-                                        className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                          message.from_me
-                                            ? `${myMessageTextClass}`
-                                            : `${otherMessageTextClass}`
-                                        }`}
-                                        style={{
-                                          wordBreak: "break-word",
-                                          overflowWrap: "break-word",
-                                          lineHeight: "1.4",
-                                          letterSpacing: "0.01em",
-                                        }}
-                                      >
-                                        {formatText(message.video.caption)}
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                              {message.type === "gif" && message.gif && (
-                                <>
-                                  <div className="gif-content p-0 message-content image-message">
-                                    <img
-                                      src={message.gif.link}
-                                      alt="GIF"
-                                      className="rounded-lg message-image cursor-pointer"
-                                      style={{
-                                        maxWidth: "200px",
-                                        maxHeight: "200px",
-                                      }}
-                                      onClick={() =>
-                                        openImageModal(message.gif?.link || "")
-                                      }
-                                    />
-                                  </div>
-                                  {message.gif?.caption && (
-                                    <div className="mt-2">
-                                      <div
-                                        className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                          message.from_me
-                                            ? `${myMessageTextClass}`
-                                            : `${otherMessageTextClass}`
-                                        }`}
-                                        style={{
-                                          wordBreak: "break-word",
-                                          overflowWrap: "break-word",
-                                          lineHeight: "1.4",
-                                          letterSpacing: "0.01em",
-                                        }}
-                                      >
-                                        {formatText(message.gif.caption)}
-                                      </div>
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                              {(message.type === "audio" ||
-                                message.type === "ptt") &&
-                                (message.audio || message.ptt) && (
+                                )}
+                                {message.type === "video" && message.video && (
                                   <>
-                                    <div className="message-content">
-                                      <audio
+                                    <div className="video-content p-0 message-content image-message">
+                                      <video
                                         controls
-                                        className="max-w-full"
-                                        src={(() => {
-                                          const audioData =
-                                            message.audio?.data ||
-                                            message.ptt?.data;
-                                          const mimeType =
-                                            message.audio?.mimetype ||
-                                            message.ptt?.mimetype;
-                                          if (audioData && mimeType) {
-                                            const byteCharacters =
-                                              atob(audioData);
-                                            const byteNumbers = new Array(
-                                              byteCharacters.length
-                                            );
-                                            for (
-                                              let i = 0;
-                                              i < byteCharacters.length;
-                                              i++
-                                            ) {
-                                              byteNumbers[i] =
-                                                byteCharacters.charCodeAt(i);
-                                            }
-                                            const byteArray = new Uint8Array(
-                                              byteNumbers
-                                            );
-                                            const blob = new Blob([byteArray], {
-                                              type: mimeType,
-                                            });
-                                            return URL.createObjectURL(blob);
-                                          }
-                                          return "";
-                                        })()}
+                                        src={message.video.link}
+                                        className="rounded-lg message-image cursor-pointer"
+                                        style={{
+                                          width: "auto",
+                                          height: "auto",
+                                          maxWidth: "100%",
+                                        }}
                                       />
                                     </div>
-                                    {(message.audio?.caption ||
-                                      message.ptt?.caption) && (
+                                    {message.video?.caption && (
                                       <div className="mt-2">
                                         <div
-                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                            message.from_me
-                                              ? `${myMessageTextClass}`
-                                              : `${otherMessageTextClass}`
-                                          }`}
+                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                            ? `${myMessageTextClass}`
+                                            : `${otherMessageTextClass}`
+                                            }`}
                                           style={{
                                             wordBreak: "break-word",
                                             overflowWrap: "break-word",
@@ -14991,1631 +14766,1395 @@ function Main() {
                                             letterSpacing: "0.01em",
                                           }}
                                         >
-                                          {formatText(
-                                            message.audio?.caption ||
-                                              message.ptt?.caption ||
-                                              ""
-                                          )}
+                                          {formatText(message.video.caption)}
                                         </div>
                                       </div>
                                     )}
                                   </>
                                 )}
-                              {message.type === "voice" && message.voice && (
-                                <div className="voice-content p-0 message-content image-message w-auto h-auto">
-                                  <audio
-                                    controls
-                                    src={message.voice.link}
-                                    className="rounded-2xl message-image cursor-pointer"
-                                  />
-                                </div>
-                              )}
-                              {message.type === "document" &&
-                                message.document && (
+                                {message.type === "gif" && message.gif && (
                                   <>
-                                    <div className="document-content flex flex-col items-center p-8 rounded-2xl shadow-xl bg-white dark:bg-gray-800">
-                                      {/* Document Header */}
-                                      <div className="flex items-center p-3 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 mb-3 w-full">
-                                        <svg
-                                          className="w-6 h-6 text-gray-500 dark:text-gray-400 mr-2.5"
-                                          fill="currentColor"
-                                          viewBox="0 0 20 20"
+                                    <div className="gif-content p-0 message-content image-message">
+                                      <img
+                                        src={message.gif.link}
+                                        alt="GIF"
+                                        className="rounded-lg message-image cursor-pointer"
+                                        style={{
+                                          maxWidth: "200px",
+                                          maxHeight: "200px",
+                                        }}
+                                        onClick={() =>
+                                          openImageModal(message.gif?.link || "")
+                                        }
+                                      />
+                                    </div>
+                                    {message.gif?.caption && (
+                                      <div className="mt-2">
+                                        <div
+                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                            ? `${myMessageTextClass}`
+                                            : `${otherMessageTextClass}`
+                                            }`}
+                                          style={{
+                                            wordBreak: "break-word",
+                                            overflowWrap: "break-word",
+                                            lineHeight: "1.4",
+                                            letterSpacing: "0.01em",
+                                          }}
                                         >
-                                          <path
-                                            fillRule="evenodd"
-                                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                                            clipRule="evenodd"
-                                          />
-                                        </svg>
-                                        <div className="flex-1">
-                                          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            {message.document.file_name ||
-                                              message.document.filename ||
-                                              "Document"}
-                                          </p>
-                                          <div className="text-xs text-gray-500 dark:text-gray-400">
-                                            {message.document.page_count &&
-                                              `${
-                                                message.document.page_count
-                                              } page${
-                                                message.document.page_count > 1
+                                          {formatText(message.gif.caption)}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                                {(message.type === "audio" ||
+                                  message.type === "ptt") &&
+                                  (message.audio || message.ptt) && (
+                                    <>
+                                      <div className="message-content">
+                                        <audio
+                                          controls
+                                          className="max-w-full"
+                                          src={(() => {
+                                            const audioData =
+                                              message.audio?.data ||
+                                              message.ptt?.data;
+                                            const mimeType =
+                                              message.audio?.mimetype ||
+                                              message.ptt?.mimetype;
+                                            if (audioData && mimeType) {
+                                              const byteCharacters =
+                                                atob(audioData);
+                                              const byteNumbers = new Array(
+                                                byteCharacters.length
+                                              );
+                                              for (
+                                                let i = 0;
+                                                i < byteCharacters.length;
+                                                i++
+                                              ) {
+                                                byteNumbers[i] =
+                                                  byteCharacters.charCodeAt(i);
+                                              }
+                                              const byteArray = new Uint8Array(
+                                                byteNumbers
+                                              );
+                                              const blob = new Blob([byteArray], {
+                                                type: mimeType,
+                                              });
+                                              return URL.createObjectURL(blob);
+                                            }
+                                            return "";
+                                          })()}
+                                        />
+                                      </div>
+                                      {(message.audio?.caption ||
+                                        message.ptt?.caption) && (
+                                          <div className="mt-2">
+                                            <div
+                                              className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                                ? `${myMessageTextClass}`
+                                                : `${otherMessageTextClass}`
+                                                }`}
+                                              style={{
+                                                wordBreak: "break-word",
+                                                overflowWrap: "break-word",
+                                                lineHeight: "1.4",
+                                                letterSpacing: "0.01em",
+                                              }}
+                                            >
+                                              {formatText(
+                                                message.audio?.caption ||
+                                                message.ptt?.caption ||
+                                                ""
+                                              )}
+                                            </div>
+                                          </div>
+                                        )}
+                                    </>
+                                  )}
+                                {message.type === "voice" && message.voice && (
+                                  <div className="voice-content p-0 message-content image-message w-auto h-auto">
+                                    <audio
+                                      controls
+                                      src={message.voice.link}
+                                      className="rounded-2xl message-image cursor-pointer"
+                                    />
+                                  </div>
+                                )}
+                                {message.type === "document" &&
+                                  message.document && (
+                                    <>
+                                      <div className="document-content flex flex-col items-center p-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                        {/* Document Header */}
+                                        <div className="flex items-center p-3 bg-white border-b-2 border-[#4b4b4b] mb-3 w-full">
+                                          <svg
+                                            className="w-6 h-6 text-gray-500 dark:text-gray-400 mr-2.5"
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                          >
+                                            <path
+                                              fillRule="evenodd"
+                                              d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                              clipRule="evenodd"
+                                            />
+                                          </svg>
+                                          <div className="flex-1">
+                                            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                              {message.document.file_name ||
+                                                message.document.filename ||
+                                                "Document"}
+                                            </p>
+                                            <div className="text-xs text-gray-500 dark:text-gray-400">
+                                              {message.document.page_count &&
+                                                `${message.document.page_count
+                                                } page${message.document.page_count > 1
                                                   ? "s"
                                                   : ""
-                                              } • `}
-                                            {message.document.mimetype ||
-                                              "Unknown"}{" "}
-                                            •{" "}
-                                            {(
-                                              (message.document.file_size ||
-                                                message.document.fileSize ||
-                                                0) /
-                                              (1024 * 1024)
-                                            ).toFixed(2)}{" "}
-                                            MB
+                                                } • `}
+                                              {message.document.mimetype ||
+                                                "Unknown"}{" "}
+                                              •{" "}
+                                              {(
+                                                (message.document.file_size ||
+                                                  message.document.fileSize ||
+                                                  0) /
+                                                (1024 * 1024)
+                                              ).toFixed(2)}{" "}
+                                              MB
+                                            </div>
                                           </div>
-                                        </div>
-                                        <button
-                                          onClick={() => {
-                                            if (message.document) {
-                                              const docUrl =
-                                                message.document.link ||
-                                                (message.document.data
-                                                  ? `data:${message.document.mimetype};base64,${message.document.data}`
-                                                  : null);
-                                              if (docUrl) {
-                                                const documentName =
-                                                  message.document.file_name ||
-                                                  message.document.filename ||
-                                                  "Document";
-                                                openPDFModal(
-                                                  docUrl,
-                                                  documentName
-                                                );
-                                              }
-                                            }
-                                          }}
-                                          className="px-3 py-1.5 text-xs bg-green-500 dark:bg-green-600 text-white rounded hover:bg-green-600 dark:hover:bg-green-700 transition-colors"
-                                        >
-                                          View
-                                        </button>
-                                      </div>
-
-                                      {/* Document Content Preview */}
-                                      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden w-full">
-                                        {(() => {
-                                          // Debug logging to understand document structure
-
-                                          const docUrl =
-                                            message.document.link ||
-                                            (message.document.data
-                                              ? `data:${message.document.mimetype};base64,${message.document.data}`
-                                              : null);
-
-                                          // Check if it's a PDF based on MIME type or file extension
-                                          const isPDF =
-                                            message.document.mimetype?.includes(
-                                              "pdf"
-                                            ) ||
-                                            docUrl
-                                              ?.toLowerCase()
-                                              .includes(".pdf") ||
-                                            message.document.file_name
-                                              ?.toLowerCase()
-                                              .includes(".pdf") ||
-                                            message.document.filename
-                                              ?.toLowerCase()
-                                              .includes(".pdf");
-
-                                          // Check if it's an image based on MIME type or file extension
-                                          const isImage =
-                                            message.document.mimetype?.startsWith(
-                                              "image/"
-                                            ) ||
-                                            docUrl
-                                              ?.toLowerCase()
-                                              .match(
-                                                /\.(jpg|jpeg|png|gif|webp)$/i
-                                              ) ||
-                                            message.document.file_name
-                                              ?.toLowerCase()
-                                              .match(
-                                                /\.(jpg|jpeg|png|gif|webp)$/i
-                                              ) ||
-                                            message.document.filename
-                                              ?.toLowerCase()
-                                              .match(
-                                                /\.(jpg|jpeg|png|gif|webp)$/i
-                                              );
-
-                                          if (isPDF && docUrl) {
-                                            // Try multiple PDF viewing methods
-                                            const googleDocsViewer = `https://docs.google.com/viewer?url=${encodeURIComponent(
-                                              docUrl
-                                            )}&embedded=true`;
-
-                                            return (
-                                              <div className="relative">
-                                                {/* Primary PDF viewer */}
-                                                <iframe
-                                                  src={docUrl}
-                                                  width="100%"
-                                                  height="400"
-                                                  title="PDF Document Preview"
-                                                  className="border-0"
-                                                  style={{ minHeight: "400px" }}
-                                                  onError={(e) => {
-                                                    console.log(
-                                                      "PDF preview error:",
-                                                      e
-                                                    );
-                                                  }}
-                                                />
-
-                                                {/* Google Docs viewer as fallback */}
-                                                <div className="mt-2">
-                                                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 text-center">
-                                                    If PDF doesn't load, try:
-                                                  </p>
-                                                  <div className="flex gap-2 justify-center">
-                                                    <button
-                                                      onClick={() =>
-                                                        window.open(
-                                                          docUrl,
-                                                          "_blank"
-                                                        )
-                                                      }
-                                                      className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs transition-colors"
-                                                    >
-                                                      Open in New Tab
-                                                    </button>
-                                                    <button
-                                                      onClick={() =>
-                                                        window.open(
-                                                          googleDocsViewer,
-                                                          "_blank"
-                                                        )
-                                                      }
-                                                      className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded text-xs transition-colors"
-                                                    >
-                                                      Google Docs Viewer
-                                                    </button>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            );
-                                          } else if (isImage && docUrl) {
-                                            return (
-                                              <img
-                                                src={docUrl}
-                                                alt="Image Document Preview"
-                                                className="w-full h-auto max-h-96 object-contain"
-                                                onError={(e) => {
-                                                  console.log(
-                                                    "Image preview error:",
-                                                    e
-                                                  );
-                                                }}
-                                              />
-                                            );
-                                          } else if (docUrl) {
-                                            // For other document types, try to show a preview if possible
-                                            return (
-                                              <div className="p-4 text-center">
-                                                <svg
-                                                  className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-2"
-                                                  fill="currentColor"
-                                                  viewBox="0 0 20 20"
-                                                >
-                                                  <path
-                                                    fillRule="evenodd"
-                                                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                                                    clipRule="evenodd"
-                                                  />
-                                                </svg>
-                                                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                                                  Document preview not available
-                                                </p>
-                                                <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                                  Click View to open this
-                                                  document
-                                                </p>
-                                              </div>
-                                            );
-                                          } else {
-                                            // No URL available
-                                            return (
-                                              <div className="p-4 text-center">
-                                                <svg
-                                                  className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-2"
-                                                  fill="currentColor"
-                                                  viewBox="0 0 20 20"
-                                                >
-                                                  <path
-                                                    fillRule="evenodd"
-                                                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                                                    clipRule="evenodd"
-                                                  />
-                                                </svg>
-                                                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                                                  Document not available
-                                                </p>
-                                                <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
-                                                  Document data could not be
-                                                  loaded
-                                                </p>
-                                              </div>
-                                            );
-                                          }
-                                        })()}
-                                      </div>
-                                    </div>
-                                    {message.document?.caption && (
-                                      <div className="mt-2">
-                                        <div
-                                          className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${
-                                            message.from_me
-                                              ? `${myMessageTextClass}`
-                                              : `${otherMessageTextClass}`
-                                          }`}
-                                          style={{
-                                            wordBreak: "break-word",
-                                            overflowWrap: "break-word",
-                                            lineHeight: "1.4",
-                                            letterSpacing: "0.01em",
-                                          }}
-                                        >
-                                          {formatText(message.document.caption)}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </>
-                                )}
-                              {message.type === "revoked" && (
-                                <div className="revoked-content p-0 message-content image-message rounded-lg overflow-hidden text-gray-800 dark:text-gray-200">
-                                  <div className="p-2.5 italic">
-                                    This message was deleted and is unavailable.
-                                  </div>
-                                </div>
-                              )}
-                              {message.type === "sticker" &&
-                                message.sticker && (
-                                  <div className="sticker-content p-0 message-content image-message">
-                                    <img
-                                      src={`data:${message.sticker.mimetype};base64,${message.sticker.data}`}
-                                      alt="Sticker"
-                                      className="rounded-lg message-image cursor-pointer"
-                                      style={{
-                                        maxWidth: "150px",
-                                        maxHeight: "150px",
-                                        objectFit: "contain",
-                                      }}
-                                      onClick={() =>
-                                        openImageModal(
-                                          `data:${message.sticker?.mimetype};base64,${message.sticker?.data}`
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                )}
-                              {message.type === "location" &&
-                                message.location && (
-                                  <div className="location-content p-0 message-content image-message">
-                                    <button
-                                      className="text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-2.5 py-1.5 text-sm transition-colors duration-200"
-                                      onClick={() =>
-                                        window.open(
-                                          `https://www.google.com/maps?q=${message.location?.latitude},${message.location?.longitude}`,
-                                          "_blank"
-                                        )
-                                      }
-                                    >
-                                      Open Location in Google Maps
-                                    </button>
-                                    {message.location?.description && (
-                                      <div className="text-sm text-white mt-1.5">
-                                        {message.location.description}
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                              {message.type === "poll" && message.poll && (
-                                <div className="poll-content p-0 message-content image-message">
-                                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                                    Poll: {message.poll.title}
-                                  </div>
-                                </div>
-                              )}
-                              {message.type === "hsm" && message.hsm && (
-                                <div className="hsm-content p-0 message-content image-message">
-                                  <div className="text-sm text-gray-800 dark:text-gray-200">
-                                    HSM: {message.hsm.title}
-                                  </div>
-                                </div>
-                              )}
-                              {message.type === "action" && message.action && (
-                                <div className="action-content flex flex-col p-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
-                                  {message.action.type === "delete" ? (
-                                    <div className="text-gray-400 dark:text-gray-600 text-sm">
-                                      This message was deleted
-                                    </div>
-                                  ) : (
-                                    /* Handle other action types */
-                                    <div className="text-gray-800 dark:text-gray-200 text-sm">
-                                      {message.action.emoji}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                              {message.type === "call_log" && (
-                                <div className="call-logs-content p-2.5 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                  <div className="flex items-center space-x-2 mb-2">
-                                    {message.call_log?.status === "missed" ? (
-                                      <Lucide
-                                        icon="PhoneMissed"
-                                        className="w-3.5 h-3.5 text-red-500"
-                                      />
-                                    ) : message.call_log?.status ===
-                                      "outgoing" ? (
-                                      <Lucide
-                                        icon="PhoneOutgoing"
-                                        className="w-3.5 h-3.5 text-green-500"
-                                      />
-                                    ) : (
-                                      <Lucide
-                                        icon="PhoneIncoming"
-                                        className="w-3.5 h-3.5 text-blue-500"
-                                      />
-                                    )}
-                                    <span className="font-medium text-gray-800 dark:text-gray-200 capitalize text-sm">
-                                      {message.call_log?.status || "Missed"}{" "}
-                                      Call
-                                    </span>
-                                  </div>
-
-                                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                                    {message.call_log?.duration ? (
-                                      <span>
-                                        Duration:{" "}
-                                        {formatDuration(
-                                          message.call_log.duration
-                                        )}
-                                      </span>
-                                    ) : (
-                                      <span>Call ended</span>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                              {/* Fallback for unknown message types with media data */}
-                              {message.type === "unknown" && (message as any)[message.type] && (
-                                <div className="unknown-content p-2.5 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                  {(() => {
-                                    const unknownData = (message as any)[message.type];
-                                    const mediaUrl = unknownData?.url || unknownData?.data;
-                                    const mimetype = unknownData?.metadata?.mimetype || unknownData?.mimetype || "";
-                                    
-                                    if (mediaUrl && mimetype.startsWith("image/")) {
-                                      return (
-                                        <img
-                                          src={unknownData.data 
-                                            ? `data:${mimetype};base64,${unknownData.data}` 
-                                            : mediaUrl}
-                                          alt="Media"
-                                          className="rounded-lg max-w-[200px] max-h-[200px] object-contain cursor-pointer"
-                                          onClick={() => openImageModal(unknownData.data 
-                                            ? `data:${mimetype};base64,${unknownData.data}` 
-                                            : mediaUrl)}
-                                        />
-                                      );
-                                    } else if (mediaUrl) {
-                                      return (
-                                        <div className="flex items-center space-x-2">
-                                          <Lucide icon="File" className="w-4 h-4 text-gray-500" />
-                                          <span className="text-sm text-gray-600 dark:text-gray-400">
-                                            Media attachment
-                                          </span>
                                           <button
-                                            onClick={() => window.open(mediaUrl, "_blank")}
-                                            className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                                            onClick={() => {
+                                              if (message.document) {
+                                                const docUrl =
+                                                  message.document.link ||
+                                                  (message.document.data
+                                                    ? `data:${message.document.mimetype};base64,${message.document.data}`
+                                                    : null);
+                                                if (docUrl) {
+                                                  const documentName =
+                                                    message.document.file_name ||
+                                                    message.document.filename ||
+                                                    "Document";
+                                                  openPDFModal(
+                                                    docUrl,
+                                                    documentName
+                                                  );
+                                                }
+                                              }
+                                            }}
+                                            className="px-3 py-1.5 text-xs font-black uppercase tracking-wider bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
                                           >
                                             View
                                           </button>
                                         </div>
-                                      );
-                                    } else {
-                                      return (
-                                        <span className="text-sm text-gray-500 dark:text-gray-400 italic">
-                                          Unsupported message type
-                                        </span>
-                                      );
-                                    }
-                                  })()}
-                                </div>
-                              )}
 
-                              {showReactionPicker &&
-                                reactionMessage?.id === message.id && (
-                                  <ReactionPicker
-                                    onSelect={(emoji) =>
-                                      handleReaction(message, emoji)
-                                    }
-                                    onClose={() => setShowReactionPicker(false)}
-                                  />
-                                )}
-                              {(() => {
-                                const reactions = message.reactions;
-                                if (reactions && reactions.length > 0) {
-                                  return (
-                                    <div className="flex items-center gap-0.5 mt-2 -mb-1 ml-auto">
-                                      {reactions.map(
-                                        (reaction: any, index: number) => (
-                                          <span
-                                            key={index}
-                                            className="text-sm bg-white/80 dark:bg-gray-700/80 rounded-full p-1 shadow-sm border border-white/30 dark:border-gray-600/30 backdrop-blur-sm"
+                                        {/* Document Content Preview */}
+                                        <div className="bg-white border-2 border-[#4b4b4b] overflow-hidden w-full relative">
+                                          {(() => {
+                                            // Debug logging to understand document structure
+
+                                            const docUrl =
+                                              message.document.link ||
+                                              (message.document.data
+                                                ? `data:${message.document.mimetype};base64,${message.document.data}`
+                                                : null);
+
+                                            // Check if it's a PDF based on MIME type or file extension
+                                            const isPDF =
+                                              message.document.mimetype?.includes(
+                                                "pdf"
+                                              ) ||
+                                              docUrl
+                                                ?.toLowerCase()
+                                                .includes(".pdf") ||
+                                              message.document.file_name
+                                                ?.toLowerCase()
+                                                .includes(".pdf") ||
+                                              message.document.filename
+                                                ?.toLowerCase()
+                                                .includes(".pdf");
+
+                                            // Check if it's an image based on MIME type or file extension
+                                            const isImage =
+                                              message.document.mimetype?.startsWith(
+                                                "image/"
+                                              ) ||
+                                              docUrl
+                                                ?.toLowerCase()
+                                                .match(
+                                                  /\.(jpg|jpeg|png|gif|webp)$/i
+                                                ) ||
+                                              message.document.file_name
+                                                ?.toLowerCase()
+                                                .match(
+                                                  /\.(jpg|jpeg|png|gif|webp)$/i
+                                                ) ||
+                                              message.document.filename
+                                                ?.toLowerCase()
+                                                .match(
+                                                  /\.(jpg|jpeg|png|gif|webp)$/i
+                                                );
+
+                                            if (isPDF && docUrl) {
+                                              // Try multiple PDF viewing methods
+                                              const googleDocsViewer = `https://docs.google.com/viewer?url=${encodeURIComponent(
+                                                docUrl
+                                              )}&embedded=true`;
+
+                                              return (
+                                                <div className="relative">
+                                                  {/* Primary PDF viewer */}
+                                                  <iframe
+                                                    src={docUrl}
+                                                    width="100%"
+                                                    height="400"
+                                                    title="PDF Document Preview"
+                                                    className="border-0"
+                                                    style={{ minHeight: "400px" }}
+                                                    onError={(e) => {
+                                                      console.log(
+                                                        "PDF preview error:",
+                                                        e
+                                                      );
+                                                    }}
+                                                  />
+
+                                                  {/* Google Docs viewer as fallback */}
+                                                  <div className="mt-2">
+                                                    <p className="text-xs text-[#4b4b4b] font-bold uppercase tracking-wider mb-2 text-center">
+                                                      If PDF doesn't load, try:
+                                                    </p>
+                                                    <div className="flex gap-2 justify-center">
+                                                      <button
+                                                        onClick={() =>
+                                                          window.open(
+                                                            docUrl,
+                                                            "_blank"
+                                                          )
+                                                        }
+                                                        className="px-3 py-1.5 bg-[#3b82f6] text-white font-bold uppercase tracking-wider border-2 border-[#4b4b4b] text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                                      >
+                                                        Open in New Tab
+                                                      </button>
+                                                      <button
+                                                        onClick={() =>
+                                                          window.open(
+                                                            googleDocsViewer,
+                                                            "_blank"
+                                                          )
+                                                        }
+                                                        className="px-3 py-1.5 bg-[#10b981] text-white font-bold uppercase tracking-wider border-2 border-[#4b4b4b] text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                                      >
+                                                        Google Docs Viewer
+                                                      </button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            } else if (isImage && docUrl) {
+                                              return (
+                                                <img
+                                                  src={docUrl}
+                                                  alt="Image Document Preview"
+                                                  className="w-full h-auto max-h-96 object-contain"
+                                                  onError={(e) => {
+                                                    console.log(
+                                                      "Image preview error:",
+                                                      e
+                                                    );
+                                                  }}
+                                                />
+                                              );
+                                            } else if (docUrl) {
+                                              // For other document types, try to show a preview if possible
+                                              return (
+                                                <div className="p-4 text-center">
+                                                  <svg
+                                                    className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-2"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                  >
+                                                    <path
+                                                      fillRule="evenodd"
+                                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                                      clipRule="evenodd"
+                                                    />
+                                                  </svg>
+                                                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                                    Document preview not available
+                                                  </p>
+                                                  <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
+                                                    Click View to open this
+                                                    document
+                                                  </p>
+                                                </div>
+                                              );
+                                            } else {
+                                              // No URL available
+                                              return (
+                                                <div className="p-4 text-center">
+                                                  <svg
+                                                    className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-2"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 20 20"
+                                                  >
+                                                    <path
+                                                      fillRule="evenodd"
+                                                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                                      clipRule="evenodd"
+                                                    />
+                                                  </svg>
+                                                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                                    Document not available
+                                                  </p>
+                                                  <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">
+                                                    Document data could not be
+                                                    loaded
+                                                  </p>
+                                                </div>
+                                              );
+                                            }
+                                          })()}
+                                        </div>
+                                      </div>
+                                      {message.document?.caption && (
+                                        <div className="mt-2">
+                                          <div
+                                            className={`whitespace-pre-wrap break-words overflow-hidden leading-relaxed text-sm font-normal ${message.from_me
+                                              ? `${myMessageTextClass}`
+                                              : `${otherMessageTextClass}`
+                                              }`}
                                             style={{
-                                              transform: `translateX(${
-                                                index * -8
-                                              }px)`,
-                                              zIndex: reactions.length - index,
+                                              wordBreak: "break-word",
+                                              overflowWrap: "break-word",
+                                              lineHeight: "1.4",
+                                              letterSpacing: "0.01em",
                                             }}
                                           >
-                                            {reaction.emoji}
-                                          </span>
-                                        )
+                                            {formatText(message.document.caption)}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </>
+                                  )}
+                                {message.type === "revoked" && (
+                                  <div className="revoked-content p-0 message-content image-message rounded-lg overflow-hidden text-gray-800 dark:text-gray-200">
+                                    <div className="p-2.5 italic">
+                                      This message was deleted and is unavailable.
+                                    </div>
+                                  </div>
+                                )}
+                                {message.type === "sticker" &&
+                                  message.sticker && (
+                                    <div className="sticker-content p-0 message-content image-message">
+                                      <img
+                                        src={`data:${message.sticker.mimetype};base64,${message.sticker.data}`}
+                                        alt="Sticker"
+                                        className="rounded-lg message-image cursor-pointer"
+                                        style={{
+                                          maxWidth: "150px",
+                                          maxHeight: "150px",
+                                          objectFit: "contain",
+                                        }}
+                                        onClick={() =>
+                                          openImageModal(
+                                            `data:${message.sticker?.mimetype};base64,${message.sticker?.data}`
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  )}
+                                {message.type === "location" &&
+                                  message.location && (
+                                    <div className="location-content p-0 message-content image-message">
+                                      <button
+                                        className="text-white bg-blue-500 hover:bg-blue-600 rounded-lg px-2.5 py-1.5 text-sm transition-colors duration-200"
+                                        onClick={() =>
+                                          window.open(
+                                            `https://www.google.com/maps?q=${message.location?.latitude},${message.location?.longitude}`,
+                                            "_blank"
+                                          )
+                                        }
+                                      >
+                                        Open Location in Google Maps
+                                      </button>
+                                      {message.location?.description && (
+                                        <div className="text-sm text-white mt-1.5">
+                                          {message.location.description}
+                                        </div>
                                       )}
                                     </div>
-                                  );
-                                }
-                                return null;
-                              })()}
-                              <div className="flex justify-between items-center mt-2">
-                                <div
-                                  className={`message-timestamp text-xs ${
-                                    message.from_me
+                                  )}
+                                {message.type === "poll" && message.poll && (
+                                  <div className="poll-content p-0 message-content image-message">
+                                    <div className="text-sm text-gray-800 dark:text-gray-200">
+                                      Poll: {message.poll.title}
+                                    </div>
+                                  </div>
+                                )}
+                                {message.type === "hsm" && message.hsm && (
+                                  <div className="hsm-content p-0 message-content image-message">
+                                    <div className="text-sm text-gray-800 dark:text-gray-200">
+                                      HSM: {message.hsm.title}
+                                    </div>
+                                  </div>
+                                )}
+                                {message.type === "action" && message.action && (
+                                  <div className="action-content flex flex-col p-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+                                    {message.action.type === "delete" ? (
+                                      <div className="text-gray-400 dark:text-gray-600 text-sm">
+                                        This message was deleted
+                                      </div>
+                                    ) : (
+                                      /* Handle other action types */
+                                      <div className="text-gray-800 dark:text-gray-200 text-sm">
+                                        {message.action.emoji}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                                {message.type === "call_log" && (
+                                  <div className="call-logs-content p-2.5 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    <div className="flex items-center space-x-2 mb-2">
+                                      {message.call_log?.status === "missed" ? (
+                                        <Lucide
+                                          icon="PhoneMissed"
+                                          className="w-3.5 h-3.5 text-red-500"
+                                        />
+                                      ) : message.call_log?.status ===
+                                        "outgoing" ? (
+                                        <Lucide
+                                          icon="PhoneOutgoing"
+                                          className="w-3.5 h-3.5 text-green-500"
+                                        />
+                                      ) : (
+                                        <Lucide
+                                          icon="PhoneIncoming"
+                                          className="w-3.5 h-3.5 text-blue-500"
+                                        />
+                                      )}
+                                      <span className="font-medium text-gray-800 dark:text-gray-200 capitalize text-sm">
+                                        {message.call_log?.status || "Missed"}{" "}
+                                        Call
+                                      </span>
+                                    </div>
+
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                      {message.call_log?.duration ? (
+                                        <span>
+                                          Duration:{" "}
+                                          {formatDuration(
+                                            message.call_log.duration
+                                          )}
+                                        </span>
+                                      ) : (
+                                        <span>Call ended</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Fallback for unknown message types with media data */}
+                                {message.type === "unknown" && (message as any)[message.type] && (
+                                  <div className="unknown-content p-2.5 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                    {(() => {
+                                      const unknownData = (message as any)[message.type];
+                                      const mediaUrl = unknownData?.url || unknownData?.data;
+                                      const mimetype = unknownData?.metadata?.mimetype || unknownData?.mimetype || "";
+
+                                      if (mediaUrl && mimetype.startsWith("image/")) {
+                                        return (
+                                          <img
+                                            src={unknownData.data
+                                              ? `data:${mimetype};base64,${unknownData.data}`
+                                              : mediaUrl}
+                                            alt="Media"
+                                            className="rounded-lg max-w-[200px] max-h-[200px] object-contain cursor-pointer"
+                                            onClick={() => openImageModal(unknownData.data
+                                              ? `data:${mimetype};base64,${unknownData.data}`
+                                              : mediaUrl)}
+                                          />
+                                        );
+                                      } else if (mediaUrl) {
+                                        return (
+                                          <div className="flex items-center space-x-2">
+                                            <Lucide icon="File" className="w-4 h-4 text-gray-500" />
+                                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                                              Media attachment
+                                            </span>
+                                            <button
+                                              onClick={() => window.open(mediaUrl, "_blank")}
+                                              className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                                            >
+                                              View
+                                            </button>
+                                          </div>
+                                        );
+                                      } else {
+                                        return (
+                                          <span className="text-sm text-gray-500 dark:text-gray-400 italic">
+                                            Unsupported message type
+                                          </span>
+                                        );
+                                      }
+                                    })()}
+                                  </div>
+                                )}
+
+                                {showReactionPicker &&
+                                  reactionMessage?.id === message.id && (
+                                    <ReactionPicker
+                                      onSelect={(emoji) =>
+                                        handleReaction(message, emoji)
+                                      }
+                                      onClose={() => setShowReactionPicker(false)}
+                                    />
+                                  )}
+                                {(() => {
+                                  const reactions = message.reactions;
+                                  if (reactions && reactions.length > 0) {
+                                    return (
+                                      <div className="flex items-center gap-0.5 mt-2 -mb-1 ml-auto">
+                                        {reactions.map(
+                                          (reaction: any, index: number) => (
+                                            <span
+                                              key={index}
+                                              className="text-sm bg-white/80 dark:bg-gray-700/80 rounded-full p-1 shadow-sm border border-white/30 dark:border-gray-600/30 backdrop-blur-sm"
+                                              style={{
+                                                transform: `translateX(${index * -8
+                                                  }px)`,
+                                                zIndex: reactions.length - index,
+                                              }}
+                                            >
+                                              {reaction.emoji}
+                                            </span>
+                                          )
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })()}
+                                <div className="flex justify-between items-center mt-2">
+                                  <div
+                                    className={`message-timestamp text-xs ${message.from_me
                                       ? "text-slate-700 dark:text-white/80"
                                       : "text-gray-500 dark:text-gray-400"
-                                  } flex items-center h-4 ml-auto`}
-                                >
-                                  <div className="flex items-center mr-1">
-                                    {(hoveredMessageId === message.id ||
-                                      selectedMessages.includes(message)) && (
-                                      <>
-                                        <button
-                                          className="ml-1 text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-300 transition-colors duration-200 mr-1"
-                                          onClick={() =>
-                                            setReplyToMessage(message)
-                                          }
-                                        >
-                                          <Lucide
-                                            icon="MessageCircleReply"
-                                            className="w-4 h-4"
-                                          />
-                                        </button>
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            setReactionMessage(message);
-                                            setShowReactionPicker(true);
-                                          }}
-                                          className="mr-1 p-0.5 text-black hover:text-blue-500 dark:text-white dark:hover:text-blue-300"
-                                        >
-                                          <Lucide
-                                            icon="Heart"
-                                            className="w-4 h-4"
-                                          />
-                                        </button>
-                                        {showReactionPicker &&
-                                          reactionMessage?.id ===
-                                            message.id && (
-                                            <ReactionPicker
-                                              onSelect={(emoji) =>
-                                                handleReaction(message, emoji)
-                                              }
-                                              onClose={() =>
-                                                setShowReactionPicker(false)
-                                              }
-                                            />
-                                          )}
-                                        {message.from_me &&
-                                          message.createdAt &&
-                                          new Date().getTime() -
-                                            new Date(
-                                              message.createdAt
-                                            ).getTime() <
-                                            15 * 60 * 1000 &&
-                                          userRole !== "3" && (
+                                      } flex items-center h-4 ml-auto`}
+                                  >
+                                    <div className="flex items-center mr-1">
+                                      {(hoveredMessageId === message.id ||
+                                        selectedMessages.includes(message)) && (
+                                          <>
                                             <button
-                                              className="ml-2 mr-2 text-white hover:text-blue-500 dark:text-white dark:hover:text-blue-300 transition-colors duration-200"
+                                              className="ml-1 text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-300 transition-colors duration-200 mr-1"
                                               onClick={() =>
-                                                openEditMessage(message)
+                                                setReplyToMessage(message)
                                               }
                                             >
                                               <Lucide
-                                                icon="PencilLine"
+                                                icon="MessageCircleReply"
                                                 className="w-4 h-4"
                                               />
                                             </button>
-                                          )}
-                                        <input
-                                          type="checkbox"
-                                          className="mr-2 form-checkbox h-4 w-4 text-blue-500 transition duration-150 ease-in-out rounded-full"
-                                          checked={selectedMessages.includes(
-                                            message
-                                          )}
-                                          onChange={() =>
-                                            handleSelectMessage(message)
-                                          }
-                                        />
-                                      </>
-                                    )}
-                                    {message.phoneIndex !== undefined && (
-                                      <div
-                                        className={`text-xs px-2 py-1 ${
-                                          message.from_me
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setReactionMessage(message);
+                                                setShowReactionPicker(true);
+                                              }}
+                                              className="mr-1 p-0.5 text-black hover:text-blue-500 dark:text-white dark:hover:text-blue-300"
+                                            >
+                                              <Lucide
+                                                icon="Heart"
+                                                className="w-4 h-4"
+                                              />
+                                            </button>
+                                            {showReactionPicker &&
+                                              reactionMessage?.id ===
+                                              message.id && (
+                                                <ReactionPicker
+                                                  onSelect={(emoji) =>
+                                                    handleReaction(message, emoji)
+                                                  }
+                                                  onClose={() =>
+                                                    setShowReactionPicker(false)
+                                                  }
+                                                />
+                                              )}
+                                            {message.from_me &&
+                                              message.createdAt &&
+                                              new Date().getTime() -
+                                              new Date(
+                                                message.createdAt
+                                              ).getTime() <
+                                              15 * 60 * 1000 &&
+                                              userRole !== "3" && (
+                                                <button
+                                                  className="ml-2 mr-2 text-white hover:text-blue-500 dark:text-white dark:hover:text-blue-300 transition-colors duration-200"
+                                                  onClick={() =>
+                                                    openEditMessage(message)
+                                                  }
+                                                >
+                                                  <Lucide
+                                                    icon="PencilLine"
+                                                    className="w-4 h-4"
+                                                  />
+                                                </button>
+                                              )}
+                                            <input
+                                              type="checkbox"
+                                              className="mr-2 form-checkbox h-4 w-4 text-blue-500 transition duration-150 ease-in-out rounded-full"
+                                              checked={selectedMessages.includes(
+                                                message
+                                              )}
+                                              onChange={() =>
+                                                handleSelectMessage(message)
+                                              }
+                                            />
+                                          </>
+                                        )}
+                                      {message.phoneIndex !== undefined && (
+                                        <div
+                                          className={`text-xs px-2 py-1 ${message.from_me
                                             ? "text-slate-800 dark:text-white"
                                             : "text-slate-800 dark:text-white"
-                                        }`}
-                                      >
-                                        {phoneNames[message.phoneIndex] ||
-                                          `Phone ${message.phoneIndex + 1}`}
-                                      </div>
-                                    )}
-                                    <span
-                                      className={`text-xs ${
-                                        message.from_me
+                                            }`}
+                                        >
+                                          {phoneNames[message.phoneIndex] ||
+                                            `Phone ${message.phoneIndex + 1}`}
+                                        </div>
+                                      )}
+                                      <span
+                                        className={`text-xs ${message.from_me
                                           ? "text-slate-700 dark:text-white/90"
                                           : "text-slate-700 dark:text-white/90"
-                                      }`}
-                                    >
-                                      {formatTimestamp(
-                                        message.createdAt ||
+                                          }`}
+                                      >
+                                        {formatTimestamp(
+                                          message.createdAt ||
                                           message.dateAdded ||
                                           message.timestamp
-                                      )}
-                                    </span>
+                                        )}
+                                      </span>
 
-                                    {/* Message status indicator for sent messages */}
-                                    {message.from_me && (
-                                      <div className="flex items-center ml-4">
-                                        {message.status === "failed" ? (
-                                          <div className="flex items-center space-x-2">
+                                      {/* Message status indicator for sent messages */}
+                                      {message.from_me && (
+                                        <div className="flex items-center ml-4">
+                                          {message.status === "failed" ? (
+                                            <div className="flex items-center space-x-2">
+                                              <Lucide
+                                                icon="XCircle"
+                                                className="w-4 h-4 text-red-500"
+                                                title={
+                                                  message.error ||
+                                                  "Failed to send"
+                                                }
+                                              />
+                                              <button
+                                                onClick={() =>
+                                                  handleRetryMessage(message)
+                                                }
+                                                className="text-xs text-blue-500 hover:text-blue-700 underline"
+                                                title="Retry sending message"
+                                              >
+                                                Retry
+                                              </button>
+                                            </div>
+                                          ) : message.status === "sent" ? (
                                             <Lucide
-                                              icon="XCircle"
-                                              className="w-4 h-4 text-red-500"
-                                              title={
-                                                message.error ||
-                                                "Failed to send"
-                                              }
+                                              icon="Check"
+                                              className="w-4 h-4 text-green-500"
+                                              title="Message sent"
                                             />
-                                            <button
-                                              onClick={() =>
-                                                handleRetryMessage(message)
-                                              }
-                                              className="text-xs text-blue-500 hover:text-blue-700 underline"
-                                              title="Retry sending message"
-                                            >
-                                              Retry
-                                            </button>
-                                          </div>
-                                        ) : message.status === "sent" ? (
-                                          <Lucide
-                                            icon="Check"
-                                            className="w-4 h-4 text-green-500"
-                                            title="Message sent"
-                                          />
-                                        ) : message.status === "sending" ? (
-                                          <div className="flex items-center space-x-2">
-                                            <LoadingIcon
-                                              icon="spinning-circles"
-                                              className="w-12 h-12 text-blue-500 dark:text-blue-400"
-                                            />
-                                            <span className="text-xs text-blue-500">
-                                              Sending...
-                                            </span>
-                                          </div>
-                                        ) : null}
-                                      </div>
-                                    )}
+                                          ) : message.status === "sending" ? (
+                                            <div className="flex items-center space-x-2">
+                                              <LoadingIcon
+                                                icon="spinning-circles"
+                                                className="w-12 h-12 text-blue-500 dark:text-blue-400"
+                                              />
+                                              <span className="text-xs text-blue-500">
+                                                Sending...
+                                              </span>
+                                            </div>
+                                          ) : null}
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </React.Fragment>
-                      );
-                    })}
-                </>
-              )}
-            </div>
+                          </React.Fragment>
+                        );
+                      })}
+                  </>
+                )}
+              </div>
 
-            {replyToMessage && (
-              <div className="absolute bottom-20 left-2 p-3 rounded-xl bg-gray-800/60 dark:bg-gray-900/80 flex items-center justify-between backdrop-blur-xl border border-gray-600/50 dark:border-gray-700/60 shadow-xl shadow-black/20 dark:shadow-black/40 max-w-md">
-                <div>
-                  <div className="font-semibold text-gray-100 dark:text-gray-50 text-sm">
-                    {replyToMessage.from_me
-                      ? "Me"
-                      : selectedContact?.contactName ||
+              {replyToMessage && (
+                <div className="absolute bottom-20 left-2 p-3 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-between max-w-md z-20 transition-all duration-300">
+                  <div>
+                    <div className="font-black text-[#4b4b4b] uppercase tracking-wider text-sm mb-1">
+                      {replyToMessage.from_me
+                        ? "Me"
+                        : selectedContact?.contactName ||
                         selectedContact?.firstName ||
                         selectedContact?.phone ||
                         replyToMessage.from_name}
-                  </div>
-                  <div className="text-xs text-gray-300 dark:text-gray-400 mt-1">
-                    {replyToMessage.type === "text" &&
-                      replyToMessage.text?.body}
-                    {replyToMessage.type === "link_preview" &&
-                      replyToMessage.link_preview?.body}
-                    {replyToMessage.type === "image" && (
-                      <img
-                        src={replyToMessage.image?.link}
-                        alt="Image"
-                        style={{ maxWidth: "150px" }}
-                        className="rounded-lg shadow-md"
-                      />
-                    )}
-                    {replyToMessage.type === "video" && (
-                      <video
-                        controls
-                        src={replyToMessage.video?.link}
-                        style={{ maxWidth: "150px" }}
-                        className="rounded-lg shadow-md"
-                      />
-                    )}
-                    {replyToMessage.type === "gif" && (
-                      <img
-                        src={replyToMessage.gif?.link}
-                        alt="GIF"
-                        style={{ maxWidth: "120px" }}
-                        className="rounded-lg shadow-md"
-                      />
-                    )}
-                    {replyToMessage.type === "audio" && (
-                      <audio
-                        controls
-                        src={replyToMessage.audio?.link}
-                        className="rounded-lg"
-                      />
-                    )}
-                    {replyToMessage.type === "voice" && (
-                      <audio
-                        controls
-                        src={replyToMessage.voice?.link}
-                        className="rounded-lg"
-                      />
-                    )}
-                    {replyToMessage.type === "document" && (
-                      <iframe
-                        src={replyToMessage.document?.link}
-                        width="100%"
-                        height="150px"
-                        className="rounded-lg shadow-md"
-                      />
-                    )}
-                    {replyToMessage.type === "sticker" && (
-                      <img
-                        src={replyToMessage.sticker?.link}
-                        alt="Sticker"
-                        style={{ maxWidth: "120px" }}
-                        className="rounded-lg shadow-md"
-                      />
-                    )}
-                    {replyToMessage.type === "location" && (
-                      <div className="text-gray-300 dark:text-gray-400">
-                        Location: {replyToMessage.location?.latitude},{" "}
-                        {replyToMessage.location?.longitude}
-                      </div>
-                    )}
-                    {replyToMessage.type === "poll" && (
-                      <div className="text-gray-300 dark:text-gray-400">
-                        Poll: {replyToMessage.poll?.title}
-                      </div>
-                    )}
-                    {replyToMessage.type === "hsm" && (
-                      <div className="text-gray-300 dark:text-gray-400">
-                        HSM: {replyToMessage.hsm?.title}
-                      </div>
-                    )}
-                    {replyToMessage.type === "call_log" && (
-                      <div className="text-gray-300 dark:text-gray-400">
-                        Call Logs: {replyToMessage.call_log?.title}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <button
-                  onClick={() => setReplyToMessage(null)}
-                  className="p-1.5 hover:bg-gray-700/60 dark:hover:bg-gray-800/80 rounded-lg transition-all duration-200 hover:scale-110 ml-2"
-                >
-                  <Lucide
-                    icon="X"
-                    className="w-4 h-4 text-gray-400 dark:text-gray-500"
-                  />
-                </button>
-              </div>
-            )}
-            {/* 24-hour Window Warning Banner */}
-            {isOfficialApi && sessionWindowInfo?.requiresTemplate && (
-              <div className="absolute bottom-16 left-0 right-0 mx-2 mb-2 animate-fade-in-up z-10">
-                <div className="flex items-center justify-between bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-xl px-4 py-3 shadow-lg">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center mr-3">
-                      <Lucide icon="Clock" className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                        24-hour messaging window expired
-                      </p>
-                      <p className="text-xs text-yellow-600 dark:text-yellow-400">
-                        Use a message template to re-engage this contact
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setIsTemplateSelectorOpen(true)}
-                    className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-                  >
-                    <Lucide icon="FileText" className="w-4 h-4" />
-                    Send Template
-                  </button>
-                </div>
-              </div>
-            )}
-            <div className="absolute bottom-0 left-0 right-0 mx-2 mb-2 animate-fade-in-up">
-              <div className="flex items-center w-full bg-white/95 dark:bg-gray-800 backdrop-blur-2xl pl-3 pr-3 py-2.5 rounded-3xl border border-slate-200/80 dark:border-gray-600/60 shadow-2xl shadow-black/10 dark:shadow-black/40 transition-all duration-300 hover:shadow-3xl hover:shadow-indigo-500/10 dark:hover:shadow-indigo-400/20 hover:border-indigo-400/30 dark:hover:border-indigo-500/40">
-                <button
-                  className="p-2.5 m-0 hover:bg-gradient-to-br hover:from-blue-500/20 hover:to-purple-500/20 dark:hover:from-blue-500/30 dark:hover:to-purple-500/30 rounded-xl transition-all duration-300 hover:scale-110 group border-0 hover:shadow-lg hover:shadow-blue-500/20"
-                  onClick={() => setEmojiPickerOpen(!isEmojiPickerOpen)}
-                >
-                  <span className="flex items-center justify-center w-5 h-5">
-                    <Lucide
-                      icon="Smile"
-                      className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-300"
-                    />
-                  </span>
-                </button>
-                <button
-                  className="p-2.5 m-0 hover:bg-gradient-to-br hover:from-green-500/20 hover:to-emerald-500/20 dark:hover:from-green-500/30 dark:hover:to-emerald-500/30 rounded-xl transition-all duration-300 hover:scale-110 group hover:shadow-lg hover:shadow-green-500/20"
-                  onClick={() => setIsAttachmentModalOpen(true)}
-                >
-                  <span className="flex items-center justify-center w-5 h-5">
-                    <Lucide
-                      icon="Paperclip"
-                      className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors duration-300"
-                    />
-                  </span>
-                </button>
-                <button
-                  className="p-2.5 m-0 hover:bg-gradient-to-br hover:from-purple-500/20 hover:to-pink-500/20 dark:hover:from-purple-500/30 dark:hover:to-pink-500/30 rounded-xl transition-all duration-300 hover:scale-110 group hover:shadow-lg hover:shadow-purple-500/20"
-                  onClick={() => {
-                    setIsQuickRepliesOpen(true);
-                    setQuickReplyFilter("");
-                  }}
-                >
-                  <span className="flex items-center justify-center w-5 h-5">
-                    <Lucide
-                      icon="MessageSquare"
-                      className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors duration-300"
-                    />
-                  </span>
-                </button>
-
-                {userData?.company === "Juta Software" && (
-                  <button
-                    className="p-2 m-0 !box ml-2"
-                    onClick={handleGenerateAIResponse}
-                    disabled={isGeneratingResponse}
-                  >
-                    <span className="flex items-center justify-center w-5 h-5">
-                      {isGeneratingResponse ? (
-                        <Lucide
-                          icon="Loader"
-                          className="w-5 h-5 text-gray-800 dark:text-gray-200 animate-spin"
-                        />
-                      ) : (
-                        <Lucide
-                          icon="Sparkles"
-                          className="w-5 h-5 text-gray-800 dark:text-gray-200"
+                    <div className="text-xs font-bold text-[#4b4b4b]">
+                      {replyToMessage.type === "text" &&
+                        replyToMessage.text?.body}
+                      {replyToMessage.type === "link_preview" &&
+                        replyToMessage.link_preview?.body}
+                      {replyToMessage.type === "image" && (
+                        <img
+                          src={replyToMessage.image?.link}
+                          alt="Image"
+                          style={{ maxWidth: "150px" }}
+                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
                         />
                       )}
-                    </span>
-                  </button>
-                )}
-                <textarea
-                  ref={textareaRef}
-                  className="flex-grow h-8 px-4 py-2 text-sm resize-none overflow-hidden bg-transparent dark:bg-transparent text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-none outline-none focus:outline-none focus:ring-0 focus:border-none transition-all duration-300 font-medium"
-                  placeholder={
-                    messageMode === "privateNote"
-                      ? "Type a private note..."
-                      : "Type a message..."
-                  }
-                  value={newMessage}
-                  onChange={(e) => {
-                    setNewMessage(e.target.value);
-                    adjustHeight(e.target);
-                    const lastAtSymbolIndex = e.target.value.lastIndexOf("@");
-                    if (
-                      lastAtSymbolIndex !== -1 &&
-                      lastAtSymbolIndex === e.target.value.length - 1
-                    ) {
-                      setIsPrivateNotesMentionOpen(true);
-                    } else {
-                      setIsPrivateNotesMentionOpen(false);
-                    }
-                    if (e.target.value === "\\") {
-                      handleQR();
-                      setNewMessage("");
-                    }
-                    // Update this condition for quick reply search
-                    if (e.target.value.startsWith("/")) {
-                      setIsQuickRepliesOpen(true);
-                      setQuickReplyFilter(e.target.value.slice(1));
-                    } else {
-                      setIsQuickRepliesOpen(false);
-                      setQuickReplyFilter("");
-                    }
-                  }}
-                  rows={1}
-                  style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
-                  onKeyDown={(e) => {
-                    const target = e.target as HTMLTextAreaElement;
-                    const handleKeyDown = (
-                      e: React.KeyboardEvent<HTMLTextAreaElement>
-                    ) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      } else if (e.key === "Enter") {
-                        if (e.shiftKey) {
-                          e.preventDefault();
-                          setNewMessage((prev) => prev + "\n");
-                        } else {
-                          e.preventDefault();
-                          if (selectedIcon === "ws") {
-                            if (messageMode !== "privateNote") {
-                              handleSendMessage();
-                            } else {
-                              handleAddPrivateNote(newMessage);
-                            }
-                          }
-                          setNewMessage("");
-                          adjustHeight(target, true); // Reset height after sending message
-                        }
-                      }
-                    };
-                    handleKeyDown(e);
-                  }}
-                  onPaste={(e) => {
-                    e.preventDefault();
-                    const items = e.clipboardData?.items;
-                    if (items) {
-                      for (const item of items) {
-                        const blob = item.getAsFile();
-                        if (blob) {
-                          const fileType = getFileTypeFromMimeType(item.type);
-                          if (fileType === "Unknown") {
-                            console.warn("Unsupported file type:", item.type);
-                            continue;
-                          }
-
-                          const url = URL.createObjectURL(blob);
-                          if (
-                            ["JPEG", "PNG", "GIF", "WebP", "SVG"].includes(
-                              fileType
-                            )
-                          ) {
-                            setPastedImageUrl(url);
-                            setImageModalOpen2(true);
-                          } else {
-                            setSelectedDocument(blob);
-                            setDocumentModalOpen(true);
-                          }
-                          return;
-                        }
-                      }
-                    }
-                    const text = e.clipboardData?.getData("text");
-                    if (text) {
-                      setNewMessage((prev) => prev + text);
-                    }
-                  }}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onDrop={async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                      const file = files[0];
-                      const fileType = getFileTypeFromMimeType(file.type);
-                      if (fileType === "Unknown") {
-                        console.warn("Unsupported file type:", file.type);
-                        return;
-                      }
-
-                      const url = URL.createObjectURL(file);
-                      if (
-                        ["JPEG", "PNG", "GIF", "WebP", "SVG"].includes(fileType)
-                      ) {
-                        setPastedImageUrl(url);
-                        setImageModalOpen2(true);
-                      } else {
-                        setSelectedDocument(file);
-                        setDocumentModalOpen(true);
-                      }
-                    }
-                  }}
-                  disabled={userRole === "3"}
-                />
-                <button
-                  className="p-2.5 m-0 hover:bg-gradient-to-br hover:from-rose-500/20 hover:to-red-500/20 dark:hover:from-rose-500/30 dark:hover:to-red-500/30 rounded-xl transition-all duration-300 hover:scale-110 group hover:shadow-lg hover:shadow-rose-500/20"
-                  onClick={toggleRecordingPopup}
-                >
-                  <span className="flex items-center justify-center w-5 h-5">
-                    <Lucide
-                      icon="Mic"
-                      className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors duration-300"
-                    />
-                  </span>
-                </button>
-              </div>
-              {isEmojiPickerOpen && (
-                <div className="absolute bottom-20 left-2 z-10">
-                  <EmojiPicker onEmojiClick={handleEmojiClick} />
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          /* ── WELCOME / EMPTY STATE ── */
-          <div className="hidden md:flex flex-col w-full h-full items-center justify-center animate-fade-in relative overflow-hidden" style={{ background: '#F5F5F5' }}>
-
-            {/* Subtle background orbs matching adleticagency hero */}
-            <div style={{ position:'absolute', top:'-10%', right:'-5%', width:'420px', height:'420px', background:'radial-gradient(circle, rgba(242,101,34,0.09) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(60px)', animation:'adletic-drift 15s ease-in-out infinite', pointerEvents:'none' }} />
-            <div style={{ position:'absolute', bottom:'-10%', left:'-5%', width:'320px', height:'320px', background:'radial-gradient(circle, rgba(138,43,226,0.06) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(60px)', animation:'adletic-drift 20s ease-in-out infinite reverse', pointerEvents:'none' }} />
-
-            {/* Card */}
-            <div className="animate-slide-up relative z-10 flex flex-col items-center" style={{ background:'#ffffff', border:'2px solid #e8e8e8', borderTop:'3px solid #f26522', padding:'3rem 3.5rem', maxWidth:'680px', width:'90%', boxShadow:'6px 6px 0 rgba(0,0,0,0.06)' }}>
-
-              {/* Logo */}
-              <div style={{ width:'64px', height:'64px', marginBottom:'1.5rem', padding:'10px', border:'2px solid #e8e8e8', background:'#fff', boxShadow:'3px 3px 0 #f26522' }}>
-                <img src={logoImage} alt="Adletic CRM" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
-              </div>
-
-              {/* Headline */}
-              <div style={{ fontSize:'0.7rem', fontWeight:800, color:'#f26522', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.6rem' }}>
-                {hasNoPhones ? "⚠ Setup Required" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "⚙ Action Required" : "Adletic CRM"}
-              </div>
-              <h2 style={{ fontSize:'clamp(1.6rem,3vw,2.2rem)', fontWeight:900, color:'#4b4b4b', textAlign:'center', letterSpacing:'-0.02em', textTransform:'uppercase', marginBottom:'0.75rem', lineHeight:1.1 }}>
-                {hasNoPhones ? "No Phones Connected" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "Complete Your Setup" : "Welcome Back"}
-              </h2>
-              <p style={{ fontSize:'0.95rem', color:'#8b8b8b', textAlign:'center', lineHeight:1.7, maxWidth:'480px', marginBottom:'2rem', fontWeight:500 }}>
-                {hasNoPhones
-                  ? "Connect your WhatsApp number before you can start messaging your leads."
-                  : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "")
-                    ? "Configure your AI assistant to unlock automation and smart replies."
-                    : "Select a contact on the left to open the conversation, or start a new one."}
-              </p>
-
-              {/* ── BUTTONS ── */}
-              {hasNoPhones ? (
-                <div style={{ display:'flex', gap:'12px', flexWrap:'wrap', justifyContent:'center', marginBottom:'2rem' }}>
-                  <button
-                    onClick={() => navigate('/loading')}
-                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 28px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.85rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
-                  >
-                    <Lucide icon="Wifi" className="w-4 h-4" />
-                    Connect Phones
-                  </button>
-                </div>
-              ) : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? (
-                <div style={{ width:'100%', maxWidth:'520px', background:'rgba(242,101,34,0.04)', border:'2px solid rgba(242,101,34,0.2)', borderLeft:'4px solid #f26522', padding:'1.5rem', marginBottom:'2rem' }}>
-                  <div style={{ display:'flex', alignItems:'flex-start', gap:'1rem' }}>
-                    <div style={{ width:'40px', height:'40px', background:'#f26522', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                      <Lucide icon="Settings" className="w-5 h-5 text-white" />
-                    </div>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'0.85rem', fontWeight:800, color:'#4b4b4b', textTransform:'uppercase', letterSpacing:'0.04em', marginBottom:'0.4rem' }}>AI Assistant Setup</div>
-                      <p style={{ fontSize:'0.83rem', color:'#8b8b8b', lineHeight:1.6, marginBottom:'1rem' }}>
-                        Set up your AI assistant to handle customer queries automatically and improve response time.
-                      </p>
-                      <button
-                        onClick={() => navigate('/onboarding')}
-                        style={{ display:'inline-flex', alignItems:'center', gap:'6px', padding:'10px 22px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.8rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
-                      >
-                        <Lucide icon="ArrowRight" className="w-4 h-4" />
-                        Go to Setup
-                      </button>
+                      {replyToMessage.type === "video" && (
+                        <video
+                          controls
+                          src={replyToMessage.video?.link}
+                          style={{ maxWidth: "150px" }}
+                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                        />
+                      )}
+                      {replyToMessage.type === "gif" && (
+                        <img
+                          src={replyToMessage.gif?.link}
+                          alt="GIF"
+                          style={{ maxWidth: "120px" }}
+                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                        />
+                      )}
+                      {replyToMessage.type === "audio" && (
+                        <audio
+                          controls
+                          src={replyToMessage.audio?.link}
+                          className="border-2 border-[#4b4b4b] rounded-none"
+                        />
+                      )}
+                      {replyToMessage.type === "voice" && (
+                        <audio
+                          controls
+                          src={replyToMessage.voice?.link}
+                          className="border-2 border-[#4b4b4b] rounded-none"
+                        />
+                      )}
+                      {replyToMessage.type === "document" && (
+                        <iframe
+                          src={replyToMessage.document?.link}
+                          width="100%"
+                          height="150px"
+                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                        />
+                      )}
+                      {replyToMessage.type === "sticker" && (
+                        <img
+                          src={replyToMessage.sticker?.link}
+                          alt="Sticker"
+                          style={{ maxWidth: "120px" }}
+                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                        />
+                      )}
+                      {replyToMessage.type === "location" && (
+                        <div className="text-[#4b4b4b]">
+                          Location: {replyToMessage.location?.latitude},{" "}
+                          {replyToMessage.location?.longitude}
+                        </div>
+                      )}
+                      {replyToMessage.type === "poll" && (
+                        <div className="text-[#4b4b4b]">
+                          Poll: {replyToMessage.poll?.title}
+                        </div>
+                      )}
+                      {replyToMessage.type === "hsm" && (
+                        <div className="text-[#4b4b4b]">
+                          HSM: {replyToMessage.hsm?.title}
+                        </div>
+                      )}
+                      {replyToMessage.type === "call_log" && (
+                        <div className="text-[#4b4b4b]">
+                          Call Logs: {replyToMessage.call_log?.title}
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div style={{ display:'flex', gap:'10px', flexWrap:'wrap', justifyContent:'center', marginBottom:'2rem' }}>
                   <button
-                    onClick={openNewChatModal}
-                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
+                    onClick={() => setReplyToMessage(null)}
+                    className="p-1 border-2 border-[#4b4b4b] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] ml-2"
                   >
-                    <Lucide icon="Plus" className="w-4 h-4" />
-                    New Chat
-                  </button>
-                  <button
-                    onClick={() => setIsSearchModalOpen(true)}
-                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'transparent', color:'#4b4b4b', border:'2px solid #4b4b4b', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(-2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='-4px 4px 0 #4b4b4b'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
-                  >
-                    <Lucide icon="Search" className="w-4 h-4" />
-                    Search
-                  </button>
-                  <button
-                    onClick={() => setIsSyncModalOpen(true)}
-                    disabled={fetching}
-                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'transparent', color:'#4b4b4b', border:'2px solid #e8e8e8', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor: fetching ? 'not-allowed' : 'pointer', opacity: fetching ? 0.6 : 1, transition:'all 0.2s' }}
-                    onMouseEnter={e => { if (!fetching) { (e.currentTarget as HTMLButtonElement).style.borderColor='#f26522'; } }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor='#e8e8e8'; }}
-                  >
-                    {fetching ? <LoadingIcon icon="oval" color="#4b4b4b" className="w-4 h-4" /> : <Lucide icon="RefreshCw" className="w-4 h-4" />}
-                    {fetching ? "Syncing..." : "Sync"}
+                    <Lucide
+                      icon="X"
+                      className="w-4 h-4 text-[#4b4b4b]"
+                    />
                   </button>
                 </div>
               )}
-
-              {/* ── TIPS ROW ── */}
-              <div style={{ borderTop:'1px solid #e8e8e8', paddingTop:'1.5rem', width:'100%' }}>
-                <div style={{ fontSize:'0.68rem', fontWeight:700, color:'#c0c0c0', textTransform:'uppercase', letterSpacing:'0.1em', textAlign:'center', marginBottom:'1rem' }}>
-                  {hasNoPhones ? "Why Connect" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "What You Unlock" : "Quick Tips"}
-                </div>
-                <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px' }}>
-                  {(hasNoPhones ? [
-                    { icon:"📱", text:"Connect WhatsApp to start messaging" },
-                    { icon:"🔀", text:"Use multiple numbers for different teams" },
-                    { icon:"🔒", text:"Secure, encrypted connection always" },
-                  ] : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? [
-                    { icon:"🤖", text:"AI replies to customers automatically" },
-                    { icon:"⚡", text:"Automate repetitive follow-ups" },
-                    { icon:"📈", text:"Better response rate & satisfaction" },
-                  ] : [
-                    { icon:"💬", text:"Click any contact to open their chat" },
-                    { icon:"🔍", text:"Search contacts by name or number" },
-                    { icon:"✨", text:"Start new conversations anytime" },
-                  ]).map((tip, i) => (
-                    <div key={i} style={{ background:'#F5F5F5', border:'1px solid #e8e8e8', padding:'12px', display:'flex', alignItems:'flex-start', gap:'10px', transition:'border-color 0.2s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor='rgba(242,101,34,0.4)'; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor='#e8e8e8'; }}
-                    >
-                      <span style={{ fontSize:'1.1rem', flexShrink:0, marginTop:'1px' }}>{tip.icon}</span>
-                      <span style={{ fontSize:'0.78rem', color:'#6b6b6b', fontWeight:500, lineHeight:1.5 }}>{tip.text}</span>
+              {/* 24-hour Window Warning Banner */}
+              {isOfficialApi && sessionWindowInfo?.requiresTemplate && (
+                <div className="absolute bottom-16 left-0 right-0 mx-2 mb-2 animate-fade-in-up z-10">
+                  <div className="flex items-center justify-between bg-[#fef08a] border-2 border-[#854d0e] shadow-[4px_4px_0_#854d0e] px-4 py-3">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-[#854d0e] text-white rounded-none flex items-center justify-center mr-3 border-2 border-[#854d0e]">
+                        <Lucide icon="Clock" className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black uppercase tracking-wider text-[#854d0e]">
+                          24-hour messaging window expired
+                        </p>
+                        <p className="text-xs font-bold text-[#854d0e]">
+                          Use a message template to re-engage this contact
+                        </p>
+                      </div>
                     </div>
-                  ))}
+                    <button
+                      onClick={() => setIsTemplateSelectorOpen(true)}
+                      className="px-4 py-2 bg-[#f26522] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] text-white text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-2"
+                    >
+                      <Lucide icon="FileText" className="w-4 h-4" />
+                      Send Template
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="absolute bottom-0 left-0 right-0 mx-2 mb-2 animate-fade-in-up">
+                <div className="flex items-center w-full bg-white pl-3 pr-3 py-2.5 border-2 border-[#4b4b4b] shadow-[6px_6px_0_#4b4b4b] transition-all duration-300">
+                  <button
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    onClick={() => setEmojiPickerOpen(!isEmojiPickerOpen)}
+                  >
+                    <span className="flex items-center justify-center w-5 h-5">
+                      <Lucide
+                        icon="Smile"
+                        className="w-5 h-5 text-[#4b4b4b] group-hover:text-[#f26522] transition-colors duration-300"
+                      />
+                    </span>
+                  </button>
+                  <button
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    onClick={() => setIsAttachmentModalOpen(true)}
+                  >
+                    <span className="flex items-center justify-center w-5 h-5">
+                      <Lucide
+                        icon="Paperclip"
+                        className="w-5 h-5 text-[#4b4b4b] group-hover:text-[#10b981] transition-colors duration-300"
+                      />
+                    </span>
+                  </button>
+                  <button
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    onClick={() => {
+                      setIsQuickRepliesOpen(true);
+                      setQuickReplyFilter("");
+                    }}
+                  >
+                    <span className="flex items-center justify-center w-5 h-5">
+                      <Lucide
+                        icon="MessageSquare"
+                        className="w-5 h-5 text-[#4b4b4b] group-hover:text-[#3b82f6] transition-colors duration-300"
+                      />
+                    </span>
+                  </button>
+
+                  {userData?.company === "Juta Software" && (
+                    <button
+                      className="p-2 m-0 !box ml-2"
+                      onClick={handleGenerateAIResponse}
+                      disabled={isGeneratingResponse}
+                    >
+                      <span className="flex items-center justify-center w-5 h-5">
+                        {isGeneratingResponse ? (
+                          <Lucide
+                            icon="Loader"
+                            className="w-5 h-5 text-[#4b4b4b] animate-spin"
+                          />
+                        ) : (
+                          <Lucide
+                            icon="Sparkles"
+                            className="w-5 h-5 text-[#4b4b4b]"
+                          />
+                        )}
+                      </span>
+                    </button>
+                  )}
+                  <textarea
+                    ref={textareaRef}
+                    className="flex-grow h-8 px-4 py-2 text-sm resize-none overflow-hidden bg-transparent text-[#4b4b4b] placeholder-[#8b8b8b] border-l-2 border-r-2 border-transparent focus:border-[#4b4b4b] outline-none transition-all duration-300 font-bold mx-2"
+                    placeholder={
+                      messageMode === "privateNote"
+                        ? "Type a private note..."
+                        : "Type a message..."
+                    }
+                    value={newMessage}
+                    onChange={(e) => {
+                      setNewMessage(e.target.value);
+                      adjustHeight(e.target);
+                      const lastAtSymbolIndex = e.target.value.lastIndexOf("@");
+                      if (
+                        lastAtSymbolIndex !== -1 &&
+                        lastAtSymbolIndex === e.target.value.length - 1
+                      ) {
+                        setIsPrivateNotesMentionOpen(true);
+                      } else {
+                        setIsPrivateNotesMentionOpen(false);
+                      }
+                      if (e.target.value === "\\") {
+                        handleQR();
+                        setNewMessage("");
+                      }
+                      // Update this condition for quick reply search
+                      if (e.target.value.startsWith("/")) {
+                        setIsQuickRepliesOpen(true);
+                        setQuickReplyFilter(e.target.value.slice(1));
+                      } else {
+                        setIsQuickRepliesOpen(false);
+                        setQuickReplyFilter("");
+                      }
+                    }}
+                    rows={1}
+                    style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                    onKeyDown={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      const handleKeyDown = (
+                        e: React.KeyboardEvent<HTMLTextAreaElement>
+                      ) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        } else if (e.key === "Enter") {
+                          if (e.shiftKey) {
+                            e.preventDefault();
+                            setNewMessage((prev) => prev + "\n");
+                          } else {
+                            e.preventDefault();
+                            if (selectedIcon === "ws") {
+                              if (messageMode !== "privateNote") {
+                                handleSendMessage();
+                              } else {
+                                handleAddPrivateNote(newMessage);
+                              }
+                            }
+                            setNewMessage("");
+                            adjustHeight(target, true); // Reset height after sending message
+                          }
+                        }
+                      };
+                      handleKeyDown(e);
+                    }}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      const items = e.clipboardData?.items;
+                      if (items) {
+                        for (const item of items) {
+                          const blob = item.getAsFile();
+                          if (blob) {
+                            const fileType = getFileTypeFromMimeType(item.type);
+                            if (fileType === "Unknown") {
+                              console.warn("Unsupported file type:", item.type);
+                              continue;
+                            }
+
+                            const url = URL.createObjectURL(blob);
+                            if (
+                              ["JPEG", "PNG", "GIF", "WebP", "SVG"].includes(
+                                fileType
+                              )
+                            ) {
+                              setPastedImageUrl(url);
+                              setImageModalOpen2(true);
+                            } else {
+                              setSelectedDocument(blob);
+                              setDocumentModalOpen(true);
+                            }
+                            return;
+                          }
+                        }
+                      }
+                      const text = e.clipboardData?.getData("text");
+                      if (text) {
+                        setNewMessage((prev) => prev + text);
+                      }
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onDrop={async (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      const files = e.dataTransfer.files;
+                      if (files.length > 0) {
+                        const file = files[0];
+                        const fileType = getFileTypeFromMimeType(file.type);
+                        if (fileType === "Unknown") {
+                          console.warn("Unsupported file type:", file.type);
+                          return;
+                        }
+
+                        const url = URL.createObjectURL(file);
+                        if (
+                          ["JPEG", "PNG", "GIF", "WebP", "SVG"].includes(fileType)
+                        ) {
+                          setPastedImageUrl(url);
+                          setImageModalOpen2(true);
+                        } else {
+                          setSelectedDocument(file);
+                          setDocumentModalOpen(true);
+                        }
+                      }
+                    }}
+                    disabled={userRole === "3"}
+                  />
+                  <button
+                    className="p-2.5 m-0 bg-[#f26522] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 group ml-2"
+                    onClick={toggleRecordingPopup}
+                  >
+                    <span className="flex items-center justify-center w-5 h-5">
+                      <Lucide
+                        icon="Mic"
+                        className="w-5 h-5 text-white"
+                      />
+                    </span>
+                  </button>
+                </div>
+                {isEmojiPickerOpen && (
+                  <div className="absolute bottom-20 left-2 z-10">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            /* ── WELCOME / EMPTY STATE ── */
+            <div className="hidden md:flex flex-col w-full h-full items-center justify-center animate-fade-in relative overflow-hidden" style={{ background: '#F5F5F5' }}>
+
+              {/* Subtle background orbs matching adleticagency hero */}
+              <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '420px', height: '420px', background: 'radial-gradient(circle, rgba(242,101,34,0.09) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', animation: 'adletic-drift 15s ease-in-out infinite', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: '320px', height: '320px', background: 'radial-gradient(circle, rgba(138,43,226,0.06) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(60px)', animation: 'adletic-drift 20s ease-in-out infinite reverse', pointerEvents: 'none' }} />
+
+              {/* Card */}
+              <div className="animate-slide-up relative z-10 flex flex-col items-center" style={{ background: '#ffffff', border: '2px solid #e8e8e8', borderTop: '3px solid #f26522', padding: '3rem 3.5rem', maxWidth: '680px', width: '90%', boxShadow: '6px 6px 0 rgba(0,0,0,0.06)' }}>
+
+                {/* Logo */}
+                <div style={{ width: '64px', height: '64px', marginBottom: '1.5rem', padding: '10px', border: '2px solid #e8e8e8', background: '#fff', boxShadow: '3px 3px 0 #f26522' }}>
+                  <img src={logoImage} alt="Adletic CRM" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                </div>
+
+                {/* Headline */}
+                <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#f26522', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.6rem' }}>
+                  {hasNoPhones ? "⚠ Setup Required" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "⚙ Action Required" : "Adletic CRM"}
+                </div>
+                <h2 style={{ fontSize: 'clamp(1.6rem,3vw,2.2rem)', fontWeight: 900, color: '#4b4b4b', textAlign: 'center', letterSpacing: '-0.02em', textTransform: 'uppercase', marginBottom: '0.75rem', lineHeight: 1.1 }}>
+                  {hasNoPhones ? "No Phones Connected" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "Complete Your Setup" : "Welcome Back"}
+                </h2>
+                <p style={{ fontSize: '0.95rem', color: '#8b8b8b', textAlign: 'center', lineHeight: 1.7, maxWidth: '480px', marginBottom: '2rem', fontWeight: 500 }}>
+                  {hasNoPhones
+                    ? "Connect your WhatsApp number before you can start messaging your leads."
+                    : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "")
+                      ? "Configure your AI assistant to unlock automation and smart replies."
+                      : "Select a contact on the left to open the conversation, or start a new one."}
+                </p>
+
+                {/* ── BUTTONS ── */}
+                {hasNoPhones ? (
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2rem' }}>
+                    <button
+                      onClick={() => navigate('/loading')}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 28px', background: '#f26522', color: '#fff', border: '2px solid #f26522', fontFamily: 'Inter,sans-serif', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '4px 4px 0 #4b4b4b'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = ''; (e.currentTarget as HTMLButtonElement).style.boxShadow = ''; }}
+                    >
+                      <Lucide icon="Wifi" className="w-4 h-4" />
+                      Connect Phones
+                    </button>
+                  </div>
+                ) : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? (
+                  <div style={{ width: '100%', maxWidth: '520px', background: 'rgba(242,101,34,0.04)', border: '2px solid rgba(242,101,34,0.2)', borderLeft: '4px solid #f26522', padding: '1.5rem', marginBottom: '2rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                      <div style={{ width: '40px', height: '40px', background: '#f26522', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Lucide icon="Settings" className="w-5 h-5 text-white" />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4b4b4b', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.4rem' }}>AI Assistant Setup</div>
+                        <p style={{ fontSize: '0.83rem', color: '#8b8b8b', lineHeight: 1.6, marginBottom: '1rem' }}>
+                          Set up your AI assistant to handle customer queries automatically and improve response time.
+                        </p>
+                        <button
+                          onClick={() => navigate('/onboarding')}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 22px', background: '#f26522', color: '#fff', border: '2px solid #f26522', fontFamily: 'Inter,sans-serif', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s' }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '4px 4px 0 #4b4b4b'; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = ''; (e.currentTarget as HTMLButtonElement).style.boxShadow = ''; }}
+                        >
+                          <Lucide icon="ArrowRight" className="w-4 h-4" />
+                          Go to Setup
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2rem' }}>
+                    <button
+                      onClick={openNewChatModal}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: '#f26522', color: '#fff', border: '2px solid #f26522', fontFamily: 'Inter,sans-serif', fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '4px 4px 0 #4b4b4b'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = ''; (e.currentTarget as HTMLButtonElement).style.boxShadow = ''; }}
+                    >
+                      <Lucide icon="Plus" className="w-4 h-4" />
+                      New Chat
+                    </button>
+                    <button
+                      onClick={() => setIsSearchModalOpen(true)}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'transparent', color: '#4b4b4b', border: '2px solid #4b4b4b', fontFamily: 'Inter,sans-serif', fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translate(-2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '-4px 4px 0 #4b4b4b'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = ''; (e.currentTarget as HTMLButtonElement).style.boxShadow = ''; }}
+                    >
+                      <Lucide icon="Search" className="w-4 h-4" />
+                      Search
+                    </button>
+                    <button
+                      onClick={() => setIsSyncModalOpen(true)}
+                      disabled={fetching}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px', background: 'transparent', color: '#4b4b4b', border: '2px solid #e8e8e8', fontFamily: 'Inter,sans-serif', fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: fetching ? 'not-allowed' : 'pointer', opacity: fetching ? 0.6 : 1, transition: 'all 0.2s' }}
+                      onMouseEnter={e => { if (!fetching) { (e.currentTarget as HTMLButtonElement).style.borderColor = '#f26522'; } }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#e8e8e8'; }}
+                    >
+                      {fetching ? <LoadingIcon icon="oval" color="#4b4b4b" className="w-4 h-4" /> : <Lucide icon="RefreshCw" className="w-4 h-4" />}
+                      {fetching ? "Syncing..." : "Sync"}
+                    </button>
+                  </div>
+                )}
+
+                {/* ── TIPS ROW ── */}
+                <div style={{ borderTop: '1px solid #e8e8e8', paddingTop: '1.5rem', width: '100%' }}>
+                  <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#c0c0c0', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '1rem' }}>
+                    {hasNoPhones ? "Why Connect" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "What You Unlock" : "Quick Tips"}
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
+                    {(hasNoPhones ? [
+                      { icon: "📱", text: "Connect WhatsApp to start messaging" },
+                      { icon: "🔀", text: "Use multiple numbers for different teams" },
+                      { icon: "🔒", text: "Secure, encrypted connection always" },
+                    ] : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? [
+                      { icon: "🤖", text: "AI replies to customers automatically" },
+                      { icon: "⚡", text: "Automate repetitive follow-ups" },
+                      { icon: "📈", text: "Better response rate & satisfaction" },
+                    ] : [
+                      { icon: "💬", text: "Click any contact to open their chat" },
+                      { icon: "🔍", text: "Search contacts by name or number" },
+                      { icon: "✨", text: "Start new conversations anytime" },
+                    ]).map((tip, i) => (
+                      <div key={i} style={{ background: '#F5F5F5', border: '1px solid #e8e8e8', padding: '12px', display: 'flex', alignItems: 'flex-start', gap: '10px', transition: 'border-color 0.2s' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(242,101,34,0.4)'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#e8e8e8'; }}
+                      >
+                        <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '1px' }}>{tip.icon}</span>
+                        <span style={{ fontSize: '0.78rem', color: '#6b6b6b', fontWeight: 500, lineHeight: 1.5 }}>{tip.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+        </div>
+        {isLoading2 && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+            <div className="relative bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-8 animate-pulse">
+              <div className="flex flex-col items-center justify-center space-y-6">
+                <LoadingIcon
+                  icon="rings"
+                  className="w-16 h-16 text-[#f26522]"
+                />
+                <div className="text-center">
+                  <p className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                    Loading Messages
+                  </p>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    Please wait while we fetch your conversation...
+                  </p>
                 </div>
               </div>
-
             </div>
           </div>
         )}
-      </div>
-      {isLoading2 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center  backdrop-blur-sm">
-          <div className="relative p-8 rounded-3xl  backdrop-blur-2xl ">
-            <div className="flex flex-col items-center justify-center space-y-4">
-              <div className="relative">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-600/20 backdrop-blur-md border border-blue-400/30 dark:border-blue-300/30 flex items-center justify-center">
-                  <LoadingIcon
-                    icon="spinning-circles"
-                    className="w-12 h-12 text-blue-500 dark:text-blue-400"
-                  />
-                </div>
-                {/* Animated rings */}
-                <div className="absolute inset-0 rounded-full border-2 border-blue-400/20 dark:border-blue-300/20 animate-ping"></div>
-                <div
-                  className="absolute inset-0 rounded-full border-2 border-purple-500/20 dark:border-purple-400/20 animate-ping"
-                  style={{ animationDelay: "0.5s" }}
-                ></div>
-              </div>
-              <div className="text-center">
-                <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                  Loading Messages
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Please wait while we fetch your conversation...
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {isRecordingPopupOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsRecordingPopupOpen(false)}
-          />
+        {isRecordingPopupOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsRecordingPopupOpen(false)}
+            />
 
-          {/* Modal Content */}
-          <div className="relative w-full max-w-md mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl shadow-2xl rounded-3xl border-0 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                    <Lucide icon="Mic" className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      Voice Message
-                    </h2>
-                    <p className="text-red-100 text-sm">
-                      Record and send voice messages
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setIsRecordingPopupOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
-                >
-                  <Lucide icon="X" className="w-5 h-5 text-white" />
-                </button>
-              </div>
-            </div>
-
-            {/* Recording Controls */}
-            <div className="p-6 space-y-4">
-              <div className="flex items-center justify-center mb-4">
-                <button
-                  className={`p-4 rounded-full transition-all duration-200 ${
-                    isRecording
-                      ? "bg-red-500 hover:bg-red-600 text-white shadow-lg"
-                      : "bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
-                  }`}
-                  onClick={toggleRecording}
-                >
-                  <Lucide
-                    icon={isRecording ? "StopCircle" : "Mic"}
-                    className="w-8 h-8"
-                  />
-                </button>
-              </div>
-
-              <div className="flex justify-center mb-4">
-                <ReactMicComponent
-                  record={isRecording}
-                  className="w-full rounded-xl h-12"
-                  onStop={onStop}
-                  strokeColor="#0000CD"
-                  backgroundColor="#FFFFFF"
-                  mimeType="audio/webm"
-                />
-              </div>
-
-              {audioBlob && (
-                <div className="space-y-4">
-                  <div className="bg-white/20 dark:bg-slate-700/40 rounded-xl p-4">
-                    <audio
-                      src={URL.createObjectURL(audioBlob)}
-                      controls
-                      className="w-full h-10 mb-3"
-                    />
-                    <div className="flex justify-between gap-3">
-                      <button
-                        className="flex-1 px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-200"
-                        onClick={() => setAudioBlob(null)}
-                      >
-                        Remove
-                      </button>
-                      <button
-                        className="flex-1 px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium transition-all duration-200"
-                        onClick={sendVoiceMessage}
-                      >
-                        Send
-                      </button>
+            {/* Modal Content */}
+            <div className="relative w-full max-w-md mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl shadow-2xl rounded-3xl border-0 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                      <Lucide icon="Mic" className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">
+                        Voice Message
+                      </h2>
+                      <p className="text-red-100 text-sm">
+                        Record and send voice messages
+                      </p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => setIsRecordingPopupOpen(false)}
+                    className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  >
+                    <Lucide icon="X" className="w-5 h-5 text-white" />
+                  </button>
                 </div>
-              )}
+              </div>
+
+              {/* Recording Controls */}
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-center mb-4">
+                  <button
+                    className={`p-4 rounded-full transition-all duration-200 ${isRecording
+                      ? "bg-red-500 hover:bg-red-600 text-white shadow-lg"
+                      : "bg-blue-500 hover:bg-blue-600 text-white shadow-lg"
+                      }`}
+                    onClick={toggleRecording}
+                  >
+                    <Lucide
+                      icon={isRecording ? "StopCircle" : "Mic"}
+                      className="w-8 h-8"
+                    />
+                  </button>
+                </div>
+
+                <div className="flex justify-center mb-4">
+                  <ReactMicComponent
+                    record={isRecording}
+                    className="w-full rounded-xl h-12"
+                    onStop={onStop}
+                    strokeColor="#0000CD"
+                    backgroundColor="#FFFFFF"
+                    mimeType="audio/webm"
+                  />
+                </div>
+
+                {audioBlob && (
+                  <div className="space-y-4">
+                    <div className="bg-white/20 dark:bg-slate-700/40 rounded-xl p-4">
+                      <audio
+                        src={URL.createObjectURL(audioBlob)}
+                        controls
+                        className="w-full h-10 mb-3"
+                      />
+                      <div className="flex justify-between gap-3">
+                        <button
+                          className="flex-1 px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-all duration-200"
+                          onClick={() => setAudioBlob(null)}
+                        >
+                          Remove
+                        </button>
+                        <button
+                          className="flex-1 px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-medium transition-all duration-200"
+                          onClick={sendVoiceMessage}
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {selectedMessages.length > 0 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 dark:border-gray-600/30 p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
-            {/* Header */}
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 bg-blue-100/80 dark:bg-blue-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
-                <Lucide
-                  icon="MessageSquare"
-                  className="w-6 h-6 text-blue-600 dark:text-blue-400"
-                />
+        )}
+        {selectedMessages.length > 0 && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-12 h-12 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-3">
+                  <Lucide
+                    icon="MessageSquare"
+                    className="w-6 h-6 text-[#4b4b4b]"
+                  />
+                </div>
+                <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
+                  Message Actions
+                </h3>
+                <p className="text-sm font-bold text-[#8b8b8b] mt-1">
+                  {selectedMessages.length} message
+                  {selectedMessages.length !== 1 ? "s" : ""} selected
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Message Actions
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {selectedMessages.length} message
-                {selectedMessages.length !== 1 ? "s" : ""} selected
-              </p>
-            </div>
 
-            {/* Check if all messages are temporary */}
-            {selectedMessages.every(
-              (msg) => !msg.id || msg.id.startsWith("temp_")
-            ) ? (
-              // Show loading state while refreshing messages
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-blue-100/80 dark:bg-blue-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
-                  <div className="w-8 h-8 border-2 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+              {/* Check if all messages are temporary */}
+              {selectedMessages.every(
+                (msg) => !msg.id || msg.id.startsWith("temp_")
+              ) ? (
+                // Show loading state while refreshing messages
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 bg-blue-100/80 dark:bg-blue-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="w-8 h-8 border-2 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                      Refreshing Messages
+                    </h4>
+                    <p className="text-sm text-blue-600 dark:text-blue-300 mb-4">
+                      Checking for updated message data...
+                    </p>
+                  </div>
+                  <div className="space-y-3">
+                    <button
+                      className="w-full bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                      onClick={() => setSelectedMessages([])}
+                    >
+                      <Lucide icon="X" className="w-4 h-4" />
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
-                    Refreshing Messages
-                  </h4>
-                  <p className="text-sm text-blue-600 dark:text-blue-300 mb-4">
-                    Checking for updated message data...
-                  </p>
-                </div>
+              ) : (
+                // Show normal action buttons for real messages
                 <div className="space-y-3">
                   <button
-                    className="w-full bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                    className="w-full bg-[#3b82f6] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                    onClick={() => setIsForwardDialogOpen(true)}
+                  >
+                    <Lucide icon="Share" className="w-4 h-4" />
+                    Forward
+                  </button>
+
+                  <button
+                    className="w-full bg-[#ef4444] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                    onClick={openDeletePopup}
+                  >
+                    <Lucide icon="Trash2" className="w-4 h-4" />
+                    Delete
+                  </button>
+
+                  <button
+                    className="w-full bg-white text-[#4b4b4b] px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
                     onClick={() => setSelectedMessages([])}
+                    onKeyDown={handleKeyDown}
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                     Cancel
                   </button>
                 </div>
-              </div>
-            ) : (
-              // Show normal action buttons for real messages
-              <div className="space-y-3">
-                <button
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-blue-500/30 dark:border-blue-400/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                  onClick={() => setIsForwardDialogOpen(true)}
-                >
-                  <Lucide icon="Share" className="w-4 h-4" />
-                  Forward
-                </button>
-
-                <button
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-red-500/30 dark:border-red-400/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                  onClick={openDeletePopup}
-                >
-                  <Lucide icon="Trash2" className="w-4 h-4" />
-                  Delete
-                </button>
-
-                <button
-                  className="w-full bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                  onClick={() => setSelectedMessages([])}
-                  onKeyDown={handleKeyDown}
-                >
-                  <Lucide icon="X" className="w-4 h-4" />
-                  Cancel
-                </button>
-              </div>
-            )}
-
-            {/* Close on backdrop click */}
-            <div
-              className="absolute inset-0 -z-10"
-              onClick={() => setSelectedMessages([])}
-            />
-          </div>
-        </div>
-      )}
-      {/* Glassmorphic Phone Selection Modal */}
-      {showPhoneModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onKeyDown={(e) => {
-            if (e.key === "Escape") {
-              setShowPhoneModal(false);
-            }
-          }}
-          tabIndex={-1}
-        >
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md"
-            onClick={() => setShowPhoneModal(false)}
-          />
-
-          {/* Modal */}
-          <div
-            className="relative w-full max-w-lg transform transition-all duration-300 ease-out"
-            data-phone-modal
-            tabIndex={-1}
-          >
-            {/* Modern Glassmorphic Container */}
-            <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl dark:shadow-black/40">
-              {/* Animated gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-indigo-500/10 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-pulse" />
-
-              {/* Content */}
-              <div className="relative p-8">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center space-x-4">
-                    <div className="relative">
-                      <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-                        <Lucide
-                          icon="Phone"
-                          className="w-6 h-6 text-white"
-                        />
-                      </div>
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        Phone Selection
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        Choose your active WhatsApp connection
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setShowPhoneModal(false)}
-                    className="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-110"
-                  >
-                    <Lucide icon="X" className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Phone List */}
-                <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar mb-6">
-                  {qrCodes && qrCodes.length > 0 ? (
-                    qrCodes.map((qrCode, itemIndex) => {
-                      const phoneIndexOption = qrCode.phoneIndex;
-                      // Use phoneNames if available, otherwise generate a default name
-                      const phoneName = phoneNames[phoneIndexOption] || `Phone ${phoneIndexOption + 1}`;
-                      const phoneStatus = qrCode?.status || "unknown";
-                      const isConnected =
-                        phoneStatus === "ready" ||
-                        phoneStatus === "authenticated";
-                      const isCurrentPhone =
-                        userData?.phone === phoneIndexOption;
-
-                      // Get status display info
-                      const getStatusInfo = (status: string | undefined) => {
-                        switch (status?.toLowerCase()) {
-                          case "ready":
-                          case "authenticated":
-                            return {
-                              text: "Connected",
-                              color: "bg-green-100 text-green-700 dark:bg-green-800/50 dark:text-green-300",
-                              dotColor: "bg-green-500",
-                              icon: "✅"
-                            };
-                          case "qr":
-                            return {
-                              text: "QR Required",
-                              color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-800/50 dark:text-yellow-300",
-                              dotColor: "bg-yellow-500",
-                              icon: "⏳"
-                            };
-                          case "loading":
-                            return {
-                              text: "Loading...",
-                              color: "bg-blue-100 text-blue-700 dark:bg-blue-800/50 dark:text-blue-300",
-                              dotColor: "bg-blue-500",
-                              icon: "⏳"
-                            };
-                          default:
-                            return {
-                              text: "Not Connected",
-                              color: "bg-red-100 text-red-700 dark:bg-red-800/50 dark:text-red-300",
-                              dotColor: "bg-red-500",
-                              icon: "❌"
-                            };
-                        }
-                      };
-
-                      const statusInfo = getStatusInfo(phoneStatus);
-
-                      return (
-                        <button
-                          key={phoneIndexOption}
-                          onClick={() => {
-                            handlePhoneChange(phoneIndexOption);
-                            setShowPhoneModal(false);
-                          }}
-                          className={`group w-full p-4 rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-                            isCurrentPhone
-                              ? "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border-blue-300 dark:border-blue-600/50 shadow-lg"
-                              : "bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600/50 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 dark:hover:from-gray-600/50 dark:hover:to-blue-900/20 hover:border-blue-300 dark:hover:border-blue-500/50 hover:shadow-md"
-                          }`}
-                          style={{
-                            animationDelay: `${itemIndex * 100}ms`,
-                            animation: "slideInUp 0.5s ease-out forwards",
-                          }}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                              <div className="relative">
-                                <div
-                                  className={`p-3 rounded-xl shadow-md transition-all duration-300 ${
-                                    isCurrentPhone
-                                      ? "bg-gradient-to-br from-blue-500 to-indigo-600 shadow-blue-200 dark:shadow-blue-900/50"
-                                      : "bg-gradient-to-br from-gray-400 to-gray-500 group-hover:from-blue-400 group-hover:to-indigo-500"
-                                  }`}
-                                >
-                                  <Lucide
-                                    icon="Smartphone"
-                                    className="w-5 h-5 text-white"
-                                  />
-                                </div>
-                                {isCurrentPhone && (
-                                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                                )}
-                              </div>
-                              <div className="text-left">
-                                <div
-                                  className={`text-lg font-semibold ${
-                                    isCurrentPhone
-                                      ? "text-blue-900 dark:text-blue-100"
-                                      : "text-gray-900 dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-100"
-                                  }`}
-                                >
-                                  {phoneName} {statusInfo.icon}
-                                </div>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  {isCurrentPhone && (
-                                    <span className="text-xs bg-blue-100 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full font-medium">
-                                      Active
-                                    </span>
-                                  )}
-                                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                                    {qrCode.phoneInfo || `Phone ${phoneIndexOption + 1}`}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex flex-col items-end space-y-2">
-                              <div
-                                className={`flex items-center space-x-2 px-3 py-1.5 rounded-full font-medium text-sm ${statusInfo.color}`}
-                              >
-                                <div
-                                  className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`}
-                                />
-                                <span>
-                                  {statusInfo.text}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })
-                  ) : (
-                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                      <Lucide icon="Smartphone" className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                      <p className="text-lg font-medium mb-2">No phones available</p>
-                      <p className="text-sm">Please check your configuration</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Connect Phones Button - Show when no phones are connected */}
-                {qrCodes && qrCodes.length > 0 &&
-                  !qrCodes.some((qrCode) => {
-                    const phoneStatus = qrCode?.status || "unknown";
-                    const isConnected = phoneStatus === "ready" || phoneStatus === "authenticated";
-                    return isConnected;
-                  }) && (
-                  <div className="mb-6">
-                    <button
-                      onClick={() => {
-                        console.log('Connect Phones button clicked, navigating to /loading');
-                        navigate('/loading');
-                        setShowPhoneModal(false);
-                      }}
-                      className="group relative w-full px-6 py-4 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:from-blue-600 hover:via-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl border border-blue-400/30 overflow-hidden"
-                    >
-                      {/* Animated background effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
-                      
-                      {/* Button content */}
-                      <div className="relative flex items-center space-x-3">
-                        <div className="p-1.5 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors duration-300">
-                          <Lucide icon="Wifi" className="w-5 h-5" />
-                        </div>
-                        <div className="flex flex-col items-start">
-                          <span className="text-base font-bold">Connect Phones</span>
-                          <span className="text-xs text-blue-100 group-hover:text-white transition-colors duration-300">
-                            Set up WhatsApp connection
-                          </span>
-                        </div>
-                      </div>
-                      
-                      {/* Arrow icon */}
-                      <div className="relative ml-2 group-hover:translate-x-1 transition-transform duration-300">
-                        <Lucide icon="ArrowRight" className="w-4 h-4" />
-                      </div>
-                    </button>
-                  </div>
-                )}
-
-                {/* Footer */}
-                <div className="pt-4 border-t border-gray-200/50 dark:border-gray-600/50">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {qrCodes ? qrCodes.length : 0} phone
-                      {qrCodes && qrCodes.length !== 1 ? "s" : ""} available
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Fallback popup for still-temporary messages after refresh */}
-      {selectedMessages.length > 0 &&
-        !isRefreshingMessages &&
-        selectedMessages.every(
-          (msg) => !msg.id || msg.id.startsWith("temp_")
-        ) && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 dark:border-gray-600/30 p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
-              {/* Header */}
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-amber-100/80 dark:bg-amber-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Lucide
-                    icon="AlertTriangle"
-                    className="w-8 h-8 text-amber-600 dark:text-amber-400"
-                  />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                  Messages Still Loading
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  These messages are still being processed. Please try again
-                  later.
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-amber-400/30 dark:border-amber-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                  onClick={() => {
-                    setSelectedMessages([]);
-                    if (selectedChatId && whapiToken) {
-                      setIsRefreshingMessages(true);
-                      fetchMessages(selectedChatId, whapiToken)
-                        .then(() => {
-                          setTimeout(
-                            () => setIsRefreshingMessages(false),
-                            1000
-                          );
-                        })
-                        .catch(() => {
-                          setIsRefreshingMessages(false);
-                        });
-                    }
-                  }}
-                >
-                  <Lucide icon="RefreshCw" className="w-4 h-4" />
-                  Try Again
-                </button>
-
-                <button
-                  className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                  onClick={() => setSelectedMessages([])}
-                >
-                  <Lucide icon="X" className="w-4 h-4" />
-                  Cancel
-                </button>
-              </div>
+              )}
 
               {/* Close on backdrop click */}
               <div
@@ -16625,566 +16164,672 @@ function Main() {
             </div>
           </div>
         )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeletePopupOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 dark:border-gray-600/30 p-6 mx-4 max-w-md w-full animate-in zoom-in-95 duration-200">
-            {/* Header */}
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-red-100/80 dark:bg-red-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lucide
-                  icon="AlertTriangle"
-                  className="w-8 h-8 text-red-600 dark:text-red-400"
-                />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Delete Messages
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete {selectedMessages.length}{" "}
-                message{selectedMessages.length !== 1 ? "s" : ""}? This action
-                cannot be undone.
-              </p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                className="flex-1 bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-red-500/30 dark:border-red-400/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                onClick={deleteMessages}
-              >
-                <Lucide icon="Trash2" className="w-4 h-4" />
-                Delete
-              </button>
-
-              <button
-                className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
-                onClick={closeDeletePopup}
-              >
-                <Lucide icon="X" className="w-4 h-4" />
-                Cancel
-              </button>
-            </div>
-
-            {/* Close on backdrop click */}
+        {/* Glassmorphic Phone Selection Modal */}
+        {showPhoneModal && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setShowPhoneModal(false);
+              }
+            }}
+            tabIndex={-1}
+          >
+            {/* Backdrop */}
             <div
-              className="absolute inset-0 -z-10"
-              onClick={closeDeletePopup}
+              className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-md"
+              onClick={() => setShowPhoneModal(false)}
             />
-          </div>
-        </div>
-      )}
 
-      {/* Forward Messages Dialog */}
-      {isForwardDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 dark:border-gray-600/30 p-6 mx-4 max-w-2xl w-full animate-in zoom-in-95 duration-200">
-            {/* Header */}
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-blue-100/80 dark:bg-blue-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lucide
-                  icon="Share"
-                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
-                />
+            {/* Modal */}
+            <div
+              className="relative w-full max-w-lg transform transition-all duration-300 ease-out"
+              data-phone-modal
+              tabIndex={-1}
+            >
+              {/* Modern Glassmorphic Container */}
+              <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-2xl border border-white/20 dark:border-gray-700/50 shadow-2xl dark:shadow-black/40">
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-indigo-500/10 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent animate-pulse" />
+
+                {/* Content */}
+                <div className="relative p-8">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center space-x-4">
+                      <div className="relative">
+                        <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                          <Lucide
+                            icon="Phone"
+                            className="w-6 h-6 text-white"
+                          />
+                        </div>
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                          Phone Selection
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                          Choose your active WhatsApp connection
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowPhoneModal(false)}
+                      className="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-200 hover:scale-110"
+                    >
+                      <Lucide icon="X" className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Phone List */}
+                  <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar mb-6">
+                    {qrCodes && qrCodes.length > 0 ? (
+                      qrCodes.map((qrCode, itemIndex) => {
+                        const phoneIndexOption = qrCode.phoneIndex;
+                        // Use phoneNames if available, otherwise generate a default name
+                        const phoneName = phoneNames[phoneIndexOption] || `Phone ${phoneIndexOption + 1}`;
+                        const phoneStatus = qrCode?.status || "unknown";
+                        const isConnected =
+                          phoneStatus === "ready" ||
+                          phoneStatus === "authenticated";
+                        const isCurrentPhone =
+                          userData?.phone === phoneIndexOption;
+
+                        // Get status display info
+                        const getStatusInfo = (status: string | undefined) => {
+                          switch (status?.toLowerCase()) {
+                            case "ready":
+                            case "authenticated":
+                              return {
+                                text: "Connected",
+                                color: "bg-green-100 text-green-700 dark:bg-green-800/50 dark:text-green-300",
+                                dotColor: "bg-green-500",
+                                icon: "✅"
+                              };
+                            case "qr":
+                              return {
+                                text: "QR Required",
+                                color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-800/50 dark:text-yellow-300",
+                                dotColor: "bg-yellow-500",
+                                icon: "⏳"
+                              };
+                            case "loading":
+                              return {
+                                text: "Loading...",
+                                color: "bg-blue-100 text-blue-700 dark:bg-blue-800/50 dark:text-blue-300",
+                                dotColor: "bg-blue-500",
+                                icon: "⏳"
+                              };
+                            default:
+                              return {
+                                text: "Not Connected",
+                                color: "bg-red-100 text-red-700 dark:bg-red-800/50 dark:text-red-300",
+                                dotColor: "bg-red-500",
+                                icon: "❌"
+                              };
+                          }
+                        };
+
+                        const statusInfo = getStatusInfo(phoneStatus);
+
+                        return (
+                          <button
+                            key={phoneIndexOption}
+                            onClick={() => {
+                              handlePhoneChange(phoneIndexOption);
+                              setShowPhoneModal(false);
+                            }}
+                            className={`group w-full p-4 rounded-xl border-2 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${isCurrentPhone
+                              ? "bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border-blue-300 dark:border-blue-600/50 shadow-lg"
+                              : "bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600/50 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 dark:hover:from-gray-600/50 dark:hover:to-blue-900/20 hover:border-blue-300 dark:hover:border-blue-500/50 hover:shadow-md"
+                              }`}
+                            style={{
+                              animationDelay: `${itemIndex * 100}ms`,
+                              animation: "slideInUp 0.5s ease-out forwards",
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <div className="relative">
+                                  <div
+                                    className={`p-3 rounded-xl shadow-md transition-all duration-300 ${isCurrentPhone
+                                      ? "bg-gradient-to-br from-blue-500 to-indigo-600 shadow-blue-200 dark:shadow-blue-900/50"
+                                      : "bg-gradient-to-br from-gray-400 to-gray-500 group-hover:from-blue-400 group-hover:to-indigo-500"
+                                      }`}
+                                  >
+                                    <Lucide
+                                      icon="Smartphone"
+                                      className="w-5 h-5 text-white"
+                                    />
+                                  </div>
+                                  {isCurrentPhone && (
+                                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                                  )}
+                                </div>
+                                <div className="text-left">
+                                  <div
+                                    className={`text-lg font-semibold ${isCurrentPhone
+                                      ? "text-blue-900 dark:text-blue-100"
+                                      : "text-gray-900 dark:text-white group-hover:text-blue-900 dark:group-hover:text-blue-100"
+                                      }`}
+                                  >
+                                    {phoneName} {statusInfo.icon}
+                                  </div>
+                                  <div className="flex items-center space-x-2 mt-1">
+                                    {isCurrentPhone && (
+                                      <span className="text-xs bg-blue-100 dark:bg-blue-800/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full font-medium">
+                                        Active
+                                      </span>
+                                    )}
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                      {qrCode.phoneInfo || `Phone ${phoneIndexOption + 1}`}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col items-end space-y-2">
+                                <div
+                                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-full font-medium text-sm ${statusInfo.color}`}
+                                >
+                                  <div
+                                    className={`w-2 h-2 rounded-full ${statusInfo.dotColor}`}
+                                  />
+                                  <span>
+                                    {statusInfo.text}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                        <Lucide icon="Smartphone" className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p className="text-lg font-medium mb-2">No phones available</p>
+                        <p className="text-sm">Please check your configuration</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Connect Phones Button - Show when no phones are connected */}
+                  {qrCodes && qrCodes.length > 0 &&
+                    !qrCodes.some((qrCode) => {
+                      const phoneStatus = qrCode?.status || "unknown";
+                      const isConnected = phoneStatus === "ready" || phoneStatus === "authenticated";
+                      return isConnected;
+                    }) && (
+                      <div className="mb-6">
+                        <button
+                          onClick={() => {
+                            console.log('Connect Phones button clicked, navigating to /loading');
+                            navigate('/loading');
+                            setShowPhoneModal(false);
+                          }}
+                          className="group relative w-full px-6 py-4 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:from-blue-600 hover:via-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl border border-blue-400/30 overflow-hidden"
+                        >
+                          {/* Animated background effect */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out"></div>
+
+                          {/* Button content */}
+                          <div className="relative flex items-center space-x-3">
+                            <div className="p-1.5 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors duration-300">
+                              <Lucide icon="Wifi" className="w-5 h-5" />
+                            </div>
+                            <div className="flex flex-col items-start">
+                              <span className="text-base font-bold">Connect Phones</span>
+                              <span className="text-xs text-blue-100 group-hover:text-white transition-colors duration-300">
+                                Set up WhatsApp connection
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Arrow icon */}
+                          <div className="relative ml-2 group-hover:translate-x-1 transition-transform duration-300">
+                            <Lucide icon="ArrowRight" className="w-4 h-4" />
+                          </div>
+                        </button>
+                      </div>
+                    )}
+
+                  {/* Footer */}
+                  <div className="pt-4 border-t border-gray-200/50 dark:border-gray-600/50">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {qrCodes ? qrCodes.length : 0} phone
+                        {qrCodes && qrCodes.length !== 1 ? "s" : ""} available
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Forward Messages
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Select contacts to forward {selectedMessages.length} message
-                {selectedMessages.length !== 1 ? "s" : ""} to
-              </p>
             </div>
+          </div>
+        )}
+        {/* Fallback popup for still-temporary messages after refresh */}
+        {selectedMessages.length > 0 &&
+          !isRefreshingMessages &&
+          selectedMessages.every(
+            (msg) => !msg.id || msg.id.startsWith("temp_")
+          ) && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+              <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 dark:border-gray-600/30 p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
+                {/* Header */}
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-amber-100/80 dark:bg-amber-600/40 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Lucide
+                      icon="AlertTriangle"
+                      className="w-8 h-8 text-amber-600 dark:text-amber-400"
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    Messages Still Loading
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    These messages are still being processed. Please try again
+                    later.
+                  </p>
+                </div>
 
-            {/* Contact Selection */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Select Contacts
-                </label>
-                <div className="flex gap-2">
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => setForwardDialogTags([])}
-                    className="px-3 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-amber-400/30 dark:border-amber-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                    onClick={() => {
+                      setSelectedMessages([]);
+                      if (selectedChatId && whapiToken) {
+                        setIsRefreshingMessages(true);
+                        fetchMessages(selectedChatId, whapiToken)
+                          .then(() => {
+                            setTimeout(
+                              () => setIsRefreshingMessages(false),
+                              1000
+                            );
+                          })
+                          .catch(() => {
+                            setIsRefreshingMessages(false);
+                          });
+                      }
+                    }}
                   >
-                    Clear Tags
+                    <Lucide icon="RefreshCw" className="w-4 h-4" />
+                    Try Again
+                  </button>
+
+                  <button
+                    className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                    onClick={() => setSelectedMessages([])}
+                  >
+                    <Lucide icon="X" className="w-4 h-4" />
+                    Cancel
                   </button>
                 </div>
+
+                {/* Close on backdrop click */}
+                <div
+                  className="absolute inset-0 -z-10"
+                  onClick={() => setSelectedMessages([])}
+                />
+              </div>
+            </div>
+          )}
+
+        {/* Delete Confirmation Modal */}
+        {isDeletePopupOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-md w-full animate-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-[#fca5a5] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-4">
+                  <Lucide
+                    icon="AlertTriangle"
+                    className="w-8 h-8 text-[#ef4444]"
+                  />
+                </div>
+                <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                  Delete Messages
+                </h3>
+                <p className="text-sm font-bold text-[#8b8b8b]">
+                  Are you sure you want to delete {selectedMessages.length}{" "}
+                  message{selectedMessages.length !== 1 ? "s" : ""}? This action
+                  cannot be undone.
+                </p>
               </div>
 
-              {/* Tag Filter */}
-              <div className="mb-3">
-                <div className="flex flex-wrap gap-2">
-                  {Array.from(
-                    new Set(contacts.flatMap((c) => c.tags || []))
-                  ).map((tag) => (
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  className="flex-1 bg-[#ef4444] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                  onClick={deleteMessages}
+                >
+                  <Lucide icon="Trash2" className="w-4 h-4" />
+                  Delete
+                </button>
+
+                <button
+                  className="flex-1 bg-white text-[#4b4b4b] px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                  onClick={closeDeletePopup}
+                >
+                  <Lucide icon="X" className="w-4 h-4" />
+                  Cancel
+                </button>
+              </div>
+
+              {/* Close on backdrop click */}
+              <div
+                className="absolute inset-0 -z-10"
+                onClick={closeDeletePopup}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Forward Messages Dialog */}
+        {isForwardDialogOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-2xl w-full animate-in zoom-in-95 duration-200">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-4">
+                  <Lucide
+                    icon="Share"
+                    className="w-8 h-8 text-[#3b82f6]"
+                  />
+                </div>
+                <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                  Forward Messages
+                </h3>
+                <p className="text-sm font-bold text-[#8b8b8b]">
+                  Select contacts to forward {selectedMessages.length} message
+                  {selectedMessages.length !== 1 ? "s" : ""} to
+                </p>
+              </div>
+
+              {/* Contact Selection */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
+                    Select Contacts
+                  </label>
+                  <div className="flex gap-2">
                     <button
-                      key={tag}
-                      onClick={() => {
-                        setForwardDialogTags((prev) =>
-                          prev.includes(tag)
-                            ? prev.filter((t) => t !== tag)
-                            : [...prev, tag]
-                        );
-                      }}
-                      className={`px-3 py-1 text-xs rounded-lg transition-colors ${
-                        forwardDialogTags.includes(tag)
+                      onClick={() => setForwardDialogTags([])}
+                      className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    >
+                      Clear Tags
+                    </button>
+                  </div>
+                </div>
+
+                {/* Tag Filter */}
+                <div className="mb-3">
+                  <div className="flex flex-wrap gap-2">
+                    {Array.from(
+                      new Set(contacts.flatMap((c) => c.tags || []))
+                    ).map((tag) => (
+                      <button
+                        key={tag}
+                        onClick={() => {
+                          setForwardDialogTags((prev) =>
+                            prev.includes(tag)
+                              ? prev.filter((t) => t !== tag)
+                              : [...prev, tag]
+                          );
+                        }}
+                        className={`px-3 py-1 text-xs rounded-lg transition-colors ${forwardDialogTags.includes(tag)
                           ? "bg-blue-100 dark:bg-blue-600/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30"
                           : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                          }`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Contact List */}
-              <div className="max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-lg p-2 bg-gray-50 dark:bg-gray-800">
-                {contacts
-                  .filter(
-                    (contact) =>
-                      forwardDialogTags.length === 0 ||
-                      contact.tags?.some((tag) =>
-                        forwardDialogTags.includes(tag)
-                      )
-                  )
-                  .map((contact) => (
-                    <div
-                      key={contact.id}
-                      className={`flex items-center p-2 rounded-lg cursor-pointer transition-colors ${
-                        selectedContactsForForwarding.some(
+                {/* Contact List */}
+                <div className="max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-lg p-2 bg-gray-50 dark:bg-gray-800">
+                  {contacts
+                    .filter(
+                      (contact) =>
+                        forwardDialogTags.length === 0 ||
+                        contact.tags?.some((tag) =>
+                          forwardDialogTags.includes(tag)
+                        )
+                    )
+                    .map((contact) => (
+                      <div
+                        key={contact.id}
+                        className={`flex items-center p-2 rounded-lg cursor-pointer transition-colors ${selectedContactsForForwarding.some(
                           (c) => c.id === contact.id
                         )
                           ? "bg-blue-100 dark:bg-blue-600/40 border border-blue-200 dark:border-blue-500/30"
                           : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                      }`}
-                      onClick={() => {
-                        setSelectedContactsForForwarding((prev) =>
-                          prev.some((c) => c.id === contact.id)
-                            ? prev.filter((c) => c.id !== contact.id)
-                            : [...prev, contact]
-                        );
-                      }}
-                    >
-                      <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          {contact.contactName?.[0] ||
-                            contact.firstName?.[0] ||
-                            contact.lastName?.[0] ||
-                            "?"}
-                        </span>
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900 dark:text-gray-100">
-                          {contact.contactName ||
-                            `${contact.firstName || ""} ${
-                              contact.lastName || ""
-                            }`.trim() ||
-                            "Unknown Contact"}
+                          }`}
+                        onClick={() => {
+                          setSelectedContactsForForwarding((prev) =>
+                            prev.some((c) => c.id === contact.id)
+                              ? prev.filter((c) => c.id !== contact.id)
+                              : [...prev, contact]
+                          );
+                        }}
+                      >
+                        <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mr-3">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {contact.contactName?.[0] ||
+                              contact.firstName?.[0] ||
+                              contact.lastName?.[0] ||
+                              "?"}
+                          </span>
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {contact.phone ||
-                            contact.customer_phone ||
-                            "No phone"}
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                            {contact.contactName ||
+                              `${contact.firstName || ""} ${contact.lastName || ""
+                                }`.trim() ||
+                              "Unknown Contact"}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {contact.phone ||
+                              contact.customer_phone ||
+                              "No phone"}
+                          </div>
+                        </div>
+                        <div className="ml-2">
+                          {selectedContactsForForwarding.some(
+                            (c) => c.id === contact.id
+                          ) && (
+                              <Lucide
+                                icon="Check"
+                                className="w-5 h-5 text-blue-600 dark:text-blue-400"
+                              />
+                            )}
                         </div>
                       </div>
-                      <div className="ml-2">
-                        {selectedContactsForForwarding.some(
-                          (c) => c.id === contact.id
-                        ) && (
-                          <Lucide
-                            icon="Check"
-                            className="w-5 h-5 text-blue-600 dark:text-blue-400"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                className={`flex-1 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 backdrop-blur-sm border font-medium flex items-center justify-center gap-2 ${
-                  isForwarding
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  className={`flex-1 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 backdrop-blur-sm border font-medium flex items-center justify-center gap-2 ${isForwarding
                     ? "bg-gray-500 dark:bg-gray-600 text-white border-gray-400/30 dark:border-gray-500/30 cursor-not-allowed"
                     : "bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white border-blue-500/30 dark:border-blue-400/30 hover:shadow-xl hover:scale-[1.02] active:scale-98"
-                }`}
-                onClick={handleForwardMessages}
-                disabled={
-                  selectedContactsForForwarding.length === 0 || isForwarding
-                }
-              >
-                {isForwarding ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Forwarding...
-                  </>
-                ) : (
-                  <>
-                    <Lucide icon="Send" className="w-4 h-4" />
-                    Forward to {selectedContactsForForwarding.length} Contact
-                    {selectedContactsForForwarding.length !== 1 ? "s" : ""}
-                  </>
-                )}
-              </button>
+                    }`}
+                  onClick={handleForwardMessages}
+                  disabled={
+                    selectedContactsForForwarding.length === 0 || isForwarding
+                  }
+                >
+                  {isForwarding ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Forwarding...
+                    </>
+                  ) : (
+                    <>
+                      <Lucide icon="Send" className="w-4 h-4" />
+                      Forward to {selectedContactsForForwarding.length} Contact
+                      {selectedContactsForForwarding.length !== 1 ? "s" : ""}
+                    </>
+                  )}
+                </button>
 
-              <button
-                className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                <button
+                  className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white px-4 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-gray-400/30 dark:border-gray-300/30 hover:scale-[1.02] active:scale-98 font-medium flex items-center justify-center gap-2"
+                  onClick={() => {
+                    setIsForwardDialogOpen(false);
+                    setSelectedContactsForForwarding([]);
+                  }}
+                >
+                  <Lucide icon="X" className="w-4 h-4" />
+                  Cancel
+                </button>
+              </div>
+
+              {/* Close on backdrop click */}
+              <div
+                className="absolute inset-0 -z-10"
                 onClick={() => {
                   setIsForwardDialogOpen(false);
                   setSelectedContactsForForwarding([]);
                 }}
-              >
-                <Lucide icon="X" className="w-4 h-4" />
-                Cancel
-              </button>
-            </div>
-
-            {/* Close on backdrop click */}
-            <div
-              className="absolute inset-0 -z-10"
-              onClick={() => {
-                setIsForwardDialogOpen(false);
-                setSelectedContactsForForwarding([]);
-              }}
-            />
-          </div>
-        </div>
-      )}
-      {isNewChatModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
-            <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-              Start New Chat
-            </h2>
-            <div className="mb-4">
-              <label
-                htmlFor="newContactNumber"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-              >
-                Enter contact number (include country code)
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 dark:text-gray-400">
-                  +
-                </span>
-                <input
-                  type="text"
-                  id="newContactNumber"
-                  value={newContactNumber}
-                  onChange={(e) => setNewContactNumber(e.target.value)}
-                  placeholder="60123456789"
-                  className="w-full p-2 pl-6 border rounded text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={closeNewChatModal}
-                className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreateNewChat}
-                className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded transition duration-200"
-              >
-                Start Chat
-              </button>
+              />
             </div>
           </div>
-        </div>
-      )}
-      {isTabOpen && (
-        <div className="absolute top-0 right-0 h-full w-full md:w-1/3 lg:w-2/5 bg-white/60 dark:bg-gray-800/60 backdrop-blur-3xl border-l border-white/30 dark:border-gray-600/40 overflow-y-auto z-50 shadow-2xl transition-all duration-500 ease-in-out">
-          <div className="flex flex-col h-full">
-            <div className="flex items-center justify-between p-4 border-b border-white/30 dark:border-gray-600/40 bg-gradient-to-r from-white/50 via-white/30 to-white/20 dark:from-gray-800/60 dark:via-gray-800/40 dark:to-gray-800/20 backdrop-blur-2xl">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl shadow-lg flex items-center justify-center">
-                  <Lucide icon="User" className="w-4 h-4 text-white" />
-                </div>
-
-                <div className="flex flex-col">
-                  <h1 className="text-lg font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                    Contact Info
-                  </h1>
+        )}
+        {isNewChatModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-md w-full">
+              <h2 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-4">
+                Start New Chat
+              </h2>
+              <div className="mb-4">
+                <label
+                  htmlFor="newContactNumber"
+                  className="block text-sm font-bold text-[#8b8b8b] mb-1 uppercase tracking-wider"
+                >
+                  Enter contact number (include country code)
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 font-bold text-[#4b4b4b]">
+                    +
+                  </span>
+                  <input
+                    type="text"
+                    id="newContactNumber"
+                    value={newContactNumber}
+                    onChange={(e) => setNewContactNumber(e.target.value)}
+                    placeholder="60123456789"
+                    className="w-full p-2 pl-6 font-bold text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  />
                 </div>
               </div>
-              <button
-                onClick={handleEyeClick}
-                className="p-2.5 bg-white/20 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl hover:bg-white/30 dark:hover:bg-gray-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 hover:scale-110 border border-white/30 dark:border-gray-600/40"
-              >
-                <Lucide
-                  icon="X"
-                  className="w-5 h-5 text-gray-700 dark:text-gray-200"
-                />
-              </button>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={closeNewChatModal}
+                  className="px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateNewChat}
+                  className="px-4 py-2 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                >
+                  Start Chat
+                </button>
+              </div>
             </div>
-            {/* Enhanced Content Area */}
-            <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-white/10 via-white/5 to-transparent dark:from-gray-800/10 dark:via-gray-800/5 dark:to-transparent backdrop-blur-2xl">
-              {/* Profile Header Section - Enhanced Glassmorphic */}
-              <div className="bg-gradient-to-br from-white/30 via-white/20 to-white/10 dark:from-gray-800/40 dark:via-gray-700/30 dark:to-gray-800/20 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/40 dark:border-gray-600/50 p-4 relative group hover:scale-[1.02] transition-all duration-500">
-                {/* Animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10 animate-pulse opacity-60"></div>
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-
-                <div className="text-center relative z-10">
-                  {/* Profile Picture */}
-                  <div className="w-16 h-16 mx-auto mb-3 relative group/profile-pic">
-                    {selectedContact?.profilePicUrl ? (
-                      <img
-                        src={selectedContact.profilePicUrl}
-                        alt="Profile"
-                        className="w-full h-full rounded-full object-cover shadow-xl border-2 border-white/60 dark:border-gray-500/60 transition-all duration-500 group-hover/profile-pic:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-xl border-2 border-white/60 dark:border-gray-500/60 transition-all duration-500 group-hover/profile-pic:scale-110">
-                        {selectedContact?.contactName
-                          ?.charAt(0)
-                          ?.toUpperCase() ||
-                          selectedContact?.firstName
-                            ?.charAt(0)
-                            ?.toUpperCase() ||
-                          selectedContact?.phone?.charAt(0) ||
-                          "?"}
-                      </div>
-                    )}
-                    {/* Enhanced border glow */}
-                    <div className="absolute inset-0 rounded-full ring-2 ring-blue-400/30 dark:ring-blue-300/40 group-hover/profile-pic:ring-4 group-hover/profile-pic:ring-blue-400/50 dark:group-hover/profile-pic:ring-blue-300/60 transition-all duration-500"></div>
+          </div>
+        )}
+        {isTabOpen && (
+          <div className="absolute top-0 right-0 h-full w-full md:w-1/3 lg:w-2/5 bg-[#f9f9f9] border-l-4 border-[#4b4b4b] overflow-y-auto z-50 transition-all duration-500 ease-in-out">
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between p-4 border-b-4 border-[#4b4b4b] bg-white">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-[#3b82f6] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                    <Lucide icon="User" className="w-5 h-5 text-white" />
                   </div>
 
-                  {/* Contact Name */}
-                  <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                    {selectedContact?.contactName ||
-                      selectedContact?.firstName ||
-                      selectedContact?.phone ||
-                      "Contact Name"}
-                  </h2>
-
-                  {/* Company Information */}
-                  {selectedContact?.companyName && (
-                    <div className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl p-2 mb-2 border border-white/30 dark:border-gray-600/50">
-                      <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                        {selectedContact.companyName}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        Software Company
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex flex-col">
+                    <h1 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                      Contact Info
+                    </h1>
+                  </div>
                 </div>
+                <button
+                  onClick={handleEyeClick}
+                  className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                >
+                  <Lucide
+                    icon="X"
+                    className="w-5 h-5 text-[#4b4b4b]"
+                  />
+                </button>
               </div>
-
-              {/* Contact Information Card */}
-              <div className="bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20 dark:border-white/10 hover:shadow-3xl transition-all duration-700 hover:scale-[1.02] relative group">
-                {/* Enhanced animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10 animate-pulse opacity-60"></div>
-                {/* Refined inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-3xl"></div>
-                {/* Subtle border glow */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm opacity-30 group-hover:opacity-50 transition-opacity duration-700"></div>
-
-                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-500/15 dark:to-purple-500/15 px-6 py-4 border-b border-white/20 dark:border-white/10 backdrop-blur-xl relative z-10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-xl backdrop-blur-sm">
-                        <svg
-                          className="w-5 h-5 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-bold text-white/90 drop-shadow-sm">
-                        Contact Information
-                      </h3>
-                    </div>
-                    <div className="flex space-x-2">
-                      {!isEditing ? (
-                        <>
-                          <button
-                            onClick={() => {
-                              setIsEditing(true);
-                              setEditedContact({ ...selectedContact });
-                            }}
-                            className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-white/30"
-                          >
-                            Edit
-                          </button>
-
-                          <button
-                            onClick={() =>
-                              setSyncDropdownOpen(!syncDropdownOpen)
-                            }
-                            className="px-4 py-2 bg-blue-500/30 backdrop-blur-sm text-white rounded-xl hover:bg-blue-500/40 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-blue-300/30"
-                          >
-                            Sync
-                          </button>
-                          {/* Delete Button */}
-                          <button
-                            onClick={handleDeleteContact}
-                            disabled={deleteLoading}
-                            className={`px-4 py-2 bg-red-500/30 backdrop-blur-sm text-white rounded-xl hover:bg-red-500/40 transition-all duration-300 flex items-center space-x-2 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium border border-red-300/30 ${
-                              deleteLoading
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }`}
-                          >
-                            {deleteLoading ? (
-                              <>
-                                <svg
-                                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                                <span>Deleting...</span>
-                              </>
-                            ) : (
-                              <span>Delete</span>
-                            )}
-                          </button>
-                        </>
+              {/* Enhanced Content Area */}
+              {/* Enhanced Content Area */}
+              <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-[#f9f9f9]">
+                {/* Profile Header Section */}
+                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 relative transition-all duration-500">
+                  <div className="text-center relative z-10">
+                    {/* Profile Picture */}
+                    <div className="w-20 h-20 mx-auto mb-4 relative">
+                      {selectedContact?.profilePicUrl ? (
+                        <img
+                          src={selectedContact.profilePicUrl}
+                          alt="Profile"
+                          className="w-full h-full object-cover border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]"
+                        />
                       ) : (
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={handleSaveContact}
-                            className="px-4 py-2 bg-green-500/30 backdrop-blur-sm text-white rounded-xl hover:bg-green-500/40 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium border border-green-300/30"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => {
-                              setIsEditing(false);
-                              setEditedContact(null);
-                            }}
-                            className="px-4 py-2 bg-red-500/30 backdrop-blur-sm text-white rounded-xl hover:bg-red-500/40 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-sm font-medium border border-red-300/30"
-                          >
-                            Cancel
-                          </button>
+                        <div className="w-full h-full bg-[#f26522] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center text-white text-3xl font-black">
+                          {selectedContact?.contactName
+                            ?.charAt(0)
+                            ?.toUpperCase() ||
+                            selectedContact?.firstName
+                              ?.charAt(0)
+                              ?.toUpperCase() ||
+                            selectedContact?.phone?.charAt(0) ||
+                            "?"}
                         </div>
                       )}
                     </div>
+
+                    {/* Contact Name */}
+                    <h2 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                      {selectedContact?.contactName ||
+                        selectedContact?.firstName ||
+                        selectedContact?.phone ||
+                        "Contact Name"}
+                    </h2>
+
+                    {/* Company Information */}
+                    {selectedContact?.companyName && (
+                      <div className="bg-[#fef08a] border-2 border-[#854d0e] p-2 mb-2 inline-block mx-auto shadow-[2px_2px_0_#854d0e]">
+                        <p className="text-sm font-black text-[#854d0e] uppercase tracking-wider">
+                          {selectedContact.companyName}
+                        </p>
+                        <p className="text-xs font-bold text-[#854d0e]">
+                          Software Company
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                <div className="p-6 relative z-10">
-                  {/* Sync Options Box */}
-                  {syncDropdownOpen && (
-                    <div className="mb-6 bg-white/20 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 dark:border-white/10">
-                      <div className="flex justify-between items-center mb-3">
-                        <p className="text-sm font-semibold text-gray-800 dark:text-white/80">
-                          Sync Options:
-                        </p>
-                        <button
-                          onClick={() => setSyncDropdownOpen(false)}
-                          className="text-xs text-red-600 dark:text-red-300 hover:text-red-700 dark:hover:text-red-200 flex items-center transition-colors duration-200"
-                          title="Close sync options"
-                        >
-                          <span className="mr-1">✕</span>
-                          Close
-                        </button>
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-white/60 mb-3">
-                        Choose what to sync for this contact
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <button
-                          onClick={async () => {
-                            setSyncDropdownOpen(false);
-                            try {
-                              if (!selectedContact.phone) {
-                                toast.error(
-                                  "Contact phone number is required for syncing"
-                                );
-                                return;
-                              }
-                              const userEmail =
-                                localStorage.getItem("userEmail");
-                              if (!userEmail) {
-                                toast.error("User not authenticated");
-                                return;
-                              }
-                              // Get user/company info from your backend
-                              const userRes = await fetch(
-                                `${baseUrl}/api/user-company-data?email=${encodeURIComponent(
-                                  userEmail
-                                )}`
-                              );
-                              if (!userRes.ok) {
-                                toast.error(
-                                  "Failed to fetch user/company data"
-                                );
-                                return;
-                              }
-                              const { userData, companyData } =
-                                await userRes.json();
-                              const companyId = userData.companyId;
-                              const apiUrl = companyData.apiUrl || baseUrl;
-                              const phoneNumber = selectedContact.phone.replace(
-                                /\D/g,
-                                ""
-                              );
-                              const response = await fetch(
-                                `${apiUrl}/api/sync-single-contact-name/${companyId}`,
-                                {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                  },
-                                  body: JSON.stringify({
-                                    companyId,
-                                    contactPhone: phoneNumber,
-                                    phoneIndex: selectedContact.phoneIndex ?? 0,
-                                  }),
-                                }
-                              );
-                              if (response.ok) {
-                                toast.success(
-                                  "Contact name synced successfully!"
-                                );
-                              } else {
-                                const errorText = await response.text();
-                                console.error("Sync failed:", errorText);
-                                toast.error("Failed to sync contact name");
-                              }
-                            } catch (error) {
-                              console.error("Error syncing contact:", error);
-                              toast.error(
-                                "An error occurred while syncing contact name"
-                              );
-                            }
-                          }}
-                          className="flex items-center justify-center px-4 py-3 bg-blue-500/30 hover:bg-blue-500/40 backdrop-blur-sm text-white rounded-xl transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-blue-300/50"
-                        >
+                {/* Contact Information Card */}
+                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden relative group">
+                  <div className="bg-[#bfdbfe] px-6 py-4 border-b-4 border-[#4b4b4b] relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
                           <svg
-                            className="w-4 h-4 mr-2"
+                            className="w-5 h-5 text-[#4b4b4b]"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -17192,200 +16837,370 @@ function Main() {
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              strokeWidth={2}
+                              strokeWidth={3}
                               d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                             />
                           </svg>
-                          Sync Name
-                        </button>
+                        </div>
+                        <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                          Contact Information
+                        </h3>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {!isEditing ? (
+                          <>
+                            <button
+                              onClick={() => {
+                                setIsEditing(true);
+                                setEditedContact({ ...selectedContact });
+                              }}
+                              className="px-4 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                            >
+                              Edit
+                            </button>
 
-                        <button
-                          onClick={async () => {
-                            setSyncDropdownOpen(false);
-                            try {
-                              if (!selectedContact.phone) {
-                                toast.error(
-                                  "Contact phone number is required for sync"
-                                );
-                                return;
+                            <button
+                              onClick={() =>
+                                setSyncDropdownOpen(!syncDropdownOpen)
                               }
-                              const userEmail =
-                                localStorage.getItem("userEmail");
-                              if (!userEmail) {
-                                toast.error("User not authenticated");
-                                return;
-                              }
-                              // Get user/company info from your backend
-                              const userRes = await fetch(
-                                `${baseUrl}/api/user-company-data?email=${encodeURIComponent(
-                                  userEmail
-                                )}`
-                              );
-                              if (!userRes.ok) {
-                                toast.error(
-                                  "Failed to fetch user/company data"
-                                );
-                                return;
-                              }
-                              const { userData, companyData } =
-                                await userRes.json();
-                              const companyId = userData.companyId;
-                              const apiUrl = companyData.apiUrl || baseUrl;
-                              const phoneNumber = selectedContact.phone.replace(
-                                /\D/g,
-                                ""
-                              );
-                              const response = await fetch(
-                                `${apiUrl}/api/sync-single-contact/${companyId}`,
-                                {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                  },
-                                  body: JSON.stringify({
-                                    companyId,
-                                    contactPhone: phoneNumber,
-                                    phoneIndex: userPhone ?? selectedContact.phoneIndex ?? 0,
-                                  }),
-                                }
-                              );
-                              if (response.ok) {
-                                toast.success(
-                                  "Contact messages synced successfully!"
-                                );
-                              } else {
-                                const errorText = await response.text();
-                                console.error("Sync failed:", errorText);
-                                toast.error("Failed to sync contact messages");
-                              }
-                            } catch (error) {
-                              console.error("Error syncing contact:", error);
-                              toast.error(
-                                "An error occurred while syncing contact messages"
-                              );
-                            }
-                          }}
-                          className="flex items-center justify-center px-4 py-3 bg-green-500/30 hover:bg-green-500/40 backdrop-blur-sm text-white rounded-xl transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-green-300/50"
-                        >
-                          <svg
-                            className="w-4 h-4 mr-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.959 8.959 0 01-4.906-1.44L3 21l1.44-5.094A8.959 8.959 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"
-                            />
-                          </svg>
-                          Sync Messages
-                        </button>
+                              className="px-4 py-2 bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                            >
+                              Sync
+                            </button>
+                            {/* Delete Button */}
+                            <button
+                              onClick={handleDeleteContact}
+                              disabled={deleteLoading}
+                              className={`px-4 py-2 bg-[#ef4444] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2 font-black uppercase tracking-wider text-sm ${deleteLoading
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                                }`}
+                            >
+                              {deleteLoading ? (
+                                <>
+                                  <LoadingIcon icon="spinning-circles" className="w-4 h-4 text-white" />
+                                  <span>Deleting...</span>
+                                </>
+                              ) : (
+                                <span>Delete</span>
+                              )}
+                            </button>
+                          </>
+                        ) : (
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={handleSaveContact}
+                              className="px-4 py-2 bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => {
+                                setIsEditing(false);
+                                setEditedContact(null);
+                              }}
+                              className="px-4 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  )}
+                  </div>
 
-                  {/* Phone Index Selector */}
-                  <div className="mb-6 bg-white/20 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 dark:border-white/10">
-                    <div className="flex justify-between items-center mb-3">
-                      <p className="text-sm font-semibold text-gray-800 dark:text-white/80">
-                        Active Phone:
-                      </p>
-                      <button
-                        onClick={async () => {
-                          if (companyId) {
-                            try {
-                              const botStatusResponse = await axios.get(
-                                `${baseUrl}/api/bot-status/${companyId}`
-                              );
-                              if (botStatusResponse.status === 200) {
-                                const data: BotStatusResponse =
-                                  botStatusResponse.data;
-                                if (data.phones && Array.isArray(data.phones)) {
-                                  const qrCodesData: QRCodeData[] =
-                                    data.phones.map((phone: any) => ({
-                                      phoneIndex: phone.phoneIndex,
-                                      status: phone.status,
-                                      qrCode: phone.qrCode,
-                                      phoneInfo: phone.phoneInfo || null,
-                                    }));
-                                  setQrCodes(qrCodesData);
-                                  toast.success("Phone status refreshed!");
-                                } else if (
-                                  data.phoneCount === 1 &&
-                                  data.phoneInfo
-                                ) {
-                                  setQrCodes([
-                                    {
-                                      phoneIndex: 0,
-                                      status: data.status,
-                                      qrCode: data.qrCode,
-                                      phoneInfo: typeof data.phoneInfo === 'string' ? data.phoneInfo : null,
-                                    },
-                                  ]);
-                                  toast.success("Phone status refreshed!");
+                  <div className="p-6 relative z-10 bg-white">
+                    {/* Sync Options Box */}
+                    {syncDropdownOpen && (
+                      <div className="mb-6 bg-white/20 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 dark:border-white/10">
+                        <div className="flex justify-between items-center mb-3">
+                          <p className="text-sm font-semibold text-gray-800 dark:text-white/80">
+                            Sync Options:
+                          </p>
+                          <button
+                            onClick={() => setSyncDropdownOpen(false)}
+                            className="text-xs text-red-600 dark:text-red-300 hover:text-red-700 dark:hover:text-red-200 flex items-center transition-colors duration-200"
+                            title="Close sync options"
+                          >
+                            <span className="mr-1">✕</span>
+                            Close
+                          </button>
+                        </div>
+                        <div className="text-xs text-gray-600 dark:text-white/60 mb-3">
+                          Choose what to sync for this contact
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <button
+                            onClick={async () => {
+                              setSyncDropdownOpen(false);
+                              try {
+                                if (!selectedContact.phone) {
+                                  toast.error(
+                                    "Contact phone number is required for syncing"
+                                  );
+                                  return;
                                 }
+                                const userEmail =
+                                  localStorage.getItem("userEmail");
+                                if (!userEmail) {
+                                  toast.error("User not authenticated");
+                                  return;
+                                }
+                                // Get user/company info from your backend
+                                const userRes = await fetch(
+                                  `${baseUrl}/api/user-company-data?email=${encodeURIComponent(
+                                    userEmail
+                                  )}`
+                                );
+                                if (!userRes.ok) {
+                                  toast.error(
+                                    "Failed to fetch user/company data"
+                                  );
+                                  return;
+                                }
+                                const { userData, companyData } =
+                                  await userRes.json();
+                                const companyId = userData.companyId;
+                                const apiUrl = companyData.apiUrl || baseUrl;
+                                const phoneNumber = selectedContact.phone.replace(
+                                  /\D/g,
+                                  ""
+                                );
+                                const response = await fetch(
+                                  `${apiUrl}/api/sync-single-contact-name/${companyId}`,
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      companyId,
+                                      contactPhone: phoneNumber,
+                                      phoneIndex: selectedContact.phoneIndex ?? 0,
+                                    }),
+                                  }
+                                );
+                                if (response.ok) {
+                                  toast.success(
+                                    "Contact name synced successfully!"
+                                  );
+                                } else {
+                                  const errorText = await response.text();
+                                  console.error("Sync failed:", errorText);
+                                  toast.error("Failed to sync contact name");
+                                }
+                              } catch (error) {
+                                console.error("Error syncing contact:", error);
+                                toast.error(
+                                  "An error occurred while syncing contact name"
+                                );
                               }
-                            } catch (error) {
-                              console.error(
-                                "Error refreshing phone status:",
-                                error
-                              );
-                              toast.error("Failed to refresh phone status");
-                            }
-                          }
-                        }}
-                        className="text-xs text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 flex items-center transition-colors duration-200"
-                        title="Refresh phone connection status"
-                      >
-                        <span className="mr-1">🔄</span>
-                        Refresh Status
-                      </button>
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-white/60 mb-3">
-                      Status indicators: ✅ Connected • ❌ Not Connected • ⏳
-                      Checking
-                    </div>
-                    <select
-                      value={selectedContact.phoneIndex ?? 0}
-                      onChange={async (e) => {
-                        const newPhoneIndex = parseInt(e.target.value);
-                        // Update local contact state
-                        setSelectedContact({
-                          ...selectedContact,
-                          phoneIndex: newPhoneIndex,
-                        });
-                        // Update the global phone selection which triggers message filtering
-                        await handlePhoneChange(newPhoneIndex);
-                        toast.info(
-                          `Phone updated to ${phoneNames[newPhoneIndex]}`
-                        );
-                      }}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-white/90 dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 shadow-lg transition-all duration-300 hover:bg-white dark:hover:bg-white/15"
-                    >
-                      {Object.entries(phoneNames).map(([index, name]) => {
-                        const phoneIndex = parseInt(index);
-                        const qrCode = qrCodes[phoneIndex];
-                        const isConnected =
-                          qrCode &&
-                          ["ready", "authenticated"].includes(
-                            qrCode.status?.toLowerCase()
-                          );
+                            }}
+                            className="flex items-center justify-center px-4 py-3 bg-blue-500/30 hover:bg-blue-500/40 backdrop-blur-sm text-white rounded-xl transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-blue-300/50"
+                          >
+                            <svg
+                              className="w-4 h-4 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                              />
+                            </svg>
+                            Sync Name
+                          </button>
 
-                        // Debug logging for phone status in dropdown
-                        console.log(
-                          `Phone ${phoneIndex} dropdown status debug:`,
-                          {
-                            phoneIndex,
-                            qrCode,
-                            status: qrCode?.status,
-                            statusLower: qrCode?.status?.toLowerCase(),
-                            isConnected,
-                            validStatuses: ["ready", "authenticated"],
-                            qrCodesLength: qrCodes.length,
-                            statusComparison: qrCode
-                              ? {
+                          <button
+                            onClick={async () => {
+                              setSyncDropdownOpen(false);
+                              try {
+                                if (!selectedContact.phone) {
+                                  toast.error(
+                                    "Contact phone number is required for sync"
+                                  );
+                                  return;
+                                }
+                                const userEmail =
+                                  localStorage.getItem("userEmail");
+                                if (!userEmail) {
+                                  toast.error("User not authenticated");
+                                  return;
+                                }
+                                // Get user/company info from your backend
+                                const userRes = await fetch(
+                                  `${baseUrl}/api/user-company-data?email=${encodeURIComponent(
+                                    userEmail
+                                  )}`
+                                );
+                                if (!userRes.ok) {
+                                  toast.error(
+                                    "Failed to fetch user/company data"
+                                  );
+                                  return;
+                                }
+                                const { userData, companyData } =
+                                  await userRes.json();
+                                const companyId = userData.companyId;
+                                const apiUrl = companyData.apiUrl || baseUrl;
+                                const phoneNumber = selectedContact.phone.replace(
+                                  /\D/g,
+                                  ""
+                                );
+                                const response = await fetch(
+                                  `${apiUrl}/api/sync-single-contact/${companyId}`,
+                                  {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      companyId,
+                                      contactPhone: phoneNumber,
+                                      phoneIndex: userPhone ?? selectedContact.phoneIndex ?? 0,
+                                    }),
+                                  }
+                                );
+                                if (response.ok) {
+                                  toast.success(
+                                    "Contact messages synced successfully!"
+                                  );
+                                } else {
+                                  const errorText = await response.text();
+                                  console.error("Sync failed:", errorText);
+                                  toast.error("Failed to sync contact messages");
+                                }
+                              } catch (error) {
+                                console.error("Error syncing contact:", error);
+                                toast.error(
+                                  "An error occurred while syncing contact messages"
+                                );
+                              }
+                            }}
+                            className="flex items-center justify-center px-4 py-3 bg-green-500/30 hover:bg-green-500/40 backdrop-blur-sm text-white rounded-xl transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-green-300/50"
+                          >
+                            <svg
+                              className="w-4 h-4 mr-2"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.959 8.959 0 01-4.906-1.44L3 21l1.44-5.094A8.959 8.959 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"
+                              />
+                            </svg>
+                            Sync Messages
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Phone Index Selector */}
+                    <div className="mb-6 bg-white/20 dark:bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-gray-200/50 dark:border-white/10">
+                      <div className="flex justify-between items-center mb-3">
+                        <p className="text-sm font-semibold text-gray-800 dark:text-white/80">
+                          Active Phone:
+                        </p>
+                        <button
+                          onClick={async () => {
+                            if (companyId) {
+                              try {
+                                const botStatusResponse = await axios.get(
+                                  `${baseUrl}/api/bot-status/${companyId}`
+                                );
+                                if (botStatusResponse.status === 200) {
+                                  const data: BotStatusResponse =
+                                    botStatusResponse.data;
+                                  if (data.phones && Array.isArray(data.phones)) {
+                                    const qrCodesData: QRCodeData[] =
+                                      data.phones.map((phone: any) => ({
+                                        phoneIndex: phone.phoneIndex,
+                                        status: phone.status,
+                                        qrCode: phone.qrCode,
+                                        phoneInfo: phone.phoneInfo || null,
+                                      }));
+                                    setQrCodes(qrCodesData);
+                                    toast.success("Phone status refreshed!");
+                                  } else if (
+                                    data.phoneCount === 1 &&
+                                    data.phoneInfo
+                                  ) {
+                                    setQrCodes([
+                                      {
+                                        phoneIndex: 0,
+                                        status: data.status,
+                                        qrCode: data.qrCode,
+                                        phoneInfo: typeof data.phoneInfo === 'string' ? data.phoneInfo : null,
+                                      },
+                                    ]);
+                                    toast.success("Phone status refreshed!");
+                                  }
+                                }
+                              } catch (error) {
+                                console.error(
+                                  "Error refreshing phone status:",
+                                  error
+                                );
+                                toast.error("Failed to refresh phone status");
+                              }
+                            }
+                          }}
+                          className="text-xs text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 flex items-center transition-colors duration-200"
+                          title="Refresh phone connection status"
+                        >
+                          <span className="mr-1">🔄</span>
+                          Refresh Status
+                        </button>
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-white/60 mb-3">
+                        Status indicators: ✅ Connected • ❌ Not Connected • ⏳
+                        Checking
+                      </div>
+                      <select
+                        value={selectedContact.phoneIndex ?? 0}
+                        onChange={async (e) => {
+                          const newPhoneIndex = parseInt(e.target.value);
+                          // Update local contact state
+                          setSelectedContact({
+                            ...selectedContact,
+                            phoneIndex: newPhoneIndex,
+                          });
+                          // Update the global phone selection which triggers message filtering
+                          await handlePhoneChange(newPhoneIndex);
+                          toast.info(
+                            `Phone updated to ${phoneNames[newPhoneIndex]}`
+                          );
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-white/90 dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 shadow-lg transition-all duration-300 hover:bg-white dark:hover:bg-white/15"
+                      >
+                        {Object.entries(phoneNames).map(([index, name]) => {
+                          const phoneIndex = parseInt(index);
+                          const qrCode = qrCodes[phoneIndex];
+                          const isConnected =
+                            qrCode &&
+                            ["ready", "authenticated"].includes(
+                              qrCode.status?.toLowerCase()
+                            );
+
+                          // Debug logging for phone status in dropdown
+                          console.log(
+                            `Phone ${phoneIndex} dropdown status debug:`,
+                            {
+                              phoneIndex,
+                              qrCode,
+                              status: qrCode?.status,
+                              statusLower: qrCode?.status?.toLowerCase(),
+                              isConnected,
+                              validStatuses: ["ready", "authenticated"],
+                              qrCodesLength: qrCodes.length,
+                              statusComparison: qrCode
+                                ? {
                                   statusExists: !!qrCode.status,
                                   statusType: typeof qrCode.status,
                                   statusValue: qrCode.status,
@@ -17398,126 +17213,125 @@ function Main() {
                                     qrCode.status?.toLowerCase() ===
                                     "authenticated",
                                 }
-                              : "No qrCode",
-                          }
-                        );
+                                : "No qrCode",
+                            }
+                          );
 
-                        // Show loading state when status is not yet available
-                        if (!qrCode && qrCodes.length === 0) {
+                          // Show loading state when status is not yet available
+                          if (!qrCode && qrCodes.length === 0) {
+                            return (
+                              <option key={index} value={index}>
+                                {`${name} - ⏳ Checking...`}
+                              </option>
+                            );
+                          }
+
+                          const statusIcon = isConnected ? "✅" : "❌";
+                          const statusText = isConnected
+                            ? "Connected"
+                            : "Not Connected";
+
                           return (
                             <option key={index} value={index}>
-                              {`${name} - ⏳ Checking...`}
+                              {`${name} - ${statusIcon} ${statusText}`}
                             </option>
                           );
-                        }
+                        })}
+                      </select>
 
-                        const statusIcon = isConnected ? "✅" : "❌";
-                        const statusText = isConnected
-                          ? "Connected"
-                          : "Not Connected";
+                      {/* Loading Button - Show when no phones found or bot not ready */}
+                      {(Object.keys(phoneNames).length === 0 || !Object.values(qrCodes).some(qr => ["ready", "authenticated"].includes(qr?.status?.toLowerCase()))) && (
+                        <button
+                          onClick={() => navigate('/loading')}
+                          className="ml-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center space-x-2"
+                        >
+                          <Lucide icon="Settings" className="w-4 h-4" />
+                          <span>Setup Bot</span>
+                        </button>
+                      )}
 
-                        return (
-                          <option key={index} value={index}>
-                            {`${name} - ${statusIcon} ${statusText}`}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    
-                    {/* Loading Button - Show when no phones found or bot not ready */}
-                    {(Object.keys(phoneNames).length === 0 || !Object.values(qrCodes).some(qr => ["ready", "authenticated"].includes(qr?.status?.toLowerCase()))) && (
-                      <button
-                        onClick={() => navigate('/loading')}
-                        className="ml-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center space-x-2"
-                      >
-                        <Lucide icon="Settings" className="w-4 h-4" />
-                        <span>Setup Bot</span>
-                      </button>
-                    )}
-                    
-                    {/* Phone Connection Status Indicator */}
-                    {selectedContact.phoneIndex !== null &&
-                      phoneNames[selectedContact.phoneIndex ?? 0] && (
-                        <div className="mt-3">
-                          {(() => {
-                            const currentPhoneIndex =
-                              selectedContact.phoneIndex ?? 0;
-                            const qrCode = qrCodes[currentPhoneIndex];
-                            const isConnected =
-                              qrCode &&
-                              ["ready", "authenticated"].includes(
-                                qrCode.status?.toLowerCase()
-                              );
+                      {/* Phone Connection Status Indicator */}
+                      {selectedContact.phoneIndex !== null &&
+                        phoneNames[selectedContact.phoneIndex ?? 0] && (
+                          <div className="mt-3">
+                            {(() => {
+                              const currentPhoneIndex =
+                                selectedContact.phoneIndex ?? 0;
+                              const qrCode = qrCodes[currentPhoneIndex];
+                              const isConnected =
+                                qrCode &&
+                                ["ready", "authenticated"].includes(
+                                  qrCode.status?.toLowerCase()
+                                );
 
-                            // Debug logging
-                            console.log("Phone status debug:", {
-                              currentPhoneIndex,
-                              qrCode,
-                              qrCodes,
-                              isConnected,
-                              phoneNames: phoneNames[currentPhoneIndex],
-                            });
+                              // Debug logging
+                              console.log("Phone status debug:", {
+                                currentPhoneIndex,
+                                qrCode,
+                                qrCodes,
+                                isConnected,
+                                phoneNames: phoneNames[currentPhoneIndex],
+                              });
 
-                            // Show loading state when status is not yet available
-                            if (!qrCode && qrCodes.length === 0) {
+                              // Show loading state when status is not yet available
+                              if (!qrCode && qrCodes.length === 0) {
+                                return (
+                                  <div className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-300 backdrop-blur-sm border border-yellow-500/30">
+                                    <span className="mr-1">⏳</span>
+                                    Checking connection...
+                                  </div>
+                                );
+                              }
+
                               return (
-                                <div className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-300 backdrop-blur-sm border border-yellow-500/30">
-                                  <span className="mr-1">⏳</span>
-                                  Checking connection...
-                                </div>
-                              );
-                            }
-
-                            return (
-                              <div
-                                className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm border ${
-                                  isConnected
+                                <div
+                                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm border ${isConnected
                                     ? "bg-green-500/20 text-green-300 border-green-500/30"
                                     : "bg-red-500/20 text-red-300 border-red-500/30"
-                                }`}
-                              >
-                                <span className="mr-1">
-                                  {isConnected ? "✅" : "❌"}
-                                </span>
-                                {isConnected ? "Connected" : "Not Connected"}
-                                {qrCode &&
-                                  !isConnected &&
-                                  ` (${qrCode.status})`}
-                                {!qrCode && ` (Status not available)`}
-                              </div>
-                            );
-                          })()}
-                        </div>
-                      )}
+                                    }`}
+                                >
+                                  <span className="mr-1">
+                                    {isConnected ? "✅" : "❌"}
+                                  </span>
+                                  {isConnected ? "Connected" : "Not Connected"}
+                                  {qrCode &&
+                                    !isConnected &&
+                                    ` (${qrCode.status})`}
+                                  {!qrCode && ` (Status not available)`}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
 
-                    {/* Warning when no phones are connected */}
-                    {Object.keys(phoneNames).length > 0 &&
-                      !Object.values(qrCodes).some(
-                        (qr) =>
-                          qr &&
-                          ["ready", "authenticated"].includes(
-                            qr.status?.toLowerCase()
-                          )
-                      ) && (
-                        <div className="mt-3 text-xs text-amber-700 dark:text-amber-300 bg-amber-200/80 dark:bg-amber-500/20 backdrop-blur-sm p-3 rounded-xl border border-amber-400/50 dark:border-amber-500/30">
-                          ⚠️ No phones are currently connected. Please ensure
-                          your WhatsApp bot is running and connected before
-                          sending messages.
-                        </div>
-                      )}
-                  </div>
+                      {/* Warning when no phones are connected */}
+                      {Object.keys(phoneNames).length > 0 &&
+                        !Object.values(qrCodes).some(
+                          (qr) =>
+                            qr &&
+                            ["ready", "authenticated"].includes(
+                              qr.status?.toLowerCase()
+                            )
+                        ) && (
+                          <div className="mt-3 text-xs font-bold text-[#b45309] bg-[#fef3c7] p-3 border-2 border-[#b45309] shadow-[2px_2px_0_#b45309]">
+                            ⚠️ No phones are currently connected. Please ensure
+                            your WhatsApp bot is running and connected before
+                            sending messages.
+                          </div>
+                        )}
+                    </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                      { label: "First Name", key: "contactName" },
-                      { label: "Last Name", key: "lastName" },
-                      { label: "Email", key: "email" },
-                      { label: "Phone", key: "phone" },
-                      { label: "Company", key: "companyName" },
-                      { label: "Address", key: "address1" },
-                      { label: "Website", key: "website" },
-                      ...(userData?.companyId === "095"
-                        ? [
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[
+                        { label: "First Name", key: "contactName" },
+                        { label: "Last Name", key: "lastName" },
+                        { label: "Email", key: "email" },
+                        { label: "Phone", key: "phone" },
+                        { label: "Company", key: "companyName" },
+                        { label: "Address", key: "address1" },
+                        { label: "Website", key: "website" },
+                        ...(userData?.companyId === "095"
+                          ? [
                             { label: "Country", key: "country" },
                             { label: "Nationality", key: "nationality" },
                             {
@@ -17538,76 +17352,76 @@ function Main() {
                             },
                             { label: "Passport Validity", key: "passport" },
                           ]
-                        : []),
-                      ...(["079", "001"].includes(userData?.companyId ?? "")
-                        ? [
+                          : []),
+                        ...(["079", "001"].includes(userData?.companyId ?? "")
+                          ? [
                             { label: "IC", key: "ic" },
                             { label: "Points", key: "points" },
                             { label: "Branch", key: "branch" },
                             { label: "Expiry Date", key: "expiryDate" },
                             { label: "Vehicle Number", key: "vehicleNumber" },
                           ]
-                        : []),
-                      ...(userData?.companyId === "001"
-                        ? [
+                          : []),
+                        ...(userData?.companyId === "001"
+                          ? [
                             { label: "Assistant ID", key: "assistantId" },
                             { label: "Thread ID", key: "threadid" },
                           ]
-                        : []),
-                      ...(selectedContact.customFields
-                        ? Object.entries(selectedContact.customFields).map(
+                          : []),
+                        ...(selectedContact.customFields
+                          ? Object.entries(selectedContact.customFields).map(
                             ([key, value]) => ({
                               label: key,
                               key: `customFields.${key}`,
                               isCustom: true,
                             })
                           )
-                        : []),
-                    ]
-                      .slice(0, showMoreContactInfo ? undefined : 6)
-                      .map((item, index) => (
-                        <div
-                          key={index}
-                          className="bg-white/30 dark:bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-gray-200/50 dark:border-white/10 hover:bg-white/40 dark:hover:bg-white/10 transition-all duration-300"
-                        >
-                          <p className="text-sm font-semibold text-gray-700 dark:text-white/70 mb-2">
-                            {item.label}
-                          </p>
-                          {isEditing ? (
-                            <input
-                              type="text"
-                              value={
-                                editedContact?.[item.key as keyof Contact] || ""
-                              }
-                              onChange={(e) =>
-                                setEditedContact({
-                                  ...editedContact,
-                                  [item.key]: e.target.value,
-                                } as Contact)
-                              }
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 bg-white/90 dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 shadow-lg transition-all duration-300"
-                            />
-                          ) : (
-                            <p className="text-gray-900 dark:text-white/90 font-medium">
-                              {selectedContact[item.key as keyof Contact] ||
-                                "N/A"}
+                          : []),
+                      ]
+                        .slice(0, showMoreContactInfo ? undefined : 6)
+                        .map((item, index) => (
+                          <div
+                            key={index}
+                            className="bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
+                          >
+                            <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                              {item.label}
                             </p>
-                          )}
-                        </div>
-                      ))}
-                  </div>
+                            {isEditing ? (
+                              <input
+                                type="text"
+                                value={
+                                  editedContact?.[item.key as keyof Contact] || ""
+                                }
+                                onChange={(e) =>
+                                  setEditedContact({
+                                    ...editedContact,
+                                    [item.key]: e.target.value,
+                                  } as Contact)
+                                }
+                                className="w-full px-3 py-2 font-bold text-[#4b4b4b] border-2 border-[#4b4b4b] focus:outline-none focus:shadow-[2px_2px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                              />
+                            ) : (
+                              <p className="font-bold text-[#4b4b4b]">
+                                {selectedContact[item.key as keyof Contact] ||
+                                  "N/A"}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                    </div>
 
-                  {/* Show More/Hide Button */}
-                  {[
-                    { label: "First Name", key: "contactName" },
-                    { label: "Last Name", key: "lastName" },
-                    { label: "Email", key: "email" },
-                    { label: "Phone", key: "phone" },
-                    { label: "Company", key: "companyName" },
-                    { label: "Address", key: "address1" },
-                    { label: "Website", key: "website" },
-                    ...(userData?.companyId === "095"
-                      ? [
+                    {/* Show More/Hide Button */}
+                    {[
+                      { label: "First Name", key: "contactName" },
+                      { label: "Last Name", key: "lastName" },
+                      { label: "Email", key: "email" },
+                      { label: "Phone", key: "phone" },
+                      { label: "Company", key: "companyName" },
+                      { label: "Address", key: "address1" },
+                      { label: "Website", key: "website" },
+                      ...(userData?.companyId === "095"
+                        ? [
                           { label: "Country", key: "country" },
                           { label: "Nationality", key: "nationality" },
                           {
@@ -17628,2117 +17442,2079 @@ function Main() {
                           },
                           { label: "Passport Validity", key: "passport" },
                         ]
-                      : []),
-                    ...(["079", "001"].includes(userData?.companyId ?? "")
-                      ? [
+                        : []),
+                      ...(["079", "001"].includes(userData?.companyId ?? "")
+                        ? [
                           { label: "IC", key: "ic" },
                           { label: "Points", key: "points" },
                           { label: "Branch", key: "branch" },
                           { label: "Expiry Date", key: "expiryDate" },
                           { label: "Vehicle Number", key: "vehicleNumber" },
                         ]
-                      : []),
-                    ...(userData?.companyId === "001"
-                      ? [
+                        : []),
+                      ...(userData?.companyId === "001"
+                        ? [
                           { label: "Assistant ID", key: "assistantId" },
                           { label: "Thread ID", key: "threadid" },
                         ]
-                      : []),
-                    ...(selectedContact.customFields
-                      ? Object.entries(selectedContact.customFields).map(
+                        : []),
+                      ...(selectedContact.customFields
+                        ? Object.entries(selectedContact.customFields).map(
                           ([key, value]) => ({
                             label: key,
                             key: `customFields.${key}`,
                             isCustom: true,
                           })
                         )
-                      : []),
-                  ].length > 6 && (
-                    <div className="mt-6 text-center">
-                      <button
-                        onClick={() =>
-                          setShowMoreContactInfo(!showMoreContactInfo)
-                        }
-                        className="px-6 py-3 bg-white/30 dark:bg-white/10 backdrop-blur-sm text-gray-900 dark:text-white/90 rounded-xl hover:bg-white/40 dark:hover:bg-white/15 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105 border border-gray-200/50 dark:border-white/20"
-                      >
-                        {showMoreContactInfo ? "Show Less" : "Show More"}
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Enhanced Employee Assignment Section */}
-                  {selectedContact.tags.some((tag: string) =>
-                    employeeList.some(
-                      (employee) =>
-                        (employee.name?.toLowerCase() || "") ===
-                        (typeof tag === "string"
-                          ? tag
-                          : String(tag)
-                        ).toLowerCase()
-                    )
-                  ) && (
-                    <div className="bg-green-500/10 backdrop-blur-xl rounded-2xl p-6 border border-green-500/20 mb-6 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:scale-[1.02] relative group">
-                      {/* Enhanced animated gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-400/5 via-emerald-400/5 to-green-400/5 animate-pulse opacity-60"></div>
-                      {/* Refined inner glow */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl"></div>
-                      {/* Subtle border glow */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-500/20 via-emerald-500/20 to-green-500/20 blur-sm opacity-30 group-hover:opacity-50 transition-opacity duration-700"></div>
-
-                      <div className="flex items-center space-x-3 mb-4 relative z-10">
-                        <div className="p-3 bg-green-500/30 backdrop-blur-sm rounded-xl shadow-lg">
-                          <Lucide icon="Users" className="w-5 h-5 text-white" />
+                        : []),
+                    ].length > 6 && (
+                        <div className="mt-6 text-center">
+                          <button
+                            onClick={() =>
+                              setShowMoreContactInfo(!showMoreContactInfo)
+                            }
+                            className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all duration-300 text-sm font-black uppercase tracking-wider"
+                          >
+                            {showMoreContactInfo ? "Show Less" : "Show More"}
+                          </button>
                         </div>
-                        <h4 className="font-bold text-lg text-white/90 drop-shadow-sm">
-                          Assigned Employees
-                        </h4>
-                      </div>
-                      <div className="flex flex-wrap gap-3 relative z-10">
-                        {selectedContact.tags
-                          ?.filter((tag: string) =>
-                            employeeList.some(
-                              (employee) =>
-                                (employee.name?.toLowerCase() || "") ===
+                      )}
+
+                    {/* Enhanced Employee Assignment Section */}
+                    {selectedContact.tags.some((tag: string) =>
+                      employeeList.some(
+                        (employee) =>
+                          (employee.name?.toLowerCase() || "") ===
+                          (typeof tag === "string"
+                            ? tag
+                            : String(tag)
+                          ).toLowerCase()
+                      )
+                    ) && (
+                        <div className="bg-[#10b981] p-6 border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] mb-6 transition-all duration-500">
+                          <div className="flex items-center space-x-3 mb-4 relative z-10">
+                            <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                              <Lucide icon="Users" className="w-5 h-5 text-[#4b4b4b]" />
+                            </div>
+                            <h4 className="font-black text-xl text-white uppercase tracking-wider">
+                              Assigned Employees
+                            </h4>
+                          </div>
+                          <div className="flex flex-wrap gap-3 relative z-10">
+                            {selectedContact.tags
+                              ?.filter((tag: string) =>
+                                employeeList.some(
+                                  (employee) =>
+                                    (employee.name?.toLowerCase() || "") ===
+                                    (typeof tag === "string"
+                                      ? tag
+                                      : String(tag)
+                                    ).toLowerCase()
+                                )
+                              )
+                              .map((employeeTag: string, index: number) => (
+                                <div
+                                  key={index}
+                                  className="inline-flex items-center bg-white text-[#4b4b4b] text-sm font-black uppercase tracking-wider px-4 py-2 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] transition-all hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
+                                >
+                                  <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-2"></div>
+                                  <span>{employeeTag}</span>
+                                  <button
+                                    className="ml-2 p-1 bg-[#ef4444] border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 focus:outline-none"
+                                    onClick={() =>
+                                      handleRemoveTag(
+                                        selectedContact.contact_id,
+                                        employeeTag
+                                      )
+                                    }
+                                  >
+                                    <Lucide
+                                      icon="X"
+                                      className="w-3 h-3 text-white"
+                                    />
+                                  </button>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                </div>
+                {/* Enhanced Tags Section */}
+                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                  <div className="bg-[#a855f7] px-4 py-3 border-b-4 border-[#4b4b4b] relative z-10">
+                    <h3 className="text-xl font-black text-white uppercase tracking-wider">
+                      Tags
+                    </h3>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex flex-wrap gap-2">
+                      {selectedContact &&
+                        selectedContact.tags &&
+                        selectedContact.tags.length > 0 ? (
+                        <>
+                          {selectedContact.tags
+                            .filter(
+                              (tag: string) =>
                                 (typeof tag === "string"
                                   ? tag
                                   : String(tag)
-                                ).toLowerCase()
+                                ).toLowerCase() !== "stop bot" &&
+                                !employeeList.some(
+                                  (employee) =>
+                                    (employee.name?.toLowerCase() || "") ===
+                                    (typeof tag === "string"
+                                      ? tag
+                                      : String(tag)
+                                    ).toLowerCase()
+                                )
                             )
-                          )
-                          .map((employeeTag: string, index: number) => (
-                            <div
-                              key={index}
-                              className="inline-flex items-center bg-green-500/20 backdrop-blur-sm text-white/90 text-sm font-medium px-4 py-2 rounded-full border border-green-500/30 shadow-lg hover:shadow-xl transition-all duration-300 group hover:scale-105"
-                            >
-                              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 shadow-sm"></div>
-                              <span>{employeeTag}</span>
-                              <button
-                                className="ml-2 p-1 rounded-full hover:bg-green-500/30 transition-colors duration-300 focus:outline-none hover:scale-110"
-                                onClick={() =>
-                                  handleRemoveTag(
-                                    selectedContact.contact_id,
-                                    employeeTag
-                                  )
-                                }
+                            .map((tag: string, index: number) => (
+                              <div
+                                key={index}
+                                className="inline-flex items-center bg-[#f26522] text-white text-sm font-black uppercase tracking-wider px-3 py-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
                               >
-                                <Lucide
-                                  icon="X"
-                                  className="w-3 h-3 text-white/80 hover:text-white"
-                                />
-                              </button>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {/* Enhanced Tags Section */}
-              <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
-                {/* Animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-indigo-500/10 dark:from-indigo-400/20 dark:via-purple-400/20 dark:to-indigo-400/20 animate-pulse opacity-40"></div>
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-
-                <div className="bg-gradient-to-r from-indigo-500/30 to-purple-500/30 dark:from-indigo-500/40 dark:to-purple-500/40 px-4 py-3 border-b border-white/40 dark:border-gray-500/60 backdrop-blur-2xl relative z-10">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
-                    Tags
-                  </h3>
-                </div>
-                <div className="p-4">
-                  <div className="flex flex-wrap gap-2">
-                    {selectedContact &&
-                    selectedContact.tags &&
-                    selectedContact.tags.length > 0 ? (
-                      <>
-                        {selectedContact.tags
-                          .filter(
-                            (tag: string) =>
-                              (typeof tag === "string"
-                                ? tag
-                                : String(tag)
-                              ).toLowerCase() !== "stop bot" &&
-                              !employeeList.some(
-                                (employee) =>
-                                  (employee.name?.toLowerCase() || "") ===
-                                  (typeof tag === "string"
-                                    ? tag
-                                    : String(tag)
-                                  ).toLowerCase()
-                              )
-                          )
-                          .map((tag: string, index: number) => (
-                            <div
-                              key={index}
-                              className="inline-flex items-center bg-blue-100/80 dark:bg-blue-800/60 backdrop-blur-2xl text-blue-800 dark:text-blue-200 text-sm font-bold px-2.5 py-1 rounded-full border border-blue-400/50 dark:border-blue-600/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-                            >
-                              <span>{tag}</span>
-                              <button
-                                className="ml-1.5 focus:outline-none hover:scale-110 transition-transform duration-300"
-                                onClick={() =>
-                                  handleRemoveTag(
-                                    selectedContact.contact_id,
-                                    tag
-                                  )
-                                }
-                              >
-                                <Lucide
-                                  icon="X"
-                                  className="w-3 h-3 text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
-                                />
-                              </button>
-                            </div>
-                          ))}
-                      </>
-                    ) : (
-                      <span className="text-gray-500 dark:text-gray-400">
-                        No tags assigned
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/40 dark:bg-gray-700/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
-                {/* Animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-orange-500/10 to-yellow-500/10 dark:from-yellow-400/20 dark:via-orange-400/20 dark:to-yellow-400/20 animate-pulse opacity-40"></div>
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-
-                <div className="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 dark:from-yellow-500/40 dark:to-orange-500/40 px-4 py-3 border-b border-white/40 dark:border-gray-500/60 backdrop-blur-2xl flex items-center justify-between relative z-10">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
-                      Scheduled Messages
-                    </h3>
-                    {scheduledMessages.length > 0 && (
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={
-                            scheduledMessages.length > 0 &&
-                            selectedScheduledMessages.size === scheduledMessages.length
-                          }
-                          onChange={handleSelectAllScheduledMessages}
-                          className="w-4 h-4 text-yellow-600 bg-white/50 border-yellow-300 rounded focus:ring-yellow-500 focus:ring-2"
-                        />
-                        <label
-                          onClick={handleSelectAllScheduledMessages}
-                          className="text-sm text-gray-700 dark:text-gray-300 cursor-pointer font-medium"
-                        >
-                          Select All
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {selectedScheduledMessages.size > 0 && (
-                      <button
-                        onClick={handleDeleteSelectedScheduledMessages}
-                        className="px-3 py-1 bg-red-500/80 text-white text-xs rounded-full hover:bg-red-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl flex items-center gap-1"
-                        title={`Delete ${selectedScheduledMessages.size} selected messages`}
-                      >
-                        <Lucide icon="Trash2" className="w-3 h-3" />
-                        Delete ({selectedScheduledMessages.size})
-                      </button>
-                    )}
-                    <span className="text-xs text-gray-600 dark:text-gray-300 bg-white/30 dark:bg-gray-800/50 px-2 py-1 rounded-full backdrop-blur-sm border border-white/30 dark:border-gray-600/50">
-                      {scheduledMessages.length} scheduled
-                    </span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  {scheduledMessages.length > 0 ? (
-                    <div className="overflow-x-auto">
-                      <div
-                        className="flex gap-4 pb-2"
-                        style={{ minWidth: "min-content" }}
-                      >
-                        {scheduledMessages.map((message) => (
-                          <div
-                            key={message.id}
-                            className={`flex-none w-[320px] bg-gradient-to-br from-yellow-500/20 to-orange-500/20 dark:from-yellow-500/30 dark:to-orange-500/30 backdrop-blur-md rounded-2xl p-4 border shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 ${
-                              selectedScheduledMessages.has(message.id!)
-                                ? "border-yellow-500 dark:border-yellow-400 ring-2 ring-yellow-500/50"
-                                : "border-yellow-300/50 dark:border-yellow-600/50"
-                            }`}
-                          >
-                            <div className="flex flex-col h-full">
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedScheduledMessages.has(message.id!)}
-                                    onChange={() => handleToggleScheduledMessage(message.id!)}
-                                    className="w-4 h-4 text-yellow-600 bg-white/50 border-yellow-300 rounded focus:ring-yellow-500 focus:ring-2"
-                                  />
-                                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                                    {new Date(
-                                      message.scheduledTime
-                                    ).toLocaleString()}
-                                  </span>
-                                </div>
-                                <span
-                                  className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                                    message.status === "scheduled"
-                                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200"
-                                      : message.status === "sent"
-                                      ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200"
-                                      : "bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                                  }`}
-                                >
-                                  {message.status
-                                    ? message.status.charAt(0).toUpperCase() +
-                                      message.status.slice(1)
-                                    : "Scheduled"}
-                                </span>
-                              </div>
-                              <div className="flex-1 mb-2">
-                                <p className="text-gray-800 dark:text-gray-200 break-words whitespace-pre-line text-sm">
-                                  {message.messageContent}
-                                </p>
-                                {message.mediaUrl && (
-                                  <div className="mt-2">
-                                    {message.mediaUrl.match(
-                                      /\.(jpg|jpeg|png|gif)$/i
-                                    ) ? (
-                                      <img
-                                        src={message.mediaUrl}
-                                        alt="Scheduled Media"
-                                        className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700"
-                                      />
-                                    ) : message.mediaUrl.match(
-                                        /\.(mp4|webm|ogg)$/i
-                                      ) ? (
-                                      <video
-                                        src={message.mediaUrl}
-                                        controls
-                                        className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700"
-                                      />
-                                    ) : null}
-                                  </div>
-                                )}
-                                {message.documentUrl && (
-                                  <div className="mt-2 flex items-center gap-2">
-                                    <Lucide
-                                      icon="FileText"
-                                      className="w-4 h-4 text-gray-500"
-                                    />
-                                    <a
-                                      href={message.documentUrl}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-xs text-blue-600 dark:text-blue-300 underline break-all"
-                                    >
-                                      {message.fileName || "Document"}
-                                    </a>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex gap-2 mt-2">
+                                <span>{tag}</span>
                                 <button
-                                  onClick={() => handleSendNow(message)}
-                                  className="flex-1 px-3 py-2 bg-green-500/80 backdrop-blur-sm text-white text-sm rounded-lg hover:bg-green-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl hover:scale-105"
-                                  title="Send this message now"
-                                >
-                                  Send Now
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    handleEditScheduledMessage(message);
-                                    setEditScheduledMessageModal(true);
-                                  }}
-                                  className="flex-1 px-3 py-2 bg-primary/80 backdrop-blur-sm text-white text-sm rounded-lg hover:bg-primary-dark transition-all duration-200 font-medium shadow-lg hover:shadow-xl hover:scale-105"
-                                  title="Edit scheduled message"
-                                >
-                                  Edit
-                                </button>
-                                <button
+                                  className="ml-2 p-1 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 focus:outline-none"
                                   onClick={() =>
-                                    handleDeleteScheduledMessage(message.id!)
+                                    handleRemoveTag(
+                                      selectedContact.contact_id,
+                                      tag
+                                    )
                                   }
-                                  className="flex-1 px-3 py-2 bg-red-500/80 backdrop-blur-sm text-white text-sm rounded-lg hover:bg-red-600 transition-all duration-200 font-medium shadow-lg hover:shadow-xl hover:scale-105"
-                                  title="Delete scheduled message"
                                 >
-                                  Delete
+                                  <Lucide
+                                    icon="X"
+                                    className="w-3 h-3 text-[#f26522]"
+                                  />
                                 </button>
                               </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center py-8">
-                      <Lucide
-                        icon="Clock"
-                        className="w-10 h-10 text-yellow-400 mb-2"
-                      />
-                      <p className="text-gray-500 dark:text-gray-400 text-center">
-                        No scheduled messages for this contact.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {/* Add the new Notes section */}
-              <div className="bg-white/40 dark:bg-gray-700/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
-                {/* Animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-yellow-500/10 to-amber-500/10 dark:from-amber-400/20 dark:via-yellow-400/20 dark:to-amber-400/20 animate-pulse opacity-40"></div>
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-
-                <div className="bg-gradient-to-r from-amber-500/30 to-yellow-500/30 dark:from-amber-500/40 dark:to-yellow-500/40 px-4 py-3 border-b border-white/40 dark:border-gray-500/60 backdrop-blur-2xl flex items-center justify-between relative z-10">
-                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-amber-600 to-yellow-600 dark:from-amber-400 dark:to-yellow-400 bg-clip-text text-transparent">
-                    Notes
-                  </h3>
-                  {!isEditing && (
-                    <button
-                      onClick={() => {
-                        setIsEditing(true);
-                        setEditedContact({ ...selectedContact });
-                      }}
-                      className="px-3 py-2 bg-gradient-to-r from-primary/80 to-primary-dark/80 backdrop-blur-2xl text-white rounded-xl hover:from-primary to-primary-dark transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 text-sm font-bold border border-white/30 dark:border-white/20"
-                    >
-                      Edit Notes
-                    </button>
-                  )}
-                </div>
-                <div className="p-4">
-                  {isEditing ? (
-                    <textarea
-                      value={editedContact?.notes || ""}
-                      onChange={(e) =>
-                        setEditedContact({
-                          ...editedContact,
-                          notes: e.target.value,
-                        } as Contact)
-                      }
-                      className="w-full h-32 p-3 border border-white/30 dark:border-gray-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-gray-100 shadow-inner"
-                      placeholder="Add notes about this contact..."
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-gray-800 dark:text-gray-200 p-3 bg-white/40 dark:bg-gray-800/40 rounded-xl backdrop-blur-sm">
-                      {selectedContact.notes || "No notes added yet."}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Media, Links and Docs Section */}
-              <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
-                {/* Animated gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 dark:from-blue-400/20 dark:via-purple-400/20 dark:to-pink-400/20 animate-pulse opacity-40"></div>
-                {/* Subtle inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-2xl"></div>
-
-                <div className="p-4 relative z-10">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                      Media, links and docs
-                    </h3>
-                    <span className="text-sm text-gray-600 dark:text-gray-300 bg-white/30 dark:bg-gray-800/50 px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/30 dark:border-gray-600/50">
-                      121
-                    </span>
-                  </div>
-
-                  {/* Sample Media Thumbnails */}
-                  <div className="grid grid-cols-4 gap-3">
-                    <div className="w-full aspect-square bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-800/50 dark:to-blue-900/50 rounded-lg flex items-center justify-center border border-blue-200/50 dark:border-blue-700/50">
-                      <div className="text-center">
-                        <div className="w-8 h-8 bg-blue-500 rounded-lg mx-auto mb-1 flex items-center justify-center">
-                          <Lucide
-                            icon="BarChart3"
-                            className="w-4 h-4 text-white"
-                          />
-                        </div>
-                        <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
-                          Engulfing
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="w-full aspect-square bg-gradient-to-br from-green-100 to-green-200 dark:from-green-800/50 dark:to-green-900/50 rounded-lg flex items-center justify-center border border-green-200/50 dark:border-green-700/50">
-                      <div className="text-center">
-                        <div className="w-8 h-8 bg-green-500 rounded-lg mx-auto mb-1 flex items-center justify-center">
-                          <Lucide
-                            icon="FileText"
-                            className="w-4 h-4 text-white"
-                          />
-                        </div>
-                        <p className="text-xs text-green-700 dark:text-green-300 font-medium">
-                          Chapter 7
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="w-full aspect-square bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-800/50 dark:to-purple-900/50 rounded-lg flex items-center justify-center border border-purple-200/50 dark:border-purple-700/50">
-                      <div className="text-center">
-                        <div className="w-8 h-8 bg-purple-500 rounded-lg mx-auto mb-1 flex items-center justify-center">
-                          <Lucide icon="Image" className="w-4 h-4 text-white" />
-                        </div>
-                        <p className="text-xs text-purple-700 dark:text-purple-300 font-medium">
-                          Image
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="w-full aspect-square bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-800/50 dark:to-orange-900/50 rounded-lg flex items-center justify-center border border-orange-200/50 dark:border-orange-700/50">
-                      <div className="text-center">
-                        <div className="w-8 h-8 bg-orange-500 rounded-lg mx-auto mb-1 flex items-center justify-center">
-                          <Lucide icon="File" className="w-4 h-4 text-white" />
-                        </div>
-                        <p className="text-xs text-orange-700 dark:text-orange-300 font-medium">
-                          Doc
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {isMessageSearchOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-40 flex items-center justify-center p-4"
-          onClick={() => {
-            setIsMessageSearchOpen(false);
-            setMessageSearchQuery("");
-          }}
-        >
-          <div
-            className="w-full max-w-4xl bg-white/20 dark:bg-gray-800/25 backdrop-blur-2xl border border-white/40 dark:border-gray-600/50 p-8 shadow-2xl z-50 rounded-3xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-6">
-              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                Search Messages
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Find specific messages in your conversation
-              </p>
-            </div>
-
-            <input
-              ref={messageSearchInputRef}
-              type="text"
-              placeholder="Search messages..."
-              value={messageSearchQuery}
-              onChange={handleMessageSearchChange}
-              className="w-full border-0 rounded-xl text-gray-800 dark:text-gray-200 bg-white/90 dark:bg-gray-700/90 placeholder-gray-500 dark:placeholder-gray-400 p-4 shadow-lg backdrop-blur-sm focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all duration-300"
-            />
-
-            <div className="mt-6 max-h-[70vh] overflow-y-auto space-y-3">
-              {messageSearchResults.length === 0 && messageSearchQuery && (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <p>No messages found matching "{messageSearchQuery}"</p>
-                </div>
-              )}
-
-              {messageSearchResults.map((result) => (
-                <div
-                  key={result.id}
-                  className="p-4 hover:bg-white/30 dark:hover:bg-gray-700/40 cursor-pointer transition-all duration-300 rounded-2xl backdrop-blur-sm border border-white/30 dark:border-gray-600/40 hover:shadow-lg hover:scale-[1.02]"
-                  onClick={() => scrollToMessage(result.id)}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 bg-white/50 dark:bg-gray-600/50 px-3 py-1 rounded-full backdrop-blur-sm">
-                      {result.from_me
-                        ? "You"
-                        : selectedContact.contactName ||
-                          selectedContact.firstName ||
-                          result.from.split("@")[0]}
-                    </p>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(result.timestamp * 1000).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
-                    {result.text.body.length > 150
-                      ? result.text.body.substring(0, 150) + "..."
-                      : result.text.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <DocumentModal
-        isOpen={documentModalOpen}
-        type={selectedDocument?.type || ""}
-        onClose={() => setDocumentModalOpen(false)}
-        document={selectedDocument}
-        onSend={(document, caption) => {
-          if (document) {
-            sendDocument(document, caption);
-          }
-          setDocumentModalOpen(false);
-        }}
-        initialCaption={documentCaption}
-      />
-
-      {/* PDF Modal */}
-      <PDFModal
-        isOpen={isPDFModalOpen}
-        onClose={closePDFModal}
-        documentUrl={pdfModalData.documentUrl}
-        documentName={pdfModalData.documentName}
-      />
-
-      {/* Usage Dashboard Modal */}
-      {isUsageDashboardOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsUsageDashboardOpen(false)}
-          />
-          {/* Modal Content */}
-          <div className="relative flex flex-col w-full h-full bg-white dark:bg-gray-900 overflow-hidden">
-            {/* Header */}
-            <div className="relative bg-gradient-to-r from-slate-600 via-gray-600 to-slate-700 p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
-                    <Lucide icon="BarChart3" className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      Usage Analytics
-                    </h2>
-                    <p className="text-gray-200 text-sm">
-                      Real-time monitoring and insights
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={fetchDailyUsageData}
-                    disabled={isLoadingUsageData}
-                    className="flex items-center gap-2 px-3 py-2 bg-white/15 hover:bg-white/25 disabled:bg-white/10 text-white rounded-lg transition-all duration-200 text-sm font-medium border border-white/20 backdrop-blur-sm"
-                  >
-                    <Lucide
-                      icon={isLoadingUsageData ? "Loader2" : "RefreshCw"}
-                      className={`w-4 h-4 ${
-                        isLoadingUsageData ? "animate-spin" : ""
-                      }`}
-                    />
-                    Refresh
-                  </button>
-                  <button
-                    onClick={() => setIsUsageDashboardOpen(false)}
-                    className="p-2 hover:bg-white/15 rounded-lg transition-all duration-200 border border-white/20"
-                  >
-                    <Lucide icon="X" className="w-4 h-4 text-white" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 p-8 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-              <div className="max-w-7xl mx-auto">
-                {isLoadingUsageData ? (
-                  <div className="flex items-center justify-center py-16">
-                    <div className="flex flex-col items-center gap-4">
-                      <LoadingIcon
-                        icon="oval"
-                        className="w-10 h-10 text-blue-500"
-                      />
-                      <p className="text-gray-600 dark:text-gray-400 font-medium">
-                        Loading analytics data...
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-5">
-                    {/* Current Usage Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-blue-50 to-blue-100 dark:from-blue-950/50 dark:via-blue-900/30 dark:to-blue-800/20 p-6 rounded-2xl border border-blue-200/50 dark:border-blue-700/50 group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full -translate-y-12 translate-x-12"></div>
-                        <div className="relative">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                              <Lucide
-                                icon="Sparkles"
-                                className="w-6 h-6 text-white"
-                              />
-                            </div>
-                            <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100">
-                              AI Messages
-                            </h3>
-                          </div>
-                          <div className="space-y-3">
-                            <div className="flex items-end justify-between">
-                              <span className="text-4xl font-black text-blue-900 dark:text-blue-100 tracking-tight">
-                                {aiMessageUsage.toLocaleString()}
-                              </span>
-                              <span className="text-lg font-semibold text-blue-600 dark:text-blue-400">
-                                /{" "}
-                                {(
-                                  currentPlanLimits.aiMessages ||
-                                  quotaData?.limit ||
-                                  100
-                                ).toLocaleString()}
-                              </span>
-                            </div>
-                            <div className="relative w-full bg-blue-200/50 dark:bg-blue-800/50 rounded-full h-4 overflow-hidden">
-                              <div
-                                className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-500 rounded-full transition-all duration-700 ease-out shadow-sm"
-                                style={{
-                                  width: `${Math.min(
-                                    Math.max(
-                                      (((currentPlanLimits.aiMessages ||
-                                        quotaData?.limit ||
-                                        100) -
-                                        (aiMessageUsage || 0)) /
-                                        (currentPlanLimits.aiMessages ||
-                                          quotaData?.limit ||
-                                          100)) *
-                                        100,
-                                      0
-                                    ),
-                                    100
-                                  )}%`,
-                                }}
-                              >
-                                <div className="w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                              </div>
-                            </div>
-                            <p className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                              {Math.max(
-                                (((currentPlanLimits.aiMessages ||
-                                  quotaData?.limit ||
-                                  100) -
-                                  (aiMessageUsage || 0)) /
-                                  (currentPlanLimits.aiMessages ||
-                                    quotaData?.limit ||
-                                    100)) *
-                                  100,
-                                0
-                              ).toFixed(1)}
-                              % quota remaining{currentPlanLimits.isLifetime ? '' : ' this month'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-emerald-50 to-emerald-100 dark:from-emerald-950/50 dark:via-emerald-900/30 dark:to-emerald-800/20 p-6 rounded-2xl border border-emerald-200/50 dark:border-emerald-700/50 group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full -translate-y-12 translate-x-12"></div>
-                        <div className="relative">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                              <Lucide
-                                icon="Users"
-                                className="w-6 h-6 text-white"
-                              />
-                            </div>
-                            <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100">
-                              Contacts
-                            </h3>
-                          </div>
-                          <div className="space-y-3">
-                            <div className="flex items-end justify-between">
-                              <span className="text-4xl font-black text-emerald-900 dark:text-emerald-100 tracking-tight">
-                                {contacts.length.toLocaleString()}
-                              </span>
-                              <span className="text-lg font-semibold text-emerald-600 dark:text-emerald-400">
-                                contacts
-                              </span>
-                            </div>
-                            <div className="relative w-full bg-emerald-200/50 dark:bg-emerald-800/50 rounded-full h-4 overflow-hidden">
-                              <div
-                                className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-sm"
-                                style={{
-                                  width: "100%",
-                                }}
-                              >
-                                <div className="w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                              </div>
-                            </div>
-                            <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                              Unlimited contacts available
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Daily Usage Chart */}
-                    <div className="bg-gradient-to-br from-gray-50/50 via-white to-gray-50/50 dark:from-gray-900/50 dark:via-gray-800 dark:to-gray-900/50 rounded-3xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden shadow-lg">
-                      <div className="bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-750 px-6 py-5 border-b border-gray-200/50 dark:border-gray-600/50">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-slate-500 to-gray-600 rounded-xl flex items-center justify-center">
-                              <Lucide
-                                icon="TrendingUp"
-                                className="w-5 h-5 text-white"
-                              />
-                            </div>
-                            <div>
-                              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                                7-Day Usage Trend
-                              </h3>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
-                                AI messages activity
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="p-8">
-                        {dailyUsageData.length > 0 ? (
-                          <div className="space-y-8">
-                            {/* Enhanced Line Chart */}
-                            <div className="relative h-96 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-inner overflow-hidden">
-                              {(() => {
-                                return (
-                                  <div className="w-full h-full p-4">
-                                    <canvas
-                                      ref={(canvas) => {
-                                        if (
-                                          canvas &&
-                                          dailyUsageData.length > 0
-                                        ) {
-                                          // Use a timeout to ensure proper destruction
-                                          setTimeout(() => {
-                                            // Destroy any existing chart instance
-                                            const existingChart = (
-                                              canvas as any
-                                            ).chart;
-                                            if (existingChart) {
-                                              try {
-                                                existingChart.destroy();
-                                              } catch (e) {
-                                                console.warn(
-                                                  "Error destroying chart:",
-                                                  e
-                                                );
-                                              }
-                                              (canvas as any).chart = null;
-                                            }
-
-                                            // Clear the canvas
-                                            const ctx = canvas.getContext("2d");
-                                            if (ctx) {
-                                              ctx.clearRect(
-                                                0,
-                                                0,
-                                                canvas.width,
-                                                canvas.height
-                                              );
-                                            }
-
-                                            import("chart.js/auto")
-                                              .then((Chart) => {
-                                                if (
-                                                  ctx &&
-                                                  !(canvas as any).chart
-                                                ) {
-                                                  const isDark =
-                                                    document.documentElement.classList.contains(
-                                                      "dark"
-                                                    );
-                                                  const formatDateLabel = (
-                                                    dateString: string
-                                                  ) => {
-                                                    const date = new Date(
-                                                      dateString
-                                                    );
-                                                    const monthNames = [
-                                                      "JAN",
-                                                      "FEB",
-                                                      "MAR",
-                                                      "APR",
-                                                      "MAY",
-                                                      "JUN",
-                                                      "JUL",
-                                                      "AUG",
-                                                      "SEP",
-                                                      "OCT",
-                                                      "NOV",
-                                                      "DEC",
-                                                    ];
-                                                    const month =
-                                                      monthNames[
-                                                        date.getMonth()
-                                                      ];
-                                                    const day = date
-                                                      .getDate()
-                                                      .toString()
-                                                      .padStart(2, "0");
-                                                    return `${month} ${day}`;
-                                                  };
-
-                                                  try {
-                                                    (canvas as any).chart =
-                                                      new Chart.default(ctx, {
-                                                        type: "line",
-                                                        data: {
-                                                          labels:
-                                                            dailyUsageData.map(
-                                                              (day) =>
-                                                                formatDateLabel(
-                                                                  day.date
-                                                                )
-                                                            ),
-                                                          datasets: [
-                                                            {
-                                                              label:
-                                                                "AI Messages",
-                                                              data: dailyUsageData.map(
-                                                                (day) =>
-                                                                  day.aiMessages
-                                                              ),
-                                                              borderColor:
-                                                                "#3B82F6",
-                                                              backgroundColor:
-                                                                "rgba(59, 130, 246, 0.1)",
-                                                              borderWidth: 3,
-                                                              pointBackgroundColor:
-                                                                "#3B82F6",
-                                                              pointBorderColor:
-                                                                "#ffffff",
-                                                              pointBorderWidth: 2,
-                                                              pointRadius: 6,
-                                                              pointHoverRadius: 8,
-                                                              tension: 0.4,
-                                                              fill: true,
-                                                            },
-                                                          ],
-                                                        },
-                                                        options: {
-                                                          responsive: true,
-                                                          maintainAspectRatio:
-                                                            false,
-                                                          interaction: {
-                                                            intersect: false,
-                                                            mode: "index" as const,
-                                                          },
-                                                          plugins: {
-                                                            legend: {
-                                                              position:
-                                                                "top" as const,
-                                                              labels: {
-                                                                usePointStyle:
-                                                                  true,
-                                                                pointStyle:
-                                                                  "circle" as const,
-                                                                padding: 20,
-                                                                color: isDark
-                                                                  ? "#9CA3AF"
-                                                                  : "#6B7280",
-                                                                font: {
-                                                                  size: 14,
-                                                                },
-                                                              },
-                                                            },
-                                                            tooltip: {
-                                                              backgroundColor:
-                                                                isDark
-                                                                  ? "#1F2937"
-                                                                  : "#FFFFFF",
-                                                              titleColor: isDark
-                                                                ? "#F3F4F6"
-                                                                : "#1F2937",
-                                                              bodyColor: isDark
-                                                                ? "#D1D5DB"
-                                                                : "#4B5563",
-                                                              borderColor:
-                                                                isDark
-                                                                  ? "#374151"
-                                                                  : "#E5E7EB",
-                                                              borderWidth: 1,
-                                                              cornerRadius: 8,
-                                                              displayColors:
-                                                                true,
-                                                              padding: 12,
-                                                            },
-                                                          },
-                                                          scales: {
-                                                            x: {
-                                                              grid: {
-                                                                display: true,
-                                                                color: isDark
-                                                                  ? "#374151"
-                                                                  : "#F3F4F6",
-                                                              },
-                                                              ticks: {
-                                                                color: isDark
-                                                                  ? "#9CA3AF"
-                                                                  : "#6B7280",
-                                                                font: {
-                                                                  size: 12,
-                                                                },
-                                                                padding: 10,
-                                                              },
-                                                            },
-                                                            y: {
-                                                              beginAtZero: true,
-                                                              grid: {
-                                                                display: true,
-                                                                color: isDark
-                                                                  ? "#374151"
-                                                                  : "#F3F4F6",
-                                                              },
-                                                              ticks: {
-                                                                color: isDark
-                                                                  ? "#9CA3AF"
-                                                                  : "#6B7280",
-                                                                font: {
-                                                                  size: 12,
-                                                                },
-                                                                padding: 10,
-                                                                callback:
-                                                                  function (
-                                                                    value: any
-                                                                  ) {
-                                                                    return Number.isInteger(
-                                                                      value
-                                                                    )
-                                                                      ? value
-                                                                      : "";
-                                                                  },
-                                                              },
-                                                            },
-                                                          },
-                                                        },
-                                                      });
-                                                  } catch (error) {
-                                                    console.error(
-                                                      "Error creating chart:",
-                                                      error
-                                                    );
-                                                  }
-                                                }
-                                              })
-                                              .catch((error) => {
-                                                console.error(
-                                                  "Error importing Chart.js:",
-                                                  error
-                                                );
-                                              });
-                                          }, 100);
-                                        }
-                                      }}
-                                      className="w-full h-full"
-                                    />
-                                  </div>
-                                );
-                              })()}
-                            </div>
-
-                            {/* Enhanced Usage Summary */}
-                            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200/50 dark:border-gray-600/50">
-                              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/10 rounded-2xl border border-blue-200/30 dark:border-blue-700/30">
-                                <div className="flex items-center justify-center mb-2">
-                                  <Lucide
-                                    icon="Sparkles"
-                                    className="w-6 h-6 text-blue-500"
-                                  />
-                                </div>
-                                <div className="text-3xl font-black text-blue-600 dark:text-blue-400 mb-1">
-                                  {dailyUsageData
-                                    .reduce(
-                                      (sum, day) => sum + day.aiMessages,
-                                      0
-                                    )
-                                    .toLocaleString()}
-                                </div>
-                                <div className="text-sm text-blue-700 dark:text-blue-300 font-semibold">
-                                  Total AI Messages
-                                </div>
-                                <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                                  Past 7 days
-                                </div>
-                              </div>
-                              <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-800/10 rounded-2xl border border-emerald-200/30 dark:border-emerald-700/30">
-                                <div className="flex items-center justify-center mb-2">
-                                  <Lucide
-                                    icon="UserPlus"
-                                    className="w-6 h-6 text-emerald-500"
-                                  />
-                                </div>
-                                <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 mb-1">
-                                  {dailyUsageData
-                                    .reduce(
-                                      (sum, day) => sum + (day.contacts || 0),
-                                      0
-                                    )
-                                    .toLocaleString()}
-                                </div>
-                                <div className="text-sm text-emerald-700 dark:text-emerald-300 font-semibold">
-                                  New Contacts
-                                </div>
-                                <div className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
-                                  Past 7 days
-                                </div>
-                              </div>
-                              <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/10 rounded-2xl border border-purple-200/30 dark:border-purple-700/30">
-                                <div className="flex items-center justify-center mb-2">
-                                  <Lucide
-                                    icon="Users"
-                                    className="w-6 h-6 text-purple-500"
-                                  />
-                                </div>
-                                <div className="text-3xl font-black text-purple-600 dark:text-purple-400 mb-1">
-                                  {contacts.length || 0}
-                                </div>
-                                <div className="text-sm text-purple-700 dark:text-purple-300 font-semibold">
-                                  Total Contacts
-                                </div>
-                                <div className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                                  Available for blasts
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="h-80 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                            <div className="text-center">
-                              <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Lucide
-                                  icon="BarChart3"
-                                  className="w-10 h-10 text-gray-400 dark:text-gray-500"
-                                />
-                              </div>
-                              <p className="text-xl font-bold text-gray-600 dark:text-gray-400 mb-2">
-                                No usage data yet
-                              </p>
-                              <p className="text-sm text-gray-500 dark:text-gray-500 max-w-sm">
-                                Your usage analytics will appear here once you
-                                start sending AI and blast messages
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-5 border border-gray-200/50 dark:border-gray-600/50">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <button
-                            onClick={() => {
-                              toast.info(
-                                "📊 Export functionality will be available soon with CSV, PDF, and Excel formats!"
-                              );
-                            }}
-                            className="flex items-center gap-3 px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md group"
-                          >
-                            <Lucide
-                              icon="Download"
-                              className="w-5 h-5 group-hover:scale-110 transition-transform"
-                            />
-                            <span className="font-semibold">
-                              Export Analytics
-                            </span>
-                          </button>
-                        </div>
-
-                        <button
-                          onClick={() => {
-                            setIsUsageDashboardOpen(false);
-                            setIsTopUpModalOpen(true);
-                          }}
-                          className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-slate-500 to-gray-600 text-white rounded-2xl hover:from-slate-600 hover:to-gray-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 group"
-                        >
-                          <Lucide
-                            icon="Plus"
-                            className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300"
-                          />
-                          <span className="font-semibold">Upgrade Quota</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      <ImageModal
-        isOpen={isImageModalOpen}
-        onClose={closeImageModal}
-        imageUrl={modalImageUrl}
-      />
-      <ImageModal2
-        isOpen={isImageModalOpen2}
-        onClose={() => setImageModalOpen2(false)}
-        imageUrl={pastedImageUrl}
-        onSend={async (urls, caption) => {
-          if (Array.isArray(urls)) {
-            // Handle multiple images
-            for (let i = 0; i < urls.length; i++) {
-              const isLastImage = i === urls.length - 1;
-              // Only send caption with the last image
-              await sendImage(urls[i], isLastImage ? caption : "");
-            }
-          } else if (urls) {
-            // Handle single image
-            await sendImage(urls, caption);
-          }
-          setImageModalOpen2(false);
-        }}
-        initialCaption={documentCaption}
-      />
-      {videoModalOpen &&
-        selectedVideo &&
-        (() => {
-          if (selectedVideo.size > 20 * 1024 * 1024) {
-            setVideoModalOpen(false);
-            toast.error(
-              "The video file is too big. Please select a file smaller than 20MB."
-            );
-            return null; // Return null to render nothing
-          }
-
-          return (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-2xl w-full">
-                <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-                  Send Video
-                </h2>
-                <video
-                  src={URL.createObjectURL(selectedVideo)}
-                  controls
-                  className="w-full mb-4 rounded"
-                  style={{ maxHeight: "400px" }}
-                />
-                <textarea
-                  value={videoCaption}
-                  onChange={(e) => setVideoCaption(e.target.value)}
-                  placeholder="Add a caption..."
-                  className="w-full p-2 mb-4 border rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-                />
-                <div className="flex justify-end space-x-2 mt-4">
-                  <button
-                    onClick={() => {
-                      setVideoModalOpen(false);
-                      setSelectedVideo(null);
-                      setVideoCaption("");
-                    }}
-                    className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={async () => {
-                      if (!isScheduling) {
-                        setIsScheduling(true);
-                        try {
-                          await handleVideoUpload(videoCaption);
-                          setVideoModalOpen(false);
-                          setSelectedVideo(null);
-                          setVideoCaption("");
-                        } finally {
-                          setIsScheduling(false);
-                        }
-                      }
-                    }}
-                    className={`px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors ${
-                      isScheduling ? "opacity-60 cursor-not-allowed" : ""
-                    }`}
-                    disabled={isScheduling}
-                  >
-                    {isScheduling ? (
-                      <span className="flex items-center">
-                        <svg
-                          className="animate-spin h-5 w-5 mr-2 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : (
-                      "Send"
-                    )}
-                  </button>
-                </div>
-                <button
-                  onClick={() => setVideoModalOpen(false)}
-                  className="absolute top-2 right-2 text-gray-800 dark:text-gray-200"
-                >
-                  &times;
-                </button>
-              </div>
-            </div>
-          );
-        })()}
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-
-      <ContextMenu id="contact-context-menu">
-        <Item onClick={({ props }) => markAsUnread(props.contact)}>
-          Mark as Unread
-        </Item>
-        <Item onClick={({ props }) => markAsRead(props.contact)}>
-          Mark as Read
-        </Item>
-        <Separator />
-        <Item
-          onClick={({ props }) =>
-            props.isSnooze
-              ? props.onUnsnooze(props.contact)
-              : props.onSnooze(props.contact)
-          }
-        >
-          Snooze/Unsnooze
-        </Item>
-        <Separator />
-        <Item
-          onClick={({ props }) =>
-            props.isResolved
-              ? props.onUnresolve(props.contact)
-              : props.onResolve(props.contact)
-          }
-        >
-          Resolve/Unresolve
-        </Item>
-      </ContextMenu>
-      {isReminderModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={() => setIsReminderModalOpen(false)}
-        >
-          <div
-            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
-              Set Reminder
-            </h2>
-            <textarea
-              placeholder="Enter reminder message..."
-              className="w-full md:w-96 lg:w-120 p-2 border rounded text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 mb-4"
-              rows={3}
-              onChange={(e) => setReminderText(e.target.value)}
-              value={reminderText}
-            />
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Reminder Date and Time
-              </label>
-              <DatePickerComponent
-                selected={reminderDate}
-                onChange={(date: Date) => setReminderDate(date)}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                dateFormat="MMMM d, yyyy h:mm aa"
-                className="w-full md:w-96 lg:w-120 p-2 border rounded text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700"
-                placeholderText="Select date and time"
-              />
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button
-                onClick={() => {
-                  setIsReminderModalOpen(false);
-                  setReminderText("");
-                }}
-                className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleSetReminder(reminderText)}
-                className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded transition duration-200"
-              >
-                Set Reminder
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Top-up Modal */}
-      {isTopUpModalOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsTopUpModalOpen(false)}
-          />
-          {/* Modal Content */}
-          <div className="relative flex flex-col w-full h-full bg-white dark:bg-gray-900 overflow-hidden">
-            {/* Header */}
-            <div className="relative bg-white/10 dark:bg-gray-800/10 backdrop-blur-2xl border-b border-white/20 dark:border-gray-600/30 p-6">
-              {/* Background gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-indigo-500/10 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent" />
-              
-              <div className="relative flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 dark:bg-gray-700/30 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 dark:border-gray-600/30 shadow-lg">
-                    <Lucide icon="Sparkles" className="w-6 h-6 text-gray-800 dark:text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      AI Response Top-up & Plans
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
-                      Upgrade your plan or top up your AI responses
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setIsTopUpModalOpen(false)}
-                  className="p-2 hover:bg-white/20 dark:hover:bg-gray-700/30 rounded-xl transition-all duration-200 border border-white/30 dark:border-gray-600/30 backdrop-blur-sm shadow-lg hover:shadow-xl"
-                >
-                  <Lucide icon="X" className="w-6 h-6 text-gray-800 dark:text-white" />
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 p-8 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-              <div className="max-w-7xl mx-auto">
-                {/* AI Response Calculator - Compact Design */}
-                <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="text-center mb-4">
-                    <div className="inline-flex items-center gap-2 mb-2">
-                      <Lucide icon="Calculator" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      <h4 className="text-lg font-bold text-gray-900 dark:text-white">
-                        AI Response Calculator
-                      </h4>
-                    </div>
-                  </div>
-
-                  <div className="max-w-sm mx-auto">
-                    <div className="grid grid-cols-2 gap-3 mb-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Amount (RM)
-                        </label>
-                        <input
-                          type="number"
-                          min="10"
-                          step="10"
-                          defaultValue="10"
-                          className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white font-semibold text-center text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
-                          onChange={(e) => {
-                            const amount = parseInt(e.target.value) || 0;
-                            const responses = amount * 10;
-                            const resultDiv = document.getElementById('calc-result');
-                            const buyButton = document.getElementById('buy-button') as HTMLAnchorElement;
-                            if (resultDiv) {
-                              resultDiv.innerHTML = 
-                                '<div class="text-center">' +
-                                  '<div class="text-lg font-bold text-emerald-600 dark:text-emerald-400">' +
-                                    responses.toLocaleString() + ' Responses' +
-                                  '</div>' +
-                                '</div>';
-                            }
-                            if (buyButton) {
-                              buyButton.href = `https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20purchase%20${responses}%20AI%20Responses%20for%20RM%20${amount}`;
-                              buyButton.innerHTML = `Buy RM ${amount}`;
-                            }
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          You Get
-                        </label>
-                        <div id="calc-result" className="px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded border">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                              100 Responses
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <a
-                        id="buy-button"
-                        href="https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20purchase%20100%20AI%20Responses%20for%20RM%2010"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded transition-colors duration-200 text-sm"
-                      >
-                        Buy RM 10
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Current Usage Summary */}
-                <div className="mb-10 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
-                  <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
-                    Current Usage
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        {aiMessageUsage}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300">
-                        AI Responses Used
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        {currentPlanLimits.aiMessages}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300">
-                        {currentPlanLimits.isLifetime ? 'Lifetime Limit' : 'Monthly Limit'} ({currentPlanLimits.title})
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div
-                        className={`text-2xl font-bold ${
-                          (currentPlanLimits.aiMessages || 0) -
-                            (aiMessageUsage || 0) >=
-                          0
-                            ? "text-blue-600 dark:text-blue-400"
-                            : "text-red-600 dark:text-red-400"
-                        }`}
-                      >
-                        {(currentPlanLimits.aiMessages || 0) -
-                          (aiMessageUsage || 0)}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300">
-                        Remaining
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pricing Plans */}
-                <div className="mb-6">
-                  <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 mb-3">
-                      <Lucide icon="Crown" className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                      Pricing Plans
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Choose the perfect plan for your business needs
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Pay-as-you-go Plan */}
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
-                      <div className="text-center mb-6">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 mb-3">
-                          <Lucide icon="Zap" className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                          Pay-as-you-go
-                        </h4>
-                        <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                          RM 0.10
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          / AI Response
-                        </div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                          100 free lifetime AI responses, then pay only for what you use with full access to all features.
-                        </p>
-                        <div className="w-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold py-2 px-4 rounded-lg text-sm text-center">
-                          Current Plan
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        {[
-                          "Pay per AI Response",
-                          "AI Follow-Up System",
-                          "AI Booking System",
-                          "AI Tagging System",
-                          "Mobile & Desktop App",
-                        ].map((benefit, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center text-sm text-gray-700 dark:text-gray-300"
-                          >
-                            <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center mr-3 flex-shrink-0">
-                              <Lucide
-                                icon="Check"
-                                className="w-3 h-3 text-white"
-                              />
-                            </div>
-                            {benefit}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Premium Support Plan - Most Popular */}
-                    <div className="relative bg-white dark:bg-gray-800 rounded-2xl border-2 border-orange-300 dark:border-orange-600 p-6 shadow-lg">
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                          Most Popular
-                        </div>
-                      </div>
-                      
-                      <div className="text-center mb-6 mt-2">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 mb-3">
-                          <Lucide icon="Target" className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                        </div>
-                        <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                          Premium Support Plan
-                        </h4>
-                        <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">
-                          RM 950
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          /month
-                        </div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                          Premium support with 5,000 AI responses monthly. Full setup and maintenance included.
-                        </p>
-                        <a
-                          href="https://api.payex.io/Payment/Details?key=78cd6WScl365InsA&amount=950&payment_type=fpx&description=Pro%20Plan&signature=c33c1d57c6ddb0976c02f5dab08bc683b25e01d099e92e707b82a607268e28a7"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm text-center"
-                        >
-                          Upgrade Now
-                        </a>
-                      </div>
-                      <div className="space-y-3">
-                        {[
-                          "5,000 AI Responses Monthly",
-                          "AI Setup & Maintenance",
-                          "AI Follow-Up System",
-                          "AI Booking System",
-                          "Mobile & Desktop App",
-                        ].map((benefit, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center text-sm text-gray-700 dark:text-gray-300"
-                          >
-                            <div className="w-4 h-4 rounded-full bg-orange-500 flex items-center justify-center mr-3 flex-shrink-0">
-                              <Lucide
-                                icon="Check"
-                                className="w-3 h-3 text-white"
-                              />
-                            </div>
-                            {benefit}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Enterprise Plan */}
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
-                      <div className="text-center mb-6">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 mb-3">
-                          <Lucide icon="Building" className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                        </div>
-                        <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                          Enterprise Plan
-                        </h4>
-                        <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                          RM 3,088+
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          /month
-                        </div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                          Complete solution with 20,000 AI responses, custom automations, and full maintenance.
-                        </p>
-                        <a
-                          href="https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20know%20more%20about%20your%20enterprise%20plan"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
-                        >
-                          Learn More
-                        </a>
-                      </div>
-                      <div className="space-y-3">
-                        {[
-                          "20,000 AI Responses Monthly",
-                          "Custom Automations",
-                          "AI Setup & Maintenance",
-                          "AI Follow-Up System",
-                          "Mobile & Desktop App",
-                        ].map((benefit, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center text-sm text-gray-700 dark:text-gray-300"
-                          >
-                            <div className="w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center mr-3 flex-shrink-0">
-                              <Lucide
-                                icon="Check"
-                                className="w-3 h-3 text-white"
-                              />
-                            </div>
-                            {benefit}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Quick Replies Modal */}
-      <QuickRepliesModal
-        isOpen={isQuickRepliesOpen}
-        onClose={() => setIsQuickRepliesOpen(false)}
-        quickReplies={quickReplies}
-        categories={categories}
-        onSelectReply={(reply) => {
-          // Handle videos first
-          if (reply.videos?.length) {
-            reply.videos.forEach((video) => {
-              fetch(video.url)
-                .then((response) => response.blob())
-                .then((blob) => {
-                  const videoFile = new File([blob], video.name, {
-                    type: video.type,
-                    lastModified: video.lastModified,
-                  });
-                  setSelectedVideo(videoFile);
-                  setVideoModalOpen(true);
-                  setDocumentCaption(reply.text || "");
-                })
-                .catch((error) => {
-                  console.error("Error handling video:", error);
-                  toast.error("Failed to load video");
-                });
-            });
-          }
-          // Handle images
-          else if (reply.images?.length) {
-            setPastedImageUrl(reply.images);
-            setDocumentCaption(reply.text || "");
-            setImageModalOpen2(true);
-          }
-          // Handle documents
-          else if (reply.documents?.length) {
-            reply.documents.forEach((doc) => {
-              fetch(doc.url)
-                .then((response) => response.blob())
-                .then((blob) => {
-                  const documentFile = new File([blob], doc.name, {
-                    type: doc.type,
-                    lastModified: doc.lastModified,
-                  });
-                  setSelectedDocument(documentFile);
-                  setDocumentModalOpen(true);
-                  setDocumentCaption(reply.text || "");
-                })
-                .catch((error) => {
-                  console.error("Error handling document:", error);
-                  toast.error("Failed to load document");
-                });
-            });
-          }
-          // Handle text-only replies
-          else if (
-            !reply.images?.length &&
-            !reply.documents?.length &&
-            !reply.videos?.length
-          ) {
-            setNewMessage(reply.text);
-          }
-        }}
-        onUpdateReply={updateQuickReply}
-        onDeleteReply={deleteQuickReply}
-      />
-
-      {/* Template Selector Modal for 24-hour window */}
-      <TemplateSelectorModal
-        isOpen={isTemplateSelectorOpen}
-        onClose={() => setIsTemplateSelectorOpen(false)}
-        onSend={handleSendTemplate}
-        companyId={companyId}
-        phoneIndex={userData?.phone || 0}
-        contactName={selectedContact?.contactName || selectedContact?.firstName || ''}
-      />
-
-      {/* Employee Assignment Modal */}
-      {isEmployeeModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsEmployeeModalOpen(false)}
-          />
-
-          {/* Modal Content */}
-          <div className="relative w-full max-w-2xl mx-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/20 dark:border-gray-600/30 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                    <Lucide icon="Users" className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      Assign Employee
-                    </h2>
-                    <p className="text-blue-100 text-sm">
-                      Select an employee to assign to this contact
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setIsEmployeeModalOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
-                >
-                  <Lucide icon="X" className="w-5 h-5 text-white" />
-                </button>
-              </div>
-            </div>
-
-            {/* Search Input */}
-            <div className="p-6 border-b border-gray-200/50 dark:border-gray-600/50">
-              <div className="relative">
-                <Lucide
-                  icon="Search"
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Search employees..."
-                  className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-700/50 border border-gray-300/50 dark:border-gray-600/50 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-                  value={employeeSearch}
-                  onChange={(e) => setEmployeeSearch(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Employee List */}
-            <div className="max-h-96 overflow-y-auto p-6">
-              {/* All Contacts Option */}
-              <button
-                className={`w-full flex items-center justify-between p-4 rounded-xl text-base font-medium transition-all duration-200 mb-3 ${
-                  !selectedEmployee
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "bg-gray-100/50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
-                }`}
-                onClick={() => {
-                  setSelectedEmployee(null);
-                  setIsEmployeeModalOpen(false);
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <Lucide
-                      icon="Users"
-                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                    />
-                  </div>
-                  <span>All Contacts</span>
-                </div>
-                <span className="text-sm opacity-75">Default</span>
-              </button>
-
-              {/* Employee List */}
-              {employeeList
-                .filter(
-                  (employee) =>
-                    (employee.name?.toLowerCase() || "").includes(
-                      employeeSearch?.toLowerCase() || ""
-                    ) &&
-                    (userRole === "1" || employee.name === currentUserName)
-                )
-                .sort((a, b) =>
-                  (a.name?.toLowerCase() || "").localeCompare(
-                    b.name?.toLowerCase() || ""
-                  )
-                )
-                .map((employee) => (
-                  <button
-                    key={employee.id}
-                    className={`w-full flex items-center justify-between p-4 rounded-xl text-base transition-all duration-200 mb-3 ${
-                      selectedEmployee === employee.name
-                        ? "bg-blue-600 text-white shadow-lg"
-                        : "bg-gray-100/50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
-                    }`}
-                    onClick={() => {
-                      console.log(
-                        "🎯 [UI] Employee assignment clicked:",
-                        employee.name,
-                        selectedContact
-                      );
-                      handleAddTagToSelectedContacts(
-                        employee.name,
-                        selectedContact
-                      );
-                      setIsEmployeeModalOpen(false);
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                        <Lucide
-                          icon="User"
-                          className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                        />
-                      </div>
-                      <span className="font-medium">{employee.name}</span>
-                    </div>
-                    <div className="flex items-center space-x-2 text-sm">
-                      {employee.quotaLeads !== undefined && (
-                        <span className="px-2 py-1 bg-white/20 dark:bg-gray-600/30 rounded-lg">
-                          {employee.assignedContacts || 0}/{employee.quotaLeads}{" "}
-                          leads
+                            ))}
+                        </>
+                      ) : (
+                        <span className="text-gray-500 dark:text-gray-400">
+                          No tags assigned
                         </span>
                       )}
                     </div>
-                  </button>
-                ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tag Assignment Modal */}
-      {isTagModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsTagModalOpen(false)}
-          />
-
-          {/* Modal Content */}
-          <div className="relative w-full max-w-2xl mx-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/20 dark:border-gray-600/30 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                    <Lucide icon="Tag" className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">Add Tag</h2>
-                    <p className="text-green-100 text-sm">
-                      Select a tag to assign to this contact
-                    </p>
                   </div>
                 </div>
+
+                <div className="bg-white/40 dark:bg-gray-700/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
+                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                    <div className="bg-[#facc15] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                          Scheduled Messages
+                        </h3>
+                        {scheduledMessages.length > 0 && (
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={
+                                scheduledMessages.length > 0 &&
+                                selectedScheduledMessages.size === scheduledMessages.length
+                              }
+                              onChange={handleSelectAllScheduledMessages}
+                              className="w-4 h-4 text-yellow-600 bg-white/50 border-yellow-300 rounded focus:ring-500 focus:ring-2"
+                            />
+                            <label
+                              onClick={handleSelectAllScheduledMessages}
+                              className="text-sm font-bold text-[#4b4b4b] cursor-pointer uppercase tracking-wider"
+                            >
+                              Select All
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {selectedScheduledMessages.size > 0 && (
+                          <button
+                            onClick={handleDeleteSelectedScheduledMessages}
+                            className="px-3 py-1 bg-[#ef4444] text-white text-xs border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider flex items-center gap-1"
+                            title={`Delete ${selectedScheduledMessages.size} selected messages`}
+                          >
+                            <Lucide icon="Trash2" className="w-3 h-3" />
+                            Delete ({selectedScheduledMessages.size})
+                          </button>
+                        )}
+                        <span className="text-xs font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] px-2 py-1 uppercase tracking-wider">
+                          {scheduledMessages.length} scheduled
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-white">
+                      {scheduledMessages.length > 0 ? (
+                        <div className="overflow-x-auto">
+                          <div
+                            className="flex gap-4 pb-2"
+                            style={{ minWidth: "min-content" }}
+                          >
+                            {scheduledMessages.map((message) => (
+                              <div
+                                key={message.id}
+                                className={`flex-none w-[320px] bg-white border-2 p-4 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] ${selectedScheduledMessages.has(message.id!)
+                                  ? "border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] bg-[#fef08a]"
+                                  : "border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]"
+                                  }`}
+                              >
+                                <div className="flex flex-col h-full">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedScheduledMessages.has(message.id!)}
+                                        onChange={() => handleToggleScheduledMessage(message.id!)}
+                                        className="w-4 h-4 text-[#10b981] bg-white border-2 border-[#4b4b4b] focus:ring-0 cursor-pointer"
+                                      />
+                                      <span className="text-xs font-bold text-[#8b8b8b]">
+                                        {new Date(
+                                          message.scheduledTime
+                                        ).toLocaleString()}
+                                      </span>
+                                    </div>
+                                    <span
+                                      className={`px-2 py-0.5 border-2 border-[#4b4b4b] text-xs font-black uppercase tracking-wider ${message.status === "scheduled"
+                                        ? "bg-[#3b82f6] text-white"
+                                        : message.status === "sent"
+                                          ? "bg-[#10b981] text-white"
+                                          : "bg-white text-[#4b4b4b]"
+                                        }`}
+                                    >
+                                      {message.status
+                                        ? message.status.charAt(0).toUpperCase() +
+                                        message.status.slice(1)
+                                        : "Scheduled"}
+                                    </span>
+                                  </div>
+                                  <div className="flex-1 mb-2">
+                                    <p className="font-bold text-[#4b4b4b] break-words whitespace-pre-line text-sm">
+                                      {message.messageContent}
+                                    </p>
+                                    {message.mediaUrl && (
+                                      <div className="mt-2">
+                                        {message.mediaUrl.match(
+                                          /\.(jpg|jpeg|png|gif)$/i
+                                        ) ? (
+                                          <img
+                                            src={message.mediaUrl}
+                                            alt="Scheduled Media"
+                                            className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700"
+                                          />
+                                        ) : message.mediaUrl.match(
+                                          /\.(mp4|webm|ogg)$/i
+                                        ) ? (
+                                          <video
+                                            src={message.mediaUrl}
+                                            controls
+                                            className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700"
+                                          />
+                                        ) : null}
+                                      </div>
+                                    )}
+                                    {message.documentUrl && (
+                                      <div className="mt-2 flex items-center gap-2">
+                                        <Lucide
+                                          icon="FileText"
+                                          className="w-4 h-4 text-gray-500"
+                                        />
+                                        <a
+                                          href={message.documentUrl}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-xs text-[#3b82f6] font-bold underline break-all"
+                                        >
+                                          {message.fileName || "Document"}
+                                        </a>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="flex gap-2 mt-2">
+                                    <button
+                                      onClick={() => handleSendNow(message)}
+                                      className="flex-1 px-3 py-2 bg-[#10b981] text-white text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      title="Send this message now"
+                                    >
+                                      Send Now
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        handleEditScheduledMessage(message);
+                                        setEditScheduledMessageModal(true);
+                                      }}
+                                      className="flex-1 px-3 py-2 bg-white text-[#4b4b4b] text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      title="Edit scheduled message"
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteScheduledMessage(message.id!)
+                                      }
+                                      className="flex-1 px-3 py-2 bg-[#ef4444] text-white text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      title="Delete scheduled message"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-8">
+                          <Lucide
+                            icon="Clock"
+                            className="w-10 h-10 text-yellow-400 mb-2"
+                          />
+                          <p className="font-bold text-[#8b8b8b] text-center uppercase tracking-wider text-sm mt-4">
+                            No scheduled messages for this contact.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {/* Add the new Notes section */}
+                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                    <div className="bg-[#fb923c] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
+                      <h3 className="text-xl font-black text-white uppercase tracking-wider">
+                        Notes
+                      </h3>
+                      {!isEditing && (
+                        <button
+                          onClick={() => {
+                            setIsEditing(true);
+                            setEditedContact({ ...selectedContact });
+                          }}
+                          className="px-3 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all text-xs font-black uppercase tracking-wider"
+                        >
+                          Edit Notes
+                        </button>
+                      )}
+                    </div>
+                    <div className="p-4 bg-white">
+                      {isEditing ? (
+                        <textarea
+                          value={editedContact?.notes || ""}
+                          onChange={(e) =>
+                            setEditedContact({
+                              ...editedContact,
+                              notes: e.target.value,
+                            } as Contact)
+                          }
+                          className="w-full h-32 p-3 font-bold text-[#4b4b4b] border-4 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                          placeholder="Add notes about this contact..."
+                        />
+                      ) : (
+                        <div className="whitespace-pre-wrap font-bold text-[#4b4b4b] p-3 border-2 border-transparent">
+                          {selectedContact.notes || "No notes added yet."}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Media, Links and Docs Section */}
+                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                    <div className="bg-[#3b82f6] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
+                      <h3 className="text-xl font-black text-white uppercase tracking-wider">
+                        Media, links & docs
+                      </h3>
+                      <span className="text-xs font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] px-2.5 py-1 uppercase tracking-wider">
+                        121
+                      </span>
+                    </div>
+
+                    <div className="p-4 bg-white">
+
+                      {/* Sample Media Thumbnails */}
+                      <div className="grid grid-cols-4 gap-3">
+                        <div className="w-full aspect-square bg-[#bfdbfe] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="text-center">
+                            <div className="w-8 h-8 bg-[#3b82f6] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                              <Lucide icon="BarChart3" className="w-4 h-4 text-white" />
+                            </div>
+                            <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                              Chart
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="w-full aspect-square bg-[#bbf7d0] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="text-center">
+                            <div className="w-8 h-8 bg-[#10b981] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                              <Lucide icon="FileText" className="w-4 h-4 text-white" />
+                            </div>
+                            <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                              Doc
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="w-full aspect-square bg-[#e9d5ff] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="text-center">
+                            <div className="w-8 h-8 bg-[#a855f7] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                              <Lucide icon="Image" className="w-4 h-4 text-white" />
+                            </div>
+                            <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                              Img
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="w-full aspect-square bg-[#fed7aa] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                          <div className="text-center">
+                            <div className="w-8 h-8 bg-[#f97316] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                              <Lucide icon="File" className="w-4 h-4 text-white" />
+                            </div>
+                            <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
+                              File
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isMessageSearchOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4"
+            onClick={() => {
+              setIsMessageSearchOpen(false);
+              setMessageSearchQuery("");
+            }}
+          >
+            <div
+              className="w-full max-w-4xl bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 z-50 flex flex-col max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-6 flex justify-between items-center shrink-0">
+                <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                  Search Messages
+                </h3>
+                <p className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider">
+                  Search through all messages in this conversation
+                </p>
+              </div>
+
+              <div className="mb-6 shrink-0 relative">
+                <input
+                  type="text"
+                  value={messageSearchQuery}
+                  onChange={handleMessageSearchChange}
+                  placeholder="Search messages..."
+                  className="w-full px-4 py-3 pl-12 font-bold text-[#4b4b4b] border-4 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                  ref={(input) => input && input.focus()}
+                />
+                <Lucide
+                  icon="Search"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#4b4b4b]"
+                />
+              </div>
+
+              <div className="flex-1 overflow-y-auto min-h-[300px]">
+                <div className="space-y-4 pr-2">
+                  {messageSearchResults.length === 0 && messageSearchQuery && (
+                    <div className="text-center py-8">
+                      <p className="font-bold text-[#8b8b8b] uppercase tracking-wider">
+                        No messages found matching "{messageSearchQuery}"
+                      </p>
+                    </div>
+                  )}
+
+                  {messageSearchResults.map((result) => (
+                    <div
+                      key={result.id}
+                      className="p-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]"
+                      onClick={() => scrollToMessage(result.id)}
+                    >
+                      <div className="flex items-center justify-between mb-2 border-b-2 border-dashed border-[#8b8b8b] pb-2">
+                        <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider">
+                          {result.from_me
+                            ? "You"
+                            : selectedContact.contactName ||
+                            selectedContact.firstName ||
+                            result.from.split("@")[0]}
+                        </p>
+                        <span className="text-xs font-bold text-[#8b8b8b]">
+                          {new Date(result.timestamp * 1000).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="font-bold text-[#4b4b4b] leading-relaxed">
+                        {result.text.body.length > 150
+                          ? result.text.body.substring(0, 150) + "..."
+                          : result.text.body}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <DocumentModal
+          isOpen={documentModalOpen}
+          type={selectedDocument?.type || ""}
+          onClose={() => setDocumentModalOpen(false)}
+          document={selectedDocument}
+          onSend={(document, caption) => {
+            if (document) {
+              sendDocument(document, caption);
+            }
+            setDocumentModalOpen(false);
+          }}
+          initialCaption={documentCaption}
+        />
+
+        {/* PDF Modal */}
+        <PDFModal
+          isOpen={isPDFModalOpen}
+          onClose={closePDFModal}
+          documentUrl={pdfModalData.documentUrl}
+          documentName={pdfModalData.documentName}
+        />
+
+        {/* Usage Dashboard Modal */}
+        {isUsageDashboardOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0"
+              onClick={() => setIsUsageDashboardOpen(false)}
+            />
+            {/* Modal Content */}
+            <div className="relative flex flex-col w-full max-w-6xl h-[90vh] bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden">
+              {/* Header */}
+              <div className="bg-[#bfdbfe] border-b-4 border-[#4b4b4b] p-6 relative z-10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-[#3b82f6] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                      <Lucide icon="BarChart3" className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                        Usage Analytics
+                      </h2>
+                      <p className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider mt-1">
+                        Real-time monitoring & insights
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={fetchDailyUsageData}
+                      disabled={isLoadingUsageData}
+                      className="flex items-center gap-2 px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Lucide
+                        icon={isLoadingUsageData ? "Loader2" : "RefreshCw"}
+                        className={`w-4 h-4 ${isLoadingUsageData ? "animate-spin" : ""
+                          }`}
+                      />
+                      Refresh
+                    </button>
+                    <button
+                      onClick={() => setIsUsageDashboardOpen(false)}
+                      className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    >
+                      <Lucide icon="X" className="w-5 h-5 text-[#4b4b4b]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 p-8 overflow-y-auto">
+                <div className="max-w-7xl mx-auto">
+                  {isLoadingUsageData ? (
+                    <div className="flex items-center justify-center py-16">
+                      <div className="flex flex-col items-center gap-4">
+                        <LoadingIcon
+                          icon="spinning-circles"
+                          className="w-12 h-12 text-[#4b4b4b]"
+                        />
+                        <p className="font-black text-[#4b4b4b] uppercase tracking-wider">
+                          Loading analytics data...
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-5">
+                      {/* Current Usage Stats */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-[#bbf7d0] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0_#4b4b4b]">
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-4 mb-6">
+                              <div className="w-14 h-14 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                                <Lucide
+                                  icon="Sparkles"
+                                  className="w-7 h-7 text-white"
+                                />
+                              </div>
+                              <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                                AI Messages
+                              </h3>
+                            </div>
+                            <div className="space-y-4">
+                              <div className="flex items-baseline justify-between">
+                                <span className="text-5xl font-black text-[#4b4b4b]">
+                                  {aiMessageUsage.toLocaleString()}
+                                </span>
+                                <span className="text-xl font-bold text-[#4b4b4b]">
+                                  /{" "}
+                                  {(
+                                    currentPlanLimits.aiMessages ||
+                                    quotaData?.limit ||
+                                    100
+                                  ).toLocaleString()}
+                                </span>
+                              </div>
+                              <div className="relative w-full h-6 border-2 border-[#4b4b4b] bg-white overflow-hidden shadow-[2px_2px_0_#4b4b4b]">
+                                <div
+                                  className="absolute inset-y-0 left-0 bg-[#10b981] border-r-2 border-[#4b4b4b] transition-all duration-700 ease-out"
+                                  style={{
+                                    width: `${Math.min(
+                                      Math.max(
+                                        (((currentPlanLimits.aiMessages ||
+                                          quotaData?.limit ||
+                                          100) -
+                                          (aiMessageUsage || 0)) /
+                                          (currentPlanLimits.aiMessages ||
+                                            quotaData?.limit ||
+                                            100)) *
+                                        100,
+                                        0
+                                      ),
+                                      100
+                                    )}%`,
+                                  }}
+                                >
+                                </div>
+                              </div>
+                              <p className="text-sm font-bold text-[#4b4b4b] uppercase tracking-wider">
+                                {Math.max(
+                                  (((currentPlanLimits.aiMessages ||
+                                    quotaData?.limit ||
+                                    100) -
+                                    (aiMessageUsage || 0)) /
+                                    (currentPlanLimits.aiMessages ||
+                                      quotaData?.limit ||
+                                      100)) *
+                                  100,
+                                  0
+                                ).toFixed(1)}
+                                % quota remaining{currentPlanLimits.isLifetime ? '' : ' this month'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bg-[#fef08a] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0_#4b4b4b]">
+                          <div className="relative z-10">
+                            <div className="flex items-center gap-4 mb-6">
+                              <div className="w-14 h-14 bg-[#eab308] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                                <Lucide
+                                  icon="Users"
+                                  className="w-7 h-7 text-white"
+                                />
+                              </div>
+                              <h3 className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
+                                Contacts
+                              </h3>
+                            </div>
+                            <div className="space-y-4">
+                              <div className="flex items-baseline justify-between">
+                                <span className="text-5xl font-black text-[#4b4b4b]">
+                                  {contacts.length.toLocaleString()}
+                                </span>
+                                <span className="text-xl font-bold text-[#4b4b4b]">
+                                  contacts
+                                </span>
+                              </div>
+                              <div className="relative w-full h-6 border-2 border-[#4b4b4b] bg-white overflow-hidden shadow-[2px_2px_0_#4b4b4b]">
+                                <div
+                                  className="absolute inset-y-0 left-0 bg-[#eab308] border-r-2 border-[#4b4b4b] transition-all duration-700 ease-out"
+                                  style={{ width: "100%" }}
+                                >
+                                </div>
+                              </div>
+                              <p className="text-sm font-bold text-[#4b4b4b] uppercase tracking-wider">
+                                Unlimited contacts available
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Daily Usage Chart */}
+                      <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden">
+                        <div className="bg-[#c084fc] px-6 py-5 border-b-4 border-[#4b4b4b]">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-slate-500 to-gray-600 rounded-xl flex items-center justify-center">
+                                <Lucide
+                                  icon="TrendingUp"
+                                  className="w-5 h-5 text-white"
+                                />
+                              </div>
+                              <div>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                                  7-Day Usage Trend
+                                </h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  AI messages activity
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-8">
+                          {dailyUsageData.length > 0 ? (
+                            <div className="space-y-8">
+                              {/* Enhanced Line Chart */}
+                              <div className="relative h-96 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-inner overflow-hidden">
+                                {(() => {
+                                  return (
+                                    <div className="w-full h-full p-4">
+                                      <canvas
+                                        ref={(canvas) => {
+                                          if (
+                                            canvas &&
+                                            dailyUsageData.length > 0
+                                          ) {
+                                            // Use a timeout to ensure proper destruction
+                                            setTimeout(() => {
+                                              // Destroy any existing chart instance
+                                              const existingChart = (
+                                                canvas as any
+                                              ).chart;
+                                              if (existingChart) {
+                                                try {
+                                                  existingChart.destroy();
+                                                } catch (e) {
+                                                  console.warn(
+                                                    "Error destroying chart:",
+                                                    e
+                                                  );
+                                                }
+                                                (canvas as any).chart = null;
+                                              }
+
+                                              // Clear the canvas
+                                              const ctx = canvas.getContext("2d");
+                                              if (ctx) {
+                                                ctx.clearRect(
+                                                  0,
+                                                  0,
+                                                  canvas.width,
+                                                  canvas.height
+                                                );
+                                              }
+
+                                              import("chart.js/auto")
+                                                .then((Chart) => {
+                                                  if (
+                                                    ctx &&
+                                                    !(canvas as any).chart
+                                                  ) {
+                                                    const isDark =
+                                                      document.documentElement.classList.contains(
+                                                        "dark"
+                                                      );
+                                                    const formatDateLabel = (
+                                                      dateString: string
+                                                    ) => {
+                                                      const date = new Date(
+                                                        dateString
+                                                      );
+                                                      const monthNames = [
+                                                        "JAN",
+                                                        "FEB",
+                                                        "MAR",
+                                                        "APR",
+                                                        "MAY",
+                                                        "JUN",
+                                                        "JUL",
+                                                        "AUG",
+                                                        "SEP",
+                                                        "OCT",
+                                                        "NOV",
+                                                        "DEC",
+                                                      ];
+                                                      const month =
+                                                        monthNames[
+                                                        date.getMonth()
+                                                        ];
+                                                      const day = date
+                                                        .getDate()
+                                                        .toString()
+                                                        .padStart(2, "0");
+                                                      return `${month} ${day}`;
+                                                    };
+
+                                                    try {
+                                                      (canvas as any).chart =
+                                                        new Chart.default(ctx, {
+                                                          type: "line",
+                                                          data: {
+                                                            labels:
+                                                              dailyUsageData.map(
+                                                                (day) =>
+                                                                  formatDateLabel(
+                                                                    day.date
+                                                                  )
+                                                              ),
+                                                            datasets: [
+                                                              {
+                                                                label:
+                                                                  "AI Messages",
+                                                                data: dailyUsageData.map(
+                                                                  (day) =>
+                                                                    day.aiMessages
+                                                                ),
+                                                                borderColor:
+                                                                  "#3B82F6",
+                                                                backgroundColor:
+                                                                  "rgba(59, 130, 246, 0.1)",
+                                                                borderWidth: 3,
+                                                                pointBackgroundColor:
+                                                                  "#3B82F6",
+                                                                pointBorderColor:
+                                                                  "#ffffff",
+                                                                pointBorderWidth: 2,
+                                                                pointRadius: 6,
+                                                                pointHoverRadius: 8,
+                                                                tension: 0.4,
+                                                                fill: true,
+                                                              },
+                                                            ],
+                                                          },
+                                                          options: {
+                                                            responsive: true,
+                                                            maintainAspectRatio:
+                                                              false,
+                                                            interaction: {
+                                                              intersect: false,
+                                                              mode: "index" as const,
+                                                            },
+                                                            plugins: {
+                                                              legend: {
+                                                                position:
+                                                                  "top" as const,
+                                                                labels: {
+                                                                  usePointStyle:
+                                                                    true,
+                                                                  pointStyle:
+                                                                    "circle" as const,
+                                                                  padding: 20,
+                                                                  color: isDark
+                                                                    ? "#9CA3AF"
+                                                                    : "#6B7280",
+                                                                  font: {
+                                                                    size: 14,
+                                                                  },
+                                                                },
+                                                              },
+                                                              tooltip: {
+                                                                backgroundColor:
+                                                                  isDark
+                                                                    ? "#1F2937"
+                                                                    : "#FFFFFF",
+                                                                titleColor: isDark
+                                                                  ? "#F3F4F6"
+                                                                  : "#1F2937",
+                                                                bodyColor: isDark
+                                                                  ? "#D1D5DB"
+                                                                  : "#4B5563",
+                                                                borderColor:
+                                                                  isDark
+                                                                    ? "#374151"
+                                                                    : "#E5E7EB",
+                                                                borderWidth: 1,
+                                                                cornerRadius: 8,
+                                                                displayColors:
+                                                                  true,
+                                                                padding: 12,
+                                                              },
+                                                            },
+                                                            scales: {
+                                                              x: {
+                                                                grid: {
+                                                                  display: true,
+                                                                  color: isDark
+                                                                    ? "#374151"
+                                                                    : "#F3F4F6",
+                                                                },
+                                                                ticks: {
+                                                                  color: isDark
+                                                                    ? "#9CA3AF"
+                                                                    : "#6B7280",
+                                                                  font: {
+                                                                    size: 12,
+                                                                  },
+                                                                  padding: 10,
+                                                                },
+                                                              },
+                                                              y: {
+                                                                beginAtZero: true,
+                                                                grid: {
+                                                                  display: true,
+                                                                  color: isDark
+                                                                    ? "#374151"
+                                                                    : "#F3F4F6",
+                                                                },
+                                                                ticks: {
+                                                                  color: isDark
+                                                                    ? "#9CA3AF"
+                                                                    : "#6B7280",
+                                                                  font: {
+                                                                    size: 12,
+                                                                  },
+                                                                  padding: 10,
+                                                                  callback:
+                                                                    function (
+                                                                      value: any
+                                                                    ) {
+                                                                      return Number.isInteger(
+                                                                        value
+                                                                      )
+                                                                        ? value
+                                                                        : "";
+                                                                    },
+                                                                },
+                                                              },
+                                                            },
+                                                          },
+                                                        });
+                                                    } catch (error) {
+                                                      console.error(
+                                                        "Error creating chart:",
+                                                        error
+                                                      );
+                                                    }
+                                                  }
+                                                })
+                                                .catch((error) => {
+                                                  console.error(
+                                                    "Error importing Chart.js:",
+                                                    error
+                                                  );
+                                                });
+                                            }, 100);
+                                          }
+                                        }}
+                                        className="w-full h-full"
+                                      />
+                                    </div>
+                                  );
+                                })()}
+                              </div>
+
+                              {/* Enhanced Usage Summary */}
+                              <div className="grid grid-cols-3 gap-6 pt-6 border-t-4 border-dashed border-[#8b8b8b]">
+                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                  <div className="flex items-center justify-center mb-2">
+                                    <Lucide
+                                      icon="Sparkles"
+                                      className="w-6 h-6 text-[#3b82f6]"
+                                    />
+                                  </div>
+                                  <div className="text-3xl font-black text-[#4b4b4b] mb-1">
+                                    {dailyUsageData
+                                      .reduce(
+                                        (sum, day) => sum + day.aiMessages,
+                                        0
+                                      )
+                                      .toLocaleString()}
+                                  </div>
+                                  <div className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider">
+                                    Total AI Messages
+                                  </div>
+                                  <div className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider mt-1">
+                                    Past 7 days
+                                  </div>
+                                </div>
+                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                  <div className="flex items-center justify-center mb-2">
+                                    <Lucide
+                                      icon="UserPlus"
+                                      className="w-6 h-6 text-emerald-500"
+                                    />
+                                  </div>
+                                  <div className="text-3xl font-black text-[#4b4b4b] mb-1">
+                                    {dailyUsageData
+                                      .reduce(
+                                        (sum, day) => sum + (day.contacts || 0),
+                                        0
+                                      )
+                                      .toLocaleString()}
+                                  </div>
+                                  <div className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider">
+                                    New Contacts
+                                  </div>
+                                  <div className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider mt-1">
+                                    Past 7 days
+                                  </div>
+                                </div>
+                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                  <div className="flex items-center justify-center mb-2">
+                                    <Lucide
+                                      icon="Users"
+                                      className="w-6 h-6 text-[#a855f7]"
+                                    />
+                                  </div>
+                                  <div className="text-3xl font-black text-[#4b4b4b] mb-1">
+                                    {contacts.length || 0}
+                                  </div>
+                                  <div className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider">
+                                    Total Contacts
+                                  </div>
+                                  <div className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider mt-1">
+                                    Available for blasts
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="h-80 flex items-center justify-center p-8 bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b]">
+                              <div className="text-center">
+                                <div className="w-20 h-20 bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center mx-auto mb-6">
+                                  <Lucide
+                                    icon="BarChart3"
+                                    className="w-10 h-10 text-[#4b4b4b]"
+                                  />
+                                </div>
+                                <p className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
+                                  No usage data yet
+                                </p>
+                                <p className="text-sm font-bold text-[#8b8b8b] uppercase tracking-wider max-w-sm mx-auto">
+                                  Your usage analytics will appear here once you
+                                  start sending AI and blast messages.
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="bg-[#bfdbfe] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 transition-all duration-300">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <button
+                              onClick={() => {
+                                toast.info(
+                                  "📊 Export functionality will be available soon with CSV, PDF, and Excel formats!"
+                                );
+                              }}
+                              className="flex items-center gap-3 px-6 py-3 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] transition-all group"
+                            >
+                              <Lucide
+                                icon="Download"
+                                className="w-5 h-5 group-hover:-translate-y-1 group-hover:scale-110 transition-transform"
+                              />
+                              <span>Export Analytics</span>
+                            </button>
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              setIsUsageDashboardOpen(false);
+                              setIsTopUpModalOpen(true);
+                            }}
+                            className="flex items-center gap-3 px-6 py-3 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] transition-all group"
+                          >
+                            <Lucide
+                              icon="Plus"
+                              className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+                            />
+                            <span>Upgrade Quota</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <ImageModal
+          isOpen={isImageModalOpen}
+          onClose={closeImageModal}
+          imageUrl={modalImageUrl}
+        />
+        <ImageModal2
+          isOpen={isImageModalOpen2}
+          onClose={() => setImageModalOpen2(false)}
+          imageUrl={pastedImageUrl}
+          onSend={async (urls, caption) => {
+            if (Array.isArray(urls)) {
+              // Handle multiple images
+              for (let i = 0; i < urls.length; i++) {
+                const isLastImage = i === urls.length - 1;
+                // Only send caption with the last image
+                await sendImage(urls[i], isLastImage ? caption : "");
+              }
+            } else if (urls) {
+              // Handle single image
+              await sendImage(urls, caption);
+            }
+            setImageModalOpen2(false);
+          }}
+          initialCaption={documentCaption}
+        />
+        {videoModalOpen &&
+          selectedVideo &&
+          (() => {
+            if (selectedVideo.size > 20 * 1024 * 1024) {
+              setVideoModalOpen(false);
+              toast.error(
+                "The video file is too big. Please select a file smaller than 20MB."
+              );
+              return null; // Return null to render nothing
+            }
+
+            return (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-2xl w-full">
+                  <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+                    Send Video
+                  </h2>
+                  <video
+                    src={URL.createObjectURL(selectedVideo)}
+                    controls
+                    className="w-full mb-4 rounded"
+                    style={{ maxHeight: "400px" }}
+                  />
+                  <textarea
+                    value={videoCaption}
+                    onChange={(e) => setVideoCaption(e.target.value)}
+                    placeholder="Add a caption..."
+                    className="w-full p-2 mb-4 border rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                  />
+                  <div className="flex justify-end space-x-2 mt-4">
+                    <button
+                      onClick={() => {
+                        setVideoModalOpen(false);
+                        setSelectedVideo(null);
+                        setVideoCaption("");
+                      }}
+                      className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (!isScheduling) {
+                          setIsScheduling(true);
+                          try {
+                            await handleVideoUpload(videoCaption);
+                            setVideoModalOpen(false);
+                            setSelectedVideo(null);
+                            setVideoCaption("");
+                          } finally {
+                            setIsScheduling(false);
+                          }
+                        }
+                      }}
+                      className={`px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors ${isScheduling ? "opacity-60 cursor-not-allowed" : ""
+                        }`}
+                      disabled={isScheduling}
+                    >
+                      {isScheduling ? (
+                        <span className="flex items-center">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : (
+                        "Send"
+                      )}
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setVideoModalOpen(false)}
+                    className="absolute top-2 right-2 text-gray-800 dark:text-gray-200"
+                  >
+                    &times;
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+
+        <ContextMenu id="contact-context-menu">
+          <Item onClick={({ props }) => markAsUnread(props.contact)}>
+            Mark as Unread
+          </Item>
+          <Item onClick={({ props }) => markAsRead(props.contact)}>
+            Mark as Read
+          </Item>
+          <Separator />
+          <Item
+            onClick={({ props }) =>
+              props.isSnooze
+                ? props.onUnsnooze(props.contact)
+                : props.onSnooze(props.contact)
+            }
+          >
+            Snooze/Unsnooze
+          </Item>
+          <Separator />
+          <Item
+            onClick={({ props }) =>
+              props.isResolved
+                ? props.onUnresolve(props.contact)
+                : props.onResolve(props.contact)
+            }
+          >
+            Resolve/Unresolve
+          </Item>
+        </ContextMenu>
+        {isReminderModalOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setIsReminderModalOpen(false)}
+          >
+            <div
+              className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+                Set Reminder
+              </h2>
+              <textarea
+                placeholder="Enter reminder message..."
+                className="w-full md:w-96 lg:w-120 p-2 border rounded text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700 mb-4"
+                rows={3}
+                onChange={(e) => setReminderText(e.target.value)}
+                value={reminderText}
+              />
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Reminder Date and Time
+                </label>
+                <DatePickerComponent
+                  selected={reminderDate}
+                  onChange={(date: Date) => setReminderDate(date)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  className="w-full md:w-96 lg:w-120 p-2 border rounded text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-700"
+                  placeholderText="Select date and time"
+                />
+              </div>
+              <div className="flex justify-end space-x-2 mt-4">
                 <button
-                  onClick={() => setIsTagModalOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  onClick={() => {
+                    setIsReminderModalOpen(false);
+                    setReminderText("");
+                  }}
+                  className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition duration-200"
                 >
-                  <Lucide icon="X" className="w-5 h-5 text-white" />
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleSetReminder(reminderText)}
+                  className="px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded transition duration-200"
+                >
+                  Set Reminder
                 </button>
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Tag List */}
-            <div className="max-h-96 overflow-y-auto p-6">
-              {tagList.map((tag) => (
+        {/* Top-up Modal */}
+        {isTopUpModalOpen && (
+          <div className="fixed inset-0 z-50 flex flex-col">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsTopUpModalOpen(false)}
+            />
+            {/* Modal Content */}
+            <div className="relative flex flex-col w-full h-full bg-white dark:bg-gray-900 overflow-hidden">
+              {/* Header */}
+              <div className="relative bg-white/10 dark:bg-gray-800/10 backdrop-blur-2xl border-b border-white/20 dark:border-gray-600/30 p-6">
+                {/* Background gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-indigo-500/10 dark:from-blue-400/20 dark:via-purple-400/10 dark:to-indigo-400/20" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent" />
+
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white/20 dark:bg-gray-700/30 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 dark:border-gray-600/30 shadow-lg">
+                      <Lucide icon="Sparkles" className="w-6 h-6 text-gray-800 dark:text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        AI Response Top-up & Plans
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
+                        Upgrade your plan or top up your AI responses
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsTopUpModalOpen(false)}
+                    className="p-2 hover:bg-white/20 dark:hover:bg-gray-700/30 rounded-xl transition-all duration-200 border border-white/30 dark:border-gray-600/30 backdrop-blur-sm shadow-lg hover:shadow-xl"
+                  >
+                    <Lucide icon="X" className="w-6 h-6 text-gray-800 dark:text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 p-8 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+                <div className="max-w-7xl mx-auto">
+                  {/* AI Response Calculator - Compact Design */}
+                  <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div className="text-center mb-4">
+                      <div className="inline-flex items-center gap-2 mb-2">
+                        <Lucide icon="Calculator" className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <h4 className="text-lg font-bold text-gray-900 dark:text-white">
+                          AI Response Calculator
+                        </h4>
+                      </div>
+                    </div>
+
+                    <div className="max-w-sm mx-auto">
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Amount (RM)
+                          </label>
+                          <input
+                            type="number"
+                            min="10"
+                            step="10"
+                            defaultValue="10"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white font-semibold text-center text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+                            onChange={(e) => {
+                              const amount = parseInt(e.target.value) || 0;
+                              const responses = amount * 10;
+                              const resultDiv = document.getElementById('calc-result');
+                              const buyButton = document.getElementById('buy-button') as HTMLAnchorElement;
+                              if (resultDiv) {
+                                resultDiv.innerHTML =
+                                  '<div class="text-center">' +
+                                  '<div class="text-lg font-bold text-emerald-600 dark:text-emerald-400">' +
+                                  responses.toLocaleString() + ' Responses' +
+                                  '</div>' +
+                                  '</div>';
+                              }
+                              if (buyButton) {
+                                buyButton.href = `https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20purchase%20${responses}%20AI%20Responses%20for%20RM%20${amount}`;
+                                buyButton.innerHTML = `Buy RM ${amount}`;
+                              }
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            You Get
+                          </label>
+                          <div id="calc-result" className="px-3 py-2 bg-gray-50 dark:bg-gray-700 rounded border">
+                            <div className="text-center">
+                              <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                                100 Responses
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-center">
+                        <a
+                          id="buy-button"
+                          href="https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20purchase%20100%20AI%20Responses%20for%20RM%2010"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded transition-colors duration-200 text-sm"
+                        >
+                          Buy RM 10
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Current Usage Summary */}
+                  <div className="mb-10 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-2xl border border-blue-200/50 dark:border-blue-700/50">
+                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+                      Current Usage
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                          {aiMessageUsage}
+                        </div>
+                        <div className="text-sm text-blue-700 dark:text-blue-300">
+                          AI Responses Used
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                          {currentPlanLimits.aiMessages}
+                        </div>
+                        <div className="text-sm text-blue-700 dark:text-blue-300">
+                          {currentPlanLimits.isLifetime ? 'Lifetime Limit' : 'Monthly Limit'} ({currentPlanLimits.title})
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <div
+                          className={`text-2xl font-bold ${(currentPlanLimits.aiMessages || 0) -
+                            (aiMessageUsage || 0) >=
+                            0
+                            ? "text-blue-600 dark:text-blue-400"
+                            : "text-red-600 dark:text-red-400"
+                            }`}
+                        >
+                          {(currentPlanLimits.aiMessages || 0) -
+                            (aiMessageUsage || 0)}
+                        </div>
+                        <div className="text-sm text-blue-700 dark:text-blue-300">
+                          Remaining
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing Plans */}
+                  <div className="mb-6">
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 mb-3">
+                        <Lucide icon="Crown" className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                        Pricing Plans
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        Choose the perfect plan for your business needs
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      {/* Pay-as-you-go Plan */}
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
+                        <div className="text-center mb-6">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 mb-3">
+                            <Lucide icon="Zap" className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            Pay-as-you-go
+                          </h4>
+                          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                            RM 0.10
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            / AI Response
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                            100 free lifetime AI responses, then pay only for what you use with full access to all features.
+                          </p>
+                          <div className="w-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold py-2 px-4 rounded-lg text-sm text-center">
+                            Current Plan
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          {[
+                            "Pay per AI Response",
+                            "AI Follow-Up System",
+                            "AI Booking System",
+                            "AI Tagging System",
+                            "Mobile & Desktop App",
+                          ].map((benefit, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center text-sm text-gray-700 dark:text-gray-300"
+                            >
+                              <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                <Lucide
+                                  icon="Check"
+                                  className="w-3 h-3 text-white"
+                                />
+                              </div>
+                              {benefit}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Premium Support Plan - Most Popular */}
+                      <div className="relative bg-white dark:bg-gray-800 rounded-2xl border-2 border-orange-300 dark:border-orange-600 p-6 shadow-lg">
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                          <div className="bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                            Most Popular
+                          </div>
+                        </div>
+
+                        <div className="text-center mb-6 mt-2">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 mb-3">
+                            <Lucide icon="Target" className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                          </div>
+                          <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            Premium Support Plan
+                          </h4>
+                          <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                            RM 950
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            /month
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                            Premium support with 5,000 AI responses monthly. Full setup and maintenance included.
+                          </p>
+                          <a
+                            href="https://api.payex.io/Payment/Details?key=78cd6WScl365InsA&amount=950&payment_type=fpx&description=Pro%20Plan&signature=c33c1d57c6ddb0976c02f5dab08bc683b25e01d099e92e707b82a607268e28a7"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm text-center"
+                          >
+                            Upgrade Now
+                          </a>
+                        </div>
+                        <div className="space-y-3">
+                          {[
+                            "5,000 AI Responses Monthly",
+                            "AI Setup & Maintenance",
+                            "AI Follow-Up System",
+                            "AI Booking System",
+                            "Mobile & Desktop App",
+                          ].map((benefit, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center text-sm text-gray-700 dark:text-gray-300"
+                            >
+                              <div className="w-4 h-4 rounded-full bg-orange-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                <Lucide
+                                  icon="Check"
+                                  className="w-3 h-3 text-white"
+                                />
+                              </div>
+                              {benefit}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Enterprise Plan */}
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg">
+                        <div className="text-center mb-6">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 mb-3">
+                            <Lucide icon="Building" className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                          </div>
+                          <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            Enterprise Plan
+                          </h4>
+                          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                            RM 3,088+
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            /month
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                            Complete solution with 20,000 AI responses, custom automations, and full maintenance.
+                          </p>
+                          <a
+                            href="https://wa.me/601121677522?text=Hi%20i%20would%20like%20to%20know%20more%20about%20your%20enterprise%20plan"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+                          >
+                            Learn More
+                          </a>
+                        </div>
+                        <div className="space-y-3">
+                          {[
+                            "20,000 AI Responses Monthly",
+                            "Custom Automations",
+                            "AI Setup & Maintenance",
+                            "AI Follow-Up System",
+                            "Mobile & Desktop App",
+                          ].map((benefit, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center text-sm text-gray-700 dark:text-gray-300"
+                            >
+                              <div className="w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center mr-3 flex-shrink-0">
+                                <Lucide
+                                  icon="Check"
+                                  className="w-3 h-3 text-white"
+                                />
+                              </div>
+                              {benefit}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Quick Replies Modal */}
+        <QuickRepliesModal
+          isOpen={isQuickRepliesOpen}
+          onClose={() => setIsQuickRepliesOpen(false)}
+          quickReplies={quickReplies}
+          categories={categories}
+          onSelectReply={(reply) => {
+            // Handle videos first
+            if (reply.videos?.length) {
+              reply.videos.forEach((video) => {
+                fetch(video.url)
+                  .then((response) => response.blob())
+                  .then((blob) => {
+                    const videoFile = new File([blob], video.name, {
+                      type: video.type,
+                      lastModified: video.lastModified,
+                    });
+                    setSelectedVideo(videoFile);
+                    setVideoModalOpen(true);
+                    setDocumentCaption(reply.text || "");
+                  })
+                  .catch((error) => {
+                    console.error("Error handling video:", error);
+                    toast.error("Failed to load video");
+                  });
+              });
+            }
+            // Handle images
+            else if (reply.images?.length) {
+              setPastedImageUrl(reply.images);
+              setDocumentCaption(reply.text || "");
+              setImageModalOpen2(true);
+            }
+            // Handle documents
+            else if (reply.documents?.length) {
+              reply.documents.forEach((doc) => {
+                fetch(doc.url)
+                  .then((response) => response.blob())
+                  .then((blob) => {
+                    const documentFile = new File([blob], doc.name, {
+                      type: doc.type,
+                      lastModified: doc.lastModified,
+                    });
+                    setSelectedDocument(documentFile);
+                    setDocumentModalOpen(true);
+                    setDocumentCaption(reply.text || "");
+                  })
+                  .catch((error) => {
+                    console.error("Error handling document:", error);
+                    toast.error("Failed to load document");
+                  });
+              });
+            }
+            // Handle text-only replies
+            else if (
+              !reply.images?.length &&
+              !reply.documents?.length &&
+              !reply.videos?.length
+            ) {
+              setNewMessage(reply.text);
+            }
+          }}
+          onUpdateReply={updateQuickReply}
+          onDeleteReply={deleteQuickReply}
+        />
+
+        {/* Template Selector Modal for 24-hour window */}
+        <TemplateSelectorModal
+          isOpen={isTemplateSelectorOpen}
+          onClose={() => setIsTemplateSelectorOpen(false)}
+          onSend={handleSendTemplate}
+          companyId={companyId}
+          phoneIndex={userData?.phone || 0}
+          contactName={selectedContact?.contactName || selectedContact?.firstName || ''}
+        />
+
+        {/* Employee Assignment Modal */}
+        {isEmployeeModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsEmployeeModalOpen(false)}
+            />
+
+            {/* Modal Content */}
+            <div className="relative w-full max-w-2xl mx-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/20 dark:border-gray-600/30 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                      <Lucide icon="Users" className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">
+                        Assign Employee
+                      </h2>
+                      <p className="text-blue-100 text-sm">
+                        Select an employee to assign to this contact
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsEmployeeModalOpen(false)}
+                    className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  >
+                    <Lucide icon="X" className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Search Input */}
+              <div className="p-6 border-b border-gray-200/50 dark:border-gray-600/50">
+                <div className="relative">
+                  <Lucide
+                    icon="Search"
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Search employees..."
+                    className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-700/50 border border-gray-300/50 dark:border-gray-600/50 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+                    value={employeeSearch}
+                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Employee List */}
+              <div className="max-h-96 overflow-y-auto p-6">
+                {/* All Contacts Option */}
                 <button
-                  key={tag.id}
-                  className={`w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 mb-3 ${
-                    activeTags.includes(tag.name)
+                  className={`w-full flex items-center justify-between p-4 rounded-xl text-base font-medium transition-all duration-200 mb-3 ${!selectedEmployee
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-100/50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
+                    }`}
+                  onClick={() => {
+                    setSelectedEmployee(null);
+                    setIsEmployeeModalOpen(false);
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                      <Lucide
+                        icon="Users"
+                        className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                      />
+                    </div>
+                    <span>All Contacts</span>
+                  </div>
+                  <span className="text-sm opacity-75">Default</span>
+                </button>
+
+                {/* Employee List */}
+                {employeeList
+                  .filter(
+                    (employee) =>
+                      (employee.name?.toLowerCase() || "").includes(
+                        employeeSearch?.toLowerCase() || ""
+                      ) &&
+                      (userRole === "1" || employee.name === currentUserName)
+                  )
+                  .sort((a, b) =>
+                    (a.name?.toLowerCase() || "").localeCompare(
+                      b.name?.toLowerCase() || ""
+                    )
+                  )
+                  .map((employee) => (
+                    <button
+                      key={employee.id}
+                      className={`w-full flex items-center justify-between p-4 rounded-xl text-base transition-all duration-200 mb-3 ${selectedEmployee === employee.name
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-100/50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
+                        }`}
+                      onClick={() => {
+                        console.log(
+                          "🎯 [UI] Employee assignment clicked:",
+                          employee.name,
+                          selectedContact
+                        );
+                        handleAddTagToSelectedContacts(
+                          employee.name,
+                          selectedContact
+                        );
+                        setIsEmployeeModalOpen(false);
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                          <Lucide
+                            icon="User"
+                            className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                          />
+                        </div>
+                        <span className="font-medium">{employee.name}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm">
+                        {employee.quotaLeads !== undefined && (
+                          <span className="px-2 py-1 bg-white/20 dark:bg-gray-600/30 rounded-lg">
+                            {employee.assignedContacts || 0}/{employee.quotaLeads}{" "}
+                            leads
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tag Assignment Modal */}
+        {isTagModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsTagModalOpen(false)}
+            />
+
+            {/* Modal Content */}
+            <div className="relative w-full max-w-2xl mx-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl shadow-2xl rounded-3xl border border-white/20 dark:border-gray-600/30 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                      <Lucide icon="Tag" className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">Add Tag</h2>
+                      <p className="text-green-100 text-sm">
+                        Select a tag to assign to this contact
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsTagModalOpen(false)}
+                    className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  >
+                    <Lucide icon="X" className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Tag List */}
+              <div className="max-h-96 overflow-y-auto p-6">
+                {tagList.map((tag) => (
+                  <button
+                    key={tag.id}
+                    className={`w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 mb-3 ${activeTags.includes(tag.name)
                       ? "bg-green-600 text-white shadow-lg"
                       : "bg-gray-100/50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-600/50"
-                  }`}
+                      }`}
+                    onClick={() => {
+                      console.log(
+                        "🎯 [UI] Tag assignment clicked:",
+                        tag.name,
+                        selectedContact
+                      );
+                      handleAddTagToSelectedContacts(tag.name, selectedContact);
+                      setIsTagModalOpen(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <Lucide
+                          icon="Tag"
+                          className="w-4 h-4 text-green-600 dark:text-green-400"
+                        />
+                      </div>
+                      <span className="font-medium">{tag.name}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Attachment Modal */}
+        {isAttachmentModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsAttachmentModalOpen(false)}
+            />
+
+            {/* Modal Content */}
+            <div className="relative w-full max-w-md mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl shadow-2xl rounded-3xl border-0 overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                      <Lucide icon="Paperclip" className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">
+                        Attach File
+                      </h2>
+                      <p className="text-blue-100 text-sm">
+                        Choose what you want to attach
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsAttachmentModalOpen(false)}
+                    className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  >
+                    <Lucide icon="X" className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Attachment Options */}
+              <div className="p-6 space-y-4">
+                <button
+                  className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
                   onClick={() => {
-                    console.log(
-                      "🎯 [UI] Tag assignment clicked:",
-                      tag.name,
-                      selectedContact
-                    );
-                    handleAddTagToSelectedContacts(tag.name, selectedContact);
-                    setIsTagModalOpen(false);
+                    document.getElementById("imageUpload")?.click();
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                      <Lucide
+                        icon="Image"
+                        className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                      />
+                    </div>
+                    <span className="font-medium">Image</span>
+                  </div>
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (files && files.length > 0) {
+                        const imageUrls = Array.from(files).map((file) =>
+                          URL.createObjectURL(file)
+                        );
+                        setPastedImageUrl(imageUrls);
+                        setImageModalOpen2(true);
+                        setIsAttachmentModalOpen(false);
+                      }
+                    }}
+                  />
+                </button>
+
+                <button
+                  className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
+                  onClick={() => {
+                    document.getElementById("videoUpload")?.click();
                   }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
                       <Lucide
-                        icon="Tag"
+                        icon="Video"
                         className="w-4 h-4 text-green-600 dark:text-green-400"
                       />
                     </div>
-                    <span className="font-medium">{tag.name}</span>
+                    <span className="font-medium">Video</span>
                   </div>
+                  <input
+                    type="file"
+                    id="videoUpload"
+                    accept="video/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedVideo(file);
+                        setVideoModalOpen(true);
+                        setIsAttachmentModalOpen(false);
+                      }
+                    }}
+                  />
                 </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Attachment Modal */}
-      {isAttachmentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsAttachmentModalOpen(false)}
-          />
-
-          {/* Modal Content */}
-          <div className="relative w-full max-w-md mx-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl shadow-2xl rounded-3xl border-0 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                    <Lucide icon="Paperclip" className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      Attach File
-                    </h2>
-                    <p className="text-blue-100 text-sm">
-                      Choose what you want to attach
-                    </p>
-                  </div>
-                </div>
                 <button
-                  onClick={() => setIsAttachmentModalOpen(false)}
-                  className="p-2 hover:bg-white/20 rounded-xl transition-all duration-200 border border-white/30"
+                  className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
+                  onClick={() => {
+                    document.getElementById("documentUpload")?.click();
+                  }}
                 >
-                  <Lucide icon="X" className="w-5 h-5 text-white" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                      <Lucide
+                        icon="File"
+                        className="w-4 h-4 text-purple-600 dark:text-purple-400"
+                      />
+                    </div>
+                    <span className="font-medium">Document</span>
+                  </div>
+                  <input
+                    type="file"
+                    id="documentUpload"
+                    accept="application/pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setSelectedDocument(file);
+                        setDocumentModalOpen(true);
+                        setIsAttachmentModalOpen(false);
+                      }
+                    }}
+                  />
                 </button>
               </div>
             </div>
-
-            {/* Attachment Options */}
-            <div className="p-6 space-y-4">
-              <button
-                className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
-                onClick={() => {
-                  document.getElementById("imageUpload")?.click();
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <Lucide
-                      icon="Image"
-                      className="w-4 h-4 text-blue-600 dark:text-blue-400"
-                    />
-                  </div>
-                  <span className="font-medium">Image</span>
-                </div>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files && files.length > 0) {
-                      const imageUrls = Array.from(files).map((file) =>
-                        URL.createObjectURL(file)
-                      );
-                      setPastedImageUrl(imageUrls);
-                      setImageModalOpen2(true);
-                      setIsAttachmentModalOpen(false);
-                    }
-                  }}
-                />
-              </button>
-
-              <button
-                className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
-                onClick={() => {
-                  document.getElementById("videoUpload")?.click();
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                    <Lucide
-                      icon="Video"
-                      className="w-4 h-4 text-green-600 dark:text-green-400"
-                    />
-                  </div>
-                  <span className="font-medium">Video</span>
-                </div>
-                <input
-                  type="file"
-                  id="videoUpload"
-                  accept="video/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setSelectedVideo(file);
-                      setVideoModalOpen(true);
-                      setIsAttachmentModalOpen(false);
-                    }
-                  }}
-                />
-              </button>
-
-              <button
-                className="w-full flex items-center p-4 rounded-xl text-base transition-all duration-200 bg-white/20 dark:bg-slate-700/40 hover:bg-white/30 dark:hover:bg-slate-600/50 text-slate-800 dark:text-slate-200"
-                onClick={() => {
-                  document.getElementById("documentUpload")?.click();
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <Lucide
-                      icon="File"
-                      className="w-4 h-4 text-purple-600 dark:text-purple-400"
-                    />
-                  </div>
-                  <span className="font-medium">Document</span>
-                </div>
-                <input
-                  type="file"
-                  id="documentUpload"
-                  accept="application/pdf"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setSelectedDocument(file);
-                      setDocumentModalOpen(true);
-                      setIsAttachmentModalOpen(false);
-                    }
-                  }}
-                />
-              </button>
-            </div>
           </div>
-        </div>
-      )}
-      
-   
-    </div>
+        )}
+      </div>
     </>
   );
-}
+};
 
 interface ImageModalProps2 {
   isOpen: boolean;

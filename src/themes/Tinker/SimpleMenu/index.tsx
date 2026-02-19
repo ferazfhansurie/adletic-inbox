@@ -39,160 +39,160 @@ function Main() {
   const [activeTab, setActiveTab] = useState('notifications');
   const [scheduledMessages, setScheduledMessages] = useState<any[]>([]);
   const [userData, setUserData] = useState<any>(null);
-// Initialize Firebase app
-const firebaseConfig = {
-  apiKey: "AIzaSyCc0oSHlqlX7fLeqqonODsOIC3XA8NI7hc",
-  authDomain: "onboarding-a5fcb.firebaseapp.com",
-  databaseURL: "https://onboarding-a5fcb-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "onboarding-a5fcb",
-  storageBucket: "onboarding-a5fcb.appspot.com",
-  messagingSenderId: "334607574757",
-  appId: "1:334607574757:web:2603a69bf85f4a1e87960c",
-  measurementId: "G-2C9J1RY67L"
-};
+  // Initialize Firebase app
+  const firebaseConfig = {
+    apiKey: "AIzaSyCc0oSHlqlX7fLeqqonODsOIC3XA8NI7hc",
+    authDomain: "onboarding-a5fcb.firebaseapp.com",
+    databaseURL: "https://onboarding-a5fcb-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "onboarding-a5fcb",
+    storageBucket: "onboarding-a5fcb.appspot.com",
+    messagingSenderId: "334607574757",
+    appId: "1:334607574757:web:2603a69bf85f4a1e87960c",
+    measurementId: "G-2C9J1RY67L"
+  };
 
-let companyId = '014';
+  let companyId = '014';
 
-let ghlConfig = {
-  ghl_id: '',
-  ghl_secret: '',
-  ghl_refreshToken: '',
-};
-let role = 2;
+  let ghlConfig = {
+    ghl_id: '',
+    ghl_secret: '',
+    ghl_refreshToken: '',
+  };
+  let role = 2;
 
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const firestore = getFirestore(app);
 
-const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); // Initialize useNavigate
 
-const handleNotificationClick = (chatId: string,index: number) => {
-  setNotifications(notifications.filter((_, i) => i !== index));
-  navigate(`/chat/?chatId=${chatId}`);
-};
+  const handleNotificationClick = (chatId: string, index: number) => {
+    setNotifications(notifications.filter((_, i) => i !== index));
+    navigate(`/chat/?chatId=${chatId}`);
+  };
 
-const showSearchDropdown = () => {
-  setSearchDropdown(true);
-};
+  const showSearchDropdown = () => {
+    setSearchDropdown(true);
+  };
 
-const hideSearchDropdown = () => {
-  setSearchDropdown(false);
-};
+  const hideSearchDropdown = () => {
+    setSearchDropdown(false);
+  };
 
-useEffect(() => {
-  fetchConfigFromDatabase();
-}, []);
+  useEffect(() => {
+    fetchConfigFromDatabase();
+  }, []);
 
-useEffect(() => {
-  fetchScheduledMessages();
-}, []);
+  useEffect(() => {
+    fetchScheduledMessages();
+  }, []);
 
 
 
-async function fetchConfigFromDatabase() {
-  // Get the stored user email from your login response
-  const userEmail = localStorage.getItem('userEmail'); // or however you store it after login
-  
-  if (!userEmail) {
-    console.error("No user email found.");
-    return;
-  }
+  async function fetchConfigFromDatabase() {
+    // Get the stored user email from your login response
+    const userEmail = localStorage.getItem('userEmail'); // or however you store it after login
 
-  setUserEmail(userEmail);
+    if (!userEmail) {
+      console.error("No user email found.");
+      return;
+    }
 
-  try {
-    // Fetch user data from SQL database
-    const response = await fetch(`https://bisnesgpt.jutateknologi.com/api/user/config?email=${encodeURIComponent(userEmail)}`, {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json'
+    setUserEmail(userEmail);
+
+    try {
+      // Fetch user data from SQL database
+      const response = await fetch(`https://bisnesgpt.jutateknologi.com/api/user/config?email=${encodeURIComponent(userEmail)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user config');
       }
-    });
 
+      const dataUser = await response.json();
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch user config');
-    }
-
-    const dataUser = await response.json();
-    
-    if (!dataUser) {
-      return;
-    }
-
-    setUserName(dataUser.name);
-    const companyId = dataUser.company_id;
-    const role = dataUser.role;
-
-    if (!companyId) {
-      return;
-    }
-
-    // Fetch company data
-    const companyResponse = await fetch(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}`, {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      if (!dataUser) {
+        return;
       }
-    });
 
-    if (!companyResponse.ok) {
-      throw new Error('Failed to fetch company data');
+      setUserName(dataUser.name);
+      const companyId = dataUser.company_id;
+      const role = dataUser.role;
+
+      if (!companyId) {
+        return;
+      }
+
+      // Fetch company data
+      const companyResponse = await fetch(`https://bisnesgpt.jutateknologi.com/api/companies/${companyId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!companyResponse.ok) {
+        throw new Error('Failed to fetch company data');
+      }
+
+      const data = await companyResponse.json();
+
+      if (!data) {
+        console.error("No data found in company document.");
+        return;
+      }
+
+      setCompanyName(data.name); // Set company name
+
+    } catch (error) {
+      console.error('Error fetching config:', error);
+      throw error;
     }
+  }
 
-    const data = await companyResponse.json();
-    
-    if (!data) {
-      console.error("No data found in company document.");
-      return;
+  async function fetchScheduledMessages() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) return;
+
+    try {
+      const docUserRef = doc(firestore, 'user', userEmail);
+      const docUserSnapshot = await getDoc(docUserRef);
+      if (!docUserSnapshot.exists()) return;
+
+      const userData = docUserSnapshot.data();
+      const companyId = userData.companyId;
+      const scheduledMessagesRef = collection(firestore, `companies/${companyId}/scheduledMessages`);
+      const scheduledMessagesSnapshot = await getDocs(scheduledMessagesRef);
+      const messages = scheduledMessagesSnapshot.docs.map(doc => doc.data());
+      setScheduledMessages(messages);
+    } catch (error) {
+      console.error('Error fetching scheduled messages:', error);
     }
-
-    setCompanyName(data.name); // Set company name
-
-  } catch (error) {
-    console.error('Error fetching config:', error);
-    throw error;
   }
-}
-
-async function fetchScheduledMessages() {
-  const userEmail = localStorage.getItem('userEmail');
-  if (!userEmail) return;
-
-  try {
-    const docUserRef = doc(firestore, 'user', userEmail);
-    const docUserSnapshot = await getDoc(docUserRef);
-    if (!docUserSnapshot.exists()) return;
-
-    const userData = docUserSnapshot.data();
-    const companyId = userData.companyId;
-    const scheduledMessagesRef = collection(firestore, `companies/${companyId}/scheduledMessages`);
-    const scheduledMessagesSnapshot = await getDocs(scheduledMessagesRef);
-    const messages = scheduledMessagesSnapshot.docs.map(doc => doc.data());
-    setScheduledMessages(messages);
-  } catch (error) {
-    console.error('Error fetching scheduled messages:', error);
-  }
-}
 
 
-const clearAllNotifications = async () => {
-  const userEmail = localStorage.getItem('userEmail');
-  if (!userEmail) return;
+  const clearAllNotifications = async () => {
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) return;
 
-  try {
-    const notificationsRef = collection(firestore, 'user', userEmail, 'notifications');
-    const notificationsSnapshot = await getDocs(notificationsRef);
-    
-    const deletePromises = notificationsSnapshot.docs.map(doc => deleteDoc(doc.ref));
-    await Promise.all(deletePromises);
+    try {
+      const notificationsRef = collection(firestore, 'user', userEmail, 'notifications');
+      const notificationsSnapshot = await getDocs(notificationsRef);
 
-    setNotifications([]);
-    setUniqueNotifications([]);
-  } catch (error) {
-    console.error('Error clearing notifications:', error);
-  }
-};
+      const deletePromises = notificationsSnapshot.docs.map(doc => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+
+      setNotifications([]);
+      setUniqueNotifications([]);
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
 
   const handleSignOut = () => {
     // Clear localStorage and sessionStorage
@@ -200,7 +200,7 @@ const clearAllNotifications = async () => {
     localStorage.removeItem('token');
     sessionStorage.removeItem('contactsFetched');
     localStorage.removeItem('contacts');
-    
+
     // Redirect to login page
     navigate('/login');
   };
@@ -248,12 +248,12 @@ const clearAllNotifications = async () => {
     <div className="tinker h-screen flex flex-col overflow-hidden">
       <div className="flex flex-1 overflow-hidden">
         {/* BEGIN: Simple Menu */}
-        <nav className={`pt-5 pl-1 pr-2 side-nav side-nav--simple ${isMobile ? (showSideMenu ? 'block' : 'hidden') : 'flex md:flex'} flex-col justify-between sm:w-[50px] md:w-[50px] xl:w-[50px] z-100 bg-slate-300 dark:bg-gray-800`}>
-          <ul className="space-y-2 flex-grow">
+        <nav className={`pt-6 pb-2 px-2 side-nav side-nav--simple ${isMobile ? (showSideMenu ? 'block' : 'hidden') : 'flex md:flex'} flex-col justify-between w-[64px] z-[100] !bg-[#4b4b4b] border-r-[3px] !border-[#404040]`}>
+          <ul className="space-y-3 flex-grow">
             {/* BEGIN: First Child */}
             {formattedMenu.map((menu, menuKey) =>
               menu == "divider" ? (
-                <li className="my-2 side-nav__divider" key={menuKey}></li>
+                <li className="my-4 border-t border-white/20" key={menuKey}></li>
               ) : (
                 <li key={menuKey}>
                   <Tippy
@@ -268,12 +268,16 @@ const clearAllNotifications = async () => {
                       handleMenuItemClick(menu);
                     }}
                     className={clsx([
-                      "flex items-center p-2 rounded hover:bg-slate-400 dark:hover:bg-gray-700",
-                      menu.active ? "bg-slate-400 dark:bg-gray-700 text-slate-200 dark:text-gray-200 font-medium" : "",
+                      "flex items-center justify-center p-2 rounded-none transition-all duration-200 group relative",
+                      "hover:-translate-y-[2px] hover:shadow-[2px_2px_0_rgba(64,64,64,0.3)] hover:!bg-[#404040] hover:!text-white",
+                      menu.active ? "!bg-[#404040] shadow-[2px_2px_0_rgba(255,255,255,0.15)] !text-white" : "!text-white/60",
                     ])}
                   >
-                    <div className="text-left w-10 h-6 m-0 flex items-center justify-between">
-                      <Lucide icon={menu.icon} className="text-slate-900 dark:text-gray-200 hover:text-slate-900 dark:hover:text-gray-200" />
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <Lucide icon={menu.icon} className={clsx([
+                        "w-5 h-5",
+                        menu.active ? "!text-white" : "!text-white/70 group-hover:!text-white"
+                      ])} />
                     </div>
                   </Tippy>
                   {/* BEGIN: Second Child */}
@@ -307,12 +311,16 @@ const clearAllNotifications = async () => {
                                 setFormattedMenu([...formattedMenu]);
                               }}
                               className={clsx([
-                                "flex items-center p-1 my-1 rounded hover:bg-slate-400 dark:hover:bg-gray-700",
-                                subMenu.active ? "bg-slate-400 dark:bg-gray-700" : "",
+                                "flex items-center justify-center p-2 my-1 rounded-none transition-all duration-200 group relative",
+                                "hover:!bg-[#404040] hover:-translate-y-[2px] hover:shadow-[2px_2px_0_rgba(64,64,64,0.3)]",
+                                subMenu.active ? "!bg-[#404040] !text-white" : "!text-white/60",
                               ])}
                             >
-                              <div className="w-4 h-4 flex items-center justify-center">
-                                <Lucide icon={subMenu.icon} className="text-slate-900 dark:text-gray-200" />
+                              <div className="w-5 h-5 flex items-center justify-center">
+                                <Lucide icon={subMenu.icon} className={clsx([
+                                  "w-4 h-4",
+                                  subMenu.active ? "!text-white" : "!text-white/70 group-hover:!text-white"
+                                ])} />
                               </div>
                             </Tippy>
                             {/* BEGIN: Third Child */}
@@ -350,12 +358,16 @@ const clearAllNotifications = async () => {
                                           ]);
                                         }}
                                         className={clsx([
-                                          "flex items-center p-1 my-1 rounded hover:bg-slate-400 dark:hover:bg-gray-700",
-                                          lastSubMenu.active ? "bg-slate-400 dark:bg-gray-700" : "",
+                                          "flex items-center justify-center p-2 my-1 rounded-none transition-all duration-200 group relative",
+                                          "hover:!bg-[#404040] hover:-translate-y-[2px] hover:shadow-[2px_2px_0_rgba(64,64,64,0.3)]",
+                                          lastSubMenu.active ? "!bg-[#404040] !text-white" : "!text-white/60",
                                         ])}
                                       >
-                                        <div className="w-10 h-10 flex items-center justify-center">
-                                          <Lucide icon={lastSubMenu.icon} className="text-slate-900 dark:text-gray-200" />
+                                        <div className="w-5 h-5 flex items-center justify-center">
+                                          <Lucide icon={lastSubMenu.icon} className={clsx([
+                                            "w-4 h-4",
+                                            lastSubMenu.active ? "!text-white" : "!text-white/70 group-hover:!text-white"
+                                          ])} />
                                         </div>
                                       </Tippy>
                                     </li>
@@ -374,27 +386,27 @@ const clearAllNotifications = async () => {
               )
             )}
             {/* END: First Child */}
-      </ul>
-          <div className="mt-4 ml-1 mb-4">
-          <Menu>
-          <Menu.Button className="block w-8 h-8 overflow-hidden rounded-md bg-blue-600 flex items-center justify-center text-white mb-2">
+          </ul>
+          <div className="mt-auto mb-4 flex flex-col items-center gap-3">
+            <Menu>
+              <Menu.Button className="block w-10 h-10 overflow-hidden rounded-none !bg-blue-600 flex items-center justify-center !text-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[2px_2px_0_rgba(255,255,255,0.2)]">
                 <Link to="/client-ticket">
-                  <Lucide icon="Ticket" className="text-center justify-center w-4 h-4" />
+                  <Lucide icon="Ticket" className="w-5 h-5" />
                 </Link>
               </Menu.Button>
-          <Menu.Button 
-            className="block w-8 h-8 overflow-hidden rounded-md bg-red-700 flex items-center justify-center text-white"
-            onClick={() => {
-              handleSignOut();
-              navigate('/login');
-            }}
-          >
-            <Lucide icon="LogOut" className="text-center justify-center w-4 h-4" />
-          </Menu.Button>
-          </Menu>
-        </div>
+              <Menu.Button
+                className="block w-10 h-10 overflow-hidden rounded-none !bg-[#404040] flex items-center justify-center !text-white transition-all duration-200 hover:-translate-y-[2px] hover:shadow-[2px_2px_0_rgba(255,255,255,0.2)]"
+                onClick={() => {
+                  handleSignOut();
+                  navigate('/login');
+                }}
+              >
+                <Lucide icon="LogOut" className="w-5 h-5" />
+              </Menu.Button>
+            </Menu>
+          </div>
         </nav>
-       
+
         {/* END: Simple Menu */}
         {/* BEGIN: Content */}
         <div className="flex-1 overflow-hidden bg-slate-100 dark:bg-gray-900">
