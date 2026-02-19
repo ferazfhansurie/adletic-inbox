@@ -70,6 +70,7 @@ import ChatGPTStyle from "../pages/ChatGPTStyle";
 import SplitTest from "../pages/SplitTest";
 import WhatsAppCallback from "../pages/WhatsAppCallback";
 import MessageTemplates from "../pages/MessageTemplates";
+import LandingPage from "../pages/LandingPage";
 
 
 function Router() {
@@ -87,6 +88,7 @@ function Router() {
   }, [auth]);
 
   const routes = [
+    { path: "/", element: <LandingPage /> },
     {
       path: "/",
       element:(
@@ -95,7 +97,6 @@ function Router() {
         </div>
       ),
       children: [
-        { path: "/", element: <Chat /> },
         { path: "chat", element: <Chat /> },
         { path: "/dashboard", element: <DashboardOverview1 /> },
         { path: "ticket", element: <Ticket /> },
@@ -183,7 +184,7 @@ function Router() {
     { path: "/attendance/:eventTitle/:phone", element: <PublicAttendanceForm />},
     { path: "/whatsapp-callback", element: <WhatsAppCallback /> },
 
-        { path: "notification", element: <Notification /> },
+    { path: "notification", element: <Notification /> },
     { path: "dashboard-overview-2", element: <DashboardOverview2 /> },
     { path: "loading", element:<LoadingIcon />  },
     { path: "/login", element: <Login /> },

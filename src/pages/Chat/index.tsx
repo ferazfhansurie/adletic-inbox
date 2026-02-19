@@ -12398,20 +12398,14 @@ function Main() {
 
   return (
     <>
-      {/* Chat Page Styles - Matching Login Page Polish */}
+      {/* Chat Page Styles - Adletic Agency Theme */}
       <style>{`
-        /* Animation Keyframes */
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        /* ── KEYFRAMES ── */
         @keyframes float-slow {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-8px); }
-        }
-        @keyframes pulse-glow {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.02); }
         }
         @keyframes slide-up {
           from { opacity: 0; transform: translateY(20px); }
@@ -12425,351 +12419,251 @@ function Main() {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
         @keyframes shimmer {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
         }
         @keyframes breathe {
           0%, 100% { transform: scale(1); opacity: 0.8; }
-          50% { transform: scale(1.02); opacity: 1; }
-        }
-        @keyframes border-glow {
-          0%, 100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.3); }
-          50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+          50% { transform: scale(1.04); opacity: 1; }
         }
         @keyframes message-appear {
-          from { opacity: 0; transform: translateY(10px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes contact-hover {
-          from { transform: scale(1); }
-          to { transform: scale(1.02); }
-        }
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(15px); }
+          from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          25% { transform: translateY(-12px) rotate(2deg); }
-          75% { transform: translateY(8px) rotate(-2deg); }
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes adletic-drift {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(20px, 20px); }
         }
 
-        /* Animation Classes */
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-slow { animation: float-slow 4s ease-in-out infinite; }
-        .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite 2s; }
-        .animate-fade-in-up { animation: fade-in-up 0.4s ease-out forwards; }
-        .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
-        .animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
-        .animate-slide-in-right { animation: slide-in-right 0.3s ease-out forwards; }
-        .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
-        .animate-message-appear { animation: message-appear 0.3s ease-out forwards; }
-        .animate-gradient-shift {
-          animation: gradient-shift 3s ease infinite;
-          background-size: 200% auto;
-        }
+        /* ── ANIMATION CLASSES ── */
+        .animate-float-slow        { animation: float-slow 4s ease-in-out infinite; }
+        .animate-fade-in-up        { animation: fade-in-up 0.35s ease-out forwards; }
+        .animate-slide-up          { animation: slide-up 0.35s ease-out forwards; }
+        .animate-slide-in-right    { animation: slide-in-right 0.3s ease-out forwards; }
+        .animate-fade-in           { animation: fade-in 0.4s ease-out forwards; }
+        .animate-breathe           { animation: breathe 3s ease-in-out infinite; }
+        .animate-message-appear    { animation: message-appear 0.25s ease-out forwards; }
+        .animate-pulse-glow        { animation: breathe 4s ease-in-out infinite; }
+        .animate-float             { animation: float-slow 6s ease-in-out infinite; }
+        .animate-float-delayed     { animation: float-slow 8s ease-in-out infinite 2s; }
+        .animate-gradient-shift    { background-size: 200% auto; }
         .animate-shimmer {
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+          background: linear-gradient(90deg, transparent, rgba(242,101,34,0.08), transparent);
           background-size: 200% 100%;
           animation: shimmer 2s infinite;
         }
 
-        /* Glassmorphism Cards - Light Mode */
-        .glass-card {
-          background: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Glassmorphism Cards - Dark Mode */
-        .dark .glass-card {
-          background: linear-gradient(145deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.85) 100%);
-          border: 1px solid rgba(75, 85, 99, 0.4);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
+        /* ── PAGE ── */
+        .page-transition { animation: fade-in 0.3s ease-out; font-family: 'Inter', sans-serif; }
 
-        /* Glass Sidebar - Light Mode */
+        /* ── SIDEBAR ── */
         .glass-sidebar {
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.85) 100%);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-right: 1px solid rgba(226, 232, 240, 0.8);
+          background: #ffffff;
+          border-right: 2px solid #e8e8e8;
         }
-        
-        /* Glass Sidebar - Dark Mode */
         .dark .glass-sidebar {
-          background: linear-gradient(180deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.95) 50%, rgba(17, 24, 39, 0.98) 100%);
-          border-right: 1px solid rgba(75, 85, 99, 0.3);
-          box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+          background: #1a1a1a;
+          border-right: 2px solid #2a2a2a;
         }
 
-        /* Glass Header - Light Mode */
+        /* ── HEADER ── */
         .glass-header {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+          background: #ffffff;
+          border-bottom: 2px solid #e8e8e8;
         }
-        
-        /* Glass Header - Dark Mode */
         .dark .glass-header {
-          background: linear-gradient(180deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.9) 100%);
-          border-bottom: 1px solid rgba(75, 85, 99, 0.4);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+          background: #1a1a1a;
+          border-bottom: 2px solid #2a2a2a;
         }
 
-        /* Glass Input - Light Mode */
-        .glass-input {
-          background: rgba(255, 255, 255, 0.8);
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* ── CARD ── */
+        .glass-card {
+          background: #ffffff;
+          border: 1px solid #e8e8e8;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
+        .dark .glass-card {
+          background: #1f1f1f;
+          border: 1px solid #2a2a2a;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* ── INPUT ── */
+        .glass-input {
+          background: #ffffff;
+          border: 2px solid #e8e8e8;
+          border-radius: 0 !important;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          font-family: 'Inter', sans-serif;
+        }
+        .glass-input:hover { border-color: rgba(242,101,34,0.4); }
         .glass-input:focus {
-          background: rgba(255, 255, 255, 0.95);
-          border-color: rgba(242, 101, 34, 0.5);
-          box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.1), 0 0 20px rgba(242, 101, 34, 0.1);
+          border-color: #f26522;
+          box-shadow: 4px 4px 0 rgba(242,101,34,0.12);
           outline: none;
         }
-        
-        /* Glass Input - Dark Mode */
         .dark .glass-input {
-          background: rgba(31, 41, 55, 0.8);
-          border: 1px solid rgba(75, 85, 99, 0.5);
-          color: #f3f4f6;
+          background: #1f1f1f;
+          border: 2px solid #2a2a2a;
+          color: #f0f0f0;
         }
+        .dark .glass-input:hover { border-color: rgba(242,101,34,0.5); }
         .dark .glass-input:focus {
-          background: rgba(31, 41, 55, 0.95);
-          border-color: rgba(242, 101, 34, 0.6);
-          box-shadow: 0 0 0 3px rgba(242, 101, 34, 0.2), 0 0 20px rgba(242, 101, 34, 0.15);
+          border-color: #f26522;
+          box-shadow: 4px 4px 0 rgba(242,101,34,0.2);
         }
-        .dark .glass-input::placeholder {
-          color: #9ca3af;
-        }
+        .dark .glass-input::placeholder { color: #555; }
 
-        /* Contact Item Styles - Light Mode */
+        /* ── CONTACT ITEMS ── */
         .contact-item {
-          background: rgba(255, 255, 255, 0.6);
-          border: 1px solid transparent;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: #ffffff;
+          border-left: 3px solid transparent;
+          border-bottom: 1px solid #f0f0f0;
+          transition: background 0.15s, border-color 0.15s;
         }
         .contact-item:hover {
-          background: rgba(255, 255, 255, 0.9);
-          border-color: rgba(242, 101, 34, 0.2);
-          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.1);
-          transform: translateX(4px);
+          background: #fff8f5;
+          border-left-color: rgba(242,101,34,0.5);
         }
         .contact-item.selected {
-          background: linear-gradient(135deg, rgba(242, 101, 34, 0.1) 0%, rgba(255, 119, 68, 0.1) 100%);
-          border-color: rgba(242, 101, 34, 0.3);
-          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.15), inset 0 0 0 1px rgba(242, 101, 34, 0.1);
+          background: rgba(242,101,34,0.06);
+          border-left-color: #f26522;
         }
-        
-        /* Contact Item Styles - Dark Mode */
         .dark .contact-item {
-          background: rgba(31, 41, 55, 0.5);
-          border: 1px solid rgba(55, 65, 81, 0.3);
+          background: #1a1a1a;
+          border-bottom: 1px solid #222;
         }
         .dark .contact-item:hover {
-          background: rgba(55, 65, 81, 0.6);
-          border-color: rgba(242, 101, 34, 0.4);
-          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.2);
+          background: #232323;
+          border-left-color: rgba(242,101,34,0.6);
         }
         .dark .contact-item.selected {
-          background: linear-gradient(135deg, rgba(242, 101, 34, 0.25) 0%, rgba(255, 119, 68, 0.2) 100%);
-          border-color: rgba(242, 101, 34, 0.5);
-          box-shadow: 0 4px 20px rgba(242, 101, 34, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          background: rgba(242,101,34,0.12);
+          border-left-color: #f26522;
         }
 
-        /* Message Bubbles - Light Mode */
+        /* ── MESSAGE BUBBLES ── */
         .message-bubble-sent {
-          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
+          background: #f26522;
           color: white;
-          border-radius: 18px 18px 4px 18px;
-          box-shadow: 0 2px 12px rgba(242, 101, 34, 0.3);
+          border-radius: 12px 12px 2px 12px;
+          box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
         }
         .message-bubble-received {
-          background: rgba(255, 255, 255, 0.95);
-          color: #1e293b;
-          border-radius: 18px 18px 18px 4px;
-          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          background: #ffffff;
+          color: #4b4b4b;
+          border-radius: 12px 12px 12px 2px;
+          border: 1px solid #e8e8e8;
+          box-shadow: 2px 2px 0 rgba(0,0,0,0.04);
         }
-        
-        /* Message Bubbles - Dark Mode */
         .dark .message-bubble-sent {
-          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
-          box-shadow: 0 2px 12px rgba(242, 101, 34, 0.4);
+          background: #f26522;
+          box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
         }
         .dark .message-bubble-received {
-          background: rgba(30, 41, 59, 0.9);
-          color: #e2e8f0;
-          border: 1px solid rgba(51, 65, 85, 0.6);
-          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+          background: #1f1f1f;
+          color: #e0e0e0;
+          border: 1px solid #2a2a2a;
         }
 
-        /* Tag Pills - Light Mode */
+        /* ── TAG PILLS ── */
         .tag-pill {
-          background: rgba(242, 101, 34, 0.1);
+          background: rgba(242,101,34,0.08);
           color: #d94e1a;
-          border: 1px solid rgba(242, 101, 34, 0.2);
+          border: 1px solid rgba(242,101,34,0.2);
+          border-radius: 0 !important;
           transition: all 0.2s ease;
         }
-        .tag-pill:hover {
-          background: rgba(242, 101, 34, 0.2);
-          transform: scale(1.05);
-        }
+        .tag-pill:hover { background: rgba(242,101,34,0.15); }
         .tag-pill.active {
-          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
+          background: #f26522;
           color: white;
-          border-color: transparent;
-          box-shadow: 0 2px 10px rgba(242, 101, 34, 0.4);
+          border-color: #f26522;
+          box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
         }
-        
-        /* Tag Pills - Dark Mode */
-        .dark .tag-pill {
-          background: rgba(242, 101, 34, 0.15);
-          color: #ff9966;
-          border-color: rgba(242, 101, 34, 0.3);
-        }
-        .dark .tag-pill:hover {
-          background: rgba(242, 101, 34, 0.25);
-        }
-        .dark .tag-pill.active {
-          background: linear-gradient(135deg, #f26522 0%, #ff7744 100%);
-          color: white;
-          box-shadow: 0 2px 10px rgba(242, 101, 34, 0.5);
-        }
+        .dark .tag-pill { background: rgba(242,101,34,0.12); color: #ff9966; border-color: rgba(242,101,34,0.3); }
+        .dark .tag-pill:hover { background: rgba(242,101,34,0.22); }
+        .dark .tag-pill.active { background: #f26522; color: white; }
 
-        /* Button Styles - Primary */
+        /* ── BUTTONS ── */
         .btn-chat-primary {
-          background: linear-gradient(135deg, #f26522 0%, #ff7744 50%, #f26522 100%);
-          background-size: 200% 200%;
-          animation: gradient-shift 3s ease infinite;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
-        .btn-chat-primary::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-          transition: left 0.5s ease;
-        }
-        .btn-chat-primary:hover::before {
-          left: 100%;
+          background: #f26522;
+          color: #fff;
+          border: 2px solid #f26522;
+          border-radius: 0 !important;
+          font-family: 'Inter', sans-serif;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          transition: all 0.2s ease;
         }
         .btn-chat-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(242, 101, 34, 0.4);
+          transform: translate(2px, -2px);
+          box-shadow: 4px 4px 0 #4b4b4b;
         }
-        .btn-chat-primary:active {
-          transform: translateY(0);
-        }
+        .btn-chat-primary:active { transform: translate(0, 0); box-shadow: none; }
 
-        /* Button Styles - Secondary */
         .btn-chat-secondary {
-          background: rgba(255, 255, 255, 0.8);
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          transition: all 0.3s ease;
+          background: #ffffff;
+          border: 2px solid #e8e8e8;
+          border-radius: 0 !important;
+          font-family: 'Inter', sans-serif;
+          font-weight: 600;
+          transition: all 0.2s ease;
         }
         .btn-chat-secondary:hover {
-          background: rgba(255, 255, 255, 0.95);
-          border-color: rgba(242, 101, 34, 0.3);
-          transform: translateY(-1px);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          border-color: #f26522;
+          transform: translate(-2px, -2px);
+          box-shadow: -4px 4px 0 #e8e8e8;
         }
         .dark .btn-chat-secondary {
-          background: rgba(30, 41, 59, 0.6);
-          border-color: rgba(51, 65, 85, 0.6);
+          background: #1f1f1f;
+          border-color: #2a2a2a;
+          color: #e0e0e0;
         }
-        .dark .btn-chat-secondary:hover {
-          background: rgba(30, 41, 59, 0.8);
-          border-color: rgba(242, 101, 34, 0.3);
-        }
+        .dark .btn-chat-secondary:hover { border-color: #f26522; box-shadow: -4px 4px 0 #2a2a2a; }
 
-        /* Chat Area Background - Light Mode */
+        /* ── CHAT AREA BACKGROUND ── */
         .chat-area-bg {
-          background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+          background: #F5F5F5;
           position: relative;
         }
         .chat-area-bg::before {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239ca3af' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-          opacity: 0.5;
+          background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f26522' fill-opacity='0.03'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+          pointer-events: none;
         }
-        
-        /* Chat Area Background - Dark Mode */
-        .dark .chat-area-bg {
-          background: linear-gradient(180deg, rgba(17, 24, 39, 1) 0%, rgba(31, 41, 55, 0.95) 30%, rgba(17, 24, 39, 1) 100%);
-        }
-        .dark .chat-area-bg::before {
-          background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f26522' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-          opacity: 1;
-        }
+        .dark .chat-area-bg { background: #111111; }
+        .dark .chat-area-bg::before { opacity: 0.5; }
 
-        /* Scrollbar Styles - Light Mode */
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.05);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(242, 101, 34, 0.3);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(242, 101, 34, 0.5);
-        }
-        
-        /* Scrollbar Styles - Dark Mode */
-        .dark .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(242, 101, 34, 0.3);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(242, 101, 34, 0.5);
-        }
+        /* ── SCROLLBAR ── */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(242,101,34,0.3); }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #f26522; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(242,101,34,0.25); }
 
-        /* Avatar Glow */
-        .avatar-glow {
-          position: relative;
-        }
+        /* ── AVATAR GLOW ── */
+        .avatar-glow { position: relative; }
         .avatar-glow::after {
           content: '';
           position: absolute;
           inset: -2px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #f26522, #ff7744, #f26522);
-          background-size: 200% 200%;
-          animation: gradient-shift 3s ease infinite;
-          z-index: -1;
+          border: 2px solid #f26522;
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity 0.2s;
         }
-        .avatar-glow:hover::after {
-          opacity: 1;
-        }
+        .avatar-glow:hover::after { opacity: 1; }
 
-        /* Floating Orbs - Light Mode */
+        /* ── FLOATING ORBS (welcome screen) ── */
         .floating-orb {
           position: absolute;
           border-radius: 50%;
@@ -12777,76 +12671,44 @@ function Main() {
           pointer-events: none;
         }
         .floating-orb-1 {
-          width: 300px;
-          height: 300px;
-          background: rgba(99, 102, 241, 0.1);
-          top: 10%;
-          right: 10%;
-          animation: float-slow 8s ease-in-out infinite;
+          width: 320px; height: 320px;
+          background: rgba(242,101,34,0.08);
+          top: 5%; right: 8%;
+          animation: adletic-drift 15s ease-in-out infinite;
         }
         .floating-orb-2 {
-          width: 200px;
-          height: 200px;
-          background: rgba(139, 92, 246, 0.08);
-          bottom: 20%;
-          left: 5%;
-          animation: float-slow 10s ease-in-out infinite;
-          animation-delay: 2s;
+          width: 220px; height: 220px;
+          background: rgba(138,43,226,0.05);
+          bottom: 15%; left: 5%;
+          animation: adletic-drift 20s ease-in-out infinite reverse;
         }
-        
-        /* Floating Orbs - Dark Mode */
-        .dark .floating-orb-1 {
-          background: rgba(79, 70, 229, 0.25);
-        }
-        .dark .floating-orb-2 {
-          background: rgba(139, 92, 246, 0.2);
-        }
+        .dark .floating-orb-1 { background: rgba(242,101,34,0.12); }
+        .dark .floating-orb-2 { background: rgba(138,43,226,0.08); }
 
-        /* Status Indicators */
-        .status-online {
-          background: linear-gradient(135deg, #22c55e, #16a34a);
-          box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-        }
-        .status-offline {
-          background: linear-gradient(135deg, #ef4444, #dc2626);
-          box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-        }
+        /* ── STATUS INDICATORS ── */
+        .status-online  { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,0.3); }
+        .status-offline { background: #ef4444; box-shadow: 0 0 0 2px rgba(239,68,68,0.3); }
 
-        /* Unread Badge Animation */
-        .unread-badge {
-          animation: breathe 2s ease-in-out infinite;
-        }
+        /* ── UNREAD BADGE ── */
+        .unread-badge { animation: breathe 2s ease-in-out infinite; }
 
-        /* Input Area Glass Effect - Light Mode */
+        /* ── INPUT AREA ── */
         .input-area-glass {
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-top: 1px solid rgba(226, 232, 240, 0.6);
-          box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+          background: #ffffff;
+          border-top: 2px solid #e8e8e8;
         }
-        
-        /* Input Area Glass Effect - Dark Mode */
         .dark .input-area-glass {
-          background: rgba(31, 41, 55, 0.95);
-          border-top: 1px solid rgba(75, 85, 99, 0.5);
-          box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+          background: #1a1a1a;
+          border-top: 2px solid #2a2a2a;
         }
 
-        /* Smooth Page Transitions */
-        .page-transition {
-          animation: fade-in 0.3s ease-out;
-        }
-
-        /* Loading Skeleton */
+        /* ── SKELETON ── */
         .skeleton {
-          background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+          background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
           background-size: 200% 100%;
           animation: shimmer 1.5s infinite;
         }
-        .dark .skeleton {
-          background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-        }
+        .dark .skeleton { background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%); }
       `}</style>
 
       <div
@@ -12855,21 +12717,8 @@ function Main() {
           height: "100vh",
         }}
       >
-        {/* Dynamic Background for Light/Dark Mode */}
-        <div 
-          className="fixed inset-0 -z-10 transition-colors duration-500"
-          style={{
-            background: "var(--tw-gradient-stops, linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%))"
-          }}
-        ></div>
-        <style>{`
-          .dark .page-transition { 
-            --tw-gradient-stops: linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%);
-          }
-          :not(.dark) .page-transition {
-            --tw-gradient-stops: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
-          }
-        `}</style>
+        {/* Background */}
+        <div className="fixed inset-0 -z-10 bg-[#F5F5F5] dark:bg-[#111111]"></div>
         
         {/* Floating Orbs for Visual Interest */}
         <div className="floating-orb floating-orb-1 hidden md:block"></div>
@@ -16119,195 +15968,135 @@ function Main() {
             </div>
           </>
         ) : (
-          <div className="hidden md:flex flex-col w-full h-full bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/50 dark:from-gray-800/30 dark:via-gray-800/20 dark:to-gray-900/30 backdrop-blur-2xl text-gray-800 dark:text-gray-200 items-center justify-center p-8 animate-fade-in relative overflow-hidden">
-            {/* Floating orbs for decoration */}
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-3xl animate-float-delayed"></div>
-            <div className="flex flex-col items-center justify-center p-12 rounded-3xl glass-card shadow-2xl animate-slide-up">
-              <div className="w-24 h-24 mb-8 overflow-hidden rounded-2xl shadow-2xl bg-white/40 dark:bg-gray-700/50 backdrop-blur-xl border border-white/60 dark:border-gray-600/60 p-3 transition-all duration-500 hover:scale-110 hover:shadow-3xl hover:shadow-blue-500/20">
-                <img
-                  src={logoImage}
-                  alt="Logo"
-                  className="w-full h-full object-cover rounded-xl transition-all duration-300 hover:brightness-110"
-                />
+          /* ── WELCOME / EMPTY STATE ── */
+          <div className="hidden md:flex flex-col w-full h-full items-center justify-center animate-fade-in relative overflow-hidden" style={{ background: '#F5F5F5' }}>
+
+            {/* Subtle background orbs matching adleticagency hero */}
+            <div style={{ position:'absolute', top:'-10%', right:'-5%', width:'420px', height:'420px', background:'radial-gradient(circle, rgba(242,101,34,0.09) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(60px)', animation:'adletic-drift 15s ease-in-out infinite', pointerEvents:'none' }} />
+            <div style={{ position:'absolute', bottom:'-10%', left:'-5%', width:'320px', height:'320px', background:'radial-gradient(circle, rgba(138,43,226,0.06) 0%, transparent 70%)', borderRadius:'50%', filter:'blur(60px)', animation:'adletic-drift 20s ease-in-out infinite reverse', pointerEvents:'none' }} />
+
+            {/* Card */}
+            <div className="animate-slide-up relative z-10 flex flex-col items-center" style={{ background:'#ffffff', border:'2px solid #e8e8e8', borderTop:'3px solid #f26522', padding:'3rem 3.5rem', maxWidth:'680px', width:'90%', boxShadow:'6px 6px 0 rgba(0,0,0,0.06)' }}>
+
+              {/* Logo */}
+              <div style={{ width:'64px', height:'64px', marginBottom:'1.5rem', padding:'10px', border:'2px solid #e8e8e8', background:'#fff', boxShadow:'3px 3px 0 #f26522' }}>
+                <img src={logoImage} alt="Adletic CRM" style={{ width:'100%', height:'100%', objectFit:'contain' }} />
               </div>
-              <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-[#f26522] via-[#ff7744] to-[#ff9966] dark:from-[#f26522] dark:via-[#ff7744] dark:to-[#ff9966] bg-clip-text text-transparent animate-gradient-shift bg-[length:200%_auto]">
-                {hasNoPhones
-                  ? "No Phones Connected"
-                  : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") 
-                    ? "Welcome to Chat" 
-                    : "Welcome to Chat"
-                }
+
+              {/* Headline */}
+              <div style={{ fontSize:'0.7rem', fontWeight:800, color:'#f26522', textTransform:'uppercase', letterSpacing:'0.1em', marginBottom:'0.6rem' }}>
+                {hasNoPhones ? "⚠ Setup Required" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "⚙ Action Required" : "Adletic CRM"}
+              </div>
+              <h2 style={{ fontSize:'clamp(1.6rem,3vw,2.2rem)', fontWeight:900, color:'#4b4b4b', textAlign:'center', letterSpacing:'-0.02em', textTransform:'uppercase', marginBottom:'0.75rem', lineHeight:1.1 }}>
+                {hasNoPhones ? "No Phones Connected" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "Complete Your Setup" : "Welcome Back"}
               </h2>
-              <p className="text-gray-600 dark:text-gray-300 text-lg text-center mb-10 max-w-lg leading-relaxed font-medium px-4">
+              <p style={{ fontSize:'0.95rem', color:'#8b8b8b', textAlign:'center', lineHeight:1.7, maxWidth:'480px', marginBottom:'2rem', fontWeight:500 }}>
                 {hasNoPhones
-                  ? "You need to connect your WhatsApp phones before you can start chatting. Please set up your phone connections first."
-                  : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") 
-                    ? "Before you can start chatting, you need to configure your AI assistant."
-                    : "Select a contact from the list to start messaging, or create a new conversation to get started."
-                }
+                  ? "Connect your WhatsApp number before you can start messaging your leads."
+                  : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "")
+                    ? "Configure your AI assistant to unlock automation and smart replies."
+                    : "Select a contact on the left to open the conversation, or start a new one."}
               </p>
-              {/* Show appropriate buttons based on state */}
+
+              {/* ── BUTTONS ── */}
               {hasNoPhones ? (
-                // Show Connect Phones button when no phones are available
-                <div className="flex flex-col sm:flex-row gap-6 mb-8">
+                <div style={{ display:'flex', gap:'12px', flexWrap:'wrap', justifyContent:'center', marginBottom:'2rem' }}>
                   <button
                     onClick={() => navigate('/loading')}
-                    className="relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-green-500/30 transform hover:scale-105 backdrop-blur-md border border-green-400/50 dark:border-green-300/50"
+                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 28px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.85rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
                   >
-                    <div className="flex items-center space-x-3 relative z-10">
-                      <Lucide icon="Wifi" className="w-5 h-5" />
-                      <span>Connect Phones</span>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full animate-shimmer"></div>
+                    <Lucide icon="Wifi" className="w-4 h-4" />
+                    Connect Phones
                   </button>
                 </div>
-              ) : !(isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "")) ? (
-                // Show normal chat buttons when phones are available and instructions are set
-                <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                  <button
-                    onClick={openNewChatModal}
-                    className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/30 transform hover:scale-105 backdrop-blur-md border border-blue-400/50 dark:border-blue-300/50"
-                  >
-                    <div className="flex items-center space-x-3 relative z-10">
-                      <Lucide icon="Plus" className="w-5 h-5" />
-                      <span>Start New Chat</span>
+              ) : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? (
+                <div style={{ width:'100%', maxWidth:'520px', background:'rgba(242,101,34,0.04)', border:'2px solid rgba(242,101,34,0.2)', borderLeft:'4px solid #f26522', padding:'1.5rem', marginBottom:'2rem' }}>
+                  <div style={{ display:'flex', alignItems:'flex-start', gap:'1rem' }}>
+                    <div style={{ width:'40px', height:'40px', background:'#f26522', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                      <Lucide icon="Settings" className="w-5 h-5 text-white" />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full animate-shimmer"></div>
-                  </button>
-                  <button
-                    onClick={() => setIsSearchModalOpen(true)}
-                    className="relative overflow-hidden bg-white/50 hover:bg-white/70 dark:bg-gray-700/50 dark:hover:bg-gray-600/70 text-gray-800 dark:text-gray-200 font-semibold py-4 px-8 rounded-2xl transition-all duration-300 border border-white/60 dark:border-gray-600/60 shadow-lg hover:shadow-xl hover:shadow-purple-500/20 backdrop-blur-md hover:scale-105 transform"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Lucide icon="Search" className="w-5 h-5" />
-                      <span>Search Contacts</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setIsSyncModalOpen(true)}
-                    disabled={fetching}
-                    className="relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-green-500/30 transform hover:scale-105 disabled:hover:scale-100 backdrop-blur-md border border-green-400/50 dark:border-green-300/50"
-                  >
-                    <div className="flex items-center space-x-3 relative z-10">
-                      {fetching ? (
-                        <LoadingIcon icon="oval" color="white" className="w-5 h-5" />
-                      ) : (
-                        <Lucide icon="RefreshCw" className="w-5 h-5" />
-                      )}
-                      <span>{fetching ? "Syncing..." : "Sync Database"}</span>
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full animate-shimmer"></div>
-                  </button>
-                </div>
-              ) : null}
-              
-              {/* Onboarding Call-to-Action for empty instructions */}
-              {isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") && (
-                <div className="w-full max-w-2xl mb-8 p-6 bg-gradient-to-r from-amber-50/80 to-orange-50/80 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl border border-amber-200/50 dark:border-amber-700/50 backdrop-blur-xl shadow-xl">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-gradient-to-r from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <Lucide icon="Settings" className="w-6 h-6 text-white animate-spin-slow" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-amber-800 dark:text-amber-200 mb-2">
-                        Complete Your AI Assistant Setup
-                      </h3>
-                      <p className="text-amber-700 dark:text-amber-300 mb-4 text-sm leading-relaxed">
-                        Configure your AI assistant to unlock powerful automation features, smart responses, and enhanced customer interactions.
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:'0.85rem', fontWeight:800, color:'#4b4b4b', textTransform:'uppercase', letterSpacing:'0.04em', marginBottom:'0.4rem' }}>AI Assistant Setup</div>
+                      <p style={{ fontSize:'0.83rem', color:'#8b8b8b', lineHeight:1.6, marginBottom:'1rem' }}>
+                        Set up your AI assistant to handle customer queries automatically and improve response time.
                       </p>
                       <button
                         onClick={() => navigate('/onboarding')}
-                        className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2"
+                        style={{ display:'inline-flex', alignItems:'center', gap:'6px', padding:'10px 22px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.8rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
                       >
                         <Lucide icon="ArrowRight" className="w-4 h-4" />
-                        <span>Go to Setup</span>
+                        Go to Setup
                       </button>
                     </div>
                   </div>
                 </div>
+              ) : (
+                <div style={{ display:'flex', gap:'10px', flexWrap:'wrap', justifyContent:'center', marginBottom:'2rem' }}>
+                  <button
+                    onClick={openNewChatModal}
+                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'#f26522', color:'#fff', border:'2px solid #f26522', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='4px 4px 0 #4b4b4b'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
+                  >
+                    <Lucide icon="Plus" className="w-4 h-4" />
+                    New Chat
+                  </button>
+                  <button
+                    onClick={() => setIsSearchModalOpen(true)}
+                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'transparent', color:'#4b4b4b', border:'2px solid #4b4b4b', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor:'pointer', transition:'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform='translate(-2px,-2px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow='-4px 4px 0 #4b4b4b'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform=''; (e.currentTarget as HTMLButtonElement).style.boxShadow=''; }}
+                  >
+                    <Lucide icon="Search" className="w-4 h-4" />
+                    Search
+                  </button>
+                  <button
+                    onClick={() => setIsSyncModalOpen(true)}
+                    disabled={fetching}
+                    style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 24px', background:'transparent', color:'#4b4b4b', border:'2px solid #e8e8e8', fontFamily:'Inter,sans-serif', fontSize:'0.82rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', cursor: fetching ? 'not-allowed' : 'pointer', opacity: fetching ? 0.6 : 1, transition:'all 0.2s' }}
+                    onMouseEnter={e => { if (!fetching) { (e.currentTarget as HTMLButtonElement).style.borderColor='#f26522'; } }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor='#e8e8e8'; }}
+                  >
+                    {fetching ? <LoadingIcon icon="oval" color="#4b4b4b" className="w-4 h-4" /> : <Lucide icon="RefreshCw" className="w-4 h-4" />}
+                    {fetching ? "Syncing..." : "Sync"}
+                  </button>
+                </div>
               )}
-              <div className="text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-6 font-semibold">
-                  {hasNoPhones
-                    ? "Why Connect Phones:"
-                    : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") 
-                      ? "Why Setup is Important:" 
-                      : "Quick Tips:"
-                  }
-                </p>
-                <div className="flex flex-col sm:flex-row gap-6 text-sm text-gray-600 dark:text-gray-300">
-                  {hasNoPhones ? (
-                    // Show phone connection tips when no phones are available
-                    <>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Connect WhatsApp to start messaging
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Multiple phones for different purposes
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Secure and reliable connection
-                        </span>
-                      </div>
-                    </>
-                  ) : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? (
-                    // Show setup-focused tips when instructions are empty
-                    <>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          AI will respond to customer messages
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Automate repetitive tasks
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Improve customer experience
-                        </span>
-                      </div>
-                    </>
-                  ) : (
-                    // Show normal chat tips when instructions are set
-                    <>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Click on any contact to start chatting
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Use search to find specific contacts
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3 p-4 bg-white/40 dark:bg-gray-700/40 rounded-2xl backdrop-blur-xl border border-white/50 dark:border-gray-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                        <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full shadow-lg"></div>
-                        <span className="font-medium">
-                          Create new conversations anytime
-                        </span>
-                      </div>
-                    </>
-                  )}
+
+              {/* ── TIPS ROW ── */}
+              <div style={{ borderTop:'1px solid #e8e8e8', paddingTop:'1.5rem', width:'100%' }}>
+                <div style={{ fontSize:'0.68rem', fontWeight:700, color:'#c0c0c0', textTransform:'uppercase', letterSpacing:'0.1em', textAlign:'center', marginBottom:'1rem' }}>
+                  {hasNoPhones ? "Why Connect" : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? "What You Unlock" : "Quick Tips"}
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px' }}>
+                  {(hasNoPhones ? [
+                    { icon:"📱", text:"Connect WhatsApp to start messaging" },
+                    { icon:"🔀", text:"Use multiple numbers for different teams" },
+                    { icon:"🔒", text:"Secure, encrypted connection always" },
+                  ] : isAssistantInfoLoaded && (!assistantInfo.instructions || assistantInfo.instructions.trim() === "") ? [
+                    { icon:"🤖", text:"AI replies to customers automatically" },
+                    { icon:"⚡", text:"Automate repetitive follow-ups" },
+                    { icon:"📈", text:"Better response rate & satisfaction" },
+                  ] : [
+                    { icon:"💬", text:"Click any contact to open their chat" },
+                    { icon:"🔍", text:"Search contacts by name or number" },
+                    { icon:"✨", text:"Start new conversations anytime" },
+                  ]).map((tip, i) => (
+                    <div key={i} style={{ background:'#F5F5F5', border:'1px solid #e8e8e8', padding:'12px', display:'flex', alignItems:'flex-start', gap:'10px', transition:'border-color 0.2s' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor='rgba(242,101,34,0.4)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor='#e8e8e8'; }}
+                    >
+                      <span style={{ fontSize:'1.1rem', flexShrink:0, marginTop:'1px' }}>{tip.icon}</span>
+                      <span style={{ fontSize:'0.78rem', color:'#6b6b6b', fontWeight:500, lineHeight:1.5 }}>{tip.text}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
+
             </div>
           </div>
         )}
