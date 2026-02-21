@@ -41,7 +41,7 @@ export const menuSlice = createSlice({
 const filterMenuByEmail = (menu: Array<Menu | "divider">): Array<Menu | "divider"> => {
   const userEmail = localStorage.getItem("userEmail")?.toLowerCase() || "";
   const canSeeInbox = userEmail.includes("juta") || userEmail.includes("omniyal") || userEmail.includes("desitecreation");
-  
+
   return menu.filter((item) => {
     if (item === "divider") return true;
     if (item.pathname === "/inbox" && !canSeeInbox) return false;
@@ -53,7 +53,6 @@ export const selectMenu = (layout: Themes["layout"]) => (state: RootState) => {
   // Get config from state instead of using hook
   const config = state.config;
   const userRole = config?.userRole;
-  console.log('config?.name', config);
   if (layout == "top-menu") {
     return topMenu;
   }
@@ -63,7 +62,7 @@ export const selectMenu = (layout: Themes["layout"]) => (state: RootState) => {
       return simpleMenu2;
     } else if (config?.name === "Tatapies") {
       return simpleMenu3;
-    }else if (config?.name === "MTDC") {
+    } else if (config?.name === "MTDC") {
       return simpleMenuMTDC;
     } else if (config?.name === "Juta" || config?.name === "Omniyal AI" || config?.name === "Desitech Creation") {
       return filterMenuByEmail(simpleMenuJuta);
@@ -71,11 +70,11 @@ export const selectMenu = (layout: Themes["layout"]) => (state: RootState) => {
       // Check if user email should see inbox even on other menus
       const userEmail = localStorage.getItem("userEmail")?.toLowerCase() || "";
       const canSeeInbox = userEmail.includes("juta") || userEmail.includes("omniyal") || userEmail.includes("desitecreation");
-      
+
       if (canSeeInbox) {
         return filterMenuByEmail(simpleMenuJuta);
       }
-      
+
       switch (userRole) {
         case "1":
           return simpleMenu;
