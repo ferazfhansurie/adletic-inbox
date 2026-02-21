@@ -5662,17 +5662,7 @@ function Main() {
 
         ws.onerror = (error) => {
           console.error("WebSocket error:", error);
-          // Check if it's a security error (insecure connection from HTTPS)
-          if (error instanceof Event && window.location.protocol === "https:") {
-            console.warn(
-              "Security error detected. This might be due to insecure WebSocket connection from HTTPS page."
-            );
-            setWsError(
-              "WebSocket connection failed. Server may not support secure connections."
-            );
-          } else {
-            handleWebSocketError(error);
-          }
+          handleWebSocketError(error);
         };
 
         ws.onclose = (event) => {

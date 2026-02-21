@@ -44,7 +44,7 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
         console.log('Found cached config:', parsedConfig);
         setLocalConfig(parsedConfig);
         if (parsedConfig.name) {
-          dispatch(setConfig({ 
+          dispatch(setConfig({
             name: parsedConfig.name,
             userRole: parsedConfig.role,
             companyId: parsedConfig.company_id,
@@ -92,13 +92,13 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 
         const userData = await userResponse.json();
         console.log('User data received:', userData);
-        
+
         const companyId = userData.company_id;
         const role = userData.role;
-        
+
         console.log('Company ID:', companyId);
         console.log('User role:', role);
-        
+
         setUserRole(role);
 
         if (!companyId) {
@@ -135,21 +135,21 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
         // Store the configuration data in local state and Redux
         console.log('Setting local config:', companyData);
         setLocalConfig(companyData);
-        
-        const configPayload = { 
+
+        const configPayload = {
           name: companyData.name,
           userRole: role,
           companyId: companyId,
         };
         console.log('Dispatching config to Redux:', configPayload);
         dispatch(setConfig(configPayload));
-        
+
         // Test if Redux is working
         console.log('Testing Redux dispatch...');
         setTimeout(() => {
           console.log('Redux state after dispatch should be updated');
         }, 100);
-        
+
         localStorage.setItem('config', LZString.compress(JSON.stringify(companyData)));
         sessionStorage.setItem('configFetched', 'true');
         console.log('Config fetch completed successfully');
@@ -165,12 +165,12 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
     const checkAuth = () => {
       console.log('Checking authentication status');
       const userDataStr = localStorage.getItem("userData");
-      
+
       if (userDataStr) {
         try {
           const parsedUserData = JSON.parse(userDataStr);
           const userEmail = parsedUserData.email;
-          
+
           if (userEmail) {
             console.log('User authenticated via Neon database:', userEmail);
             fetchConfig(userEmail);
@@ -214,11 +214,9 @@ export const useConfig = () => {
   if (context === undefined) {
     throw new Error('useConfig must be used within a ConfigProvider');
   }
-  
-  console.log('useConfig hook called, context:', context);
-  console.log('useConfig config:', context.config);
-  console.log('useConfig config?.name:', context.config?.name);
-  
+
+
+
   return context;
 };
 
