@@ -71,6 +71,7 @@ import SplitTest from "../pages/SplitTest";
 import WhatsAppCallback from "../pages/WhatsAppCallback";
 import MessageTemplates from "../pages/MessageTemplates";
 import LandingPage from "../pages/LandingPage";
+import ContactAudit from "../pages/ContactAudit";
 
 
 function Router() {
@@ -91,7 +92,7 @@ function Router() {
     { path: "/", element: <LandingPage /> },
     {
       path: "/",
-      element:(
+      element: (
         <div className="h-screen flex flex-col">
           <Layout />
         </div>
@@ -100,10 +101,10 @@ function Router() {
         { path: "chat", element: <Chat /> },
         { path: "/dashboard", element: <DashboardOverview1 /> },
         { path: "ticket", element: <Ticket /> },
-                    { path: "crud-form", element: <CrudForm /> },
-            { path: "settings", element: <Settings /> },
-            { path: "feedback-form-builder", element: <FeedbackFormBuilder /> },
-            { path: "data-import", element: <DataImport /> },
+        { path: "crud-form", element: <CrudForm /> },
+        { path: "settings", element: <Settings /> },
+        { path: "feedback-form-builder", element: <FeedbackFormBuilder /> },
+        { path: "data-import", element: <DataImport /> },
         { path: "quick-replies", element: <QuickReplies /> },
         { path: "a-i-responses", element: <AIResponses /> },
         { path: "automations", element: <Automations /> },
@@ -114,8 +115,9 @@ function Router() {
         { path: "a-i-generative-responses", element: <AIGenerativeResponses /> },
         { path: "storage-pricing", element: <StoragePricing /> },
         { path: "/client-ticket", element: <PublicTaskForm /> },
+        { path: "contact-audit", element: <ContactAudit /> },
 
-        {path: "/loading2", element: <LoadingIcon2 />},
+        { path: "/loading2", element: <LoadingIcon2 /> },
         { path: "opportunities", element: <Opportunities /> },
         { path: "appointment-requests", element: <AppointmentRequests /> },
         { path: "scheduled-messages", element: <ScheduledMessages /> },
@@ -172,25 +174,25 @@ function Router() {
         { path: "opp", element: <Opportunities /> },
         { path: "users-layout-2/loading2", element: <LoadingIcon2 /> },
         { path: "dashboard-overview-2", element: <DashboardOverview2 /> },
-     
+
       ],
     },
 
     { path: "follow-ups-onboarding", element: <OnboardingFollowUps /> },
     { path: "ai-responses-onboarding", element: <OnboardingAIResponses /> },
     { path: "/onboarding", element: <ChatGPTStyle /> },
-    { path: "/guest-chat/:companyId", element: <GuestChat />},
-    { path: "/feedback/:formTitle/:phone", element: <PublicFeedbackForm />},
-    { path: "/attendance/:eventTitle/:phone", element: <PublicAttendanceForm />},
+    { path: "/guest-chat/:companyId", element: <GuestChat /> },
+    { path: "/feedback/:formTitle/:phone", element: <PublicFeedbackForm /> },
+    { path: "/attendance/:eventTitle/:phone", element: <PublicAttendanceForm /> },
     { path: "/whatsapp-callback", element: <WhatsAppCallback /> },
 
     { path: "notification", element: <Notification /> },
     { path: "dashboard-overview-2", element: <DashboardOverview2 /> },
-    { path: "loading", element:<LoadingIcon />  },
+    { path: "loading", element: <LoadingIcon /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
-  
-    { path: "/loading", element: <LoadingIcon />},
+
+    { path: "/loading", element: <LoadingIcon /> },
     { path: "/error-page", element: <ErrorPage /> },
     { path: "*", element: <ErrorPage /> },
   ];

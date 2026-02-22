@@ -4,7 +4,7 @@ const menu: Array<Menu | "divider"> = [
   {
     icon: "Home",
     title: "Dashboard",
-   pathname:'/dashboard'
+    pathname: '/dashboard'
   },
   {
     icon: "MessageSquare",
@@ -21,6 +21,11 @@ const menu: Array<Menu | "divider"> = [
     pathname: "/dashboard/calendar",
     title: "Calendar",
   },
+  {
+    icon: "Wand2",
+    pathname: "/contact-audit",
+    title: "AI Pipeline",
+  },
   "divider",
   {
     icon: "Users",
@@ -31,7 +36,7 @@ const menu: Array<Menu | "divider"> = [
     icon: "Trello",
     title: "Profile",
     pathname: "/dashboard/profile-overview-1",
-    
+
   },
 
   "divider",

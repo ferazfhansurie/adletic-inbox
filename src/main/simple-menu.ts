@@ -8,7 +8,7 @@ const menu: Array<Menu | "divider"> = [
   {
     icon: "MessageSquare",
     title: "Chats",
-    pathname:'/chat'
+    pathname: '/chat'
   },
   {
     icon: "HardDrive",
@@ -21,29 +21,34 @@ const menu: Array<Menu | "divider"> = [
     pathname: "/dashboard",
     title: "Stats",
   },
+  {
+    icon: "Wand2",
+    pathname: "/contact-audit",
+    title: "AI Pipeline",
+  },
 
-    // {
-    //   icon: "HardDrive",
-    //   pathname: "/dashboard/file-manager",
-    //   title: "File Manager",
-    // },
-    {
-      icon: "Calendar",
-      pathname: "/calendar",
-      title: "Calendar",
-    },
-    {
-      icon: "FileText",
-      pathname: "/message-templates",
-      title: "Message Templates",
-    },
-    "divider",
-    {
-      icon: "Users",
-      title: "Users",
-      pathname: "/users-layout-2",
-    },
-   
+  // {
+  //   icon: "HardDrive",
+  //   pathname: "/dashboard/file-manager",
+  //   title: "File Manager",
+  // },
+  {
+    icon: "Calendar",
+    pathname: "/calendar",
+    title: "Calendar",
+  },
+  {
+    icon: "FileText",
+    pathname: "/message-templates",
+    title: "Message Templates",
+  },
+  "divider",
+  {
+    icon: "Users",
+    title: "Users",
+    pathname: "/users-layout-2",
+  },
+
   /* {
       icon: "Database",
       pathname: "/database-manager",

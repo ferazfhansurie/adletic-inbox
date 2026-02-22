@@ -8,7 +8,7 @@ const menu: Array<Menu | "divider"> = [
   {
     icon: "MessageSquare",
     title: "Chats",
-    pathname:'/chat'
+    pathname: '/chat'
   },
   {
     icon: "HardDrive",
@@ -22,25 +22,29 @@ const menu: Array<Menu | "divider"> = [
     title: "Stats",
   },
   {
-      icon: "Bot",
-      pathname: "/inbox",
-      title: "Assistant",
-    },
+    icon: "Bot",
+    pathname: "/inbox",
+    title: "Assistant",
+  },
 
-    {
-      icon: "FileText",
-      pathname: "/message-templates",
-      title: "Message Templates",
-    },
- 
+  {
+    icon: "FileText",
+    pathname: "/message-templates",
+    title: "Message Templates",
+  },
 
+  {
+    icon: "Wand2",
+    pathname: "/contact-audit",
+    title: "AI Pipeline",
+  },
 
-    "divider",
-    {
-      icon: "Users",
-      title: "Users",
-      pathname: "/users-layout-2",
-    },
+  "divider",
+  {
+    icon: "Users",
+    title: "Users",
+    pathname: "/users-layout-2",
+  },
 
 
   /* {
