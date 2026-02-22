@@ -99,13 +99,13 @@ function SettingsPage() {
   const [qrCodes, setQrCodes] = useState<any[]>([]);
   const [isLoadingStatus, setIsLoadingStatus] = useState(false);
   const [phoneNames, setPhoneNames] = useState<{ [key: number]: string }>({});
-  
+
   // Track if company is using Cloud API (v2)
   const [isCloudApiConnected, setIsCloudApiConnected] = useState(false);
 
   useEffect(() => {
     fetchSettings();
-   
+
   }, []);
 
   // Fetch phone status and names when both companyId and apiUrl are available
@@ -129,7 +129,7 @@ function SettingsPage() {
         throw new Error("No user email found in localStorage");
       }
       console.log('fetching settings for user');
-console.log("userEmail:", userEmail);
+      console.log("userEmail:", userEmail);
       // Check if email includes juta.com
       if (userEmail.includes("juta.com") || userEmail.includes("desitecreation.com") || userEmail.includes("omniyal")) {
         setShowCompanyIdChange(true);
@@ -184,7 +184,7 @@ console.log("userEmail:", userEmail);
       // Set API URL - use the one from company data or fall back to default
       const dynamicApiUrl =
         userCompanyData?.companyData?.api_url || companyData.apiUrl;
- 
+
       setApiUrl(dynamicApiUrl || "https://bisnesgpt.jutateknologi.com");
 
       // Set phone and AI settings from company config
@@ -725,8 +725,7 @@ console.log("userEmail:", userEmail);
           } catch (phoneError) {
             console.error(`Error disconnecting phone ${i + 1}:`, phoneError);
             showNotification(
-              `Failed to disconnect phone ${
-                i + 1
+              `Failed to disconnect phone ${i + 1
               }. Continuing with remaining phones.`,
               true
             );
@@ -745,8 +744,7 @@ console.log("userEmail:", userEmail);
 
         // Show processing notification
         showNotification(
-          `Disconnecting ${disconnectBotName} Phone ${
-            disconnectPhoneIndex + 1
+          `Disconnecting ${disconnectBotName} Phone ${disconnectPhoneIndex + 1
           }...`
         );
 
@@ -778,9 +776,8 @@ console.log("userEmail:", userEmail);
         // Show success notification
         showNotification(
           data.message ||
-            `${disconnectBotName} Phone ${
-              disconnectPhoneIndex + 1
-            } disconnected successfully`
+          `${disconnectBotName} Phone ${disconnectPhoneIndex + 1
+          } disconnected successfully`
         );
       }
     } catch (error) {
@@ -802,7 +799,7 @@ console.log("userEmail:", userEmail);
   }
 
   return (
-    <div style={{fontFamily:"'Inter',sans-serif",minHeight:'100vh',background:'#f5f5f5'}}>
+    <div style={{ fontFamily: "'Inter',sans-serif", minHeight: '100vh', background: '#f5f5f5', overflowY: 'auto', height: '100%' }}>
       <style>{`
         .st-root{font-family:'Inter',sans-serif;min-height:100vh;background:#f5f5f5}
         .st-navbar{position:sticky;top:0;z-index:50;background:#4b4b4b;border-bottom:3px solid #f26522;padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
@@ -859,7 +856,7 @@ console.log("userEmail:", userEmail);
       <div className="st-navbar">
         <div className="st-nav-left">
           <Link to="/users-layout-2">
-            <button className="st-btn" style={{padding:'6px 14px',background:'rgba(255,255,255,.12)',borderColor:'rgba(255,255,255,.3)',color:'#fff'}}>
+            <button className="st-btn" style={{ padding: '6px 14px', background: 'rgba(255,255,255,.12)', borderColor: 'rgba(255,255,255,.3)', color: '#fff' }}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -872,7 +869,7 @@ console.log("userEmail:", userEmail);
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <h1 style={{fontWeight:800,fontSize:'1rem',color:'#fff',textTransform:'uppercase',letterSpacing:'.08em',margin:0}}>Settings</h1>
+          <h1 style={{ fontWeight: 800, fontSize: '1rem', color: '#fff', textTransform: 'uppercase', letterSpacing: '.08em', margin: 0 }}>Settings</h1>
         </div>
         <ThemeSwitcher />
       </div>
@@ -889,7 +886,7 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Quick Navigation</h2>
           </div>
-          <div className="st-card-body" style={{display:'flex',flexWrap:'wrap',gap:'10px'}}>
+          <div className="st-card-body" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {showAddUserButton && phoneCount >= 2 && (
               <Link to="/loading2">
                 <button className="st-btn-nav">
@@ -943,19 +940,19 @@ console.log("userEmail:", userEmail);
           </div>
           <div className="st-card-body">
             <label className="st-label">Appearance Mode</label>
-            <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <button
                 onClick={() => dispatch(setDarkMode(false))}
                 className={`st-theme-btn${!activeDarkMode ? ' st-theme-btn-active' : ''}`}
               >
-                <div style={{width:'16px',height:'16px',background:'#f26522',border:'2px solid currentColor',borderRadius:'50%'}} />
+                <div style={{ width: '16px', height: '16px', background: '#f26522', border: '2px solid currentColor', borderRadius: '50%' }} />
                 Light Mode
               </button>
               <button
                 onClick={() => dispatch(setDarkMode(true))}
                 className={`st-theme-btn${activeDarkMode ? ' st-theme-btn-active' : ''}`}
               >
-                <div style={{width:'16px',height:'16px',background:'#4b4b4b',border:'2px solid currentColor',borderRadius:'50%'}} />
+                <div style={{ width: '16px', height: '16px', background: '#4b4b4b', border: '2px solid currentColor', borderRadius: '50%' }} />
                 Dark Mode
               </button>
             </div>
@@ -973,40 +970,40 @@ console.log("userEmail:", userEmail);
               </div>
               <div>
                 <h2 className="st-section-title">WhatsApp Cloud API</h2>
-                <p style={{fontSize:'.68rem',color:'rgba(255,255,255,.6)',margin:'2px 0 0'}}>Connect using Meta's Official WhatsApp Business API</p>
+                <p style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.6)', margin: '2px 0 0' }}>Connect using Meta's Official WhatsApp Business API</p>
               </div>
             </div>
-            <div className="st-card-body" style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+            <div className="st-card-body" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div className="st-info-box">
-                <Lucide icon="Info" className="w-4 h-4 flex-shrink-0" style={{color:'#f26522',marginTop:'1px'}} />
+                <Lucide icon="Info" className="w-4 h-4 flex-shrink-0" style={{ color: '#f26522', marginTop: '1px' }} />
                 <div>
-                  <p style={{fontWeight:700,fontSize:'.8rem',color:'#4b4b4b',margin:'0 0 4px'}}>Official WhatsApp Business API</p>
-                  <p style={{fontSize:'.75rem',color:'#8b8b8b',lineHeight:1.6,margin:0}}>
+                  <p style={{ fontWeight: 700, fontSize: '.8rem', color: '#4b4b4b', margin: '0 0 4px' }}>Official WhatsApp Business API</p>
+                  <p style={{ fontSize: '.75rem', color: '#8b8b8b', lineHeight: 1.6, margin: 0 }}>
                     Connect your WhatsApp Business account using Meta's official Embedded Signup flow.
                     This provides a more stable connection with official API access, message templates, and advanced business features.
                   </p>
                 </div>
               </div>
 
-              <div style={{border:'2px solid #e8e8e8',padding:'14px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:'12px'}}>
+              <div style={{ border: '2px solid #e8e8e8', padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                 {isCloudApiConnected ? (
                   <>
-                    <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                      <Lucide icon="CheckCircle" className="w-5 h-5" style={{color:'#2a7a2a'}} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Lucide icon="CheckCircle" className="w-5 h-5" style={{ color: '#2a7a2a' }} />
                       <div>
-                        <p style={{fontWeight:700,fontSize:'.82rem',color:'#2a7a2a',margin:0}}>Meta Cloud API Connected</p>
-                        <p style={{fontSize:'.72rem',color:'#8b8b8b',margin:0}}>Connected via official WhatsApp Business API</p>
+                        <p style={{ fontWeight: 700, fontSize: '.82rem', color: '#2a7a2a', margin: 0 }}>Meta Cloud API Connected</p>
+                        <p style={{ fontSize: '.72rem', color: '#8b8b8b', margin: 0 }}>Connected via official WhatsApp Business API</p>
                       </div>
                     </div>
                     <span className="st-status-pill st-status-connected">Active</span>
                   </>
                 ) : (
                   <>
-                    <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                      <Lucide icon="Link" className="w-4 h-4" style={{color:'#8b8b8b'}} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Lucide icon="Link" className="w-4 h-4" style={{ color: '#8b8b8b' }} />
                       <div>
-                        <p style={{fontWeight:700,fontSize:'.82rem',color:'#4b4b4b',margin:0}}>Connect WhatsApp Business</p>
-                        <p style={{fontSize:'.72rem',color:'#8b8b8b',margin:0}}>Click to start the official signup flow</p>
+                        <p style={{ fontWeight: 700, fontSize: '.82rem', color: '#4b4b4b', margin: 0 }}>Connect WhatsApp Business</p>
+                        <p style={{ fontSize: '.72rem', color: '#8b8b8b', margin: 0 }}>Click to start the official signup flow</p>
                       </div>
                     </div>
                     <WhatsAppEmbeddedSignup
@@ -1023,8 +1020,8 @@ console.log("userEmail:", userEmail);
               </div>
 
               <div className="st-info-box st-info-box-warn">
-                <Lucide icon="AlertTriangle" className="w-4 h-4 flex-shrink-0" style={{color:'#f26522',marginTop:'1px'}} />
-                <p style={{fontSize:'.75rem',color:'#4b4b4b',lineHeight:1.6,margin:0}}>
+                <Lucide icon="AlertTriangle" className="w-4 h-4 flex-shrink-0" style={{ color: '#f26522', marginTop: '1px' }} />
+                <p style={{ fontSize: '.75rem', color: '#4b4b4b', lineHeight: 1.6, margin: 0 }}>
                   <strong>Note:</strong> This will connect your phone using the official WhatsApp Cloud API,
                   which is separate from the QR code-based connection. You can use either method, but not both simultaneously for the same phone number.
                 </p>
@@ -1044,11 +1041,11 @@ console.log("userEmail:", userEmail);
               </div>
               <h2 className="st-section-title">Change Company ID</h2>
             </div>
-            <div className="st-card-body" style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+            <div className="st-card-body" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {error && (
                 <div className="st-info-box st-info-box-error">
-                  <Lucide icon="AlertCircle" className="w-4 h-4 flex-shrink-0" style={{color:'#8b0000'}} />
-                  <p style={{fontSize:'.8rem',color:'#8b0000',margin:0}}>{error}</p>
+                  <Lucide icon="AlertCircle" className="w-4 h-4 flex-shrink-0" style={{ color: '#8b0000' }} />
+                  <p style={{ fontSize: '.8rem', color: '#8b0000', margin: 0 }}>{error}</p>
                 </div>
               )}
               <div>
@@ -1081,14 +1078,14 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Bot Management</h2>
           </div>
-          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"16px"}}>
-            <div style={{textAlign:"center",padding:"8px 0"}}>
-              <h3 style={{fontWeight:800,fontSize:"1rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".04em",marginBottom:"6px"}}>Disconnect Bot</h3>
-              <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0}}>Disconnect your WhatsApp bot connection{phoneCount > 1 ? "s" : ""}</p>
+          <div className="st-card-body" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div style={{ textAlign: "center", padding: "8px 0" }}>
+              <h3 style={{ fontWeight: 800, fontSize: "1rem", color: "#4b4b4b", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: "6px" }}>Disconnect Bot</h3>
+              <p style={{ fontSize: ".82rem", color: "#8b8b8b", margin: 0 }}>Disconnect your WhatsApp bot connection{phoneCount > 1 ? "s" : ""}</p>
             </div>
 
             {phoneCount <= 1 ? (
-              <div style={{display:"flex",justifyContent:"center"}}>
+              <div style={{ display: "flex", justifyContent: "center" }}>
                 <button className="st-btn st-btn-danger" onClick={() => showDisconnectConfirmation(companyId || "", 0)} disabled={isDisconnecting || !companyId}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
@@ -1097,34 +1094,34 @@ console.log("userEmail:", userEmail);
                 </button>
               </div>
             ) : (
-              <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {/* Disconnect specific phone */}
-                <div style={{border:"2px solid #e8e8e8",padding:"14px",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
+                <div style={{ border: "2px solid #e8e8e8", padding: "14px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
                   <div>
-                    <p style={{fontWeight:700,fontSize:".8rem",color:"#4b4b4b",margin:"0 0 2px",textTransform:"uppercase",letterSpacing:".06em"}}>Disconnect specific phone</p>
-                    <p style={{fontSize:".72rem",color:"#8b8b8b",margin:0}}>Select a phone to disconnect individually</p>
+                    <p style={{ fontWeight: 700, fontSize: ".8rem", color: "#4b4b4b", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: ".06em" }}>Disconnect specific phone</p>
+                    <p style={{ fontSize: ".72rem", color: "#8b8b8b", margin: 0 }}>Select a phone to disconnect individually</p>
                   </div>
-                  <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap"}}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
                     <select
                       value={disconnectPhoneIndex ?? 0}
                       onChange={(e) => setDisconnectPhoneIndex(Number(e.target.value))}
                       className="st-select"
-                      style={{minWidth:"220px",width:"auto"}}
+                      style={{ minWidth: "220px", width: "auto" }}
                       disabled={isDisconnecting}
                     >
                       {Object.keys(phoneNames).length > 0
                         ? Object.keys(phoneNames).map((index) => {
-                            const phoneIndexOption = parseInt(index);
-                            const qrCode = qrCodes[phoneIndexOption];
-                            const phoneInfo = qrCode?.phoneInfo || `Phone ${phoneIndexOption + 1}`;
-                            const statusInfo = qrCode ? getStatusInfo(qrCode.status) : {text:"Not Connected"};
-                            return (
-                              <option key={phoneIndexOption} value={phoneIndexOption}>
-                                {`${getPhoneName(phoneIndexOption)} - (${phoneInfo}) ${qrCode ? "✅" : isLoadingStatus ? "⏳" : "❌"} ${statusInfo.text}`}
-                              </option>
-                            );
-                          })
-                        : Array.from({length:phoneCount},(_,i) => <option key={i} value={i}>Phone {i+1}</option>)
+                          const phoneIndexOption = parseInt(index);
+                          const qrCode = qrCodes[phoneIndexOption];
+                          const phoneInfo = qrCode?.phoneInfo || `Phone ${phoneIndexOption + 1}`;
+                          const statusInfo = qrCode ? getStatusInfo(qrCode.status) : { text: "Not Connected" };
+                          return (
+                            <option key={phoneIndexOption} value={phoneIndexOption}>
+                              {`${getPhoneName(phoneIndexOption)} - (${phoneInfo}) ${qrCode ? "✅" : isLoadingStatus ? "⏳" : "❌"} ${statusInfo.text}`}
+                            </option>
+                          );
+                        })
+                        : Array.from({ length: phoneCount }, (_, i) => <option key={i} value={i}>Phone {i + 1}</option>)
                       }
                     </select>
                     <button
@@ -1147,10 +1144,10 @@ console.log("userEmail:", userEmail);
                 </div>
 
                 {/* Disconnect all */}
-                <div style={{border:"2px solid #8b0000",background:"#fff0f0",padding:"14px",display:"flex",flexWrap:"wrap",alignItems:"center",justifyContent:"space-between",gap:"10px"}}>
+                <div style={{ border: "2px solid #8b0000", background: "#fff0f0", padding: "14px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
                   <div>
-                    <p style={{fontWeight:700,fontSize:".8rem",color:"#8b0000",margin:"0 0 2px",textTransform:"uppercase",letterSpacing:".06em"}}>Disconnect all phones ({phoneCount} phones)</p>
-                    <p style={{fontSize:".72rem",color:"#8b6060",margin:0}}>This will disconnect all {phoneCount} phone connections</p>
+                    <p style={{ fontWeight: 700, fontSize: ".8rem", color: "#8b0000", margin: "0 0 2px", textTransform: "uppercase", letterSpacing: ".06em" }}>Disconnect all phones ({phoneCount} phones)</p>
+                    <p style={{ fontSize: ".72rem", color: "#8b6060", margin: 0 }}>This will disconnect all {phoneCount} phone connections</p>
                   </div>
                   <button
                     className="st-btn st-btn-danger"
@@ -1168,7 +1165,7 @@ console.log("userEmail:", userEmail);
           </div>
         </div>
 
-                {/* Daily Report Settings */}
+        {/* Daily Report Settings */}
         <div className="st-card">
           <div className="st-card-header">
             <div className="st-card-icon">
@@ -1178,36 +1175,36 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Daily Report Settings</h2>
           </div>
-          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+          <div className="st-card-body" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {error && (
               <div className="st-info-box st-info-box-error">
-                <p style={{fontSize:".8rem",color:"#8b0000",margin:0}}>{error}</p>
+                <p style={{ fontSize: ".8rem", color: "#8b0000", margin: 0 }}>{error}</p>
               </div>
             )}
-            <label style={{display:"flex",alignItems:"center",gap:"10px",cursor:"pointer"}}>
-              <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} style={{width:"18px",height:"18px",accentColor:"#f26522",cursor:"pointer"}} />
-              <span style={{fontWeight:700,fontSize:".82rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".06em"}}>Enable Daily Reports</span>
+            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+              <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} style={{ width: "18px", height: "18px", accentColor: "#f26522", cursor: "pointer" }} />
+              <span style={{ fontWeight: 700, fontSize: ".82rem", color: "#4b4b4b", textTransform: "uppercase", letterSpacing: ".06em" }}>Enable Daily Reports</span>
             </label>
 
             {enabled && (
               <>
                 <div>
                   <label className="st-label">Report Time</label>
-                  <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="st-input" style={{maxWidth:"200px"}} />
+                  <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="st-input" style={{ maxWidth: "200px" }} />
                 </div>
                 <div>
                   <label className="st-label">WhatsApp Group ID</label>
                   <input type="text" value={groupId} onChange={(e) => setGroupId(e.target.value)} placeholder="Enter group ID" className="st-input" />
                 </div>
                 {lastRun && (
-                  <div style={{background:"#f5f5f5",border:"2px solid #e8e8e8",padding:"10px 14px"}}>
-                    <p style={{fontSize:".78rem",color:"#8b8b8b",margin:0,fontWeight:600}}>Last report sent: {lastRun}</p>
+                  <div style={{ background: "#f5f5f5", border: "2px solid #e8e8e8", padding: "10px 14px" }}>
+                    <p style={{ fontSize: ".78rem", color: "#8b8b8b", margin: 0, fontWeight: 600 }}>Last report sent: {lastRun}</p>
                   </div>
                 )}
               </>
             )}
 
-            <div style={{display:"flex",flexWrap:"wrap",gap:"10px"}}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
               <button className="st-btn st-btn-primary" onClick={handleSave} disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Settings"}
               </button>
@@ -1220,7 +1217,7 @@ console.log("userEmail:", userEmail);
           </div>
         </div>
 
-                {/* Manual Report Trigger */}
+        {/* Manual Report Trigger */}
         <div className="st-card">
           <div className="st-card-header">
             <div className="st-card-icon">
@@ -1230,14 +1227,14 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Manual Report Trigger</h2>
           </div>
-          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-            <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0,lineHeight:1.6}}>
+          <div className="st-card-body" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            <p style={{ fontSize: ".82rem", color: "#8b8b8b", margin: 0, lineHeight: 1.6 }}>
               Send a daily contact report for a specific date. Useful for generating historical reports or resending reports for specific dates.
             </p>
             <div>
               <label className="st-label">Select Date</label>
-              <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} max={new Date().toISOString().split("T")[0]} className="st-input" style={{maxWidth:"240px"}} />
-              <p style={{fontSize:".7rem",color:"#8b8b8b",marginTop:"6px"}}>Select a date to generate and send the contact report for that specific day.</p>
+              <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} max={new Date().toISOString().split("T")[0]} className="st-input" style={{ maxWidth: "240px" }} />
+              <p style={{ fontSize: ".7rem", color: "#8b8b8b", marginTop: "6px" }}>Select a date to generate and send the contact report for that specific day.</p>
             </div>
             <div>
               <button className="st-btn st-btn-primary" onClick={handleTriggerManualReport} disabled={isTriggeringManualReport || !selectedDate || !companyId}>
@@ -1250,7 +1247,7 @@ console.log("userEmail:", userEmail);
           </div>
         </div>
 
-                {/* Weekly Report Trigger */}
+        {/* Weekly Report Trigger */}
         <div className="st-card">
           <div className="st-card-header">
             <div className="st-card-icon">
@@ -1260,8 +1257,8 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Weekly Report Trigger</h2>
           </div>
-          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
-            <p style={{fontSize:".82rem",color:"#8b8b8b",margin:0,lineHeight:1.6}}>
+          <div className="st-card-body" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            <p style={{ fontSize: ".82rem", color: "#8b8b8b", margin: 0, lineHeight: 1.6 }}>
               Send a 7-day performance summary report to your WhatsApp group. Includes total leads, daily average, engagement rate, qualified and hot leads, and AI-generated insights.
             </p>
             <div>
@@ -1275,7 +1272,7 @@ console.log("userEmail:", userEmail);
           </div>
         </div>
 
-                {/* Auto-Reply Settings */}
+        {/* Auto-Reply Settings */}
         <div className="st-card">
           <div className="st-card-header">
             <div className="st-card-icon">
@@ -1285,18 +1282,18 @@ console.log("userEmail:", userEmail);
             </div>
             <h2 className="st-section-title">Auto-Reply Settings</h2>
           </div>
-          <div className="st-card-body" style={{display:"flex",flexDirection:"column",gap:"14px"}}>
+          <div className="st-card-body" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {error && (
               <div className="st-info-box st-info-box-error">
-                <p style={{fontSize:".8rem",color:"#8b0000",margin:0}}>{error}</p>
+                <p style={{ fontSize: ".8rem", color: "#8b0000", margin: 0 }}>{error}</p>
               </div>
             )}
             <div>
-              <label style={{display:"flex",alignItems:"flex-start",gap:"10px",cursor:"pointer"}}>
-                <input type="checkbox" checked={autoReplyEnabled} onChange={(e) => setAutoReplyEnabled(e.target.checked)} style={{width:"18px",height:"18px",accentColor:"#f26522",cursor:"pointer",marginTop:"2px",flexShrink:0}} />
+              <label style={{ display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }}>
+                <input type="checkbox" checked={autoReplyEnabled} onChange={(e) => setAutoReplyEnabled(e.target.checked)} style={{ width: "18px", height: "18px", accentColor: "#f26522", cursor: "pointer", marginTop: "2px", flexShrink: 0 }} />
                 <div>
-                  <span style={{fontWeight:700,fontSize:".82rem",color:"#4b4b4b",textTransform:"uppercase",letterSpacing:".06em",display:"block"}}>Enable Auto-Reply</span>
-                  <span style={{fontSize:".72rem",color:"#8b8b8b",display:"block",marginTop:"3px"}}>Automatically reply to messages that haven't been responded to within the specified time frame</span>
+                  <span style={{ fontWeight: 700, fontSize: ".82rem", color: "#4b4b4b", textTransform: "uppercase", letterSpacing: ".06em", display: "block" }}>Enable Auto-Reply</span>
+                  <span style={{ fontSize: ".72rem", color: "#8b8b8b", display: "block", marginTop: "3px" }}>Automatically reply to messages that haven't been responded to within the specified time frame</span>
                 </div>
               </label>
             </div>
@@ -1304,11 +1301,11 @@ console.log("userEmail:", userEmail);
             {autoReplyEnabled && (
               <div>
                 <label className="st-label">Auto-Reply Threshold (Hours)</label>
-                <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
-                  <input type="number" min="1" max="168" value={autoReplyHours} onChange={(e) => setAutoReplyHours(e.target.value)} className="st-input" style={{maxWidth:"100px"}} />
-                  <span style={{fontSize:".82rem",color:"#8b8b8b",fontWeight:600}}>hours prior to reconnection</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <input type="number" min="1" max="168" value={autoReplyHours} onChange={(e) => setAutoReplyHours(e.target.value)} className="st-input" style={{ maxWidth: "100px" }} />
+                  <span style={{ fontSize: ".82rem", color: "#8b8b8b", fontWeight: 600 }}>hours prior to reconnection</span>
                 </div>
-                <p style={{fontSize:".7rem",color:"#8b8b8b",marginTop:"6px"}}>Messages older than this threshold will NOT be auto-replied to.</p>
+                <p style={{ fontSize: ".7rem", color: "#8b8b8b", marginTop: "6px" }}>Messages older than this threshold will NOT be auto-replied to.</p>
               </div>
             )}
 
@@ -1321,67 +1318,67 @@ console.log("userEmail:", userEmail);
         </div>
       </div>
 
-        {/* Disconnect Confirmation Modal */}
-        <Dialog open={showDisconnectModal} onClose={() => setShowDisconnectModal(false)}>
-          <div className="st-modal-overlay" />
-          <div className="st-modal-wrap">
-            <Dialog.Panel className="st-modal">
-              <div className="st-modal-header">
-                <div style={{width:"32px",height:"32px",background:"rgba(255,255,255,.2)",border:"1px solid rgba(255,255,255,.4)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+      {/* Disconnect Confirmation Modal */}
+      <Dialog open={showDisconnectModal} onClose={() => setShowDisconnectModal(false)}>
+        <div className="st-modal-overlay" />
+        <div className="st-modal-wrap">
+          <Dialog.Panel className="st-modal">
+            <div className="st-modal-header">
+              <div style={{ width: "32px", height: "32px", background: "rgba(255,255,255,.2)", border: "1px solid rgba(255,255,255,.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <h3 style={{ fontWeight: 800, fontSize: ".9rem", color: "#fff", textTransform: "uppercase", letterSpacing: ".06em", margin: 0 }}>Disconnect Bot</h3>
+            </div>
+
+            <div className="st-modal-body">
+              <div style={{ textAlign: "center", padding: "8px 0" }}>
+                <div style={{ width: "52px", height: "52px", background: "#fff0f0", border: "2px solid #8b0000", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                  <svg className="w-6 h-6" style={{ color: "#8b0000" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
                   </svg>
                 </div>
-                <h3 style={{fontWeight:800,fontSize:".9rem",color:"#fff",textTransform:"uppercase",letterSpacing:".06em",margin:0}}>Disconnect Bot</h3>
+                <h4 style={{ fontWeight: 800, fontSize: "1rem", color: "#4b4b4b", margin: "0 0 10px" }}>Are you absolutely sure?</h4>
+                <p style={{ fontSize: ".82rem", color: "#8b8b8b", lineHeight: 1.6, margin: "0 0 14px" }}>
+                  {disconnectPhoneIndex !== undefined
+                    ? `You're about to disconnect Phone ${disconnectPhoneIndex + 1} of ${disconnectBotName}.`
+                    : `You're about to disconnect all phones of ${disconnectBotName}.`}
+                </p>
+                <div className="st-info-box st-info-box-warn" style={{ textAlign: "left" }}>
+                  <svg className="w-4 h-4 flex-shrink-0" style={{ color: "#f26522", marginTop: "1px" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p style={{ fontSize: ".75rem", color: "#4b4b4b", lineHeight: 1.5, margin: 0 }}>
+                    <strong>Warning:</strong> This action cannot be undone. You'll need to reconnect by scanning the QR code again.
+                  </p>
+                </div>
               </div>
+            </div>
 
-              <div className="st-modal-body">
-                <div style={{textAlign:"center",padding:"8px 0"}}>
-                  <div style={{width:"52px",height:"52px",background:"#fff0f0",border:"2px solid #8b0000",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px"}}>
-                    <svg className="w-6 h-6" style={{color:"#8b0000"}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="st-modal-footer">
+              <button className="st-btn" onClick={() => setShowDisconnectModal(false)} disabled={isDisconnecting}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Cancel
+              </button>
+              <button className="st-btn st-btn-danger" onClick={confirmDisconnect} disabled={isDisconnecting}>
+                {isDisconnecting ? (
+                  <>{disconnectPhoneIndex !== undefined ? "Disconnecting..." : "Disconnecting All..."}</>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
                     </svg>
-                  </div>
-                  <h4 style={{fontWeight:800,fontSize:"1rem",color:"#4b4b4b",margin:"0 0 10px"}}>Are you absolutely sure?</h4>
-                  <p style={{fontSize:".82rem",color:"#8b8b8b",lineHeight:1.6,margin:"0 0 14px"}}>
-                    {disconnectPhoneIndex !== undefined
-                      ? `You're about to disconnect Phone ${disconnectPhoneIndex + 1} of ${disconnectBotName}.`
-                      : `You're about to disconnect all phones of ${disconnectBotName}.`}
-                  </p>
-                  <div className="st-info-box st-info-box-warn" style={{textAlign:"left"}}>
-                    <svg className="w-4 h-4 flex-shrink-0" style={{color:"#f26522",marginTop:"1px"}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p style={{fontSize:".75rem",color:"#4b4b4b",lineHeight:1.5,margin:0}}>
-                      <strong>Warning:</strong> This action cannot be undone. You'll need to reconnect by scanning the QR code again.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="st-modal-footer">
-                <button className="st-btn" onClick={() => setShowDisconnectModal(false)} disabled={isDisconnecting}>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Cancel
-                </button>
-                <button className="st-btn st-btn-danger" onClick={confirmDisconnect} disabled={isDisconnecting}>
-                  {isDisconnecting ? (
-                    <>{disconnectPhoneIndex !== undefined ? "Disconnecting..." : "Disconnecting All..."}</>
-                  ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728" />
-                      </svg>
-                      {disconnectPhoneIndex !== undefined ? "Yes, Disconnect" : "Yes, Disconnect All"}
-                    </>
-                  )}
-                </button>
-              </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
+                    {disconnectPhoneIndex !== undefined ? "Yes, Disconnect" : "Yes, Disconnect All"}
+                  </>
+                )}
+              </button>
+            </div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </div>
   );
 }
