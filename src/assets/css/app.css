@@ -47,40 +47,48 @@
 @layer components {
   html {
     scrollbar-width: thin;
-    scrollbar-color: #CBD5E0 #F1F5F9;
+    scrollbar-color: #d4d4d4 #f7f7f7;
   }
 
   html::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
   }
 
   html::-webkit-scrollbar-track {
-    background: #F1F5F9;
+    background: #f7f7f7;
   }
 
   html::-webkit-scrollbar-thumb {
-    background-color: #CBD5E0;
-    border-radius: 20px;
-    border: 3px solid #F1F5F9;
+    background-color: #d4d4d4;
+    border-radius: 999px;
+    border: 2px solid #f7f7f7;
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    background-color: #b4b4b4;
   }
 
   html.dark {
-    scrollbar-color: #4B5563 #1F2937;
+    scrollbar-color: #3a3a42 #16161c;
   }
 
   html.dark::-webkit-scrollbar-track {
-    background: #1F2937;
+    background: #16161c;
   }
 
   html.dark::-webkit-scrollbar-thumb {
-    background-color: #4B5563;
-    border: 3px solid #1F2937;
+    background-color: #3a3a42;
+    border: 2px solid #16161c;
+  }
+
+  html.dark::-webkit-scrollbar-thumb:hover {
+    background-color: #4a4a52;
   }
 
   /* Keep the existing .dark-scrollbar styles for other elements */
   .dark-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #4B5563 #1F2937;
+    scrollbar-color: #3a3a42 #16161c;
   }
 
   .dark-scrollbar::-webkit-scrollbar {
@@ -89,13 +97,13 @@
   }
 
   .dark-scrollbar::-webkit-scrollbar-track {
-    background: #1F2937;
+    background: #16161c;
   }
 
   .dark-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #4B5563;
-    border-radius: 20px;
-    border: 2px solid #1F2937;
+    background-color: #3a3a42;
+    border-radius: 999px;
+    border: 2px solid #16161c;
   }
 }/* Instead of: */
 .tooltip {

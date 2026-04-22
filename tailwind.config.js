@@ -40,9 +40,39 @@ export default {
           800: "rgb(var(--color-darkmode-800) / <alpha-value>)",
           900: "rgb(var(--color-darkmode-900) / <alpha-value>)",
         },
+        background: "rgb(var(--background) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        card: "rgb(var(--card) / <alpha-value>)",
+        "card-foreground": "rgb(var(--card-foreground) / <alpha-value>)",
+        popover: "rgb(var(--popover) / <alpha-value>)",
+        "popover-foreground": "rgb(var(--popover-foreground) / <alpha-value>)",
+        "primary-foreground": "rgb(var(--primary-foreground) / <alpha-value>)",
+        "secondary-foreground": "rgb(var(--secondary-foreground) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        "accent-foreground": "rgb(var(--accent-foreground) / <alpha-value>)",
+        destructive: "rgb(var(--destructive) / <alpha-value>)",
+        "destructive-foreground": "rgb(var(--destructive-foreground) / <alpha-value>)",
+        border: "rgb(var(--border) / <alpha-value>)",
+        input: "rgb(var(--input) / <alpha-value>)",
+        ring: "rgb(var(--ring) / <alpha-value>)",
         'custom-gray': '#E4E4E4',
         'adletic-orange': '#f26522',
         'adletic-white': '#FFFFFF',
+      },
+      borderRadius: {
+        xs: "calc(var(--radius) * 0.4)",
+        sm: "calc(var(--radius) * 0.6)",
+        md: "calc(var(--radius) * 0.8)",
+        lg: "var(--radius)",
+        xl: "calc(var(--radius) * 1.4)",
+        "2xl": "calc(var(--radius) * 1.8)",
+      },
+      boxShadow: {
+        'elevation-1': "0 1px 2px 0 rgb(0 0 0 / 0.04)",
+        'elevation-2': "0 2px 4px 0 rgb(0 0 0 / 0.06), 0 1px 2px 0 rgb(0 0 0 / 0.04)",
+        'elevation-3': "0 8px 24px -4px rgb(0 0 0 / 0.08), 0 4px 8px -2px rgb(0 0 0 / 0.04)",
       },
       fontFamily: {
         roboto: ["Roboto"],
@@ -78,8 +108,9 @@ export default {
     forms,
     plugin(function ({ addBase, matchUtilities }) {
       addBase({
-        // Default colors - Adletic Theme
+        // Default colors - Adletic Theme (aligned with motionboards token system)
         ":root": {
+          // Legacy tokens (kept for backwards compatibility)
           "--color-theme-1": "255 255 255", // White
           "--color-theme-2": "242 101 34", // Orange #f26522
           "--color-primary": "255 255 255", // White
@@ -91,20 +122,61 @@ export default {
           "--color-danger": toRGB(colors.red["600"]),
           "--color-light": toRGB(colors.gray["100"]),
           "--color-dark": "75 75 75", // #4b4b4b
+
+          // Modern shadcn-style tokens (motionboards parity)
+          "--background": "255 255 255",        // white
+          "--foreground": "37 37 37",           // oklch(0.145) ~ near-black
+          "--card": "255 255 255",
+          "--card-foreground": "37 37 37",
+          "--popover": "255 255 255",
+          "--popover-foreground": "37 37 37",
+          "--primary-foreground": "255 255 255", // white on orange
+          "--secondary-foreground": "37 37 37",
+          "--muted": "247 247 247",             // oklch(0.97) ~ light gray
+          "--muted-foreground": "142 142 142",  // oklch(0.556) ~ medium gray
+          "--accent": "247 247 247",
+          "--accent-foreground": "37 37 37",
+          "--destructive": "220 53 53",         // oklch(0.577 0.245 27.325) ~ red
+          "--destructive-foreground": "255 255 255",
+          "--border": "235 235 235",            // oklch(0.922) ~ very light gray
+          "--input": "235 235 235",
+          "--ring": "180 180 180",              // oklch(0.708) ~ medium-dark gray
+          "--radius": "0.625rem",
         },
         // Default dark-mode colors
         ".dark": {
           "--color-primary": "242 101 34", // Orange #f26522
-          "--color-darkmode-50": "87 103 132",
-          "--color-darkmode-100": "74 90 121",
-          "--color-darkmode-200": "65 81 114",
-          "--color-darkmode-300": "53 69 103",
-          "--color-darkmode-400": "48 61 93",
-          "--color-darkmode-500": "41 53 82",
-          "--color-darkmode-600": "40 51 78",
-          "--color-darkmode-700": "35 45 69",
-          "--color-darkmode-800": "27 37 59",
-          "--color-darkmode-900": "15 23 42",
+
+          // Modernised dark neutrals (oklch-inspired, warmer than the old slate palette)
+          "--color-darkmode-50":  "140 140 148",
+          "--color-darkmode-100": "120 120 128",
+          "--color-darkmode-200": "100 100 108",
+          "--color-darkmode-300": "82 82 90",
+          "--color-darkmode-400": "68 68 76",
+          "--color-darkmode-500": "54 54 62",
+          "--color-darkmode-600": "46 46 54",
+          "--color-darkmode-700": "38 38 46",
+          "--color-darkmode-800": "30 30 38",
+          "--color-darkmode-900": "22 22 28",
+
+          // Modern shadcn-style tokens (dark variant)
+          "--background": "22 22 28",           // oklch(0.13 0.005 270) ~ warm dark
+          "--foreground": "251 251 251",         // oklch(0.985) ~ near-white
+          "--card": "30 30 38",                  // oklch(0.18 0.008 270)
+          "--card-foreground": "251 251 251",
+          "--popover": "30 30 38",
+          "--popover-foreground": "251 251 251",
+          "--primary-foreground": "255 255 255", // white on orange
+          "--secondary-foreground": "251 251 251",
+          "--muted": "38 38 46",
+          "--muted-foreground": "163 163 168",
+          "--accent": "38 38 46",
+          "--accent-foreground": "251 251 251",
+          "--destructive": "238 106 89",         // oklch(0.704 0.191 22.216) ~ lighter red
+          "--destructive-foreground": "255 255 255",
+          "--border": "255 255 255",             // used at opacity — same value, alpha applied via class
+          "--input": "255 255 255",
+          "--ring": "242 101 34",                // orange accent for focus rings in dark
         },
         // Theme 1 colors
         ".theme-1": {
