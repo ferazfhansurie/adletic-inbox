@@ -62,15 +62,14 @@ const Button: ButtonComponent = forwardRef(
   ) => {
     const Component = as || "button";
 
-    // General Styles
+    // General Styles — motion-clean: subtle, rounded-lg, no default shadow, 3-ring focus
     const generalStyles = [
-      "transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer", // Default
-      "focus:ring-4 focus:ring-primary focus:ring-opacity-20", // On focus
-      "focus-visible:outline-none", // On focus visible
-      "dark:focus:ring-slate-700 dark:focus:ring-opacity-50", // Dark mode
+      "transition-colors duration-150 border inline-flex items-center justify-center py-2 px-3 rounded-lg text-sm font-medium cursor-pointer", // Default
+      "focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/40", // On focus
       "[&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90", // On hover and not disabled
       "[&:not(button)]:text-center", // Not a button element
-      "disabled:opacity-70 disabled:cursor-not-allowed", // Disabled
+      "disabled:opacity-60 disabled:cursor-not-allowed", // Disabled
+      "active:translate-y-px", // Playful press feedback
     ];
 
     // Sizes
