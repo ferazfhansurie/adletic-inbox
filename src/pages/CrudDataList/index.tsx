@@ -6374,7 +6374,7 @@ function Main() {
 
                 {/* Enhanced Quick Stats Cards */}
                 <div className="hidden lg:flex items-center space-x-6">
-                  <div className="group relative bg-[#ffffff] border-2 border-[#10b981] neo-shadow-green px-5 py-3 transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0px_#10b981]">
+                  <div className="group relative bg-[#ffffff] border-2 border-[#10b981] neo-shadow-green px-5 py-3 transition-transform duration-300 transform-gpu hover:shadow-[6px_6px_0px_#10b981]">
                     <div className="relative flex items-center space-x-2">
                       <div className="p-1.5 bg-[#10b981] text-white">
                         <Lucide
@@ -6387,7 +6387,7 @@ function Main() {
                       </span>
                     </div>
                   </div>
-                  <div className="group relative bg-[#ffffff] border-2 border-[#3b82f6] neo-shadow-blue px-5 py-3 transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0px_#3b82f6]">
+                  <div className="group relative bg-[#ffffff] border-2 border-[#3b82f6] neo-shadow-blue px-5 py-3 transition-transform duration-300 transform-gpu hover:shadow-[6px_6px_0px_#3b82f6]">
                     <div className="relative flex items-center space-x-2">
                       <div className="p-1.5 bg-[#3b82f6] text-white">
                         <Lucide
@@ -6461,7 +6461,7 @@ function Main() {
         {/* Main Content Area with Neo-Brutalist Effect */}
         <div className="max-w-[96rem] mx-auto px-6 py-8">
           {/* Search & Filter Bar with Modern Neo-Brutalist Effect */}
-          <div className="relative bg-[#ffffff] border-2 border-[#4b4b4b] neo-shadow p-8 mb-8">
+          <div className="relative bg-[#ffffff] border border-border neo-shadow p-8 mb-8">
             <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0 lg:space-x-8">
               {/* Enhanced Search Input */}
               <div className="flex-1 max-w-md">
@@ -6482,7 +6482,7 @@ function Main() {
               {/* Enhanced Filter Controls */}
               <div className="flex flex-wrap items-center gap-4">
                 {/* Modern Bulk Selection */}
-                <div className="flex items-center space-x-2 bg-[#ffffff] border-2 border-[#4b4b4b] p-1 neo-shadow">
+                <div className="flex items-center space-x-2 bg-[#ffffff] border border-border p-1 neo-shadow">
                   <button
                     className="flex items-center space-x-2 neo-btn-secondary px-3 py-2 text-xs"
                     onClick={handleSelectAll}
@@ -6672,7 +6672,7 @@ function Main() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Main Content with Neo-Brutalist Effect */}
             <div className="lg:flex-1 min-w-0">
-              <div className="relative bg-[#ffffff] border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+              <div className="relative bg-[#ffffff] border border-border neo-shadow overflow-hidden">
                 {/* Enhanced Table Header */}
                 <div className="relative px-8 py-6 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center justify-between">
@@ -6723,7 +6723,7 @@ function Main() {
                     </div>
                   ) : (
                     <table className="w-full text-left border-collapse">
-                      <thead className="bg-[#4b4b4b] text-white border-b-4 border-[#f26522] font-black uppercase text-sm tracking-widest">
+                      <thead className="bg-[#4b4b4b] text-white border-b-4 border-[#f26522] font-semibold text-sm tracking-widest">
                         <tr>
                           <th className="px-6 py-4 text-left w-16">
                             <input
@@ -6864,7 +6864,7 @@ function Main() {
                                 <div className="relative">
                                   <input
                                     type="checkbox"
-                                    className="w-5 h-5 border-2 border-[#4b4b4b] bg-white appearance-none checked:bg-[#f26522] checked:border-[#f26522] cursor-pointer transition-colors relative
+                                    className="w-5 h-5 border border-border bg-white appearance-none checked:bg-[#f26522] checked:border-[#f26522] cursor-pointer transition-colors relative
                                                before:content-[''] before:absolute before:top-[1px] before:left-[5px] before:w-[6px] before:h-[10px] before:border-r-2 before:border-b-2 before:border-white before:rotate-45 before:opacity-0 checked:before:opacity-100"
                                     checked={isSelected}
                                     onChange={() =>
@@ -6877,7 +6877,7 @@ function Main() {
                                 <div className="flex items-center group/contact">
                                   <div className="flex-shrink-0 h-10 w-10 relative">
                                     {contact.profileUrl ? (
-                                      <div className="h-10 w-10 overflow-hidden border-2 border-[#4b4b4b] neo-shadow group-hover/contact:shadow-[4px_4px_0_#f26522] transition-shadow duration-300">
+                                      <div className="h-10 w-10 overflow-hidden border border-border neo-shadow group-hover/contact: transition-shadow duration-300">
                                         <img
                                           src={contact.profileUrl}
                                           alt={
@@ -6902,7 +6902,7 @@ function Main() {
                                         </div>
                                       </div>
                                     ) : (
-                                      <div className="h-10 w-10 border-2 border-[#4b4b4b] bg-white neo-shadow group-hover/contact:shadow-[4px_4px_0_#f26522] transition-shadow flex items-center justify-center text-[#4b4b4b] font-black text-sm uppercase">
+                                      <div className="h-10 w-10 border border-border bg-white neo-shadow group-hover/contact: transition-shadow flex items-center justify-center text-[#4b4b4b] font-black text-sm uppercase">
                                         {contact.contactName
                                           ? contact.contactName.charAt(0)
                                           : contact.firstName?.charAt(0) || "U"}
@@ -6945,7 +6945,7 @@ function Main() {
                                       .map((tag, tagIndex) => (
                                         <span
                                           key={tagIndex}
-                                          className={`group/tag relative inline-flex items-center px-2 py-1 border-2 text-[10px] font-black uppercase transition-all shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#4b4b4b] ${employeeNames.some(
+                                          className={`group/tag relative inline-flex items-center px-2 py-1 border-2 text-[10px] font-semibold transition-all hover:-translate-y-0.5 hover: ${employeeNames.some(
                                             (name) => name.toLowerCase() === tag.toLowerCase()
                                           )
                                             ? "bg-[#10b981] text-white border-[#4b4b4b]"
@@ -6974,7 +6974,7 @@ function Main() {
                                   {contact.tags && contact.tags.length > 2 && (
                                     <div className="relative">
                                       <span
-                                        className="inline-flex items-center px-2 py-1 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[10px] font-black uppercase text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 cursor-pointer"
+                                        className="inline-flex items-center px-2 py-1 border border-border bg-[#e8e8e8] text-[10px] font-semibold text-[#4b4b4b] hover:-translate-y-0.5 cursor-pointer"
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           setHoveredContactTags(
@@ -7039,7 +7039,7 @@ function Main() {
                               <td className="px-6 py-4 whitespace-nowrap text-right">
                                 <div className="flex items-center justify-end space-x-2">
                                   <button
-                                    className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] hover:bg-[#e8e8e8] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                                    className="p-2 border border-border bg-white text-[#4b4b4b] hover:bg-[#e8e8e8] hover:-translate-y-0.5 hover: transition-all"
                                     onClick={() => {
                                       setCurrentContact(contact);
                                       setViewContactModal(true);
@@ -7084,7 +7084,7 @@ function Main() {
                       <div className="p-3 bg-[#4b4b4b] text-white neo-shadow-orange">
                         <Lucide icon="Database" className="w-5 h-5" />
                       </div>
-                      <div className="bg-white border-2 border-[#4b4b4b] px-6 py-3 shadow-[4px_4px_0_#4b4b4b]">
+                      <div className="bg-white border border-border px-6 py-3">
                         <span className="text-sm font-black text-[#4b4b4b] uppercase tracking-wide">
                           Showing{" "}
                           <span className="text-[#f26522] font-black">
@@ -7109,12 +7109,12 @@ function Main() {
                     <div className="flex items-center space-x-3">
                       <ReactPaginate
                         breakLabel={
-                          <div className="px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase border-2 border-[#4b4b4b] bg-white shadow-[2px_2px_0_#4b4b4b]">
+                          <div className="px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase border border-border bg-white">
                             ...
                           </div>
                         }
                         nextLabel={
-                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 cursor-pointer">
+                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border border-border hover:-translate-y-1 hover: transition-all duration-300 cursor-pointer">
                             <span>Next</span>
                             <Lucide icon="ChevronRight" className="w-4 h-4" />
                           </div>
@@ -7123,7 +7123,7 @@ function Main() {
                         pageRangeDisplayed={5}
                         pageCount={pageCount}
                         previousLabel={
-                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 cursor-pointer">
+                          <div className="group flex items-center space-x-2 px-5 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border border-border hover:-translate-y-1 hover: transition-all duration-300 cursor-pointer">
                             <Lucide icon="ChevronLeft" className="w-4 h-4" />
                             <span>Prev</span>
                           </div>
@@ -7131,9 +7131,9 @@ function Main() {
                         renderOnZeroPageCount={null}
                         className="flex items-center space-x-2"
                         pageClassName=""
-                        pageLinkClassName="relative group inline-flex items-center justify-center min-w-[44px] h-11 px-4 py-3 text-sm font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] transition-all duration-300 hover:-translate-y-1 hover:shadow-[4px_4px_0_#4b4b4b]"
+                        pageLinkClassName="relative group inline-flex items-center justify-center min-w-[44px] h-11 px-4 py-3 text-sm font-black text-[#4b4b4b] bg-white border border-border transition-all duration-300 hover:-translate-y-1 hover:"
                         activeClassName=""
-                        activeLinkClassName="!bg-[#f26522] !text-white !shadow-[4px_4px_0_#4b4b4b]"
+                        activeLinkClassName="!bg-[#f26522] !text-white !"
                         previousClassName="inline-flex"
                         nextClassName="inline-flex"
                         previousLinkClassName=""
@@ -7149,7 +7149,7 @@ function Main() {
             {/* Sidebar - Scheduled Messages, Quick Actions & Statistics (30% width) */}
             <div className="lg:w-80 lg:flex-shrink-0 space-y-8">
               {/* Scheduled Messages Panel */}
-              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+              <div className="bg-white border border-border neo-shadow overflow-hidden">
                 <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -7170,7 +7170,7 @@ function Main() {
                         messageTypeFilter ||
                         messageRecipientFilter) && (
                           <div className="relative ml-2">
-                            <span className="inline-flex items-center px-2 py-1 border-2 border-blue-500 bg-blue-100 text-blue-700 text-[10px] font-black uppercase shadow-[2px_2px_0_#3b82f6]">
+                            <span className="inline-flex items-center px-2 py-1 border-2 border-blue-500 bg-blue-100 text-blue-700 text-[10px] font-semibold shadow-[2px_2px_0_#3b82f6]">
                               Filtered
                             </span>
                           </div>
@@ -7178,7 +7178,7 @@ function Main() {
                     </div>
                     <div className="flex items-center">
                       <button
-                        className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                        className="p-2 border border-border bg-white text-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                         onClick={() => setScheduledMessagesModal(true)}
                       >
                         <Lucide icon="ExternalLink" className="w-4 h-4" />
@@ -7203,12 +7203,12 @@ function Main() {
                         .map((message, index) => (
                           <div
                             key={message.id || index}
-                            className="group relative p-4 border-2 border-[#4b4b4b] bg-white transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b]"
+                            className="group relative p-4 border border-border bg-white transition-all duration-300 cursor-pointer hover:"
                           >
                             <div className="relative flex items-start justify-between">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-start space-x-3 mb-3">
-                                  <div className="p-2 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[#4b4b4b]">
+                                  <div className="p-2 border border-border bg-[#e8e8e8] text-[#4b4b4b]">
                                     <Lucide icon="MessageSquare" className="w-4 h-4" />
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -7366,7 +7366,7 @@ function Main() {
               </div>
 
               {/* Quick Actions Panel */}
-              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+              <div className="bg-white border border-border neo-shadow overflow-hidden">
                 <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center space-x-3">
                     <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
@@ -7387,18 +7387,18 @@ function Main() {
                   {/* Assign User to Selected Contacts */}
                   <div className="w-full">
                     <button
-                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
+                      className="w-full flex items-center justify-between p-4 bg-white border border-border text-[#4b4b4b] hover: transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={
                         selectedContacts.length === 0 || userRole === "3"
                       }
                       onClick={() => setShowAssignUserMenu(!showAssignUserMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                           <Lucide icon="User" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-black uppercase">
+                          <div className="text-sm font-semibold">
                             Assign User
                           </div>
                           <div className="text-xs font-bold text-[#f26522]">
@@ -7413,7 +7413,7 @@ function Main() {
                     </button>
 
                     {showAssignUserMenu && (
-                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3 overflow-y-auto max-h-96">
+                      <div className="mt-4 bg-white border border-border neo-shadow p-4 space-y-3 overflow-y-auto max-h-96">
                         <div className="mb-3">
                           <div className="relative">
                             <Lucide
@@ -7437,7 +7437,7 @@ function Main() {
                           if (stableEmployeeList.length === 0) {
                             return (
                               <div className="p-6 text-center">
-                                <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-[#4b4b4b] flex items-center justify-center neo-shadow">
+                                <div className="w-16 h-16 mx-auto mb-4 bg-white border border-border flex items-center justify-center neo-shadow">
                                   <Lucide icon="Users" className="w-8 h-8 text-[#4b4b4b]" />
                                 </div>
                                 <p className="text-sm font-black text-[#4b4b4b] uppercase">
@@ -7466,7 +7466,7 @@ function Main() {
                           return filteredEmployees.map((employee) => (
                             <button
                               key={employee.id}
-                              className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                              className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                               onClick={() => {
                                 if (userRole !== "3") {
                                   selectedContacts.forEach((contact) => {
@@ -7488,7 +7488,7 @@ function Main() {
                                 }
                               }}
                             >
-                              <div className="p-2 bg-white border-2 border-[#4b4b4b] mr-3">
+                              <div className="p-2 bg-white border border-border mr-3">
                                 <Lucide icon="User" className="h-4 w-4 text-[#4b4b4b]" />
                               </div>
                               <span className="truncate">{employee.name}</span>
@@ -7502,18 +7502,18 @@ function Main() {
                   {/* Add Tags to Selected Contacts */}
                   <div className="w-full">
                     <button
-                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
+                      className="w-full flex items-center justify-between p-4 bg-white border border-border text-[#4b4b4b] hover: transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={
                         selectedContacts.length === 0 || userRole === "3"
                       }
                       onClick={() => setShowAddTagMenu(!showAddTagMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                           <Lucide icon="Tag" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-black uppercase">
+                          <div className="text-sm font-semibold">
                             Add Tags
                           </div>
                           <div className="text-xs font-bold text-[#10b981]">
@@ -7710,12 +7710,12 @@ function Main() {
                   {/* Database Operations */}
                   <div className="w-full">
                     <button
-                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
+                      className="w-full flex items-center justify-between p-4 bg-white border border-border text-[#4b4b4b] hover: transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       disabled={isSyncing || userRole === "3"}
                       onClick={() => setShowSyncMenu(!showSyncMenu)}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 border-2 border-[#4b4b4b] bg-[#e8e8e8] text-[#4b4b4b]">
+                        <div className="p-2 border border-border bg-[#e8e8e8] text-[#4b4b4b]">
                           <Lucide
                             icon={isSyncing ? "Loader2" : "RefreshCw"}
                             className={`w-4 h-4 ${isSyncing ? "animate-spin" : ""
@@ -7723,7 +7723,7 @@ function Main() {
                           />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-black uppercase text-[#4b4b4b]">
+                          <div className="text-sm font-semibold text-[#4b4b4b]">
                             {isSyncing ? "Syncing..." : "Sync Database"}
                           </div>
                           <div className="text-xs font-bold text-[#f26522]">
@@ -7738,30 +7738,30 @@ function Main() {
                     </button>
 
                     {showSyncMenu && (
-                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
+                      <div className="mt-4 bg-white border border-border neo-shadow p-4 space-y-3">
                         <button
-                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all disabled:opacity-50"
                           onClick={() => {
                             setShowSyncConfirmationModal(true);
                             setShowSyncMenu(false);
                           }}
                           disabled={isSyncing}
                         >
-                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                          <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                             <Lucide icon="MessageSquare" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
                           <span>{isSyncing ? "Syncing..." : "Sync Chats"}</span>
                         </button>
 
                         <button
-                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all disabled:opacity-50"
                           onClick={() => {
                             setShowSyncNamesConfirmationModal(true);
                             setShowSyncMenu(false);
                           }}
                           disabled={isSyncing}
                         >
-                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                          <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                             <Lucide icon="FolderSync" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
                           <span>{isSyncing ? "Syncing..." : "Sync Contact Names"}</span>
@@ -7774,15 +7774,15 @@ function Main() {
                   {userRole !== "2" && userRole !== "3" && userRole !== "5" && (
                     <div className="w-full">
                       <button
-                        className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                        className="w-full flex items-center justify-between p-4 bg-white border border-border text-[#4b4b4b] hover: transition-all duration-300"
                         onClick={() => setShowExportMenu(!showExportMenu)}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                          <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                             <Lucide icon="Download" className="w-4 h-4" />
                           </div>
                           <div className="text-left">
-                            <div className="text-sm font-black uppercase text-[#4b4b4b]">
+                            <div className="text-sm font-semibold text-[#4b4b4b]">
                               Export Contacts
                             </div>
                             <div className="text-xs font-bold text-[#10b981]">
@@ -7797,9 +7797,9 @@ function Main() {
                       </button>
 
                       {showExportMenu && (
-                        <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
+                        <div className="mt-4 bg-white border border-border neo-shadow p-4 space-y-3">
                           <button
-                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all disabled:opacity-50"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all disabled:opacity-50"
                             onClick={() => {
                               if (selectedContacts.length > 0) {
                                 exportContactsToCSV(selectedContacts);
@@ -7808,7 +7808,7 @@ function Main() {
                             }}
                             disabled={selectedContacts.length === 0}
                           >
-                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                               <Lucide icon="Users" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
                             <div className="text-left flex-1 flex justify-between items-center">
@@ -7818,13 +7818,13 @@ function Main() {
                           </button>
 
                           <button
-                            className="flex w-full items-center justify-between px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                            className="flex w-full items-center justify-between px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                             onClick={() => {
                               setShowTagSelection(!showTagSelection);
                             }}
                           >
                             <div className="flex items-center">
-                              <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                              <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                                 <Lucide icon="Tag" className="w-4 h-4 text-[#4b4b4b]" />
                               </div>
                               <span>Export by Tags</span>
@@ -7842,7 +7842,7 @@ function Main() {
                               </div>
                               {tagList.length === 0 ? (
                                 <div className="text-center py-4">
-                                  <div className="w-12 h-12 mx-auto mb-3 bg-white border-2 border-[#4b4b4b] flex items-center justify-center neo-shadow">
+                                  <div className="w-12 h-12 mx-auto mb-3 bg-white border border-border flex items-center justify-center neo-shadow">
                                     <Lucide icon="Tag" className="w-6 h-6 text-[#4b4b4b]" />
                                   </div>
                                   <p className="text-sm font-black text-[#4b4b4b] uppercase">
@@ -7868,7 +7868,7 @@ function Main() {
                                               : prev.filter((t) => t !== tag.name)
                                           );
                                         }}
-                                        className="w-4 h-4 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-[#f26522]"
+                                        className="w-4 h-4 border border-border text-[#f26522] focus:ring-[#f26522]"
                                       />
                                       <span className="text-sm font-bold text-[#4b4b4b]">
                                         {tag.name}
@@ -7889,7 +7889,7 @@ function Main() {
                                       setShowExportMenu(false);
                                       setExportSelectedTags([]);
                                     }}
-                                    className="w-full py-2 bg-[#f26522] text-white font-black uppercase border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#4b4b4b] transition-all"
+                                    className="w-full py-2 bg-[#f26522] text-white font-semibold border border-border hover:-translate-y-0.5 hover: transition-all"
                                   >
                                     Export Selected Tags
                                   </button>
@@ -7899,13 +7899,13 @@ function Main() {
                           )}
 
                           <button
-                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                             onClick={() => {
                               exportContactsToCSV(filteredContactsSearch);
                               setShowExportMenu(false);
                             }}
                           >
-                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                               <Lucide icon="Filter" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
                             <div className="text-left flex-1 flex justify-between items-center">
@@ -7915,13 +7915,13 @@ function Main() {
                           </button>
 
                           <button
-                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                            className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                             onClick={() => {
                               exportContactsToCSV(contacts);
                               setShowExportMenu(false);
                             }}
                           >
-                            <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                            <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                               <Lucide icon="Database" className="w-4 h-4 text-[#4b4b4b]" />
                             </div>
                             <div className="text-left flex-1 flex justify-between items-center">
@@ -7937,16 +7937,16 @@ function Main() {
                   {/* Manage Tags */}
                   <div className="w-full">
                     <button
-                      className="w-full flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
+                      className="w-full flex items-center justify-between p-4 bg-white border border-border text-[#4b4b4b] hover: transition-all duration-300 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-none"
                       onClick={() => setShowManageTagsMenu(!showManageTagsMenu)}
                       disabled={userRole === "3"}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                        <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                           <Lucide icon="Settings" className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <div className="text-sm font-black uppercase text-[#4b4b4b]">
+                          <div className="text-sm font-semibold text-[#4b4b4b]">
                             Manage Tags
                           </div>
                           <div className="text-xs font-bold text-[#f26522]">
@@ -7961,28 +7961,28 @@ function Main() {
                     </button>
 
                     {showManageTagsMenu && (
-                      <div className="mt-4 bg-white border-2 border-[#4b4b4b] neo-shadow p-4 space-y-3">
+                      <div className="mt-4 bg-white border border-border neo-shadow p-4 space-y-3">
                         <button
-                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#4b4b4b] uppercase bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                           onClick={() => {
                             setShowAddTagModal(true);
                             setShowManageTagsMenu(false);
                           }}
                         >
-                          <div className="p-2 bg-[#e8e8e8] border-2 border-[#4b4b4b] mr-3">
+                          <div className="p-2 bg-[#e8e8e8] border border-border mr-3">
                             <Lucide icon="Plus" className="w-4 h-4 text-[#4b4b4b]" />
                           </div>
                           <span>Add New Tag</span>
                         </button>
 
                         <button
-                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#f26522] uppercase bg-white border-2 border-transparent hover:border-[#f26522] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#f26522] transition-all"
+                          className="flex w-full items-center px-4 py-3 text-sm font-black text-[#f26522] uppercase bg-white border-2 border-transparent hover:border-[#f26522] hover:-translate-y-0.5 hover: transition-all"
                           onClick={() => {
                             setShowDeleteTagModal(true);
                             setShowManageTagsMenu(false);
                           }}
                         >
-                          <div className="p-2 bg-white border-2 border-[#f26522] mr-3">
+                          <div className="p-2 bg-white border border-adletic-orange/40 mr-3">
                             <Lucide icon="Trash2" className="w-4 h-4 text-[#f26522]" />
                           </div>
                           <span>Delete Tags</span>
@@ -7994,7 +7994,7 @@ function Main() {
               </div>
 
               {/* Statistics Panel */}
-              <div className="bg-white border-2 border-[#4b4b4b] neo-shadow overflow-hidden">
+              <div className="bg-white border border-border neo-shadow overflow-hidden">
                 <div className="relative px-6 py-4 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                   <div className="flex items-center space-x-3">
                     <div className="p-2.5 bg-[#4b4b4b] text-white neo-shadow-orange">
@@ -8012,12 +8012,12 @@ function Main() {
                 </div>
 
                 <div className="relative p-6 space-y-4 bg-white">
-                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
+                  <div className="flex items-center justify-between p-4 bg-white border border-border hover: transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                      <div className="p-2 border border-border bg-[#4b4b4b] text-white">
                         <Lucide icon="Users" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
+                      <span className="text-sm font-semibold text-[#4b4b4b]">
                         Total Contacts
                       </span>
                     </div>
@@ -8026,12 +8026,12 @@ function Main() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
+                  <div className="flex items-center justify-between p-4 bg-white border border-border hover: transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                      <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                         <Lucide icon="Filter" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
+                      <span className="text-sm font-semibold text-[#4b4b4b]">
                         Filtered Results
                       </span>
                     </div>
@@ -8040,12 +8040,12 @@ function Main() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
+                  <div className="flex items-center justify-between p-4 bg-white border border-border hover: transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                      <div className="p-2 border border-border bg-[#4b4b4b] text-white">
                         <Lucide icon="CheckSquare" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
+                      <span className="text-sm font-semibold text-[#4b4b4b]">
                         Selected
                       </span>
                     </div>
@@ -8054,12 +8054,12 @@ function Main() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between p-4 bg-white border-2 border-[#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 transition-all">
+                  <div className="flex items-center justify-between p-4 bg-white border border-border hover: transition-all">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                      <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                         <Lucide icon="Calendar" className="w-4 h-4" />
                       </div>
-                      <span className="text-sm font-black uppercase text-[#4b4b4b]">
+                      <span className="text-sm font-semibold text-[#4b4b4b]">
                         Scheduled Msgs
                       </span>
                     </div>
@@ -8079,11 +8079,11 @@ function Main() {
           onClose={() => setAddContactModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-2xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-2xl bg-white border border-border neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b] neo-shadow-orange">
                       <Lucide icon="UserPlus" className="w-6 h-6" />
                     </div>
                     <div>
@@ -8097,7 +8097,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setAddContactModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-5 h-5" />
                   </button>
@@ -8108,7 +8108,7 @@ function Main() {
                 {/* Personal Information Section */}
                 <div className="space-y-6">
                   <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
-                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#4b4b4b] text-white">
+                    <div className="p-1.5 border border-border bg-[#4b4b4b] text-white">
                       <Lucide icon="User" className="w-4 h-4" />
                     </div>
                     <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
@@ -8131,7 +8131,7 @@ function Main() {
                           })
                         }
                         placeholder="Enter contact name"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                       />
                     </div>
 
@@ -8149,7 +8149,7 @@ function Main() {
                           })
                         }
                         placeholder="Enter last name"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                       />
                     </div>
 
@@ -8167,7 +8167,7 @@ function Main() {
                           })
                         }
                         placeholder="e.g., +60123456789"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                       />
                     </div>
 
@@ -8185,7 +8185,7 @@ function Main() {
                           })
                         }
                         placeholder="Enter email address"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                       />
                     </div>
                   </div>
@@ -8194,7 +8194,7 @@ function Main() {
                 {/* Company Information Section */}
                 <div className="space-y-6">
                   <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
-                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                    <div className="p-1.5 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="Building2" className="w-4 h-4" />
                     </div>
                     <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
@@ -8217,7 +8217,7 @@ function Main() {
                           })
                         }
                         placeholder="Enter company name"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
                       />
                     </div>
 
@@ -8236,7 +8236,7 @@ function Main() {
                             })
                           }
                           placeholder="Enter branch"
-                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                          className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
                         />
                       </div>
                     )}
@@ -8255,7 +8255,7 @@ function Main() {
                           })
                         }
                         placeholder="Enter address"
-                        className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
+                        className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#10b981] transition-all rounded-none"
                       />
                     </div>
                   </div>
@@ -8265,7 +8265,7 @@ function Main() {
                 {companyId === "079" && (
                   <div className="space-y-6">
                     <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
-                      <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                      <div className="p-1.5 border border-border bg-white text-[#4b4b4b]">
                         <Lucide icon="FileText" className="w-4 h-4" />
                       </div>
                       <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
@@ -8288,7 +8288,7 @@ function Main() {
                             })
                           }
                           placeholder="Enter vehicle number"
-                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                          className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
                         />
                       </div>
 
@@ -8306,7 +8306,7 @@ function Main() {
                             })
                           }
                           placeholder="Enter IC number"
-                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                          className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
                         />
                       </div>
 
@@ -8323,7 +8323,7 @@ function Main() {
                               expiryDate: e.target.value,
                             })
                           }
-                          className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
+                          className="w-full bg-white border border-border p-3 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#a855f7] transition-all rounded-none"
                         />
                       </div>
                     </div>
@@ -8333,7 +8333,7 @@ function Main() {
                 {/* Notes Section */}
                 <div className="space-y-6">
                   <div className="flex items-center space-x-3 pb-2 border-b-2 border-[#4b4b4b]">
-                    <div className="p-1.5 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b]">
+                    <div className="p-1.5 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="MessageSquare" className="w-4 h-4" />
                     </div>
                     <h4 className="text-lg font-black text-[#4b4b4b] uppercase">
@@ -8355,7 +8355,7 @@ function Main() {
                       }
                       placeholder="Enter any additional notes"
                       rows={4}
-                      className="w-full bg-white border-2 border-[#4b4b4b] p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#4b4b4b] transition-all resize-none rounded-none"
+                      className="w-full bg-white border border-border p-3 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all resize-none rounded-none"
                     />
                   </div>
                 </div>
@@ -8364,14 +8364,14 @@ function Main() {
               <div className="flex justify-end space-x-3 p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <button
                   onClick={() => setAddContactModal(false)}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveNewContact}
                   disabled={!newContact.contactName || !newContact.phone || isLoading}
-                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all"
+                  className="px-8 py-3 bg-[#f26522] border border-border text-white font-semibold hover:-translate-y-0.5 hover: disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all"
                 >
                   {isLoading ? "Adding..." : "Add Contact"}
                 </button>
@@ -8386,11 +8386,11 @@ function Main() {
           onClose={() => setViewContactModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-3xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-3xl bg-white border border-border neo-shadow shrink-0 overflow-y-auto max-h-[90vh]">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b] neo-shadow-orange">
                       <Lucide icon="Eye" className="w-6 h-6" />
                     </div>
                     <div>
@@ -8404,7 +8404,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setViewContactModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-5 h-5" />
                   </button>
@@ -8416,7 +8416,7 @@ function Main() {
                   {/* Contact Header */}
                   <div className="text-center pb-8 border-b-2 border-[#4b4b4b]">
                     <div className="relative mx-auto mb-6 w-32 h-32">
-                      <div className="w-full h-full bg-white border-2 border-[#4b4b4b] flex items-center justify-center text-[#4b4b4b] font-black text-4xl shadow-[8px_8px_0_#f26522]">
+                      <div className="w-full h-full bg-white border border-border flex items-center justify-center text-[#4b4b4b] font-black text-4xl">
                         {currentContact.profileUrl ? (
                           <div className="w-full h-full relative group/contact">
                             <img
@@ -8464,7 +8464,7 @@ function Main() {
                     <h4 className="text-3xl font-black text-[#4b4b4b] uppercase mb-3">
                       {currentContact.contactName || "Unknown Contact"}
                     </h4>
-                    <p className="text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] px-6 py-3 inline-block font-bold">
+                    <p className="text-[#4b4b4b] bg-white border border-border px-6 py-3 inline-block font-bold">
                       {currentContact.email || "No email"}
                     </p>
                   </div>
@@ -8472,7 +8472,7 @@ function Main() {
                   {/* Contact Information Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-6">
-                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                      <div className="p-6 bg-white border border-border hover: transition-all">
                         <div className="flex items-center space-x-3 mb-3">
                           <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
                             Phone
@@ -8483,7 +8483,7 @@ function Main() {
                         </p>
                       </div>
 
-                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                      <div className="p-6 bg-white border border-border hover: transition-all">
                         <div className="flex items-center space-x-3 mb-3">
                           <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
                             Company
@@ -8495,7 +8495,7 @@ function Main() {
                       </div>
 
                       {companyId === "079" && (
-                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="p-6 bg-white border border-border hover: transition-all">
                           <div className="flex items-center space-x-3 mb-3">
                             <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
                               Branch
@@ -8508,7 +8508,7 @@ function Main() {
                       )}
 
                       {companyId === "079" && (
-                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="p-6 bg-white border border-border hover: transition-all">
                           <div className="flex items-center space-x-3 mb-3">
                             <label className="text-sm font-black text-[#f26522] uppercase tracking-wider">
                               Vehicle Number
@@ -8523,7 +8523,7 @@ function Main() {
                     </div>
 
                     <div className="space-y-6">
-                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                      <div className="p-6 bg-white border border-border hover: transition-all">
                         <div className="flex items-center space-x-3 mb-3">
                           <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
                             Address
@@ -8534,7 +8534,7 @@ function Main() {
                         </p>
                       </div>
 
-                      <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                      <div className="p-6 bg-white border border-border hover: transition-all">
                         <div className="flex items-center space-x-3 mb-3">
                           <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
                             Date Added
@@ -8554,7 +8554,7 @@ function Main() {
                       </div>
 
                       {companyId === "079" && (
-                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="p-6 bg-white border border-border hover: transition-all">
                           <div className="flex items-center space-x-3 mb-3">
                             <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
                               IC Number
@@ -8567,7 +8567,7 @@ function Main() {
                       )}
 
                       {companyId === "079" && (
-                        <div className="p-6 bg-white border-2 border-[#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="p-6 bg-white border border-border hover: transition-all">
                           <div className="flex items-center space-x-3 mb-3">
                             <label className="text-sm font-black text-[#10b981] uppercase tracking-wider">
                               Expiry Date
@@ -8588,9 +8588,9 @@ function Main() {
                   {/* Custom Fields Section */}
                   {currentContact.customFields &&
                     Object.keys(currentContact.customFields).length > 0 && (
-                      <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                      <div className="p-6 bg-white border border-border">
                         <div className="flex items-center space-x-3 mb-4">
-                          <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#e8e8e8]">
+                          <div className="p-1.5 border border-border bg-[#e8e8e8]">
                             <Lucide
                               icon="Settings"
                               className="w-4 h-4 text-[#4b4b4b]"
@@ -8605,7 +8605,7 @@ function Main() {
                             ([key, value]) => (
                               <div
                                 key={key}
-                                className="p-4 bg-white border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                                className="p-4 bg-white border border-border hover:-translate-y-0.5 hover: transition-all"
                               >
                                 <div className="space-y-2">
                                   <label className="text-xs font-black text-[#f26522] uppercase tracking-wider">
@@ -8624,9 +8624,9 @@ function Main() {
 
                   {/* Notes Section */}
                   {currentContact.notes && (
-                    <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                    <div className="p-6 bg-white border border-border">
                       <div className="flex items-center space-x-3 mb-4">
-                        <div className="p-1.5 border-2 border-[#4b4b4b] bg-[#e8e8e8]">
+                        <div className="p-1.5 border border-border bg-[#e8e8e8]">
                           <Lucide
                             icon="FileText"
                             className="w-4 h-4 text-[#4b4b4b]"
@@ -8644,9 +8644,9 @@ function Main() {
 
                   {/* Tags Section */}
                   {currentContact.tags && currentContact.tags.length > 0 && (
-                    <div className="p-6 bg-white border-2 border-[#4b4b4b]">
+                    <div className="p-6 bg-white border border-border">
                       <div className="flex items-center space-x-3 mb-4">
-                        <div className="p-1.5 border-2 border-[#4b4b4b] bg-rose-100">
+                        <div className="p-1.5 border border-border bg-rose-100">
                           <Lucide
                             icon="Tags"
                             className="w-4 h-4 text-[#4b4b4b]"
@@ -8660,7 +8660,7 @@ function Main() {
                         {currentContact.tags.map((tag, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center px-4 py-2 text-sm font-black bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] uppercase"
+                            className="inline-flex items-center px-4 py-2 text-sm font-black bg-white border border-border text-[#4b4b4b] uppercase"
                           >
                             <Lucide icon="Tag" className="w-3 h-3 mr-2" />
                             {tag}
@@ -8675,7 +8675,7 @@ function Main() {
               <div className="flex justify-end space-x-3 p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <button
                   onClick={() => setViewContactModal(false)}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Close
                 </button>
@@ -8685,7 +8685,7 @@ function Main() {
                     setEditContactModal(true);
                   }}
                   disabled={userRole === "3"}
-                  className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all flex items-center space-x-2"
+                  className="px-8 py-3 bg-[#4b4b4b] border border-border text-white font-semibold hover:-translate-y-0.5 hover: disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none transition-all flex items-center space-x-2"
                 >
                   <Lucide icon="UserCog" className="w-4 h-4" />
                   <span>Edit Contact</span>
@@ -8701,16 +8701,16 @@ function Main() {
           onClose={() => setDeleteConfirmationModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+            <Dialog.Panel className="w-full max-w-md bg-white border border-border neo-shadow shrink-0">
               <div className="relative p-8">
                 <div className="text-center">
-                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] neo-shadow-orange">
+                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border border-border bg-white text-[#4b4b4b] neo-shadow-orange">
                     <Lucide icon="AlertTriangle" className="h-8 w-8 text-[#dc2626]" />
                   </div>
                   <h3 className="text-xl font-black text-[#4b4b4b] uppercase mb-3">
                     Delete Contact
                   </h3>
-                  <p className="text-[#4b4b4b] font-bold mb-8 bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4 text-left">
+                  <p className="text-[#4b4b4b] font-bold mb-8 bg-[#f8f9fa] border border-border p-4 text-left">
                     Are you sure you want to delete this contact? This action cannot be undone.
                   </p>
                 </div>
@@ -8718,14 +8718,14 @@ function Main() {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={() => setDeleteConfirmationModal(false)}
-                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleDeleteContact}
                     disabled={isLoading}
-                    className="px-6 py-3 bg-[#dc2626] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                    className="px-6 py-3 bg-[#dc2626] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     {isLoading ? "Deleting..." : "Delete"}
                   </button>
@@ -8741,16 +8741,16 @@ function Main() {
           onClose={() => setShowMassDeleteModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+            <Dialog.Panel className="w-full max-w-md bg-white border border-border neo-shadow shrink-0">
               <div className="relative p-8">
                 <div className="text-center">
-                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                  <div className="mx-auto flex items-center justify-center h-16 w-16 mb-6 border border-border bg-white text-[#4b4b4b]">
                     <Lucide icon="AlertTriangle" className="h-8 w-8 text-[#f26522]" />
                   </div>
                   <h3 className="text-xl font-black text-[#4b4b4b] uppercase mb-3">
                     Delete Selected Contacts
                   </h3>
-                  <div className="bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4 mb-8 text-left">
+                  <div className="bg-[#f8f9fa] border border-border p-4 mb-8 text-left">
                     <p className="text-[#4b4b4b] font-bold">
                       Are you sure you want to delete{" "}
                       <span className="text-[#f26522] font-black underline underline-offset-4 decoration-2 decoration-[#f26522]">
@@ -8764,14 +8764,14 @@ function Main() {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={() => setShowMassDeleteModal(false)}
-                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleMassDelete}
                     disabled={isMassDeleting}
-                    className="px-6 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                    className="px-6 py-3 bg-[#f26522] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     {isMassDeleting ? "Deleting..." : "Delete All"}
                   </button>
@@ -8787,11 +8787,11 @@ function Main() {
           onClose={() => setShowAddTagModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+            <Dialog.Panel className="w-full max-w-md bg-white border border-border neo-shadow shrink-0">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="Tag" className="w-5 h-5" />
                     </div>
                     <div>
@@ -8802,7 +8802,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setShowAddTagModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
@@ -8819,21 +8819,21 @@ function Main() {
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     placeholder="Enter a descriptive tag name..."
-                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                    className="w-full bg-white border border-border p-4 text-[#4b4b4b] placeholder-[#4b4b4b]/40 focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                   />
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-6 bg-white mt-8 border-t-2 border-[#4b4b4b]">
                   <button
                     onClick={() => setShowAddTagModal(false)}
-                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveNewTag}
                     disabled={!newTag.trim() || isLoading}
-                    className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center space-x-2"
+                    className="px-8 py-3 bg-[#4b4b4b] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center space-x-2"
                   >
                     {isLoading ? (
                       <div className="flex items-center space-x-2">
@@ -8859,11 +8859,11 @@ function Main() {
           onClose={() => setShowFiltersModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-lg bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-hidden flex flex-col max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-lg bg-white border border-border neo-shadow shrink-0 overflow-hidden flex flex-col max-h-[90vh]">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="Filter" className="w-5 h-5" />
                     </div>
                     <div>
@@ -8874,7 +8874,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setShowFiltersModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
@@ -8900,10 +8900,10 @@ function Main() {
                       placeholder="Search tags..."
                       value={tagSearchQuery}
                       onChange={(e) => setTagSearchQuery(e.target.value)}
-                      className="w-full pl-12 pr-4 py-3 bg-white border-2 border-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 rounded-none"
+                      className="w-full pl-12 pr-4 py-3 bg-white border border-border focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 rounded-none"
                     />
                   </div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4">
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border border-border p-4">
                     {(() => {
                       const defaultTags = [
                         { id: "built-in-cancelled-appointment", name: "Cancelled Appointment" },
@@ -8930,7 +8930,7 @@ function Main() {
                             <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate flex-1">
                               {tag.name}
                             </span>
-                            <div className="ml-2 text-xs font-black uppercase text-[#4b4b4b]/60">
+                            <div className="ml-2 text-xs font-semibold text-[#4b4b4b]/60">
                               {getTagFilterState(tag.name) === "include" && (
                                 <span className="text-emerald-600 bg-emerald-100 border border-emerald-600 px-1">Include</span>
                               )}
@@ -8965,7 +8965,7 @@ function Main() {
                       Filter by Assigned User
                     </h4>
                   </div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border-2 border-[#4b4b4b] p-4">
+                  <div className="space-y-2 max-h-60 overflow-y-auto bg-[#f8f9fa] border border-border p-4">
                     {(() => {
                       const stableEmployeeList = employeeListRef.current;
                       if (stableEmployeeList.length === 0) {
@@ -8985,7 +8985,7 @@ function Main() {
                           <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate flex-1">
                             {employee.name}
                           </span>
-                          <div className="ml-2 text-xs font-black uppercase text-[#4b4b4b]/60">
+                          <div className="ml-2 text-xs font-semibold text-[#4b4b4b]/60">
                             {getUserFilterState(employee.name) === "include" && (
                               <span className="text-emerald-600 bg-emerald-100 border border-emerald-600 px-1">Include</span>
                             )}
@@ -9003,23 +9003,23 @@ function Main() {
                 </div>
 
                 {/* Filter Legend */}
-                <div className="mt-6 p-4 bg-[#f8f9fa] border-2 border-[#4b4b4b]">
+                <div className="mt-6 p-4 bg-[#f8f9fa] border border-border">
                   <div className="text-xs text-[#4b4b4b] space-y-2 font-bold">
-                    <div className="font-black uppercase mb-2 text-[#f26522]">
+                    <div className="font-semibold mb-2 text-[#f26522]">
                       Filter Guide:
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-white border-2 border-[#4b4b4b]" />
+                      <div className="w-4 h-4 bg-white border border-border" />
                       <span>Unfiltered - Shows all contacts</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-emerald-500 border-2 border-[#4b4b4b] flex items-center justify-center text-white">
+                      <div className="w-4 h-4 bg-emerald-500 border border-border flex items-center justify-center text-white">
                         <Lucide icon="Check" className="w-3 h-3" />
                       </div>
                       <span>Include - Shows only contacts with this tag/user</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-rose-500 border-2 border-[#4b4b4b] flex items-center justify-center text-white">
+                      <div className="w-4 h-4 bg-rose-500 border border-border flex items-center justify-center text-white">
                         <Lucide icon="X" className="w-3 h-3" />
                       </div>
                       <span>Exclude - Hides contacts with this tag/user</span>
@@ -9036,14 +9036,14 @@ function Main() {
                     setExcludedTagFilters([]);
                     setExcludedUserFilters([]);
                   }}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                 >
                   <Lucide icon="RotateCcw" className="w-4 h-4" />
                   <span>Clear All</span>
                 </button>
                 <button
                   onClick={() => setShowFiltersModal(false)}
-                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                  className="px-8 py-3 bg-[#f26522] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                 >
                   <Lucide icon="Check" className="w-4 h-4" />
                   <span>Apply Filters</span>
@@ -9059,11 +9059,11 @@ function Main() {
           onClose={() => setShowDateFilterModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+            <Dialog.Panel className="w-full max-w-md bg-white border border-border neo-shadow shrink-0">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="Calendar" className="w-5 h-5" />
                     </div>
                     <div>
@@ -9074,7 +9074,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setShowDateFilterModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
@@ -9090,7 +9090,7 @@ function Main() {
                     type="date"
                     value={dateFilterStart}
                     onChange={(e) => setDateFilterStart(e.target.value)}
-                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                    className="w-full bg-white border border-border p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                   />
                 </div>
 
@@ -9102,7 +9102,7 @@ function Main() {
                     type="date"
                     value={dateFilterEnd}
                     onChange={(e) => setDateFilterEnd(e.target.value)}
-                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none"
+                    className="w-full bg-white border border-border p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none"
                   />
                 </div>
               </div>
@@ -9110,7 +9110,7 @@ function Main() {
               <div className="flex justify-between items-center p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <button
                   onClick={clearDateFilter}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                 >
                   <Lucide icon="RotateCcw" className="w-4 h-4" />
                   <span>Clear Filter</span>
@@ -9118,13 +9118,13 @@ function Main() {
                 <div className="flex space-x-3">
                   <button
                     onClick={() => setShowDateFilterModal(false)}
-                    className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={applyDateFilter}
-                    className="px-8 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all flex items-center space-x-2"
+                    className="px-8 py-3 bg-[#4b4b4b] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                   >
                     <Lucide icon="Check" className="w-4 h-4" />
                     <span>Apply Settings</span>
@@ -9141,10 +9141,10 @@ function Main() {
           onClose={() => setShowColumnsModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0">
+            <Dialog.Panel className="w-full max-w-sm bg-white border border-border neo-shadow shrink-0">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa]">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                  <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                     <Lucide icon="Grid2x2" className="w-5 h-5" />
                   </div>
                   <Dialog.Title className="text-xl font-black text-[#4b4b4b] uppercase">
@@ -9195,7 +9195,7 @@ function Main() {
                                 [column]: !isVisible,
                               }));
                             }}
-                            className="w-5 h-5 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
+                            className="w-5 h-5 border border-border text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
                           />
                           <span className="ml-3 text-sm font-bold text-[#4b4b4b] capitalize truncate">
                             {isCustomField ? `${displayName} (Custom)` : displayName}
@@ -9211,14 +9211,14 @@ function Main() {
                                   return newColumns;
                                 });
                               }}
-                              className="ml-3 p-1.5 text-rose-500 hover:text-white hover:bg-rose-500 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] transition-all"
+                              className="ml-3 p-1.5 text-rose-500 hover:text-white hover:bg-rose-500 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: transition-all"
                               title="Delete column"
                             >
                               <Lucide icon="Trash2" className="w-4 h-4" />
                             </button>
                           )}
                           {isEssentialColumn && (
-                            <span className="text-xs font-black uppercase text-emerald-600 bg-emerald-100 border border-emerald-600 px-2 py-0.5">
+                            <span className="text-xs font-semibold text-emerald-600 bg-emerald-100 border border-emerald-600 px-2 py-0.5">
                               Required
                             </span>
                           )}
@@ -9231,7 +9231,7 @@ function Main() {
               <div className="flex justify-between items-center p-6 bg-[#f8f9fa]">
                 <button
                   onClick={() => setShowColumnsModal(false)}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Close
                 </button>
@@ -9243,7 +9243,7 @@ function Main() {
                       });
                     }
                   }}
-                  className="px-6 py-3 bg-[#4b4b4b] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f26522] transition-all flex items-center space-x-2"
+                  className="px-6 py-3 bg-[#4b4b4b] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                 >
                   <Lucide icon="RotateCcw" className="w-4 h-4" />
                   <span>Reset</span>
@@ -9260,7 +9260,7 @@ function Main() {
             onClose={() => setShowDeleteTagModal(false)}
           >
             <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-              <Dialog.Panel className="w-full max-w-2xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 flex flex-col max-h-[90vh]">
+              <Dialog.Panel className="w-full max-w-2xl bg-white border border-border neo-shadow shrink-0 flex flex-col max-h-[90vh]">
                 <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-rose-100/50 shrink-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -9278,7 +9278,7 @@ function Main() {
                     </div>
                     <button
                       onClick={() => setShowDeleteTagModal(false)}
-                      className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                      className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                     >
                       <Lucide icon="X" className="w-4 h-4" />
                     </button>
@@ -9288,7 +9288,7 @@ function Main() {
                 <div className="p-8 overflow-y-auto bg-white flex-1">
                   {tagList.length === 0 ? (
                     <div className="text-center py-12 border-2 border-dashed border-[#4b4b4b]/30">
-                      <div className="p-4 bg-gray-100 border-2 border-[#4b4b4b] inline-block mb-4 shadow-[4px_4px_0_#4b4b4b]">
+                      <div className="p-4 bg-gray-100 border border-border inline-block mb-4">
                         <Lucide icon="Tag" className="w-8 h-8 text-[#4b4b4b]" />
                       </div>
                       <h4 className="text-lg font-black text-[#4b4b4b] uppercase mb-2">
@@ -9302,21 +9302,21 @@ function Main() {
                     <>
                       <div className="mb-6">
                         <p className="text-[#4b4b4b] text-sm font-bold bg-amber-100 border-2 border-amber-500 p-4 shadow-[4px_4px_0_#f59e0b]">
-                          <span className="text-amber-600 font-black uppercase tracking-wide mr-2">
+                          <span className="text-amber-600 font-semibold tracking-wide mr-2">
                             ⚠️ Warning:
                           </span>
                           Deleting tags will remove them from all contacts. This action cannot be undone.
                         </p>
                       </div>
 
-                      <div className="space-y-3 overflow-y-auto border-2 border-[#4b4b4b] p-4 bg-[#f8f9fa]">
+                      <div className="space-y-3 overflow-y-auto border border-border p-4 bg-[#f8f9fa]">
                         {tagList.map((tag) => (
                           <div
                             key={tag.id}
-                            className="flex items-center justify-between p-3 bg-white border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:border-rose-500 transition-all group"
+                            className="flex items-center justify-between p-3 bg-white border border-border hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:border-rose-500 transition-all group"
                           >
                             <div className="flex items-center space-x-4">
-                              <div className="p-2 border-2 border-[#4b4b4b] bg-blue-100 text-[#4b4b4b]">
+                              <div className="p-2 border border-border bg-blue-100 text-[#4b4b4b]">
                                 <Lucide icon="Tag" className="w-4 h-4" />
                               </div>
                               <h4 className="text-[#4b4b4b] font-black group-hover:text-rose-600 transition-colors">
@@ -9329,7 +9329,7 @@ function Main() {
                                   handleConfirmDeleteTag(tag);
                                 }
                               }}
-                              className="px-4 py-2 bg-rose-50 border-2 border-rose-500 text-rose-600 font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:bg-rose-500 hover:text-white transition-all flex items-center space-x-2"
+                              className="px-4 py-2 bg-rose-50 border-2 border-rose-500 text-rose-600 font-semibold hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#f43f5e] hover:bg-rose-500 hover:text-white transition-all flex items-center space-x-2"
                             >
                               <Lucide icon="Trash2" className="w-4 h-4" />
                               <span>Delete</span>
@@ -9353,7 +9353,7 @@ function Main() {
                                   // handleBulkDeleteTags();
                                 }
                               }}
-                              className="px-6 py-3 bg-rose-600 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                              className="px-6 py-3 bg-rose-600 border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                             >
                               <Lucide icon="AlertTriangle" className="w-4 h-4" />
                               <span>Delete All Tags</span>
@@ -9368,7 +9368,7 @@ function Main() {
                 <div className="flex justify-end p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
                   <button
                     onClick={() => setShowDeleteTagModal(false)}
-                    className="px-8 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2"
+                    className="px-8 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                     <span>Close</span>
@@ -9385,11 +9385,11 @@ function Main() {
           onClose={() => setShowCsvImportModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-md bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 flex flex-col max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-md bg-white border border-border neo-shadow shrink-0 flex flex-col max-h-[90vh]">
               <div className="relative p-6 px-8 border-b-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] shadow-[4px_4px_0_#f26522]">
+                    <div className="p-2 border border-border bg-white text-[#4b4b4b]">
                       <Lucide icon="Upload" className="w-5 h-5" />
                     </div>
                     <div>
@@ -9400,7 +9400,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setShowCsvImportModal(false)}
-                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover:shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] transition-all bg-white"
+                    className="p-2 border-2 border-transparent hover:border-[#4b4b4b] hover:-translate-y-0.5 hover: text-[#4b4b4b] transition-all bg-white"
                   >
                     <Lucide icon="X" className="w-4 h-4" />
                   </button>
@@ -9416,7 +9416,7 @@ function Main() {
                     type="file"
                     accept=".csv"
                     onChange={handleCsvFileSelect}
-                    className="w-full bg-white border-2 border-[#4b4b4b] p-[0.65rem] text-[#4b4b4b] transition-all rounded-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:bg-[#4b4b4b] file:text-white file:font-black file:uppercase file:cursor-pointer hover:file:-translate-y-0.5 hover:file:shadow-[2px_2px_0_#f26522] file:transition-all"
+                    className="w-full bg-white border border-border p-[0.65rem] text-[#4b4b4b] transition-all rounded-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:bg-[#4b4b4b] file:text-white file:font-black file:uppercase file:cursor-pointer hover:file:-translate-y-0.5 hover:file: file:transition-all"
                   />
                   <div className="pt-2">
                     <button
@@ -9432,7 +9432,7 @@ function Main() {
                   <label className="block text-sm font-black text-[#4b4b4b] uppercase">
                     Select Tags to Apply
                   </label>
-                  <div className="max-h-40 overflow-y-auto border-2 border-[#4b4b4b] bg-[#f8f9fa] p-4 space-y-2">
+                  <div className="max-h-40 overflow-y-auto border border-border bg-[#f8f9fa] p-4 space-y-2">
                     {tagList.map((tag) => (
                       <label
                         key={tag.id}
@@ -9449,7 +9449,7 @@ function Main() {
                               setSelectedImportTags(selectedImportTags.filter((t) => t !== tag.name));
                             }
                           }}
-                          className="w-5 h-5 border-2 border-[#4b4b4b] text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
+                          className="w-5 h-5 border border-border text-[#f26522] focus:ring-0 focus:ring-offset-0 rounded-none cursor-pointer"
                         />
                         <span className="ml-3 text-sm font-bold text-[#4b4b4b] truncate">
                           {tag.name}
@@ -9471,7 +9471,7 @@ function Main() {
                         e.target.value.split(",").map((tag) => tag.trim())
                       )
                     }
-                    className="w-full bg-white border-2 border-[#4b4b4b] p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus:shadow-[4px_4px_0_#f26522] transition-all rounded-none placeholder-[#4b4b4b]/40 font-bold"
+                    className="w-full bg-white border border-border p-4 text-[#4b4b4b] focus:outline-none focus:ring-0 focus:border-[#4b4b4b] focus:-translate-y-0.5 focus:-translate-x-0.5 focus: transition-all rounded-none placeholder-[#4b4b4b]/40 font-bold"
                     placeholder="Enter new tags separated by commas..."
                   />
                 </div>
@@ -9480,14 +9480,14 @@ function Main() {
               <div className="flex justify-end p-6 border-t-2 border-[#4b4b4b] bg-[#f8f9fa] shrink-0 space-x-3">
                 <button
                   onClick={() => setShowCsvImportModal(false)}
-                  className="px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCsvImport}
                   disabled={!selectedCsvFile || isLoading}
-                  className="px-8 py-3 bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed"
+                  className="px-8 py-3 bg-[#f26522] border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center space-x-2 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center space-x-2">
@@ -9512,9 +9512,9 @@ function Main() {
           onClose={() => setShowSyncConfirmationModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 text-center">
+            <Dialog.Panel className="w-full max-w-sm bg-white border border-border neo-shadow shrink-0 text-center">
               <div className="p-8 pb-0">
-                <div className="w-20 h-20 mx-auto bg-amber-100 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f59e0b] flex items-center justify-center mb-6">
+                <div className="w-20 h-20 mx-auto bg-amber-100 border border-border shadow-[4px_4px_0_#f59e0b] flex items-center justify-center mb-6">
                   <Lucide icon="AlertTriangle" className="w-10 h-10 text-amber-500" />
                 </div>
                 <h3 className="text-2xl font-black text-[#4b4b4b] uppercase mb-4">
@@ -9524,7 +9524,7 @@ function Main() {
                   <p className="text-amber-600">
                     This action will sync the database<br />and may take some time.
                   </p>
-                  <p className="p-3 bg-gray-100 border-2 border-[#4b4b4b] mt-4">
+                  <p className="p-3 bg-gray-100 border border-border mt-4">
                     It may affect your current data.
                   </p>
                 </div>
@@ -9533,14 +9533,14 @@ function Main() {
               <div className="flex flex-col sm:flex-row p-6 gap-3 bg-white mt-6">
                 <button
                   onClick={() => setShowSyncConfirmationModal(false)}
-                  className="w-full px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="w-full px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmSync}
                   disabled={isSyncing}
-                  className="w-full px-6 py-3 bg-amber-500 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                  className="w-full px-6 py-3 bg-amber-500 border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none cursor-pointer disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                 >
                   {isSyncing ? (
                     <div className="flex items-center space-x-2">
@@ -9565,9 +9565,9 @@ function Main() {
           onClose={() => setShowSyncNamesConfirmationModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-sm bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 text-center">
+            <Dialog.Panel className="w-full max-w-sm bg-white border border-border neo-shadow shrink-0 text-center">
               <div className="p-8 pb-0">
-                <div className="w-20 h-20 mx-auto bg-violet-100 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] flex items-center justify-center mb-6">
+                <div className="w-20 h-20 mx-auto bg-violet-100 border border-border shadow-[4px_4px_0_#8b5cf6] flex items-center justify-center mb-6">
                   <Lucide icon="Users" className="w-10 h-10 text-violet-500" />
                 </div>
                 <h3 className="text-2xl font-black text-[#4b4b4b] uppercase mb-4">
@@ -9577,7 +9577,7 @@ function Main() {
                   <p>
                     This action will sync all contact names<br />and may take some time.
                   </p>
-                  <p className="text-violet-600 bg-violet-50 border-2 border-[#4b4b4b] p-3 mt-4">
+                  <p className="text-violet-600 bg-violet-50 border border-border p-3 mt-4">
                     It may affect your current contact data.
                   </p>
                 </div>
@@ -9586,13 +9586,13 @@ function Main() {
               <div className="flex flex-col sm:flex-row p-6 gap-3 bg-white mt-6">
                 <button
                   onClick={() => setShowSyncNamesConfirmationModal(false)}
-                  className="w-full px-6 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="w-full px-6 py-3 bg-white border border-border text-[#4b4b4b] font-semibold hover:-translate-y-0.5 hover: transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmSyncNames}
-                  className="w-full px-6 py-3 bg-violet-500 border-2 border-[#4b4b4b] text-white font-black uppercase hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center justify-center space-x-2"
+                  className="w-full px-6 py-3 bg-violet-500 border border-border text-white font-semibold hover:-translate-y-0.5 hover: transition-all flex items-center justify-center space-x-2"
                 >
                   <Lucide icon="RefreshCw" className="w-4 h-4" />
                   <span>Sync Names</span>
@@ -9608,11 +9608,11 @@ function Main() {
           onClose={() => setBlastMessageModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm z-50">
-            <Dialog.Panel className="w-full max-w-4xl bg-white border-2 border-[#4b4b4b] neo-shadow shrink-0 overflow-y-auto max-h-[90vh] flex flex-col">
+            <Dialog.Panel className="w-full max-w-4xl bg-white border border-border neo-shadow shrink-0 overflow-y-auto max-h-[90vh] flex flex-col">
 
               <div className="p-6 border-b-2 border-[#4b4b4b] bg-[#FFE0B2] flex items-center justify-between shrink-0">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 flex items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                  <div className="w-12 h-12 flex items-center justify-center bg-white border border-border">
                     <Lucide icon="Send" className="w-6 h-6 text-[#4b4b4b]" />
                   </div>
                   <Dialog.Title className="text-2xl font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -9621,7 +9621,7 @@ function Main() {
                 </div>
                 <button
                   onClick={() => setBlastMessageModal(false)}
-                  className="w-8 h-8 flex items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                  className="w-8 h-8 flex items-center justify-center bg-white border border-border hover: transition-all outline-none"
                 >
                   <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
                 </button>
@@ -9638,7 +9638,7 @@ function Main() {
                         Recipients ({selectedContacts.length} selected)
                       </label>
                     </div>
-                    <div className="bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-6 max-h-48 overflow-y-auto">
+                    <div className="bg-white border border-border p-6 max-h-48 overflow-y-auto">
                       {selectedContacts.length > 0 ? (
                         <div className="space-y-3">
                           {selectedContacts
@@ -9646,10 +9646,10 @@ function Main() {
                             .map((contact, index) => (
                               <div
                                 key={index}
-                                className="flex items-center justify-between p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                                className="flex items-center justify-between p-3 bg-white border border-border"
                               >
                                 <div className="flex items-center">
-                                  <div className="w-10 h-10 bg-[#f26522] border-2 border-[#4b4b4b] flex items-center justify-center text-white text-sm font-bold mr-3 shadow-[2px_2px_0_#4b4b4b]">
+                                  <div className="w-10 h-10 bg-[#f26522] border border-border flex items-center justify-center text-white text-sm font-bold mr-3">
                                     {contact.contactName
                                       ?.charAt(0)
                                       ?.toUpperCase() || "U"}
@@ -9662,7 +9662,7 @@ function Main() {
                                   onClick={() =>
                                     handleContactCheckboxChange(contact)
                                   }
-                                  className="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-200 flex items-center justify-center"
+                                  className="w-8 h-8 bg-red-100 hover:bg-red-200 text-red-600 border border-border transition-all duration-200 flex items-center justify-center"
                                   title="Remove contact"
                                 >
                                   <Lucide icon="X" className="w-5 h-5" />
@@ -9670,7 +9670,7 @@ function Main() {
                               </div>
                             ))}
                           {selectedContacts.length > 10 && (
-                            <div className="text-sm text-[#4b4b4b] font-bold border-2 border-[#4b4b4b] bg-gray-50 p-3 text-center shadow-[2px_2px_0_#4b4b4b]">
+                            <div className="text-sm text-[#4b4b4b] font-bold border border-border bg-gray-50 p-3 text-center">
                               ... and {selectedContacts.length - 10} more
                               contacts
                             </div>
@@ -9678,7 +9678,7 @@ function Main() {
                         </div>
                       ) : (
                         <div className="text-center text-[#4b4b4b] py-8">
-                          <div className="w-16 h-16 bg-white border-2 border-[#4b4b4b] flex items-center justify-center mx-auto mb-4 shadow-[4px_4px_0_rgba(0,0,0,0.1)]">
+                          <div className="w-16 h-16 bg-white border border-border flex items-center justify-center mx-auto mb-4">
                             <Lucide
                               icon="Users"
                               className="w-8 h-8 opacity-50 text-[#4b4b4b]"
@@ -9697,9 +9697,9 @@ function Main() {
 
                   {/* Official API Notice */}
                   {isOfficialApi && (
-                    <div className="bg-[#fef3c7] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#d97706] p-6">
+                    <div className="bg-[#fef3c7] border border-border shadow-[4px_4px_0_#d97706] p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-[#f59e0b] border-2 border-[#4b4b4b] flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b]">
+                        <div className="w-10 h-10 bg-[#f59e0b] border border-border flex items-center justify-center flex-shrink-0">
                           <Lucide icon="AlertTriangle" className="w-5 h-5 text-[#4b4b4b]" />
                         </div>
                         <div>
@@ -9737,7 +9737,7 @@ function Main() {
                               : Number(e.target.value)
                           )
                         }
-                        className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all appearance-none"
+                        className="w-full px-4 py-4 bg-white border border-border shadow-[4px_4px_0_#8b5cf6] text-[#4b4b4b] font-bold focus:outline-none focus: transition-all appearance-none"
                       >
                         <option value="" className="bg-white text-[#4b4b4b]">
                           Select a phone
@@ -9794,7 +9794,7 @@ function Main() {
                     </div>
                     {phoneIndex !== null && phoneNames[phoneIndex] && (
                       <div
-                        className={`inline-flex items-center px-4 py-2 text-xs font-bold border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] ${qrCodes[phoneIndex]
+                        className={`inline-flex items-center px-4 py-2 text-xs font-bold border border-border ${qrCodes[phoneIndex]
                           ? "bg-[#dcfce7] text-[#166534]"
                           : "bg-[#fee2e2] text-[#991b1b]"
                           }`}
@@ -9824,10 +9824,10 @@ function Main() {
                             qr.status?.toLowerCase()
                           )
                       ) && (
-                        <div className="text-xs text-[#b45309] bg-[#fef3c7] font-bold p-4 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#b45309]">
+                        <div className="text-xs text-[#b45309] bg-[#fef3c7] font-bold p-4 border border-border shadow-[4px_4px_0_#b45309]">
                           <div className="flex items-center gap-2 mb-2">
                             <Lucide icon="AlertTriangle" className="w-4 h-4" />
-                            <span className="font-black uppercase">
+                            <span className="font-semibold">
                               Connection Required
                             </span>
                           </div>
@@ -9856,7 +9856,7 @@ function Main() {
                           <span className="ml-2 font-bold text-[#4b4b4b]">Loading templates...</span>
                         </div>
                       ) : blastTemplates.length === 0 ? (
-                        <div className="text-center py-8 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#3b82f6]">
+                        <div className="text-center py-8 bg-white border border-border shadow-[4px_4px_0_#3b82f6]">
                           <Lucide icon="FileX" className="w-12 h-12 text-[#4b4b4b] opacity-50 mx-auto mb-3" />
                           <p className="font-bold text-[#4b4b4b]">No approved templates found</p>
                           <p className="text-xs font-medium text-[#4b4b4b] opacity-70 mt-1">
@@ -9870,14 +9870,14 @@ function Main() {
                               <div
                                 key={template.id}
                                 onClick={() => handleSelectBlastTemplate(template)}
-                                className={`p-4 border-2 border-[#4b4b4b] cursor-pointer transition-all duration-200 ${selectedBlastTemplate?.id === template.id
+                                className={`p-4 border border-border cursor-pointer transition-all duration-200 ${selectedBlastTemplate?.id === template.id
                                   ? 'bg-[#dbeafe] shadow-[4px_4px_0_#3b82f6] -translate-y-0.5 -translate-x-0.5'
-                                  : 'bg-white shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#3b82f6] hover:-translate-y-0.5 hover:-translate-x-0.5'
+                                  : 'bg-white hover:shadow-[4px_4px_0_#3b82f6]'
                                   }`}
                               >
                                 <div className="flex items-center justify-between mb-2">
                                   <span className="font-black text-[#4b4b4b] uppercase">{template.name}</span>
-                                  <span className="text-xs px-2 py-1 font-bold bg-[#dcfce7] text-[#166534] border-2 border-[#4b4b4b]">
+                                  <span className="text-xs px-2 py-1 font-bold bg-[#dcfce7] text-[#166534] border border-border">
                                     Approved
                                   </span>
                                 </div>
@@ -9897,7 +9897,7 @@ function Main() {
 
                           {/* Template Variables Input */}
                           {selectedBlastTemplate && getTemplateVariableCount(selectedBlastTemplate) > 0 && (
-                            <div className="bg-[#f3f4f6] p-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6]">
+                            <div className="bg-[#f3f4f6] p-6 border border-border shadow-[4px_4px_0_#8b5cf6]">
                               <h4 className="text-md font-black text-[#4b4b4b] uppercase mb-4 flex items-center gap-2">
                                 <Lucide icon="Pencil" className="w-5 h-5 text-[#8b5cf6]" />
                                 Fill Template Variables
@@ -9915,7 +9915,7 @@ function Main() {
                                         setBlastTemplateVariables(newVars);
                                       }}
                                       placeholder={`Value for variable ${idx + 1}`}
-                                      className="flex-1 px-4 py-2 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-medium focus:outline-none focus:shadow-[2px_2px_0_#8b5cf6] transition-all"
+                                      className="flex-1 px-4 py-2 bg-white border border-border text-[#4b4b4b] font-medium focus:outline-none focus:shadow-[2px_2px_0_#8b5cf6] transition-all"
                                     />
                                   </div>
                                 ))}
@@ -9928,9 +9928,9 @@ function Main() {
 
                           {/* Template Preview */}
                           {selectedBlastTemplate && (
-                            <div className="bg-[#e5ddd5] p-4 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
-                              <p className="text-xs text-[#4b4b4b] mb-2 font-black uppercase">Preview:</p>
-                              <div className="bg-white border-2 border-[#4b4b4b] max-w-sm mx-auto p-4 shadow-[2px_2px_0_#4b4b4b]">
+                            <div className="bg-[#e5ddd5] p-4 border border-border">
+                              <p className="text-xs text-[#4b4b4b] mb-2 font-semibold">Preview:</p>
+                              <div className="bg-white border border-border max-w-sm mx-auto p-4">
                                 {selectedBlastTemplate.components?.map((comp: any, idx: number) => (
                                   <div key={idx}>
                                     {comp.type === 'HEADER' && comp.text && (
@@ -9973,18 +9973,18 @@ function Main() {
                           onChange={(e) => setBlastMessage(e.target.value)}
                           placeholder="Enter your message here..."
                           rows={6}
-                          className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-medium focus:outline-none focus:shadow-[4px_4px_0_#f26522] transition-all shadow-[2px_2px_0_#4b4b4b] resize-none"
+                          className="w-full px-4 py-4 bg-white border border-border text-[#4b4b4b] font-medium focus:outline-none focus: transition-all resize-none"
                         />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-[#4b4b4b] bg-gray-100 px-4 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                        <span className="text-xs font-bold text-[#4b4b4b] bg-gray-100 px-4 py-2 border border-border">
                           Character count: {blastMessage.length}
                         </span>
                         <Button
                           variant="outline-secondary"
                           size="sm"
                           onClick={() => setShowPlaceholders(!showPlaceholders)}
-                          className="bg-white hover:bg-gray-50 text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 font-black uppercase tracking-wider rounded-none"
+                          className="bg-white hover:bg-gray-50 text-[#4b4b4b] border border-border hover: font-semibold rounded-none"
                         >
                           <Lucide icon="Code" className="w-4 h-4 mr-2" />
                           Placeholders
@@ -9992,7 +9992,7 @@ function Main() {
                       </div>
 
                       {showPlaceholders && (
-                        <div className="p-6 bg-gray-50 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                        <div className="p-6 bg-gray-50 border border-border">
                           <p className="text-sm font-black text-[#4b4b4b] mb-4 flex items-center gap-2 uppercase">
                             <Lucide icon="Code" className="w-4 h-4" />
                             Available Placeholders:
@@ -10019,7 +10019,7 @@ function Main() {
                                 <button
                                   key={placeholder}
                                   onClick={() => insertPlaceholder(placeholder)}
-                                  className="text-left p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] font-bold hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all font-mono"
+                                  className="text-left p-3 bg-white border border-border text-[#4b4b4b] font-bold hover: transition-all font-mono"
                                 >
                                   @{"{"}${placeholder}
                                   {"}"}
@@ -10084,8 +10084,8 @@ function Main() {
                                                 : null
                                             }
                                             disabled={!isAvailableForAll}
-                                            className={`text-left p-3 font-bold transition-all border-2 border-[#4b4b4b] font-mono w-full ${isAvailableForAll
-                                              ? "bg-white text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#8b5cf6] hover:-translate-y-0.5 hover:-translate-x-0.5 cursor-pointer"
+                                            className={`text-left p-3 font-bold transition-all border border-border font-mono w-full ${isAvailableForAll
+                                              ? "bg-white text-[#4b4b4b] hover:shadow-[4px_4px_0_#8b5cf6] cursor-pointer"
                                               : "bg-gray-200 text-[#4b4b4b] cursor-not-allowed opacity-60"
                                               }`}
                                           >
@@ -10109,8 +10109,8 @@ function Main() {
 
                                           {/* Tooltip */}
                                           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
-                                            <div className="bg-white text-[#4b4b4b] font-bold text-xs p-3 shadow-[4px_4px_0_#4b4b4b] border-2 border-[#4b4b4b] max-w-48">
-                                              <div className="font-black uppercase">
+                                            <div className="bg-white text-[#4b4b4b] font-bold text-xs p-3 border border-border max-w-48">
+                                              <div className="font-semibold">
                                                 {fieldKey}
                                               </div>
                                               <div className="mt-1">
@@ -10133,7 +10133,7 @@ function Main() {
                                   </div>
 
                                   {/* Legend */}
-                                  <div className="mt-4 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                                  <div className="mt-4 p-3 bg-white border border-border">
                                     <div className="flex items-center justify-between text-xs font-bold">
                                       <div className="flex items-center gap-2">
                                         <div className="w-3 h-3 bg-[#8b5cf6] border border-[#4b4b4b]"></div>
@@ -10177,10 +10177,10 @@ function Main() {
                             type="file"
                             accept="image/*,video/*"
                             onChange={handleMediaUpload}
-                            className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
+                            className="w-full text-sm text-[#4b4b4b] bg-white border border-border p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file: hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                           />
                           {selectedMedia && (
-                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border border-border">
                               <div className="flex items-center space-x-3 min-w-0 flex-1">
                                 <Lucide
                                   icon="Image"
@@ -10194,7 +10194,7 @@ function Main() {
                               </div>
                               <button
                                 onClick={() => setSelectedMedia(null)}
-                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border-2 border-[#4b4b4b] text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5"
+                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border border-border text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 hover:"
                               >
                                 <Lucide icon="X" className="w-3 h-3 font-bold" />
                               </button>
@@ -10218,10 +10218,10 @@ function Main() {
                             type="file"
                             accept=".pdf,.doc,.docx,.txt"
                             onChange={handleDocumentUpload}
-                            className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
+                            className="w-full text-sm text-[#4b4b4b] bg-white border border-border shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file: hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                           />
                           {selectedDocument && (
-                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                            <div className="mt-3 flex items-center justify-between bg-white px-4 py-3 border border-border">
                               <div className="flex items-center space-x-3 min-w-0 flex-1">
                                 <Lucide
                                   icon="FileText"
@@ -10238,7 +10238,7 @@ function Main() {
                               </div>
                               <button
                                 onClick={() => setSelectedDocument(null)}
-                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border-2 border-[#4b4b4b] text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5"
+                                className="ml-2 w-6 h-6 bg-[#fecaca] hover:bg-[#f87171] border border-border text-[#4b4b4b] transition-all flex items-center justify-center flex-shrink-0 hover:"
                               >
                                 <Lucide icon="X" className="w-3 h-3 font-bold" />
                               </button>
@@ -10250,9 +10250,9 @@ function Main() {
                   )}
 
                   {/* Scheduling Options */}
-                  <div className="bg-[#f0f9ff] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#0284c7] space-y-6">
+                  <div className="bg-[#f0f9ff] p-8 border border-border shadow-[4px_4px_0_#0284c7] space-y-6">
                     <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-[#0ea5e9] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                      <div className="w-10 h-10 bg-[#0ea5e9] flex items-center justify-center border border-border">
                         <Lucide
                           icon="Calendar"
                           className="w-5 h-5 text-white"
@@ -10272,7 +10272,7 @@ function Main() {
                           selected={blastStartDate}
                           onChange={(date: Date) => setBlastStartDate(date)}
                           dateFormat="MMMM d, yyyy"
-                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
+                          className="w-full px-4 py-3 bg-white border border-border text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
                         />
                       </div>
 
@@ -10288,7 +10288,7 @@ function Main() {
                           timeIntervals={15}
                           timeCaption="Time"
                           dateFormat="h:mm aa"
-                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
+                          className="w-full px-4 py-3 bg-white border border-border text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#0ea5e9] focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -10306,7 +10306,7 @@ function Main() {
                           }
                           min="1"
                           max="100"
-                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
+                          className="w-full px-4 py-3 bg-white border border-border text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         />
                       </div>
 
@@ -10321,7 +10321,7 @@ function Main() {
                             setRepeatInterval(Number(e.target.value))
                           }
                           min="0"
-                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
+                          className="w-full px-4 py-3 bg-white border border-border text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         />
                       </div>
 
@@ -10336,7 +10336,7 @@ function Main() {
                               e.target.value as "minutes" | "hours" | "days"
                             )
                           }
-                          className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
+                          className="w-full px-4 py-3 bg-white border border-border text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#0ea5e9] transition-all"
                         >
                           <option
                             value="minutes"
@@ -10361,7 +10361,7 @@ function Main() {
                     </div>
 
                     {/* Active Time Range */}
-                    <div className="mt-6 p-6 bg-[#f3f4f6] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                    <div className="mt-6 p-6 bg-[#f3f4f6] border border-border">
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center space-x-3">
                           <Lucide
@@ -10377,7 +10377,7 @@ function Main() {
                             type="checkbox"
                             checked={enableActiveHours}
                             onChange={(e) => setEnableActiveHours(e.target.checked)}
-                            className="mr-2 w-5 h-5 border-2 border-[#4b4b4b] checked:bg-[#8b5cf6] appearance-none"
+                            className="mr-2 w-5 h-5 border border-border checked:bg-[#8b5cf6] appearance-none"
                           />
                           <span className="text-sm font-bold text-[#4b4b4b] uppercase tracking-wider">Enable</span>
                         </label>
@@ -10397,7 +10397,7 @@ function Main() {
                             value={activeTimeStart}
                             onChange={(e) => setActiveTimeStart(e.target.value)}
                             disabled={!enableActiveHours}
-                            className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-4 py-3 bg-white border border-border text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           />
                         </div>
                         <div className="space-y-3">
@@ -10409,11 +10409,11 @@ function Main() {
                             value={activeTimeEnd}
                             onChange={(e) => setActiveTimeEnd(e.target.value)}
                             disabled={!enableActiveHours}
-                            className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-4 py-3 bg-white border border-border text-[#4b4b4b] font-bold focus:outline-none focus:shadow-[4px_4px_0_#8b5cf6] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           />
                         </div>
                       </div>
-                      <div className="mt-4 flex items-center space-x-2 text-xs font-bold text-[#4b4b4b] bg-white px-3 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                      <div className="mt-4 flex items-center space-x-2 text-xs font-bold text-[#4b4b4b] bg-white px-3 py-2 border border-border">
                         <Lucide icon="Info" className="w-4 h-4 text-[#8b5cf6]" />
                         <span>
                           Current range: {activeTimeStart} - {activeTimeEnd}
@@ -10424,10 +10424,10 @@ function Main() {
 
                   {/* Progress Bar (shown during sending) */}
                   {(isScheduling || isSendingBlastTemplate) && (
-                    <div className="bg-[#fef3c7] p-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#d97706]">
+                    <div className="bg-[#fef3c7] p-6 border border-border shadow-[4px_4px_0_#d97706]">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-sm font-black text-[#4b4b4b] uppercase flex items-center gap-3">
-                          <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                          <div className="w-8 h-8 bg-white border border-border flex items-center justify-center">
                             <Lucide
                               icon="Clock"
                               className="w-4 h-4 text-[#4b4b4b]"
@@ -10435,11 +10435,11 @@ function Main() {
                           </div>
                           {isSendingBlastTemplate ? "Sending templates..." : "Scheduling messages..."}
                         </span>
-                        <span className="text-sm text-[#4b4b4b] font-black uppercase bg-white px-4 py-2 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                        <span className="text-sm text-[#4b4b4b] font-semibold bg-white px-4 py-2 border border-border">
                           {Math.round(progress)}%
                         </span>
                       </div>
-                      <div className="w-full bg-white border-2 border-[#4b4b4b] h-6 shadow-[2px_2px_0_#4b4b4b]">
+                      <div className="w-full bg-white border border-border h-6">
                         <div
                           className="bg-[#f59e0b] h-full"
                           style={{ width: `${progress}%` }}
@@ -10450,7 +10450,7 @@ function Main() {
                 </div>
 
                 <div className="flex justify-between items-center mt-10 p-6 bg-[#f3f4f6] border-t-2 border-[#4b4b4b]">
-                  <div className="text-sm font-black text-[#4b4b4b] bg-white px-4 py-3 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] uppercase tracking-wider">
+                  <div className="text-sm font-black text-[#4b4b4b] bg-white px-4 py-3 border border-border uppercase tracking-wider">
                     <div className="flex items-center space-x-2">
                       <Lucide icon="Users" className="w-4 h-4 text-[#f26522]" />
                       <span>{selectedContacts.length} recipients selected</span>
@@ -10465,7 +10465,7 @@ function Main() {
                         setBlastTemplateVariables([]);
                       }}
                       disabled={isScheduling || isSendingBlastTemplate}
-                      className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] font-black uppercase tracking-wider hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none rounded-none"
+                      className="px-6 py-3 bg-white text-[#4b4b4b] border border-border font-semibold hover: transition-all outline-none rounded-none"
                     >
                       Cancel
                     </Button>
@@ -10484,7 +10484,7 @@ function Main() {
                           (getTemplateVariableCount(selectedBlastTemplate) > 0 &&
                             blastTemplateVariables.some(v => !v.trim()))
                         }
-                        className="px-8 py-3 bg-[#3b82f6] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
+                        className="px-8 py-3 bg-[#3b82f6] text-white border border-border font-semibold hover: transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
                       >
                         {isSendingBlastTemplate ? (
                           <div className="flex items-center space-x-2">
@@ -10510,7 +10510,7 @@ function Main() {
                           !phoneNames[phoneIndex] ||
                           isScheduling
                         }
-                        className="px-8 py-3 bg-[#f26522] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
+                        className="px-8 py-3 bg-[#f26522] text-white border border-border font-semibold hover: transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
                       >
                         {isScheduling ? (
                           <div className="flex items-center space-x-2">
@@ -10538,11 +10538,11 @@ function Main() {
           onClose={() => setEditScheduledMessageModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 z-[60]">
-            <Dialog.Panel className="w-full max-w-lg relative bg-white border-2 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-lg relative bg-white border border-border overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
               <div className="relative p-8">
                 <div className="flex items-center justify-between pb-6 border-b-2 border-[#4b4b4b]">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#8b5cf6] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                    <div className="w-12 h-12 bg-[#8b5cf6] flex items-center justify-center border border-border">
                       <Lucide
                         icon="PenTool"
                         className="w-6 h-6 text-white"
@@ -10554,7 +10554,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setEditScheduledMessageModal(false)}
-                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border border-border hover: transition-all outline-none"
                   >
                     <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
                   </button>
@@ -10576,7 +10576,7 @@ function Main() {
                       value={blastMessage}
                       onChange={(e) => setBlastMessage(e.target.value)}
                       rows={4}
-                      className="w-full px-4 py-4 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] hover:shadow-[4px_4px_0_#4b4b4b] transition-all outline-none resize-none"
+                      className="w-full px-4 py-4 bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] hover: transition-all outline-none resize-none"
                     />
                   </div>
 
@@ -10585,7 +10585,7 @@ function Main() {
                     <button
                       type="button"
                       onClick={() => setShowPlaceholders(!showPlaceholders)}
-                      className="flex items-center space-x-2 text-[#4b4b4b] font-black uppercase hover:text-[#8b5cf6] transition-colors"
+                      className="flex items-center space-x-2 text-[#4b4b4b] font-semibold hover:text-[#8b5cf6] transition-colors"
                     >
                       <Lucide icon="Code" className="w-4 h-4" />
                       <span className="text-sm">
@@ -10595,7 +10595,7 @@ function Main() {
                       </span>
                     </button>
                     {showPlaceholders && (
-                      <div className="p-6 bg-[#f3f4f6] border-2 border-[#4b4b4b] space-y-4">
+                      <div className="p-6 bg-[#f3f4f6] border border-border space-y-4">
                         <p className="text-sm font-black text-[#4b4b4b] uppercase flex items-center gap-2">
                           <Lucide icon="Info" className="w-4 h-4 text-[#8b5cf6]" />
                           Click to insert:
@@ -10617,7 +10617,7 @@ function Main() {
                               key={field}
                               type="button"
                               onClick={() => insertPlaceholder(field)}
-                              className="text-left p-2 bg-white text-[#4b4b4b] font-bold border-2 border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                              className="text-left p-2 bg-white text-[#4b4b4b] font-bold border border-border hover: transition-all outline-none"
                             >
                               @{"{"}${field}
                               {"}"}
@@ -10691,7 +10691,7 @@ function Main() {
                                           );
                                         }
                                       }}
-                                      className="text-left p-2 bg-[#d1fae5] text-[#065f46] font-bold border-2 border-[#065f46] hover:shadow-[2px_2px_0_#065f46] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                                      className="text-left p-2 bg-[#d1fae5] text-[#065f46] font-bold border-2 border-[#065f46] hover:shadow-[2px_2px_0_#065f46] transition-all outline-none"
                                     >
                                       @{"{"}${field}
                                       {"}"}
@@ -10734,7 +10734,7 @@ function Main() {
                       timeFormat="HH:mm"
                       timeIntervals={15}
                       dateFormat="MMMM d, yyyy h:mm aa"
-                      className="w-full px-4 py-3 bg-white border-2 border-[#4b4b4b] text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
+                      className="w-full px-4 py-3 bg-white border border-border text-sm text-[#4b4b4b] font-bold focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                     />
                   </div>
 
@@ -10773,7 +10773,7 @@ function Main() {
                           }
                         }
                       }}
-                      className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
+                      className="w-full text-sm text-[#4b4b4b] bg-white border border-border p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#f26522] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file: hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                     />
                   </div>
 
@@ -10792,7 +10792,7 @@ function Main() {
                       type="file"
                       accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                       onChange={(e) => handleEditDocumentUpload(e)}
-                      className="w-full text-sm text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file:shadow-[2px_2px_0_#4b4b4b] hover:file:translate-x-0.5 hover:file:translate-y-0.5"
+                      className="w-full text-sm text-[#4b4b4b] bg-white border border-border shadow-[4px_4px_0_#8b5cf6] p-4 transition-all focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-2 file:border-[#4b4b4b] file:text-sm file:font-black file:uppercase file:bg-[#8b5cf6] file:text-white hover:file:bg-white hover:file:text-[#4b4b4b] file: hover:file:translate-x-0.5 hover:file:translate-y-0.5"
                     />
                   </div>
                 </div>
@@ -10800,13 +10800,13 @@ function Main() {
                 <div className="flex justify-end space-x-3 mt-10 pt-6 border-t-2 border-[#4b4b4b]">
                   <button
                     onClick={() => setEditScheduledMessageModal(false)}
-                    className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] font-black uppercase tracking-wider hover:shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                    className="px-6 py-3 bg-white text-[#4b4b4b] border border-border font-semibold hover: transition-all outline-none"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveScheduledMessage}
-                    className="px-8 py-3 bg-[#3b82f6] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:shadow-[6px_6px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                    className="px-8 py-3 bg-[#3b82f6] text-white border border-border font-semibold hover: transition-all outline-none"
                   >
                     <div className="flex items-center space-x-2">
                       <Lucide icon="Save" className="w-4 h-4" />
@@ -10825,11 +10825,11 @@ function Main() {
           onClose={() => setEditContactModal(false)}
         >
           <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/50 z-[60]">
-            <Dialog.Panel className="w-full max-w-4xl relative bg-white border-2 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
+            <Dialog.Panel className="w-full max-w-4xl relative bg-white border border-border overflow-hidden overflow-y-auto transform transition-all flex flex-col max-h-[90vh]">
               <div className="relative p-8">
                 <div className="flex items-center justify-between pb-6 border-b-2 border-[#4b4b4b]">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#10b981] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                    <div className="w-12 h-12 bg-[#10b981] flex items-center justify-center border border-border">
                       <Lucide
                         icon="UserCog"
                         className="w-6 h-6 text-white"
@@ -10841,7 +10841,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setEditContactModal(false)}
-                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 transition-all outline-none"
+                    className="w-8 h-8 flex flex-shrink-0 items-center justify-center bg-white border border-border hover: transition-all outline-none"
                   >
                     <Lucide icon="X" className="w-4 h-4 text-[#4b4b4b]" />
                   </button>
@@ -10850,9 +10850,9 @@ function Main() {
                 {currentContact && (
                   <div className="mt-8 space-y-8">
                     {/* Basic Contact Information */}
-                    <div className="bg-[#f0fdf4] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#10b981] space-y-6">
+                    <div className="bg-[#f0fdf4] p-8 border border-border shadow-[4px_4px_0_#10b981] space-y-6">
                       <div className="flex items-center space-x-3 mb-6">
-                        <div className="w-10 h-10 bg-[#34d399] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                        <div className="w-10 h-10 bg-[#34d399] flex items-center justify-center border border-border">
                           <Lucide
                             icon="User"
                             className="w-5 h-5 text-white"
@@ -10883,7 +10883,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter contact name"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
                           />
                         </div>
 
@@ -10901,7 +10901,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter last name"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
                           />
                         </div>
 
@@ -10919,7 +10919,7 @@ function Main() {
                               })
                             }
                             placeholder="e.g., +60123456789"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                           />
                         </div>
 
@@ -10937,7 +10937,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter email address"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
                           />
                         </div>
 
@@ -10955,7 +10955,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter company name"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
                           />
                         </div>
 
@@ -10973,7 +10973,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter address"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ec4899] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ec4899] transition-all outline-none"
                           />
                         </div>
 
@@ -10992,7 +10992,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter branch"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#14b8a6] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#14b8a6] transition-all outline-none"
                             />
                           </div>
                         )}
@@ -11012,7 +11012,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter vehicle number"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#8b5cf6] transition-all outline-none"
                             />
                           </div>
                         )}
@@ -11032,7 +11032,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter IC number"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f59e0b] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f59e0b] transition-all outline-none"
                             />
                           </div>
                         )}
@@ -11051,7 +11051,7 @@ function Main() {
                                   expiryDate: e.target.value,
                                 })
                               }
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f43f5e] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f43f5e] transition-all outline-none"
                             />
                           </div>
                         )}
@@ -11060,9 +11060,9 @@ function Main() {
 
                     {/* Company-specific fields */}
                     {companyId === "095" && (
-                      <div className="bg-[#f5f3ff] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#8b5cf6] space-y-6">
+                      <div className="bg-[#f5f3ff] p-8 border border-border shadow-[4px_4px_0_#8b5cf6] space-y-6">
                         <div className="flex items-center space-x-3 mb-6">
-                          <div className="w-10 h-10 bg-[#8b5cf6] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                          <div className="w-10 h-10 bg-[#8b5cf6] flex items-center justify-center border border-border">
                             <Lucide
                               icon="GraduationCap"
                               className="w-5 h-5 text-white"
@@ -11088,7 +11088,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter country"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#10b981] transition-all outline-none"
                             />
                           </div>
 
@@ -11106,7 +11106,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter nationality"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ef4444] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#ef4444] transition-all outline-none"
                             />
                           </div>
 
@@ -11124,7 +11124,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter highest education"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#3b82f6] transition-all outline-none"
                             />
                           </div>
 
@@ -11142,7 +11142,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter program of study"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#a855f7] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#a855f7] transition-all outline-none"
                             />
                           </div>
 
@@ -11160,7 +11160,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter intake preference"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#f97316] transition-all outline-none"
                             />
                           </div>
 
@@ -11178,7 +11178,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter English proficiency"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#06b6d4] transition-all outline-none"
                             />
                           </div>
 
@@ -11196,7 +11196,7 @@ function Main() {
                                 })
                               }
                               placeholder="Enter passport validity"
-                              className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#6366f1] transition-all outline-none"
+                              className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#6366f1] transition-all outline-none"
                             />
                           </div>
                         </div>
@@ -11205,9 +11205,9 @@ function Main() {
 
                     {/* Points System */}
                     {(companyId === "079" || companyId === "001") && (
-                      <div className="bg-[#fefce8] p-8 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#eab308] space-y-6">
+                      <div className="bg-[#fefce8] p-8 border border-border shadow-[4px_4px_0_#eab308] space-y-6">
                         <div className="flex items-center space-x-3 mb-6">
-                          <div className="w-10 h-10 bg-[#eab308] flex items-center justify-center border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                          <div className="w-10 h-10 bg-[#eab308] flex items-center justify-center border border-border">
                             <Lucide
                               icon="Star"
                               className="w-5 h-5 text-white"
@@ -11236,7 +11236,7 @@ function Main() {
                               })
                             }
                             placeholder="Enter points"
-                            className="w-full bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#eab308] transition-all outline-none"
+                            className="w-full bg-white border border-border text-[#4b4b4b] font-bold placeholder-[#4b4b4b]/50 focus:shadow-[4px_4px_0_#eab308] transition-all outline-none"
                           />
                         </div>
                       </div>

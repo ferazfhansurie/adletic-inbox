@@ -12711,17 +12711,17 @@ function Main() {
           <div className="flex items-center justify-between pl-3 pr-3 pt-3 pb-2 sticky top-0 z-10 glass-header border-b-4 border-[#4b4b4b]">
             <div className="flex items-center gap-2">
               <div>
-                <div className="text-start text-xl font-black uppercase text-[#4b4b4b] tracking-wider mb-0.5">
+                <div className="text-start text-xl font-semibold text-[#4b4b4b] tracking-wider mb-0.5">
                   {companyName}
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="text-start text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
+                  <div className="text-start text-xs font-medium text-[#4b4b4b]">
                     Contacts: <span className="font-black text-[#f26522]">{totalContacts}</span>
                   </div>
 
                   {/* Error Message - Animated Badge */}
                   {wsError && (
-                    <div className="text-[10px] text-white bg-[#ef4444] px-1.5 py-0.5 border-2 border-[#4b4b4b] font-bold uppercase tracking-wider animate-slide-up shadow-[2px_2px_0_#4b4b4b]">
+                    <div className="text-[10px] text-white bg-[#ef4444] px-1.5 py-0.5 border border-border font-medium animate-slide-up">
                       {wsError}
                     </div>
                   )}
@@ -12737,16 +12737,16 @@ function Main() {
                 console.log('Banner check - phoneStatus:', phoneStatus, 'isConnected:', isConnected, 'qrCodes:', qrCodes, 'phoneNames:', phoneNames);
                 return !isConnected;
               }) && (
-                  <div className="flex items-center justify-center space-x-1.5 text-[10px] text-[#f97316] bg-[#ffedd5] px-2 py-1 border-2 border-[#4b4b4b] animate-slide-up shadow-[2px_2px_0_#4b4b4b]">
+                  <div className="flex items-center justify-center space-x-1.5 text-[10px] text-[#f97316] bg-[#ffedd5] px-2 py-1 border border-border animate-slide-up">
                     <Lucide icon="AlertTriangle" className="w-3 h-3 text-[#f97316]" />
-                    <span className="font-black uppercase tracking-wider">Connection Needed</span>
+                    <span className="font-semibold">Connection Needed</span>
                   </div>
                 )}
 
               {/* Phone Selection Button - Polished */}
               <button
                 onClick={() => setShowPhoneModal(true)}
-                className="flex items-center space-x-1.5 text-xs font-black uppercase tracking-wider bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] px-2 py-1.5 transition-all duration-300"
+                className="flex items-center space-x-1.5 text-xs font-semibold bg-white border border-border hover: px-2 py-1.5 transition-all duration-300"
               >
                 <Lucide
                   icon="Phone"
@@ -12773,19 +12773,19 @@ function Main() {
               {/* WebSocket Status - Polished */}
               <div className="flex items-center gap-1.5 w-full">
                 <div
-                  className={`flex items-center justify-center gap-1 px-2 py-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 w-full bg-white`}
+                  className={`flex items-center justify-center gap-1 px-2 py-1.5 border border-border transition-all duration-300 w-full bg-white`}
                 >
                   {wsConnected ? (
                     <>
                       <div className="w-1.5 h-1.5 rounded-full bg-[#10b981] border border-[#4b4b4b]"></div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#10b981]">
+                      <span className="text-[10px] font-semibold text-[#10b981]">
                         Live
                       </span>
                     </>
                   ) : (
                     <>
                       <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] border border-[#4b4b4b]"></div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ef4444]">
+                      <span className="text-[10px] font-semibold text-[#ef4444]">
                         Offline
                       </span>
                     </>
@@ -12806,7 +12806,7 @@ function Main() {
                       // This will trigger the useEffect to re-run and create a new connection
                       setWsVersion((prev) => prev + 1);
                     }}
-                    className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-bold btn-chat-primary text-white border-2 border-[#4b4b4b] disabled:opacity-50 disabled:cursor-not-allowed w-full"
+                    className="flex items-center justify-center gap-1.5 px-2 py-1.5 text-[10px] font-bold btn-chat-primary text-white border border-border disabled:opacity-50 disabled:cursor-not-allowed w-full"
                     disabled={wsReconnectAttempts >= maxReconnectAttempts}
                   >
                     <svg
@@ -12833,12 +12833,12 @@ function Main() {
           {(companyPlan === "enterprise" || companyPlan === "free") && (
             <div className="w-full px-3 py-1.5">
               <div
-                className="bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-2 cursor-pointer hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] transition-all duration-300"
+                className="bg-white border border-border p-2 cursor-pointer hover: transition-all duration-300"
                 onClick={openUsageDashboard}
                 title="Click to view detailed usage analytics"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase text-[#4b4b4b] tracking-wider flex items-center gap-1">
+                  <span className="text-[10px] font-semibold text-[#4b4b4b] tracking-wider flex items-center gap-1">
                     <Lucide icon="Sparkles" className="w-3 h-3 text-[#f26522]" />
                     AI Msgs
                   </span>
@@ -12860,7 +12860,7 @@ function Main() {
                         e.stopPropagation();
                         setIsTopUpModalOpen(true);
                       }}
-                      className="px-1.5 py-0.5 text-[9px] bg-[#f26522] text-white font-black uppercase tracking-wider border-[1.5px] border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[0px_0px_0_#4b4b4b] transition-all"
+                      className="px-1.5 py-0.5 text-[9px] bg-[#f26522] text-white font-semibold border-[1.5px] border-[#4b4b4b] hover: active: transition-all"
                     >
                       Top-up
                     </button>
@@ -12927,7 +12927,7 @@ function Main() {
               <div className="relative flex-grow">
                 <button
                   onClick={() => setIsSearchModalOpen(true)}
-                  className="flex items-center w-full bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all px-3 py-1.5"
+                  className="flex items-center w-full bg-white border border-border hover: transition-all px-3 py-1.5"
                 >
                   <Lucide icon="Search" className="w-4 h-4 text-[#8b8b8b]" />
                   <span className="ml-1.5 text-xs font-bold text-[#8b8b8b] uppercase tracking-wider">Search...</span>
@@ -12975,9 +12975,9 @@ function Main() {
                   className="relative z-50"
                 >
                   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-                    <Dialog.Panel className="w-full max-w-md bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6">
+                    <Dialog.Panel className="w-full max-w-md bg-white border border-border p-6">
                       <div className="flex items-center space-x-4 mb-6">
-                        <div className="w-12 h-12 bg-[#10b981] border-2 border-[#4b4b4b] flex items-center justify-center shadow-[2px_2px_0_#4b4b4b]">
+                        <div className="w-12 h-12 bg-[#10b981] border border-border flex items-center justify-center">
                           <Lucide icon="RefreshCw" className="w-6 h-6 text-white" />
                         </div>
                         <div>
@@ -12996,7 +12996,7 @@ function Main() {
                       <div className="flex space-x-3">
                         <button
                           onClick={() => setIsSyncModalOpen(false)}
-                          className="flex-1 px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                          className="flex-1 px-4 py-2 bg-white text-[#4b4b4b] font-semibold border border-border hover: transition-all"
                         >
                           Cancel
                         </button>
@@ -13006,7 +13006,7 @@ function Main() {
                             handleSyncContact();
                           }}
                           disabled={fetching}
-                          className="flex-1 px-4 py-2 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50"
+                          className="flex-1 px-4 py-2 bg-[#10b981] text-white font-semibold border border-border hover: transition-all disabled:opacity-50"
                         >
                           {fetching ? (
                             <div className="flex items-center justify-center space-x-2">
@@ -13027,7 +13027,7 @@ function Main() {
               <div className="flex items-center space-x-1.5">
                 {isAssistantAvailable && (
                   <button
-                    className={`flex items-center justify-center p-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all ${companyStopBot
+                    className={`flex items-center justify-center p-1.5 border border-border hover: transition-all ${companyStopBot
                       ? "bg-[#ef4444] text-white"
                       : "bg-[#10b981] text-white"
                       } ${userRole === "3" ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -13044,18 +13044,18 @@ function Main() {
 
                 {/* Employee assignment button - Polished */}
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="flex items-center justify-center p-1.5 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                  <Menu.Button className="flex items-center justify-center p-1.5 bg-white border border-border hover: transition-all">
                     <Lucide
                       icon="Users"
                       className="w-4 h-4 text-[#f26522]"
                     />
                   </Menu.Button>
-                  <Menu.Items className="absolute right-0 mt-2 w-56 bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] z-50 max-h-64 overflow-y-auto">
+                  <Menu.Items className="absolute right-0 mt-2 w-56 bg-white border border-border z-50 max-h-64 overflow-y-auto">
                     <div className="p-2 border-b-2 border-[#4b4b4b]">
                       <input
                         type="text"
                         placeholder="Search employees..."
-                        className="w-full p-2 bg-[#f9f9f9] border-2 border-[#4b4b4b] font-bold text-[#4b4b4b] focus:outline-none focus:shadow-[2px_2px_0_#4b4b4b] transition-all text-sm"
+                        className="w-full p-2 bg-[#f9f9f9] border border-border font-bold text-[#4b4b4b] focus:outline-none focus: transition-all text-sm"
                         value={employeeSearch}
                         onChange={(e) => setEmployeeSearch(e.target.value)}
                       />
@@ -13063,7 +13063,7 @@ function Main() {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`flex items-center w-full text-left p-2 border-b-2 border-[#4b4b4b] last:border-b-0 font-black uppercase tracking-wider text-xs transition-all ${!selectedEmployee
+                          className={`flex items-center w-full text-left p-2 border-b-2 border-[#4b4b4b] last:border-b-0 font-semibold text-xs transition-all ${!selectedEmployee
                             ? "bg-[#f26522] text-white"
                             : active
                               ? "bg-[#f9f9f9] text-[#4b4b4b]"
@@ -13125,7 +13125,7 @@ function Main() {
 
                 {/* Tags expansion toggle - Polished */}
                 <button
-                  className="p-1.5 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="p-1.5 bg-white border border-border hover: transition-all"
                   onClick={toggleTagsExpansion}
                   title={isTagsExpanded ? "Show Less Tags" : "Show More Tags"}
                 >
@@ -13141,7 +13141,7 @@ function Main() {
           {/* Tags Section - Polished */}
           <div
             className={`mt-1.5 mb-1.5 px-3 py-2 transition-all duration-500 ease-in-out ${isTagsExpanded ? "max-h-96 pb-2" : "max-h-24"
-              } overflow-y-auto custom-scrollbar mx-2 bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]`}
+              } overflow-y-auto custom-scrollbar mx-2 bg-[#f9f9f9] border border-border`}
           >
             <div className="flex flex-wrap gap-1.5 justify-center">
               {[
@@ -13324,16 +13324,16 @@ function Main() {
                   <button
                     key={typeof tag === "string" ? tag : tag.id}
                     onClick={() => filterTagContact(tagName)}
-                    className={`tag-pill px-2 py-1 text-[10px] font-black uppercase tracking-wider transition-all duration-300 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 ${tagLower === activeTags[0]
-                      ? "bg-[#f26522] text-white shadow-[3px_3px_0_#4b4b4b]"
-                      : "bg-white text-[#4b4b4b] hover:shadow-[3px_3px_0_#4b4b4b]"
+                    className={`tag-pill px-2 py-1 text-[10px] font-semibold transition-all duration-300 border border-border ${tagLower === activeTags[0]
+                      ? "bg-[#f26522] text-white"
+                      : "bg-white text-[#4b4b4b] hover:"
                       }`}
                   >
                     <span className="flex items-center gap-1.5">
                       <span>{tagName}</span>
                       {userData?.role === "1" && unreadCount > 0 && (
                         <span
-                          className={`px-1 py-0.5 text-[9px] font-black border-2 border-[#4b4b4b] uppercase tracking-wider ${tagName.toLowerCase() === "stop bot"
+                          className={`px-1 py-0.5 text-[9px] font-black border border-border uppercase tracking-wider ${tagName.toLowerCase() === "stop bot"
                             ? "bg-[#ef4444] text-white"
                             : tagName.toLowerCase() === "active bot"
                               ? "bg-[#10b981] text-white"
@@ -13359,7 +13359,7 @@ function Main() {
           >
             {isLoadingMoreContacts && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 animate-fade-in">
-                <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-pulse">
+                <div className="flex flex-col items-center bg-white border border-border p-6 animate-pulse">
                   <LoadingIcon icon="rings" className="w-10 h-10 text-[#f26522] mb-3" />
                   <span className="text-xs font-black text-[#4b4b4b] uppercase tracking-wider">
                     Loading more...
@@ -13372,7 +13372,7 @@ function Main() {
                 {loadedContacts.length === 0 && (
                   <div className="flex flex-col items-center text-center max-w-md mx-auto p-6">
                     {/* Animated Icon */}
-                    <div className="w-16 h-16 bg-[#f26522] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center mb-6 animate-pulse">
+                    <div className="w-16 h-16 bg-[#f26522] border border-border flex items-center justify-center mb-6 animate-pulse">
                       <Lucide
                         icon="MessageCircle"
                         className="h-8 w-8 text-white stroke-[3]"
@@ -13399,8 +13399,8 @@ function Main() {
 
                     {/* Loading Progress Card */}
                     {isInitialLoading && (
-                      <div className="w-full max-w-sm bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-slide-up">
-                        <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-[#4b4b4b] mb-4">
+                      <div className="w-full max-w-sm bg-white border border-border p-6 animate-slide-up">
+                        <div className="flex items-center justify-between text-xs font-semibold text-[#4b4b4b] mb-4">
                           <span>Loading progress</span>
                           <span className="text-[#f26522]">
                             {realLoadingProgress}%
@@ -13408,7 +13408,7 @@ function Main() {
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="w-full h-4 bg-gray-200 border-2 border-[#4b4b4b] shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)] p-0.5">
+                        <div className="w-full h-4 bg-gray-200 border border-border shadow-[inset_2px_2px_0_rgba(0,0,0,0.1)] p-0.5">
                           <div
                             className="bg-[#f26522] h-full border-r-2 border-[#4b4b4b] transition-all duration-500 ease-out"
                             style={{ width: `${realLoadingProgress}%` }}
@@ -13419,25 +13419,25 @@ function Main() {
                         <div className="mt-6 space-y-3 text-left">
                           {loadingSteps.userConfig && (
                             <div className="flex items-center text-xs font-black text-[#10b981] uppercase tracking-wider animate-slide-up">
-                              <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-3"></div>
+                              <div className="w-3 h-3 bg-[#10b981] border border-border mr-3"></div>
                               <span>User config loaded</span>
                             </div>
                           )}
                           {loadingSteps.contactsFetch && (
                             <div className="flex items-center text-xs font-black text-[#10b981] uppercase tracking-wider animate-slide-up">
-                              <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-3"></div>
+                              <div className="w-3 h-3 bg-[#10b981] border border-border mr-3"></div>
                               <span>Contacts fetched</span>
                             </div>
                           )}
                           {loadingSteps.contactsProcess && (
                             <div className="flex items-center text-xs font-black text-[#f26522] uppercase tracking-wider animate-slide-up">
-                              <div className="w-3 h-3 bg-[#f26522] border-2 border-[#4b4b4b] mr-3 animate-pulse"></div>
+                              <div className="w-3 h-3 bg-[#f26522] border border-border mr-3 animate-pulse"></div>
                               <span>Processing...</span>
                             </div>
                           )}
                           {loadingSteps.complete && (
                             <div className="flex items-center text-xs font-black text-[#3b82f6] uppercase tracking-wider animate-slide-up">
-                              <div className="w-3 h-3 bg-[#3b82f6] border-2 border-[#4b4b4b] mr-3"></div>
+                              <div className="w-3 h-3 bg-[#3b82f6] border border-border mr-3"></div>
                               <span>Complete!</span>
                             </div>
                           )}
@@ -13447,7 +13447,7 @@ function Main() {
 
                     {/* Tag Filtering State */}
                     {isTagFiltering && (
-                      <div className="w-full max-w-sm bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-6 animate-slide-up">
+                      <div className="w-full max-w-sm bg-white border border-border p-6 animate-slide-up">
                         <div className="flex items-center justify-center mb-6">
                           <LoadingIcon icon="rings" className="w-12 h-12 text-[#f26522]" />
                         </div>
@@ -13470,9 +13470,9 @@ function Main() {
                 >
                   {/* Contact Item - Polished */}
                   <div
-                    className={`contact-item px-3 py-1.5 cursor-pointer transition-all duration-300 ease-out mx-1 my-1 select-none bg-white border-2 border-[#4b4b4b] ${selectedChatId === contact.contact_id
-                      ? "shadow-[6px_6px_0_#f26522] -translate-y-1 -translate-x-1"
-                      : "shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]"
+                    className={`contact-item px-3 py-1.5 cursor-pointer transition-all duration-300 ease-out mx-1 my-1 select-none bg-white border border-border ${selectedChatId === contact.contact_id
+                      ? " -translate-y-1 -translate-x-1"
+                      : " hover:"
                       }`}
                     onClick={() => selectChat(contact.contact_id!, contact.id!)}
                     onContextMenu={(e) => handleContextMenu(e, contact)}
@@ -13482,8 +13482,8 @@ function Main() {
                       {/* Avatar */}
                       <div className="relative flex-shrink-0 avatar-glow">
                         <div
-                          className={`w-9 h-9 flex items-center justify-center overflow-hidden transition-all duration-300 border-2 border-[#4b4b4b] ${selectedChatId === contact.contact_id
-                            ? "shadow-[2px_2px_0_#4b4b4b]"
+                          className={`w-9 h-9 flex items-center justify-center overflow-hidden transition-all duration-300 border border-border ${selectedChatId === contact.contact_id
+                            ? ""
                             : ""
                             }`}
                         >
@@ -13527,7 +13527,7 @@ function Main() {
                         {contact.unreadCount !== undefined && (
                           <>
                             {(contact.unreadCount ?? 0) > 0 && (
-                              <span className="absolute -top-1 -right-1 bg-[#ef4444] text-white text-xs border-2 border-[#4b4b4b] w-6 h-6 flex items-center justify-center font-bold shadow-[2px_2px_0_#4b4b4b] unread-badge">
+                              <span className="absolute -top-1 -right-1 bg-[#ef4444] text-white text-xs border border-border w-6 h-6 flex items-center justify-center font-bold unread-badge">
                                 {(contact.unreadCount ?? 0) > 99
                                   ? "99+"
                                   : contact.unreadCount ?? 0}
@@ -13543,7 +13543,7 @@ function Main() {
                           <div className="flex justify-between items-start">
                             <div className="flex-1 min-w-0">
                               <h3
-                                className={`text-xs font-black uppercase tracking-wider truncate transition-all duration-300 ${selectedChatId === contact.contact_id
+                                className={`text-xs font-semibold truncate transition-all duration-300 ${selectedChatId === contact.contact_id
                                   ? "text-[#f26522]"
                                   : "text-[#4b4b4b]"
                                   }`}
@@ -13601,9 +13601,9 @@ function Main() {
                                     return (
                                       <>
                                         <button
-                                          className={`text-sm font-bold flex-shrink-0 border-2 border-[#4b4b4b] p-0.5 mr-1 bg-white ${contact.pinned
+                                          className={`text-sm font-bold flex-shrink-0 border border-border p-0.5 mr-1 bg-white ${contact.pinned
                                             ? "text-[#3b82f6] shadow-[2px_2px_0_#3b82f6]"
-                                            : "text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:text-[#3b82f6] hover:shadow-[2px_2px_0_#3b82f6]"
+                                            : "text-[#4b4b4b] hover:text-[#3b82f6] hover:shadow-[2px_2px_0_#3b82f6]"
                                             }`}
                                           onClick={(e) => {
                                             e.stopPropagation();
@@ -13673,9 +13673,9 @@ function Main() {
                                                 .map((tag, tagIndex) => (
                                                   <span
                                                     key={tagIndex}
-                                                    className={`text-[10px] font-bold px-1 py-0.5 flex items-center border-2 border-[#4b4b4b] flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
-                                                      ? "bg-[#3b82f6] text-white shadow-[2px_2px_0_#4b4b4b]"
-                                                      : "bg-[#bfdbfe] text-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b]"
+                                                    className={`text-[10px] font-bold px-1 py-0.5 flex items-center border border-border flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
+                                                      ? "bg-[#3b82f6] text-white"
+                                                      : "bg-[#bfdbfe] text-[#4b4b4b]"
                                                       }`}
                                                     title={
                                                       typeof tag === "string"
@@ -13701,7 +13701,7 @@ function Main() {
                                                     : String(tag)
                                                   ).toLowerCase() !== "stop bot"
                                               ).length > 3 && (
-                                                  <span className="bg-[#bfdbfe] text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider">
+                                                  <span className="bg-[#bfdbfe] text-[#4b4b4b] border border-border text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider">
                                                     +
                                                     {uniqueTags.filter(
                                                       (tag) =>
@@ -13721,9 +13721,9 @@ function Main() {
                                               .map((tag, tagIndex) => (
                                                 <span
                                                   key={tagIndex}
-                                                  className={`text-[10px] font-bold px-1 py-0.5 flex items-center border-2 border-[#4b4b4b] flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
-                                                    ? "bg-[#10b981] text-white shadow-[2px_2px_0_#4b4b4b]"
-                                                    : "bg-[#bbf7d0] text-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b]"
+                                                  className={`text-[10px] font-bold px-1 py-0.5 flex items-center border border-border flex-shrink-0 transition-all duration-300 uppercase tracking-wider ${selectedChatId === contact.contact_id
+                                                    ? "bg-[#10b981] text-white"
+                                                    : "bg-[#bbf7d0] text-[#4b4b4b]"
                                                     }`}
                                                   title={
                                                     typeof tag === "string"
@@ -13752,7 +13752,7 @@ function Main() {
                                                 </span>
                                               ))}
                                             {employeeTags.length > 2 && (
-                                              <span className="bg-[#bbf7d0] border-2 border-[#4b4b4b] text-[#4b4b4b] text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider shadow-[1px_1px_0_#4b4b4b]">
+                                              <span className="bg-[#bbf7d0] border border-border text-[#4b4b4b] text-[10px] font-bold px-1 py-0.5 flex-shrink-0 uppercase tracking-wider">
                                                 +{employeeTags.length - 2}
                                               </span>
                                             )}
@@ -13767,7 +13767,7 @@ function Main() {
 
                             <div className="flex flex-col items-end space-y-0 ml-1">
                               <span
-                                className={`text-[10px] font-black uppercase tracking-wider border-2 border-[#4b4b4b] px-1 py-0.5 bg-white transition-all duration-300 text-[#4b4b4b]`}
+                                className={`text-[10px] font-semibold border border-border px-1 py-0.5 bg-white transition-all duration-300 text-[#4b4b4b]`}
                               >
                                 {contact.last_message?.createdAt ||
                                   contact.last_message?.timestamp
@@ -13934,14 +13934,14 @@ function Main() {
                 renderOnZeroPageCount={null}
                 containerClassName="flex justify-center items-center flex-wrap gap-2 w-full"
                 pageClassName="mx-0.5"
-                pageLinkClassName="px-3 py-1 bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[1px_1px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                pageLinkClassName="px-3 py-1 bg-white border border-border text-[#4b4b4b] font-semibold text-xs hover: active: transition-all"
                 previousClassName="mr-2"
                 nextClassName="ml-2"
-                previousLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
-                nextLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border-2 border-[#4b4b4b] font-black uppercase tracking-wider text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                previousLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border border-border font-semibold text-xs hover: active: transition-all"
+                nextLinkClassName="px-3 py-1 bg-[#4b4b4b] text-white border border-border font-semibold text-xs hover: active: transition-all"
                 disabledClassName="opacity-50 cursor-not-allowed filter grayscale"
                 activeClassName="font-bold scale-110 z-10"
-                activeLinkClassName="bg-[#f26522] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                activeLinkClassName="bg-[#f26522] text-white border border-border"
                 forcePage={currentPage}
               />
             </div>
@@ -13973,7 +13973,7 @@ function Main() {
                       e.stopPropagation();
                       handleBack();
                     }}
-                    className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                    className="p-2 bg-white border border-border hover: transition-all duration-300"
                   >
                     <Lucide
                       icon="ChevronLeft"
@@ -13982,7 +13982,7 @@ function Main() {
                   </button>
 
                   <div className="relative group profile-pic-container ml-2">
-                    <div className="w-10 h-10 overflow-hidden bg-[#f26522] flex items-center justify-center text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 relative">
+                    <div className="w-10 h-10 overflow-hidden bg-[#f26522] flex items-center justify-center text-white border border-border transition-all duration-300 relative">
                       {selectedContact?.profilePicUrl ? (
                         <img
                           src={selectedContact.profilePicUrl}
@@ -13999,7 +13999,7 @@ function Main() {
                     </div>
 
                     {/* Online status indicator */}
-                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] transition-all duration-300 z-20"></div>
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#10b981] border border-border transition-all duration-300 z-20"></div>
                   </div>
 
                   <div className="flex flex-col ml-2">
@@ -14024,7 +14024,7 @@ function Main() {
                   <div className="hidden sm:flex space-x-2">
                     {/* Employee Assignment Button */}
                     <button
-                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      className="group relative p-2 bg-white border border-border hover: transition-all duration-300"
                       onClick={() => setIsEmployeeModalOpen(true)}
                     >
                       <span className="flex items-center justify-center w-5 h-5">
@@ -14037,7 +14037,7 @@ function Main() {
 
                     {/* Tag Assignment Button */}
                     <button
-                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      className="group relative p-2 bg-white border border-border hover: transition-all duration-300"
                       onClick={() => setIsTagModalOpen(true)}
                     >
                       <span className="flex items-center justify-center w-5 h-5">
@@ -14050,7 +14050,7 @@ function Main() {
 
                     {/* Message Search Button */}
                     <button
-                      className="group relative p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                      className="group relative p-2 bg-white border border-border hover: transition-all duration-300"
                       onClick={handleMessageSearchClick}
                     >
                       <span className="flex items-center justify-center w-5 h-5">
@@ -14140,7 +14140,7 @@ function Main() {
                     {/* Lazy loading indicator */}
                     {isFetchingMessages && (
                       <div className="flex justify-center py-6">
-                        <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-4 animate-pulse">
+                        <div className="flex flex-col items-center bg-white border border-border p-4 animate-pulse">
                           <LoadingIcon
                             icon="rings"
                             className="w-10 h-10 text-[#f26522] mb-2"
@@ -14153,7 +14153,7 @@ function Main() {
                       <div className="flex justify-center py-6">
                         {allMessages.length === 0 && displayedMessages.length === 0 ? (
                           // Show loading animation when initially fetching messages
-                          <div className="flex flex-col items-center bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-4 animate-pulse">
+                          <div className="flex flex-col items-center bg-white border border-border p-4 animate-pulse">
                             <LoadingIcon
                               icon="rings"
                               className="w-10 h-10 text-[#f26522] mb-2"
@@ -14165,7 +14165,7 @@ function Main() {
                           <button
                             onClick={handleLoadAllMessages}
                             disabled={isLoadingMoreMessages}
-                            className="relative overflow-hidden px-6 py-3 bg-[#3b82f6] border-2 border-[#4b4b4b] text-white font-black text-sm uppercase tracking-wider shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:shadow-[4px_4px_0_#4b4b4b]"
+                            className="relative overflow-hidden px-6 py-3 bg-[#3b82f6] border border-border text-white font-black text-sm uppercase tracking-wider hover: active: transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:translate-x-0 disabled:hover:"
                           >
                             {isFetchingMessages ? (
                               <>
@@ -14259,7 +14259,7 @@ function Main() {
                           >
                             {showDateHeader && (
                               <div className="flex justify-center my-4">
-                                <div className="inline-block bg-[#bfdbfe] text-[#4b4b4b] font-black py-2.5 px-6 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] uppercase tracking-widest text-sm relative transition-all duration-300 date-header-container hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]">
+                                <div className="inline-block bg-[#bfdbfe] text-[#4b4b4b] font-black py-2.5 px-6 border border-border uppercase tracking-widest text-sm relative transition-all duration-300 date-header-container hover:">
                                   {/* Content with relative positioning */}
                                   <span className="relative z-10">
                                     {(() => {
@@ -14302,8 +14302,8 @@ function Main() {
                                   } relative transition-all duration-300 rounded-none ${message.type === "privateNote"
                                     ? "bg-[#fff9e6] border-2 border-[#eab308] text-[#854d0e] shadow-[4px_4px_0_#eab308]"
                                     : message.from_me
-                                      ? "bg-[#f26522] border-2 border-[#f26522] text-white shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
-                                      : "bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[4px_4px_0_#f26522] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#f26522]"
+                                      ? "bg-[#f26522] border border-adletic-orange/40 text-white hover:-translate-y-0.5 hover:translate-x-0.5 hover:"
+                                      : "bg-white border border-border text-[#4b4b4b] hover:"
                                   }`}
                                 style={{
                                   maxWidth:
@@ -14351,7 +14351,7 @@ function Main() {
                                     style={{ minHeight: '24px' }}
                                   >
                                     <div
-                                      className={`text-xs font-black uppercase tracking-wider ${message.from_me
+                                      className={`text-xs font-semibold ${message.from_me
                                         ? "text-white"
                                         : "text-[#4b4b4b]"
                                         }`}
@@ -14374,7 +14374,7 @@ function Main() {
                                       size={10}
                                       className="mr-1.5 text-[#854d0e]"
                                     />
-                                    <span className="text-xs font-black uppercase tracking-wider text-[#854d0e]">
+                                    <span className="text-xs font-semibold text-[#854d0e]">
                                       Private Note
                                     </span>
                                   </div>
@@ -14383,7 +14383,7 @@ function Main() {
                                 {message.type === "text" &&
                                   message.text?.context && (
                                     <div
-                                      className="p-2 mb-2 rounded-none bg-white/20 cursor-pointer transition-all duration-300 border-l-4 border-l-[#4b4b4b] border-2 border-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 shadow-[2px_2px_0_#4b4b4b]"
+                                      className="p-2 mb-2 rounded-none bg-white/20 cursor-pointer transition-all duration-300 border-l-4 border-l-[#4b4b4b] border border-border"
                                       onClick={() => {
                                         const quotedMessageId =
                                           message.text?.context?.id;
@@ -14439,7 +14439,7 @@ function Main() {
                                         }
                                       }}
                                     >
-                                      <div className={`text-xs font-black uppercase tracking-wider mb-1 ${message.from_me ? "text-white" : "text-[#f26522]"}`}>
+                                      <div className={`text-xs font-semibold mb-1 ${message.from_me ? "text-white" : "text-[#f26522]"}`}>
                                         {message.text.context.from || "You"}
                                       </div>
                                       <div className={`text-xs ${message.from_me ? "text-white" : "text-[#4b4b4b]"}`}>
@@ -14876,7 +14876,7 @@ function Main() {
                                 {message.type === "document" &&
                                   message.document && (
                                     <>
-                                      <div className="document-content flex flex-col items-center p-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                      <div className="document-content flex flex-col items-center p-4 bg-white border border-border">
                                         {/* Document Header */}
                                         <div className="flex items-center p-3 bg-white border-b-2 border-[#4b4b4b] mb-3 w-full">
                                           <svg
@@ -14935,14 +14935,14 @@ function Main() {
                                                 }
                                               }
                                             }}
-                                            className="px-3 py-1.5 text-xs font-black uppercase tracking-wider bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                            className="px-3 py-1.5 text-xs font-semibold bg-[#10b981] text-white border border-border hover: transition-all"
                                           >
                                             View
                                           </button>
                                         </div>
 
                                         {/* Document Content Preview */}
-                                        <div className="bg-white border-2 border-[#4b4b4b] overflow-hidden w-full relative">
+                                        <div className="bg-white border border-border overflow-hidden w-full relative">
                                           {(() => {
                                             // Debug logging to understand document structure
 
@@ -15014,7 +15014,7 @@ function Main() {
 
                                                   {/* Google Docs viewer as fallback */}
                                                   <div className="mt-2">
-                                                    <p className="text-xs text-[#4b4b4b] font-bold uppercase tracking-wider mb-2 text-center">
+                                                    <p className="text-xs text-[#4b4b4b] font-medium mb-2 text-center">
                                                       If PDF doesn't load, try:
                                                     </p>
                                                     <div className="flex gap-2 justify-center">
@@ -15025,7 +15025,7 @@ function Main() {
                                                             "_blank"
                                                           )
                                                         }
-                                                        className="px-3 py-1.5 bg-[#3b82f6] text-white font-bold uppercase tracking-wider border-2 border-[#4b4b4b] text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                                        className="px-3 py-1.5 bg-[#3b82f6] text-white font-medium border border-border text-xs hover: transition-all"
                                                       >
                                                         Open in New Tab
                                                       </button>
@@ -15036,7 +15036,7 @@ function Main() {
                                                             "_blank"
                                                           )
                                                         }
-                                                        className="px-3 py-1.5 bg-[#10b981] text-white font-bold uppercase tracking-wider border-2 border-[#4b4b4b] text-xs shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                                        className="px-3 py-1.5 bg-[#10b981] text-white font-medium border border-border text-xs hover: transition-all"
                                                       >
                                                         Google Docs Viewer
                                                       </button>
@@ -15485,7 +15485,7 @@ function Main() {
               </div>
 
               {replyToMessage && (
-                <div className="absolute bottom-20 left-2 p-3 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-between max-w-md z-20 transition-all duration-300">
+                <div className="absolute bottom-20 left-2 p-3 bg-[#bfdbfe] border border-border flex items-center justify-between max-w-md z-20 transition-all duration-300">
                   <div>
                     <div className="font-black text-[#4b4b4b] uppercase tracking-wider text-sm mb-1">
                       {replyToMessage.from_me
@@ -15505,7 +15505,7 @@ function Main() {
                           src={replyToMessage.image?.link}
                           alt="Image"
                           style={{ maxWidth: "150px" }}
-                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                          className="border border-border"
                         />
                       )}
                       {replyToMessage.type === "video" && (
@@ -15513,7 +15513,7 @@ function Main() {
                           controls
                           src={replyToMessage.video?.link}
                           style={{ maxWidth: "150px" }}
-                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                          className="border border-border"
                         />
                       )}
                       {replyToMessage.type === "gif" && (
@@ -15521,21 +15521,21 @@ function Main() {
                           src={replyToMessage.gif?.link}
                           alt="GIF"
                           style={{ maxWidth: "120px" }}
-                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                          className="border border-border"
                         />
                       )}
                       {replyToMessage.type === "audio" && (
                         <audio
                           controls
                           src={replyToMessage.audio?.link}
-                          className="border-2 border-[#4b4b4b] rounded-none"
+                          className="border border-border rounded-none"
                         />
                       )}
                       {replyToMessage.type === "voice" && (
                         <audio
                           controls
                           src={replyToMessage.voice?.link}
-                          className="border-2 border-[#4b4b4b] rounded-none"
+                          className="border border-border rounded-none"
                         />
                       )}
                       {replyToMessage.type === "document" && (
@@ -15543,7 +15543,7 @@ function Main() {
                           src={replyToMessage.document?.link}
                           width="100%"
                           height="150px"
-                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                          className="border border-border"
                         />
                       )}
                       {replyToMessage.type === "sticker" && (
@@ -15551,7 +15551,7 @@ function Main() {
                           src={replyToMessage.sticker?.link}
                           alt="Sticker"
                           style={{ maxWidth: "120px" }}
-                          className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]"
+                          className="border border-border"
                         />
                       )}
                       {replyToMessage.type === "location" && (
@@ -15579,7 +15579,7 @@ function Main() {
                   </div>
                   <button
                     onClick={() => setReplyToMessage(null)}
-                    className="p-1 border-2 border-[#4b4b4b] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[2px_2px_0_#4b4b4b] ml-2"
+                    className="p-1 border border-border bg-white transition-all duration-300 hover: ml-2"
                   >
                     <Lucide
                       icon="X"
@@ -15597,7 +15597,7 @@ function Main() {
                         <Lucide icon="Clock" className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-sm font-black uppercase tracking-wider text-[#854d0e]">
+                        <p className="text-sm font-semibold text-[#854d0e]">
                           24-hour messaging window expired
                         </p>
                         <p className="text-xs font-bold text-[#854d0e]">
@@ -15607,7 +15607,7 @@ function Main() {
                     </div>
                     <button
                       onClick={() => setIsTemplateSelectorOpen(true)}
-                      className="px-4 py-2 bg-[#f26522] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] text-white text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center gap-2"
+                      className="px-4 py-2 bg-[#f26522] border border-border hover: text-white text-sm font-semibold transition-all duration-300 flex items-center gap-2"
                     >
                       <Lucide icon="FileText" className="w-4 h-4" />
                       Send Template
@@ -15616,9 +15616,9 @@ function Main() {
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 mx-2 mb-2 animate-fade-in-up">
-                <div className="flex items-center w-full bg-white pl-3 pr-3 py-2.5 border-2 border-[#4b4b4b] shadow-[6px_6px_0_#4b4b4b] transition-all duration-300">
+                <div className="flex items-center w-full bg-white pl-3 pr-3 py-2.5 border border-border transition-all duration-300">
                   <button
-                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover: transition-all duration-300 group"
                     onClick={() => setEmojiPickerOpen(!isEmojiPickerOpen)}
                   >
                     <span className="flex items-center justify-center w-5 h-5">
@@ -15629,7 +15629,7 @@ function Main() {
                     </span>
                   </button>
                   <button
-                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover: transition-all duration-300 group"
                     onClick={() => setIsAttachmentModalOpen(true)}
                   >
                     <span className="flex items-center justify-center w-5 h-5">
@@ -15640,7 +15640,7 @@ function Main() {
                     </span>
                   </button>
                   <button
-                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 group"
+                    className="p-2.5 m-0 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover: transition-all duration-300 group"
                     onClick={() => {
                       setIsQuickRepliesOpen(true);
                       setQuickReplyFilter("");
@@ -15805,7 +15805,7 @@ function Main() {
                     disabled={userRole === "3"}
                   />
                   <button
-                    className="p-2.5 m-0 bg-[#f26522] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300 group ml-2"
+                    className="p-2.5 m-0 bg-[#f26522] border border-border hover: transition-all duration-300 group ml-2"
                     onClick={toggleRecordingPopup}
                   >
                     <span className="flex items-center justify-center w-5 h-5">
@@ -15959,7 +15959,7 @@ function Main() {
         </div>
         {isLoading2 && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-            <div className="relative bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] p-8 animate-pulse">
+            <div className="relative bg-white border border-border p-8 animate-pulse">
               <div className="flex flex-col items-center justify-center space-y-6">
                 <LoadingIcon
                   icon="rings"
@@ -16071,10 +16071,10 @@ function Main() {
         )}
         {selectedMessages.length > 0 && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
+            <div className="bg-white border border-border p-6 mx-4 max-w-sm w-full animate-in zoom-in-95 duration-200">
               {/* Header */}
               <div className="text-center mb-6">
-                <div className="w-12 h-12 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 bg-[#bfdbfe] border border-border rounded-none flex items-center justify-center mx-auto mb-3">
                   <Lucide
                     icon="MessageSquare"
                     className="w-6 h-6 text-[#4b4b4b]"
@@ -16120,7 +16120,7 @@ function Main() {
                 // Show normal action buttons for real messages
                 <div className="space-y-3">
                   <button
-                    className="w-full bg-[#3b82f6] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-[#3b82f6] text-white px-4 py-3 font-semibold border border-border hover: transition-all flex items-center justify-center gap-2"
                     onClick={() => setIsForwardDialogOpen(true)}
                   >
                     <Lucide icon="Share" className="w-4 h-4" />
@@ -16128,7 +16128,7 @@ function Main() {
                   </button>
 
                   <button
-                    className="w-full bg-[#ef4444] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-[#ef4444] text-white px-4 py-3 font-semibold border border-border hover: transition-all flex items-center justify-center gap-2"
                     onClick={openDeletePopup}
                   >
                     <Lucide icon="Trash2" className="w-4 h-4" />
@@ -16136,7 +16136,7 @@ function Main() {
                   </button>
 
                   <button
-                    className="w-full bg-white text-[#4b4b4b] px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-white text-[#4b4b4b] px-4 py-3 font-semibold border border-border hover: transition-all flex items-center justify-center gap-2"
                     onClick={() => setSelectedMessages([])}
                     onKeyDown={handleKeyDown}
                   >
@@ -16471,10 +16471,10 @@ function Main() {
         {/* Delete Confirmation Modal */}
         {isDeletePopupOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-md w-full animate-in zoom-in-95 duration-200">
+            <div className="bg-white border border-border p-6 mx-4 max-w-md w-full animate-in zoom-in-95 duration-200">
               {/* Header */}
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-[#fca5a5] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#fca5a5] border border-border rounded-none flex items-center justify-center mx-auto mb-4">
                   <Lucide
                     icon="AlertTriangle"
                     className="w-8 h-8 text-[#ef4444]"
@@ -16493,7 +16493,7 @@ function Main() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  className="flex-1 bg-[#ef4444] text-white px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                  className="flex-1 bg-[#ef4444] text-white px-4 py-3 font-semibold border border-border hover: transition-all flex items-center justify-center gap-2"
                   onClick={deleteMessages}
                 >
                   <Lucide icon="Trash2" className="w-4 h-4" />
@@ -16501,7 +16501,7 @@ function Main() {
                 </button>
 
                 <button
-                  className="flex-1 bg-white text-[#4b4b4b] px-4 py-3 font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all flex items-center justify-center gap-2"
+                  className="flex-1 bg-white text-[#4b4b4b] px-4 py-3 font-semibold border border-border hover: transition-all flex items-center justify-center gap-2"
                   onClick={closeDeletePopup}
                 >
                   <Lucide icon="X" className="w-4 h-4" />
@@ -16521,10 +16521,10 @@ function Main() {
         {/* Forward Messages Dialog */}
         {isForwardDialogOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-2xl w-full animate-in zoom-in-95 duration-200">
+            <div className="bg-white border border-border p-6 mx-4 max-w-2xl w-full animate-in zoom-in-95 duration-200">
               {/* Header */}
               <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-[#bfdbfe] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] rounded-none flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#bfdbfe] border border-border rounded-none flex items-center justify-center mx-auto mb-4">
                   <Lucide
                     icon="Share"
                     className="w-8 h-8 text-[#3b82f6]"
@@ -16548,7 +16548,7 @@ function Main() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setForwardDialogTags([])}
-                      className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                      className="px-3 py-1 text-xs font-medium bg-white border border-border text-[#4b4b4b] hover: transition-all"
                     >
                       Clear Tags
                     </button>
@@ -16695,7 +16695,7 @@ function Main() {
         )}
         {isNewChatModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 mx-4 max-w-md w-full">
+            <div className="bg-white border border-border p-6 mx-4 max-w-md w-full">
               <h2 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider mb-4">
                 Start New Chat
               </h2>
@@ -16716,20 +16716,20 @@ function Main() {
                     value={newContactNumber}
                     onChange={(e) => setNewContactNumber(e.target.value)}
                     placeholder="60123456789"
-                    className="w-full p-2 pl-6 font-bold text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                    className="w-full p-2 pl-6 font-bold text-[#4b4b4b] bg-white border border-border focus:outline-none focus: transition-all"
                   />
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
                 <button
                   onClick={closeNewChatModal}
-                  className="px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-4 py-2 bg-white text-[#4b4b4b] font-semibold border border-border hover: transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateNewChat}
-                  className="px-4 py-2 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                  className="px-4 py-2 bg-[#10b981] text-white font-semibold border border-border hover: transition-all"
                 >
                   Start Chat
                 </button>
@@ -16742,7 +16742,7 @@ function Main() {
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between p-4 border-b-4 border-[#4b4b4b] bg-white">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-[#3b82f6] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                  <div className="w-10 h-10 bg-[#3b82f6] border border-border flex items-center justify-center">
                     <Lucide icon="User" className="w-5 h-5 text-white" />
                   </div>
 
@@ -16754,7 +16754,7 @@ function Main() {
                 </div>
                 <button
                   onClick={handleEyeClick}
-                  className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                  className="p-2 bg-white border border-border hover: transition-all duration-300"
                 >
                   <Lucide
                     icon="X"
@@ -16766,7 +16766,7 @@ function Main() {
               {/* Enhanced Content Area */}
               <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-[#f9f9f9]">
                 {/* Profile Header Section */}
-                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 relative transition-all duration-500">
+                <div className="bg-white border border-border p-6 relative transition-all duration-500">
                   <div className="text-center relative z-10">
                     {/* Profile Picture */}
                     <div className="w-20 h-20 mx-auto mb-4 relative">
@@ -16774,10 +16774,10 @@ function Main() {
                         <img
                           src={selectedContact.profilePicUrl}
                           alt="Profile"
-                          className="w-full h-full object-cover border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]"
+                          className="w-full h-full object-cover border border-border"
                         />
                       ) : (
-                        <div className="w-full h-full bg-[#f26522] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center text-white text-3xl font-black">
+                        <div className="w-full h-full bg-[#f26522] border border-border flex items-center justify-center text-white text-3xl font-black">
                           {selectedContact?.contactName
                             ?.charAt(0)
                             ?.toUpperCase() ||
@@ -16813,11 +16813,11 @@ function Main() {
                 </div>
 
                 {/* Contact Information Card */}
-                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden relative group">
+                <div className="bg-white border border-border overflow-hidden relative group">
                   <div className="bg-[#bfdbfe] px-6 py-4 border-b-4 border-[#4b4b4b] relative z-10">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                        <div className="p-2 bg-white border border-border">
                           <svg
                             className="w-5 h-5 text-[#4b4b4b]"
                             fill="none"
@@ -16844,7 +16844,7 @@ function Main() {
                                 setIsEditing(true);
                                 setEditedContact({ ...selectedContact });
                               }}
-                              className="px-4 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                              className="px-4 py-2 bg-white text-[#4b4b4b] border border-border hover: transition-all font-semibold text-sm"
                             >
                               Edit
                             </button>
@@ -16853,7 +16853,7 @@ function Main() {
                               onClick={() =>
                                 setSyncDropdownOpen(!syncDropdownOpen)
                               }
-                              className="px-4 py-2 bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                              className="px-4 py-2 bg-[#10b981] text-white border border-border hover: transition-all font-semibold text-sm"
                             >
                               Sync
                             </button>
@@ -16861,7 +16861,7 @@ function Main() {
                             <button
                               onClick={handleDeleteContact}
                               disabled={deleteLoading}
-                              className={`px-4 py-2 bg-[#ef4444] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all flex items-center space-x-2 font-black uppercase tracking-wider text-sm ${deleteLoading
+                              className={`px-4 py-2 bg-[#ef4444] text-white border border-border hover: transition-all flex items-center space-x-2 font-semibold text-sm ${deleteLoading
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
                                 }`}
@@ -16880,7 +16880,7 @@ function Main() {
                           <div className="flex space-x-2">
                             <button
                               onClick={handleSaveContact}
-                              className="px-4 py-2 bg-[#10b981] text-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                              className="px-4 py-2 bg-[#10b981] text-white border border-border hover: transition-all font-semibold text-sm"
                             >
                               Save
                             </button>
@@ -16889,7 +16889,7 @@ function Main() {
                                 setIsEditing(false);
                                 setEditedContact(null);
                               }}
-                              className="px-4 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider text-sm"
+                              className="px-4 py-2 bg-white text-[#4b4b4b] border border-border hover: transition-all font-semibold text-sm"
                             >
                               Cancel
                             </button>
@@ -17372,7 +17372,7 @@ function Main() {
                         .map((item, index) => (
                           <div
                             key={index}
-                            className="bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
+                            className="bg-white border border-border p-4 transition-all duration-300 hover:"
                           >
                             <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-2">
                               {item.label}
@@ -17389,7 +17389,7 @@ function Main() {
                                     [item.key]: e.target.value,
                                   } as Contact)
                                 }
-                                className="w-full px-3 py-2 font-bold text-[#4b4b4b] border-2 border-[#4b4b4b] focus:outline-none focus:shadow-[2px_2px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                                className="w-full px-3 py-2 font-bold text-[#4b4b4b] border border-border focus:outline-none focus: transition-all bg-[#f9f9f9]"
                               />
                             ) : (
                               <p className="font-bold text-[#4b4b4b]">
@@ -17463,7 +17463,7 @@ function Main() {
                             onClick={() =>
                               setShowMoreContactInfo(!showMoreContactInfo)
                             }
-                            className="px-6 py-3 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b] transition-all duration-300 text-sm font-black uppercase tracking-wider"
+                            className="px-6 py-3 bg-white text-[#4b4b4b] border border-border hover: transition-all duration-300 text-sm font-semibold"
                           >
                             {showMoreContactInfo ? "Show Less" : "Show More"}
                           </button>
@@ -17481,9 +17481,9 @@ function Main() {
                           ).toLowerCase()
                       )
                     ) && (
-                        <div className="bg-[#10b981] p-6 border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] mb-6 transition-all duration-500">
+                        <div className="bg-[#10b981] p-6 border border-border mb-6 transition-all duration-500">
                           <div className="flex items-center space-x-3 mb-4 relative z-10">
-                            <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                            <div className="p-3 bg-white border border-border">
                               <Lucide icon="Users" className="w-5 h-5 text-[#4b4b4b]" />
                             </div>
                             <h4 className="font-black text-xl text-white uppercase tracking-wider">
@@ -17505,12 +17505,12 @@ function Main() {
                               .map((employeeTag: string, index: number) => (
                                 <div
                                   key={index}
-                                  className="inline-flex items-center bg-white text-[#4b4b4b] text-sm font-black uppercase tracking-wider px-4 py-2 border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] transition-all hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_#4b4b4b]"
+                                  className="inline-flex items-center bg-white text-[#4b4b4b] text-sm font-semibold px-4 py-2 border border-border transition-all hover:"
                                 >
-                                  <div className="w-3 h-3 bg-[#10b981] border-2 border-[#4b4b4b] mr-2"></div>
+                                  <div className="w-3 h-3 bg-[#10b981] border border-border mr-2"></div>
                                   <span>{employeeTag}</span>
                                   <button
-                                    className="ml-2 p-1 bg-[#ef4444] border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 focus:outline-none"
+                                    className="ml-2 p-1 bg-[#ef4444] border-2 border-transparent hover:border-[#4b4b4b] hover: transition-all duration-300 focus:outline-none"
                                     onClick={() =>
                                       handleRemoveTag(
                                         selectedContact.contact_id,
@@ -17531,7 +17531,7 @@ function Main() {
                   </div>
                 </div>
                 {/* Enhanced Tags Section */}
-                <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                <div className="bg-white border border-border overflow-hidden transition-all duration-500 relative group">
                   <div className="bg-[#a855f7] px-4 py-3 border-b-4 border-[#4b4b4b] relative z-10">
                     <h3 className="text-xl font-black text-white uppercase tracking-wider">
                       Tags
@@ -17562,11 +17562,11 @@ function Main() {
                             .map((tag: string, index: number) => (
                               <div
                                 key={index}
-                                className="inline-flex items-center bg-[#f26522] text-white text-sm font-black uppercase tracking-wider px-3 py-1.5 border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300"
+                                className="inline-flex items-center bg-[#f26522] text-white text-sm font-semibold px-3 py-1.5 border border-border hover: transition-all duration-300"
                               >
                                 <span>{tag}</span>
                                 <button
-                                  className="ml-2 p-1 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover:shadow-[2px_2px_0_#4b4b4b] transition-all duration-300 focus:outline-none"
+                                  className="ml-2 p-1 bg-white border-2 border-transparent hover:border-[#4b4b4b] hover: transition-all duration-300 focus:outline-none"
                                   onClick={() =>
                                     handleRemoveTag(
                                       selectedContact.contact_id,
@@ -17592,7 +17592,7 @@ function Main() {
                 </div>
 
                 <div className="bg-white/40 dark:bg-gray-700/40 backdrop-blur-3xl rounded-2xl shadow-2xl overflow-hidden border border-white/50 dark:border-gray-600/60 hover:shadow-3xl transition-all duration-500 hover:scale-[1.02] relative group">
-                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                  <div className="bg-white border border-border overflow-hidden transition-all duration-500 relative group">
                     <div className="bg-[#facc15] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
                       <div className="flex items-center gap-3">
                         <h3 className="text-xl font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -17622,14 +17622,14 @@ function Main() {
                         {selectedScheduledMessages.size > 0 && (
                           <button
                             onClick={handleDeleteSelectedScheduledMessages}
-                            className="px-3 py-1 bg-[#ef4444] text-white text-xs border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all font-black uppercase tracking-wider flex items-center gap-1"
+                            className="px-3 py-1 bg-[#ef4444] text-white text-xs border border-border hover: transition-all font-semibold flex items-center gap-1"
                             title={`Delete ${selectedScheduledMessages.size} selected messages`}
                           >
                             <Lucide icon="Trash2" className="w-3 h-3" />
                             Delete ({selectedScheduledMessages.size})
                           </button>
                         )}
-                        <span className="text-xs font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] px-2 py-1 uppercase tracking-wider">
+                        <span className="text-xs font-black text-[#4b4b4b] bg-white border border-border px-2 py-1 uppercase tracking-wider">
                           {scheduledMessages.length} scheduled
                         </span>
                       </div>
@@ -17644,9 +17644,9 @@ function Main() {
                             {scheduledMessages.map((message) => (
                               <div
                                 key={message.id}
-                                className={`flex-none w-[320px] bg-white border-2 p-4 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b] ${selectedScheduledMessages.has(message.id!)
-                                  ? "border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] bg-[#fef08a]"
-                                  : "border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]"
+                                className={`flex-none w-[320px] bg-white border-2 p-4 transition-all duration-300 hover: ${selectedScheduledMessages.has(message.id!)
+                                  ? "border-[#4b4b4b] bg-[#fef08a]"
+                                  : "border-[#4b4b4b]"
                                   }`}
                               >
                                 <div className="flex flex-col h-full">
@@ -17656,7 +17656,7 @@ function Main() {
                                         type="checkbox"
                                         checked={selectedScheduledMessages.has(message.id!)}
                                         onChange={() => handleToggleScheduledMessage(message.id!)}
-                                        className="w-4 h-4 text-[#10b981] bg-white border-2 border-[#4b4b4b] focus:ring-0 cursor-pointer"
+                                        className="w-4 h-4 text-[#10b981] bg-white border border-border focus:ring-0 cursor-pointer"
                                       />
                                       <span className="text-xs font-bold text-[#8b8b8b]">
                                         {new Date(
@@ -17665,7 +17665,7 @@ function Main() {
                                       </span>
                                     </div>
                                     <span
-                                      className={`px-2 py-0.5 border-2 border-[#4b4b4b] text-xs font-black uppercase tracking-wider ${message.status === "scheduled"
+                                      className={`px-2 py-0.5 border border-border text-xs font-semibold ${message.status === "scheduled"
                                         ? "bg-[#3b82f6] text-white"
                                         : message.status === "sent"
                                           ? "bg-[#10b981] text-white"
@@ -17723,7 +17723,7 @@ function Main() {
                                   <div className="flex gap-2 mt-2">
                                     <button
                                       onClick={() => handleSendNow(message)}
-                                      className="flex-1 px-3 py-2 bg-[#10b981] text-white text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      className="flex-1 px-3 py-2 bg-[#10b981] text-white text-xs font-semibold border border-border hover: transition-all"
                                       title="Send this message now"
                                     >
                                       Send Now
@@ -17733,7 +17733,7 @@ function Main() {
                                         handleEditScheduledMessage(message);
                                         setEditScheduledMessageModal(true);
                                       }}
-                                      className="flex-1 px-3 py-2 bg-white text-[#4b4b4b] text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      className="flex-1 px-3 py-2 bg-white text-[#4b4b4b] text-xs font-semibold border border-border hover: transition-all"
                                       title="Edit scheduled message"
                                     >
                                       Edit
@@ -17742,7 +17742,7 @@ function Main() {
                                       onClick={() =>
                                         handleDeleteScheduledMessage(message.id!)
                                       }
-                                      className="flex-1 px-3 py-2 bg-[#ef4444] text-white text-xs font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                                      className="flex-1 px-3 py-2 bg-[#ef4444] text-white text-xs font-semibold border border-border hover: transition-all"
                                       title="Delete scheduled message"
                                     >
                                       Delete
@@ -17767,7 +17767,7 @@ function Main() {
                     </div>
                   </div>
                   {/* Add the new Notes section */}
-                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                  <div className="bg-white border border-border overflow-hidden transition-all duration-500 relative group">
                     <div className="bg-[#fb923c] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
                       <h3 className="text-xl font-black text-white uppercase tracking-wider">
                         Notes
@@ -17778,7 +17778,7 @@ function Main() {
                             setIsEditing(true);
                             setEditedContact({ ...selectedContact });
                           }}
-                          className="px-3 py-2 bg-white text-[#4b4b4b] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all text-xs font-black uppercase tracking-wider"
+                          className="px-3 py-2 bg-white text-[#4b4b4b] border border-border hover: transition-all text-xs font-semibold"
                         >
                           Edit Notes
                         </button>
@@ -17794,7 +17794,7 @@ function Main() {
                               notes: e.target.value,
                             } as Contact)
                           }
-                          className="w-full h-32 p-3 font-bold text-[#4b4b4b] border-4 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                          className="w-full h-32 p-3 font-bold text-[#4b4b4b] border border-border focus:outline-none focus: transition-all bg-[#f9f9f9]"
                           placeholder="Add notes about this contact..."
                         />
                       ) : (
@@ -17806,12 +17806,12 @@ function Main() {
                   </div>
 
                   {/* Media, Links and Docs Section */}
-                  <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden transition-all duration-500 relative group">
+                  <div className="bg-white border border-border overflow-hidden transition-all duration-500 relative group">
                     <div className="bg-[#3b82f6] px-4 py-3 border-b-4 border-[#4b4b4b] flex items-center justify-between relative z-10">
                       <h3 className="text-xl font-black text-white uppercase tracking-wider">
                         Media, links & docs
                       </h3>
-                      <span className="text-xs font-black text-[#4b4b4b] bg-white border-2 border-[#4b4b4b] px-2.5 py-1 uppercase tracking-wider">
+                      <span className="text-xs font-black text-[#4b4b4b] bg-white border border-border px-2.5 py-1 uppercase tracking-wider">
                         121
                       </span>
                     </div>
@@ -17820,9 +17820,9 @@ function Main() {
 
                       {/* Sample Media Thumbnails */}
                       <div className="grid grid-cols-4 gap-3">
-                        <div className="w-full aspect-square bg-[#bfdbfe] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="w-full aspect-square bg-[#bfdbfe] border border-border flex items-center justify-center hover: transition-all">
                           <div className="text-center">
-                            <div className="w-8 h-8 bg-[#3b82f6] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                            <div className="w-8 h-8 bg-[#3b82f6] border border-border mx-auto mb-1 flex items-center justify-center">
                               <Lucide icon="BarChart3" className="w-4 h-4 text-white" />
                             </div>
                             <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -17831,9 +17831,9 @@ function Main() {
                           </div>
                         </div>
 
-                        <div className="w-full aspect-square bg-[#bbf7d0] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="w-full aspect-square bg-[#bbf7d0] border border-border flex items-center justify-center hover: transition-all">
                           <div className="text-center">
-                            <div className="w-8 h-8 bg-[#10b981] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                            <div className="w-8 h-8 bg-[#10b981] border border-border mx-auto mb-1 flex items-center justify-center">
                               <Lucide icon="FileText" className="w-4 h-4 text-white" />
                             </div>
                             <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -17842,9 +17842,9 @@ function Main() {
                           </div>
                         </div>
 
-                        <div className="w-full aspect-square bg-[#e9d5ff] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="w-full aspect-square bg-[#e9d5ff] border border-border flex items-center justify-center hover: transition-all">
                           <div className="text-center">
-                            <div className="w-8 h-8 bg-[#a855f7] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                            <div className="w-8 h-8 bg-[#a855f7] border border-border mx-auto mb-1 flex items-center justify-center">
                               <Lucide icon="Image" className="w-4 h-4 text-white" />
                             </div>
                             <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -17853,9 +17853,9 @@ function Main() {
                           </div>
                         </div>
 
-                        <div className="w-full aspect-square bg-[#fed7aa] border-2 border-[#4b4b4b] flex items-center justify-center hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                        <div className="w-full aspect-square bg-[#fed7aa] border border-border flex items-center justify-center hover: transition-all">
                           <div className="text-center">
-                            <div className="w-8 h-8 bg-[#f97316] border-2 border-[#4b4b4b] mx-auto mb-1 flex items-center justify-center">
+                            <div className="w-8 h-8 bg-[#f97316] border border-border mx-auto mb-1 flex items-center justify-center">
                               <Lucide icon="File" className="w-4 h-4 text-white" />
                             </div>
                             <p className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
@@ -17880,7 +17880,7 @@ function Main() {
             }}
           >
             <div
-              className="w-full max-w-4xl bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 z-50 flex flex-col max-h-[90vh]"
+              className="w-full max-w-4xl bg-white border border-border p-8 z-50 flex flex-col max-h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-6 flex justify-between items-center shrink-0">
@@ -17898,7 +17898,7 @@ function Main() {
                   value={messageSearchQuery}
                   onChange={handleMessageSearchChange}
                   placeholder="Search messages..."
-                  className="w-full px-4 py-3 pl-12 font-bold text-[#4b4b4b] border-4 border-[#4b4b4b] focus:outline-none focus:shadow-[4px_4px_0_#4b4b4b] transition-all bg-[#f9f9f9]"
+                  className="w-full px-4 py-3 pl-12 font-bold text-[#4b4b4b] border border-border focus:outline-none focus: transition-all bg-[#f9f9f9]"
                   ref={(input) => input && input.focus()}
                 />
                 <Lucide
@@ -17920,7 +17920,7 @@ function Main() {
                   {messageSearchResults.map((result) => (
                     <div
                       key={result.id}
-                      className="p-4 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4b4b4b]"
+                      className="p-4 bg-white border border-border cursor-pointer transition-all duration-300 hover:"
                       onClick={() => scrollToMessage(result.id)}
                     >
                       <div className="flex items-center justify-between mb-2 border-b-2 border-dashed border-[#8b8b8b] pb-2">
@@ -17979,12 +17979,12 @@ function Main() {
               onClick={() => setIsUsageDashboardOpen(false)}
             />
             {/* Modal Content */}
-            <div className="relative flex flex-col w-full max-w-6xl h-[90vh] bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden">
+            <div className="relative flex flex-col w-full max-w-6xl h-[90vh] bg-[#f9f9f9] border border-border overflow-hidden">
               {/* Header */}
               <div className="bg-[#bfdbfe] border-b-4 border-[#4b4b4b] p-6 relative z-10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-[#3b82f6] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#3b82f6] border border-border flex items-center justify-center">
                       <Lucide icon="BarChart3" className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -18000,7 +18000,7 @@ function Main() {
                     <button
                       onClick={fetchDailyUsageData}
                       disabled={isLoadingUsageData}
-                      className="flex items-center gap-2 px-4 py-2 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-2 px-4 py-2 bg-white text-[#4b4b4b] font-semibold border border-border hover: transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Lucide
                         icon={isLoadingUsageData ? "Loader2" : "RefreshCw"}
@@ -18011,7 +18011,7 @@ function Main() {
                     </button>
                     <button
                       onClick={() => setIsUsageDashboardOpen(false)}
-                      className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all"
+                      className="p-2 bg-white border border-border hover: transition-all"
                     >
                       <Lucide icon="X" className="w-5 h-5 text-[#4b4b4b]" />
                     </button>
@@ -18038,10 +18038,10 @@ function Main() {
                     <div className="space-y-5">
                       {/* Current Usage Stats */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-[#bbf7d0] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0_#4b4b4b]">
+                        <div className="bg-[#bbf7d0] border border-border p-8 transition-all duration-300 hover:">
                           <div className="relative z-10">
                             <div className="flex items-center gap-4 mb-6">
-                              <div className="w-14 h-14 bg-[#10b981] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                              <div className="w-14 h-14 bg-[#10b981] border border-border flex items-center justify-center">
                                 <Lucide
                                   icon="Sparkles"
                                   className="w-7 h-7 text-white"
@@ -18065,7 +18065,7 @@ function Main() {
                                   ).toLocaleString()}
                                 </span>
                               </div>
-                              <div className="relative w-full h-6 border-2 border-[#4b4b4b] bg-white overflow-hidden shadow-[2px_2px_0_#4b4b4b]">
+                              <div className="relative w-full h-6 border border-border bg-white overflow-hidden">
                                 <div
                                   className="absolute inset-y-0 left-0 bg-[#10b981] border-r-2 border-[#4b4b4b] transition-all duration-700 ease-out"
                                   style={{
@@ -18105,10 +18105,10 @@ function Main() {
                           </div>
                         </div>
 
-                        <div className="bg-[#fef08a] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-8 transition-all duration-300 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[12px_12px_0_#4b4b4b]">
+                        <div className="bg-[#fef08a] border border-border p-8 transition-all duration-300 hover:">
                           <div className="relative z-10">
                             <div className="flex items-center gap-4 mb-6">
-                              <div className="w-14 h-14 bg-[#eab308] border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] flex items-center justify-center">
+                              <div className="w-14 h-14 bg-[#eab308] border border-border flex items-center justify-center">
                                 <Lucide
                                   icon="Users"
                                   className="w-7 h-7 text-white"
@@ -18127,7 +18127,7 @@ function Main() {
                                   contacts
                                 </span>
                               </div>
-                              <div className="relative w-full h-6 border-2 border-[#4b4b4b] bg-white overflow-hidden shadow-[2px_2px_0_#4b4b4b]">
+                              <div className="relative w-full h-6 border border-border bg-white overflow-hidden">
                                 <div
                                   className="absolute inset-y-0 left-0 bg-[#eab308] border-r-2 border-[#4b4b4b] transition-all duration-700 ease-out"
                                   style={{ width: "100%" }}
@@ -18143,7 +18143,7 @@ function Main() {
                       </div>
 
                       {/* Daily Usage Chart */}
-                      <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] overflow-hidden">
+                      <div className="bg-white border border-border overflow-hidden">
                         <div className="bg-[#c084fc] px-6 py-5 border-b-4 border-[#4b4b4b]">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
@@ -18409,7 +18409,7 @@ function Main() {
 
                               {/* Enhanced Usage Summary */}
                               <div className="grid grid-cols-3 gap-6 pt-6 border-t-4 border-dashed border-[#8b8b8b]">
-                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                <div className="text-center p-4 bg-white border border-border">
                                   <div className="flex items-center justify-center mb-2">
                                     <Lucide
                                       icon="Sparkles"
@@ -18431,7 +18431,7 @@ function Main() {
                                     Past 7 days
                                   </div>
                                 </div>
-                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                <div className="text-center p-4 bg-white border border-border">
                                   <div className="flex items-center justify-center mb-2">
                                     <Lucide
                                       icon="UserPlus"
@@ -18453,7 +18453,7 @@ function Main() {
                                     Past 7 days
                                   </div>
                                 </div>
-                                <div className="text-center p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
+                                <div className="text-center p-4 bg-white border border-border">
                                   <div className="flex items-center justify-center mb-2">
                                     <Lucide
                                       icon="Users"
@@ -18473,9 +18473,9 @@ function Main() {
                               </div>
                             </div>
                           ) : (
-                            <div className="h-80 flex items-center justify-center p-8 bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b]">
+                            <div className="h-80 flex items-center justify-center p-8 bg-white border border-border">
                               <div className="text-center">
-                                <div className="w-20 h-20 bg-[#f9f9f9] border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] flex items-center justify-center mx-auto mb-6">
+                                <div className="w-20 h-20 bg-[#f9f9f9] border border-border flex items-center justify-center mx-auto mb-6">
                                   <Lucide
                                     icon="BarChart3"
                                     className="w-10 h-10 text-[#4b4b4b]"
@@ -18495,7 +18495,7 @@ function Main() {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="bg-[#bfdbfe] border-4 border-[#4b4b4b] shadow-[8px_8px_0_#4b4b4b] p-6 transition-all duration-300">
+                      <div className="bg-[#bfdbfe] border border-border p-6 transition-all duration-300">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <button
@@ -18504,7 +18504,7 @@ function Main() {
                                   "📊 Export functionality will be available soon with CSV, PDF, and Excel formats!"
                                 );
                               }}
-                              className="flex items-center gap-3 px-6 py-3 bg-white text-[#4b4b4b] font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] transition-all group"
+                              className="flex items-center gap-3 px-6 py-3 bg-white text-[#4b4b4b] font-semibold border border-border hover: transition-all group"
                             >
                               <Lucide
                                 icon="Download"
@@ -18519,7 +18519,7 @@ function Main() {
                               setIsUsageDashboardOpen(false);
                               setIsTopUpModalOpen(true);
                             }}
-                            className="flex items-center gap-3 px-6 py-3 bg-[#10b981] text-white font-black uppercase tracking-wider border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#4b4b4b] transition-all group"
+                            className="flex items-center gap-3 px-6 py-3 bg-[#10b981] text-white font-semibold border border-border hover: transition-all group"
                           >
                             <Lucide
                               icon="Plus"

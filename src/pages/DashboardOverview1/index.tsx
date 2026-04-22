@@ -107,7 +107,7 @@ const SplitTestDashboardCompact = () => {
       <div className="p-6 relative z-10">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+            <div className="p-2 bg-white border border-border">
               <div className="text-xl leading-none">🧪</div>
             </div>
             <div>
@@ -116,18 +116,18 @@ const SplitTestDashboardCompact = () => {
             </div>
           </div>
           <Link to="/split-test">
-            <Button variant="primary" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-[10px] px-3 py-1.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+            <Button variant="primary" className="bg-[#f26522] border border-border text-white font-semibold text-[10px] px-3 py-1.5 hover: transition-all">
               Manage Tests →
             </Button>
           </Link>
         </div>
 
         {!hasData ? (
-          <div className="text-center py-6 border-2 border-[#4b4b4b] border-dashed bg-white">
+          <div className="text-center py-6 border border-border border-dashed bg-white">
             <div className="text-4xl mb-3">🚀</div>
             <p className="text-sm font-black text-[#4b4b4b] uppercase tracking-wider mb-4">No split tests yet</p>
             <Link to="/split-test">
-              <Button variant="primary" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-xs px-4 py-2 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+              <Button variant="primary" className="bg-[#f26522] border border-border text-white font-semibold text-xs px-4 py-2 hover: transition-all">
                 Create First Test
               </Button>
             </Link>
@@ -136,22 +136,22 @@ const SplitTestDashboardCompact = () => {
           <div>
             {/* Compact metrics */}
             <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+              <div className="text-center bg-white border border-border p-3 hover: transition-all duration-300">
                 <div className="text-xl font-black text-[#3b82f6]">{splitTestData.totalCustomers}</div>
-                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Total</div>
+                <div className="text-[10px] font-semibold text-[#4b4b4b] mt-1">Total</div>
               </div>
-              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+              <div className="text-center bg-white border border-border p-3 hover: transition-all duration-300">
                 <div className="text-xl font-black text-[#10b981]">{splitTestData.closedCustomers}</div>
-                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Closed</div>
+                <div className="text-[10px] font-semibold text-[#4b4b4b] mt-1">Closed</div>
               </div>
-              <div className="text-center bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] p-3 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#f26522] transition-all duration-300">
+              <div className="text-center bg-white border border-border p-3 hover: transition-all duration-300">
                 <div className="text-xl font-black text-[#8b5cf6]">
                   {splitTestData.totalCustomers > 0
                     ? ((splitTestData.closedCustomers / splitTestData.totalCustomers) * 100).toFixed(1)
                     : '0'
                   }%
                 </div>
-                <div className="text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-1">Rate</div>
+                <div className="text-[10px] font-semibold text-[#4b4b4b] mt-1">Rate</div>
               </div>
             </div>
 
@@ -168,9 +168,9 @@ const SplitTestDashboardCompact = () => {
                   const isWorst = index === splitTestData.variationStats.filter(v => v.isActive).length - 1 && splitTestData.variationStats.filter(v => v.isActive).length > 1;
 
                   return (
-                    <div key={index} className={`flex items-center justify-between text-xs bg-white border-2 border-[#4b4b4b] px-3 py-2 ${isTop ? 'shadow-[2px_2px_0_#10b981]' : isWorst ? 'shadow-[2px_2px_0_#ef4444]' : 'shadow-[2px_2px_0_#3b82f6]'}`}>
+                    <div key={index} className={`flex items-center justify-between text-xs bg-white border border-border px-3 py-2 ${isTop ? 'shadow-[2px_2px_0_#10b981]' : isWorst ? 'shadow-[2px_2px_0_#ef4444]' : 'shadow-[2px_2px_0_#3b82f6]'}`}>
                       <div className="flex items-center gap-2 max-w-[50%]">
-                        <div className={`flex-shrink-0 w-5 h-5 flex items-center justify-center text-[10px] font-black text-white border-2 border-[#4b4b4b] shadow-[1px_1px_0_#4b4b4b] ${isTop ? 'bg-[#eab308]' : isWorst ? 'bg-[#ef4444]' : 'bg-[#3b82f6]'}`}>
+                        <div className={`flex-shrink-0 w-5 h-5 flex items-center justify-center text-[10px] font-black text-white border border-border ${isTop ? 'bg-[#eab308]' : isWorst ? 'bg-[#ef4444]' : 'bg-[#3b82f6]'}`}>
                           {index + 1}
                         </div>
                         <span className="font-black text-[#4b4b4b] text-xs uppercase tracking-wider truncate">
@@ -215,7 +215,7 @@ const SplitTestDashboardCompact = () => {
               {splitTestData.variationStats.filter(v => v.isActive).length > 1 && (
                 <div className="mt-4 pt-4 border-t-2 border-[#4b4b4b] border-dashed">
                   <div className="grid grid-cols-1 gap-3">
-                    <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#10b981]">
+                    <div className="flex items-center gap-3 p-3 bg-white border border-border shadow-[2px_2px_0_#10b981]">
                       <span className="text-xl leading-none">🏆</span>
                       <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
                         Best: <strong className="text-[#10b981]">
@@ -223,7 +223,7 @@ const SplitTestDashboardCompact = () => {
                         </strong>
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#ef4444]">
+                    <div className="flex items-center gap-3 p-3 bg-white border border-border shadow-[2px_2px_0_#ef4444]">
                       <span className="text-xl leading-none">📉</span>
                       <span className="text-[10px] font-black text-[#4b4b4b] uppercase tracking-wider">
                         Needs Work: <strong className="text-[#ef4444]">
@@ -626,7 +626,7 @@ function EmployeeSearch({
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
-          className="w-full pl-10 pr-10 border-2 border-[#4b4b4b] bg-white text-[#4b4b4b] placeholder-[#4b4b4b] font-bold text-xs uppercase tracking-wider rounded-none focus:ring-0 focus:border-[#f26522] transition-colors"
+          className="w-full pl-10 pr-10 border border-border bg-white text-[#4b4b4b] placeholder-[#4b4b4b] font-bold text-xs uppercase tracking-wider rounded-none focus:ring-0 focus:border-[#f26522] transition-colors"
         />
         {searchQuery && (
           <button
@@ -641,7 +641,7 @@ function EmployeeSearch({
         )}
       </div>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-1 bg-white border-2 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] max-h-60 overflow-auto">
+        <div className="absolute z-10 w-full mt-1 bg-white border border-border max-h-60 overflow-auto">
           {filteredEmployees.length > 0 ? (
             filteredEmployees.map((employee) => (
               <div
@@ -654,7 +654,7 @@ function EmployeeSearch({
                   setSearchQuery(employee.name);
                 }}
               >
-                <div className="w-8 h-8 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#4b4b4b] font-black flex items-center justify-center mr-3 flex-shrink-0">
+                <div className="w-8 h-8 bg-white border border-border text-[#4b4b4b] font-black flex items-center justify-center mr-3 flex-shrink-0">
                   {employee.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0">
@@ -3914,7 +3914,7 @@ function Main() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {dashboardCards.find(card => card.id === 'kpi')?.content && Array.isArray(dashboardCards.find(card => card.id === 'kpi')?.content)
             ? (dashboardCards.find(card => card.id === 'kpi')?.content as any[]).map((item: any, index: number) => (
-              <div key={index} className="bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#f26522] p-5 hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[8px_8px_0_#f26522] transition-all duration-300 animate-fade-in-up relative group" style={{ animationDelay: `${index * 100}ms` }}>
+              <div key={index} className="bg-white border border-border p-5 hover: transition-all duration-300 animate-fade-in-up relative group" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -3932,14 +3932,14 @@ function Main() {
                     </div>
                     <h3 className="text-2xl font-black text-[#f26522]">
                       {!loading ? item.value : (
-                        <div className="h-8 w-16 bg-gray-200 border-2 border-[#4b4b4b] animate-pulse"></div>
+                        <div className="h-8 w-16 bg-gray-200 border border-border animate-pulse"></div>
                       )}
                     </h3>
 
                     {/* Progress bar for Total Contacts */}
                     {item.label === "Total Contacts" && (
                       <div className="mt-4">
-                        <div className="w-full h-4 bg-white border-2 border-[#4b4b4b] relative">
+                        <div className="w-full h-4 bg-white border border-border relative">
                           <div
                             className={`h-full border-r-2 border-[#4b4b4b] transition-all duration-500 bg-[#3b82f6]`}
                             style={{
@@ -3951,7 +3951,7 @@ function Main() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-2">
+                        <div className="flex justify-between text-[10px] font-semibold text-[#4b4b4b] mt-2">
                           <span>Used: {totalContacts}</span>
                           <span>Limit: 10000</span>
                         </div>
@@ -3961,7 +3961,7 @@ function Main() {
                     {/* Progress bar for AI Responses */}
                     {item.label === "Total AI Responses Used" && (
                       <div className="mt-4">
-                        <div className="w-full h-4 bg-white border-2 border-[#4b4b4b] relative">
+                        <div className="w-full h-4 bg-white border border-border relative">
                           <div
                             className={`h-full border-r-2 border-[#4b4b4b] transition-all duration-500 bg-[#10b981]`}
                             style={{
@@ -3973,14 +3973,14 @@ function Main() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between text-[10px] font-black uppercase tracking-wider text-[#4b4b4b] mt-2">
+                        <div className="flex justify-between text-[10px] font-semibold text-[#4b4b4b] mt-2">
                           <span>Remaining: {Math.max(aiMessageQuota - totalAIResponses, 0)}</span>
                           <span>Limit: {aiMessageQuota}</span>
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] text-[#f26522] group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
+                  <div className="p-3 bg-white border border-border text-[#f26522] group-hover:-translate-y-1 group-hover:-translate-x-1 group-hover: transition-all duration-300">
                     {item.icon && <Lucide icon={item.icon} className="w-6 h-6 stroke-[3]" />}
                   </div>
                 </div>
@@ -3993,7 +3993,7 @@ function Main() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contacts Over Time */}
           {dashboardCards.find(card => card.id === 'contacts-over-time') && (
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+            <div className="bg-white border border-border overflow-hidden">
               <div className="px-6 py-4 flex justify-between items-center border-b-4 border-[#4b4b4b] bg-white">
                 <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                   {dashboardCards.find(card => card.id === 'contacts-over-time')?.title}
@@ -4006,11 +4006,11 @@ function Main() {
                 {('datasets' in totalContactsChartData) ? (
                   <Bar data={totalContactsChartData} options={totalContactsChartOptions} />
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
-                    <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border border-border border-dashed text-[#4b4b4b]">
+                    <div className="p-3 bg-white border border-border mb-4">
                       <Lucide icon="BarChart3" className="w-8 h-8 text-[#4b4b4b]" />
                     </div>
-                    <p className="text-sm font-black uppercase tracking-wider">No data available</p>
+                    <p className="text-sm font-semibold">No data available</p>
                   </div>
                 )}
               </div>
@@ -4018,7 +4018,7 @@ function Main() {
           )}
 
           {/* Split Test Performance */}
-          <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+          <div className="bg-white border border-border overflow-hidden">
             <div className="px-6 py-4 border-b-4 border-[#4b4b4b] bg-white">
               <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                 Split Test Performance
@@ -4032,13 +4032,13 @@ function Main() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Blast Messages */}
           {dashboardCards.find(card => card.id === 'blast-messages') && (
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+            <div className="bg-white border border-border overflow-hidden">
               <div className="px-6 py-4 flex justify-between items-center border-b-4 border-[#4b4b4b] bg-white">
                 <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider">
                   {dashboardCards.find(card => card.id === 'blast-messages')?.title}
                 </h3>
                 <Link to="blast-history">
-                  <Button variant="primary" size="sm" className="bg-[#f26522] border-2 border-[#4b4b4b] text-white font-black uppercase tracking-wider text-[10px] px-3 py-1.5 shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] transition-all">
+                  <Button variant="primary" size="sm" className="bg-[#f26522] border border-border text-white font-semibold text-[10px] px-3 py-1.5 hover: transition-all">
                     <Lucide icon="ExternalLink" className="w-3 h-3 mr-1 inline-block" />
                     Blast History
                   </Button>
@@ -4088,11 +4088,11 @@ function Main() {
                       }
                     }} />
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-center text-[#4b4b4b] bg-white border-4 border-[#4b4b4b] border-dashed">
-                      <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                    <div className="flex flex-col items-center justify-center h-full text-center text-[#4b4b4b] bg-white border border-border border-dashed">
+                      <div className="p-3 bg-white border border-border mb-4">
                         <Lucide icon="Mail" className="w-8 h-8 text-[#4b4b4b]" />
                       </div>
-                      <p className="text-sm font-black uppercase tracking-wider mb-2">No scheduled message data available</p>
+                      <p className="text-sm font-semibold mb-2">No scheduled message data available</p>
                       <p className="text-xs font-bold text-gray-500 uppercase">Create blast messages to see analytics</p>
                     </div>
                   )}
@@ -4100,20 +4100,20 @@ function Main() {
 
                 {blastMessageData.labels.length > 0 && (
                   <div className="mt-6 grid grid-cols-3 gap-4">
-                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-[#3b82f6] mb-1">Total Scheduled</p>
+                    <div className="p-3 bg-white border border-border hover: transition-all duration-300">
+                      <p className="text-[10px] font-semibold text-[#3b82f6] mb-1">Total Scheduled</p>
                       <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[0].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
                     </div>
-                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-[#10b981] mb-1">Total Completed</p>
+                    <div className="p-3 bg-white border border-border hover: transition-all duration-300">
+                      <p className="text-[10px] font-semibold text-[#10b981] mb-1">Total Completed</p>
                       <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[1].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
                     </div>
-                    <div className="p-3 bg-white border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[4px_4px_0_#4b4b4b] transition-all duration-300">
-                      <p className="text-[10px] font-black uppercase tracking-wider text-[#e11d48] mb-1">Total Failed</p>
+                    <div className="p-3 bg-white border border-border hover: transition-all duration-300">
+                      <p className="text-[10px] font-semibold text-[#e11d48] mb-1">Total Failed</p>
                       <p className="text-lg font-black text-[#4b4b4b]">
                         {blastMessageData.datasets[2].data.reduce((a, b) => a + b, 0).toLocaleString()}
                       </p>
@@ -4126,16 +4126,16 @@ function Main() {
 
           {/* Employee Metrics */}
           {dashboardCards.find(card => card.id === 'employee-assignments') && (
-            <div className="bg-white border-4 border-[#4b4b4b] shadow-[8px_8px_0_#f26522] overflow-hidden">
+            <div className="bg-white border border-border overflow-hidden">
               <div className="px-6 py-4 border-b-4 border-[#4b4b4b] bg-white">
                 <h3 className="text-lg font-black text-[#4b4b4b] uppercase tracking-wider mb-4">
                   {dashboardCards.find(card => card.id === 'employee-assignments')?.title}
                 </h3>
                 <div className="mb-2">
-                  <label className="block text-xs font-black uppercase tracking-wider text-[#4b4b4b] mb-2">
+                  <label className="block text-xs font-semibold text-[#4b4b4b] mb-2">
                     Select Employee
                   </label>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center justify-between">
+                  <div className="text-[10px] font-medium text-gray-500 mb-3 flex items-center justify-between">
                     <span>Available employees: {employees.length} | Current user: {currentUser?.name || 'None'}</span>
                     <button
                       onClick={async () => {
@@ -4174,13 +4174,13 @@ function Main() {
                           }
                         }
                       }}
-                      className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider bg-white border-2 border-[#4b4b4b] text-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_#4b4b4b] active:translate-y-0 active:translate-x-0 active:shadow-[1px_1px_0_#4b4b4b] transition-all"
+                      className="px-3 py-1.5 text-[10px] font-semibold bg-white border border-border text-[#4b4b4b] hover: active: transition-all"
                       title="Refresh employee assignments"
                     >
                       🔄 Refresh
                     </button>
                   </div>
-                  <div className="border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b] p-1 bg-white focus-within:ring-2 focus-within:ring-[#f26522] transition-all">
+                  <div className="border border-border p-1 bg-white focus-within:ring-2 focus-within:ring-[#f26522] transition-all">
                     <EmployeeSearch
                       employees={employees}
                       onSelect={(employee: { id: string; name: string; assignedContacts?: number | undefined; }) =>
@@ -4192,40 +4192,40 @@ function Main() {
               </div>
               <div className="p-6">
                 {loading ? (
-                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
-                    <div className="w-8 h-8 border-4 border-[#4b4b4b] border-t-transparent rounded-none animate-spin shadow-[2px_2px_0_#4b4b4b]"></div>
-                    <span className="mt-4 text-[10px] font-black uppercase tracking-wider">Loading employee data...</span>
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border border-border border-dashed text-[#4b4b4b]">
+                    <div className="w-8 h-8 border border-border border-t-transparent rounded-none animate-spin"></div>
+                    <span className="mt-4 text-[10px] font-semibold">Loading employee data...</span>
                   </div>
                 ) : selectedEmployee ? (
                   chartData ? (
                     <div>
-                      <div className="flex items-center mb-6 p-4 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b]">
-                        <div className="w-8 h-8 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] text-white flex items-center justify-center mr-3 font-black border-2 border-[#4b4b4b] shadow-[2px_2px_0_#4b4b4b]">
+                      <div className="flex items-center mb-6 p-4 bg-white border border-border">
+                        <div className="w-8 h-8 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] text-white flex items-center justify-center mr-3 font-black border border-border">
                           {selectedEmployee.name.charAt(0).toUpperCase()}
                         </div>
                         <span className="font-black text-[#4b4b4b] uppercase tracking-wider">{selectedEmployee.name}</span>
                         <span className="mx-3 text-[#4b4b4b] font-black">|</span>
                         <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">{selectedEmployee.assignedContacts || 0} assigned contacts</span>
                       </div>
-                      <div className="h-48 border-2 border-[#4b4b4b] p-2 bg-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]">
+                      <div className="h-48 border border-border p-2 bg-white shadow-[inset_2px_2px_0_rgba(0,0,0,0.05)]">
                         <Line data={chartData} options={lineChartOptions} />
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
-                      <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                    <div className="flex flex-col items-center justify-center h-48 bg-white border border-border border-dashed text-[#4b4b4b]">
+                      <div className="p-3 bg-white border border-border mb-4">
                         <Lucide icon="BarChart2" className="w-8 h-8 text-[#4b4b4b]" />
                       </div>
-                      <p className="text-sm font-black uppercase tracking-wider mb-1">No assignment data available</p>
+                      <p className="text-sm font-semibold mb-1">No assignment data available</p>
                       <p className="text-[10px] font-bold text-gray-500 uppercase">Employee has {selectedEmployee.assignedContacts || 0} assigned contacts</p>
                     </div>
                   )
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-48 bg-white border-4 border-[#4b4b4b] border-dashed text-[#4b4b4b]">
-                    <div className="p-3 bg-white border-4 border-[#4b4b4b] shadow-[4px_4px_0_#4b4b4b] mb-4">
+                  <div className="flex flex-col items-center justify-center h-48 bg-white border border-border border-dashed text-[#4b4b4b]">
+                    <div className="p-3 bg-white border border-border mb-4">
                       <Lucide icon="User" className="w-8 h-8 text-[#4b4b4b]" />
                     </div>
-                    <p className="text-sm font-black uppercase tracking-wider">Select an employee to view their chart</p>
+                    <p className="text-sm font-semibold">Select an employee to view their chart</p>
                   </div>
                 )}
               </div>
@@ -4237,7 +4237,7 @@ function Main() {
       {/* Info Tooltip */}
       {infoTooltip && (
         <div
-          className="fixed z-50 bg-white border-4 border-[#4b4b4b] shadow-[6px_6px_0_#f26522] text-[#4b4b4b] p-4 max-w-xs text-xs font-bold"
+          className="fixed z-50 bg-white border border-border text-[#4b4b4b] p-4 max-w-xs text-xs font-bold"
           style={{
             left: tooltipPosition.x,
             top: tooltipPosition.y,
