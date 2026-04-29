@@ -18,7 +18,7 @@
 // the existing /api/templates/... pattern (companyId in path, phoneIndex
 // as query string, credentials: 'include' for session cookies).
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Lucide from "@/components/Base/Lucide";
 import Button from "@/components/Base/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -843,51 +843,17 @@ const LeadFormsPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Optional image attachment — sent with the message text as caption. */}
-            <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
-                Image (optional)
-              </label>
-              <div className="flex items-start gap-3">
-                {/* Thumbnail preview when a URL is set */}
-                {draft.auto_reply_image_url ? (
-                  <div className="relative shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={draft.auto_reply_image_url}
-                      alt="Auto-reply attachment preview"
-                      className="h-16 w-16 object-cover rounded-lg border border-slate-200"
-                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setDraft({ ...draft, auto_reply_image_url: "" })}
-                      title="Remove image"
-                      className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-rose-600 transition-colors"
-                    >
-                      <Lucide icon="X" className="w-3 h-3" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="h-16 w-16 shrink-0 flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
-                    <Lucide icon="Image" className="w-5 h-5 text-slate-300" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <input
-                    type="url"
-                    value={draft.auto_reply_image_url}
-                    onChange={(e) => setDraft({ ...draft, auto_reply_image_url: e.target.value })}
-                    placeholder="https://yourbrand.com/lead-magnet.jpg"
-                    className="w-full px-3 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100"
-                  />
-                  <p className="text-[10px] text-slate-500 mt-1">
-                    Public URL of an image to attach. The auto-reply text becomes its caption.
-                    Leave blank to send text-only. JPG, PNG, or GIF.
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* Optional image attachment — uploaded directly from the
+                user's device (no public URL hosting needed). The file is
+                read as a base64 data: URL via FileReader and stored in
+                the same field; the server detects data: URLs and builds
+                a MessageMedia(mime, base64) directly. Cap at 4 MB raw
+                so the base64 payload stays well under the 50 MB Express
+                body limit. */}
+            <ImageUploadField
+              value={draft.auto_reply_image_url}
+              onChange={(v) => setDraft({ ...draft, auto_reply_image_url: v })}
+            />
           </div>
 
           <div className="flex items-center justify-end gap-2 mt-5 pt-4 border-t border-slate-200">
@@ -953,6 +919,114 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, placeholder, onCopy, 
         >
           <Lucide icon="Copy" className="w-4 h-4" />
         </button>
+      </div>
+    </div>
+  );
+};
+
+// ── ImageUploadField ──────────────────────────────────────────────────
+//
+// File picker that converts the chosen image to a base64 data: URL and
+// stores it in `value`. The server treats data: URLs the same as https
+// URLs for MessageMedia, so the user never needs a public host.
+//
+// Limit: 4 MB raw — base64 expands by ~33 %, leaving plenty of headroom
+// under the server's 50 MB body limit. Bigger images get a friendly
+// toast saying so + suggestion to compress.
+const IMAGE_MAX_BYTES = 4 * 1024 * 1024;
+
+const ImageUploadField: React.FC<{
+  value: string;
+  onChange: (v: string) => void;
+}> = ({ value, onChange }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [reading, setReading] = useState(false);
+
+  const onPick = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Pick an image file (JPG, PNG, GIF, or WebP).");
+      return;
+    }
+    if (file.size > IMAGE_MAX_BYTES) {
+      const mb = (file.size / 1024 / 1024).toFixed(1);
+      toast.error(`Image is ${mb} MB — max is 4 MB. Compress it first.`);
+      return;
+    }
+    setReading(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || "");
+      if (!dataUrl.startsWith("data:")) {
+        toast.error("Couldn't read that file. Try another image.");
+        setReading(false);
+        return;
+      }
+      onChange(dataUrl);
+      setReading(false);
+    };
+    reader.onerror = () => {
+      toast.error("FileReader failed. Try another image.");
+      setReading(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div>
+      <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
+        Image (optional)
+      </label>
+      <div className="flex items-start gap-3">
+        {value ? (
+          <div className="relative shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={value}
+              alt="Auto-reply attachment preview"
+              className="h-16 w-16 object-cover rounded-lg border border-slate-200"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
+            />
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              title="Remove image"
+              className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-rose-600 transition-colors"
+            >
+              <Lucide icon="X" className="w-3 h-3" />
+            </button>
+          </div>
+        ) : (
+          <div className="h-16 w-16 shrink-0 flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
+            <Lucide icon="Image" className="w-5 h-5 text-slate-300" />
+          </div>
+        )}
+        <div className="flex-1">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onPick(e.target.files?.[0])}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={reading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold rounded-lg border border-slate-200 bg-white text-slate-700 hover:border-adletic-orange hover:text-adletic-orange transition-colors disabled:opacity-50"
+          >
+            {reading ? (
+              <LoadingIcon icon="oval" className="w-3 h-3" />
+            ) : (
+              <Lucide icon={value ? "RefreshCw" : "Upload"} className="w-3.5 h-3.5" />
+            )}
+            {reading ? "Reading…" : value ? "Replace image" : "Upload image"}
+          </button>
+          <p className="text-[10px] text-slate-500 mt-1.5">
+            Pick any JPG / PNG / GIF / WebP from your device. The auto-reply
+            text becomes its caption. Leave blank to send text-only. Max 4 MB.
+          </p>
+        </div>
       </div>
     </div>
   );
