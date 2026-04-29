@@ -33,6 +33,7 @@ interface LeadForm {
   fb_page_name?: string; // resolved on the server when possible
   label: string;         // friendly name shown in the UI
   auto_reply_template: string;
+  auto_reply_image_url?: string | null;
   is_active: boolean;
   total_leads: number;
   last_lead_at?: string | null;
@@ -89,6 +90,7 @@ const LeadFormsPage: React.FC = () => {
     fb_page_access_token: "",
     label: "",
     auto_reply_template: DEFAULT_TEMPLATE,
+    auto_reply_image_url: "",
   });
 
   // Remember the last phone used for "Send test" so the user doesn't
@@ -199,7 +201,14 @@ const LeadFormsPage: React.FC = () => {
 
   const openAddModal = () => {
     setEditingId(null);
-    setDraft({ fb_form_id: "", fb_page_id: "", fb_page_access_token: "", label: "", auto_reply_template: DEFAULT_TEMPLATE });
+    setDraft({
+      fb_form_id: "",
+      fb_page_id: "",
+      fb_page_access_token: "",
+      label: "",
+      auto_reply_template: DEFAULT_TEMPLATE,
+      auto_reply_image_url: "",
+    });
     resetDiscovery();
     setShowFormModal(true);
   };
@@ -212,6 +221,7 @@ const LeadFormsPage: React.FC = () => {
       fb_page_access_token: "", // never echo the token back; user re-pastes if rotating
       label: f.label,
       auto_reply_template: f.auto_reply_template,
+      auto_reply_image_url: f.auto_reply_image_url || "",
     });
     resetDiscovery();
     setShowFormModal(true);
@@ -831,6 +841,52 @@ const LeadFormsPage: React.FC = () => {
                 <code className="bg-slate-100 px-1 rounded">{"{{phone}}"}</code>{" "}
                 <code className="bg-slate-100 px-1 rounded">{"{{form_label}}"}</code>
               </p>
+            </div>
+
+            {/* Optional image attachment — sent with the message text as caption. */}
+            <div>
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
+                Image (optional)
+              </label>
+              <div className="flex items-start gap-3">
+                {/* Thumbnail preview when a URL is set */}
+                {draft.auto_reply_image_url ? (
+                  <div className="relative shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={draft.auto_reply_image_url}
+                      alt="Auto-reply attachment preview"
+                      className="h-16 w-16 object-cover rounded-lg border border-slate-200"
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setDraft({ ...draft, auto_reply_image_url: "" })}
+                      title="Remove image"
+                      className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-rose-600 transition-colors"
+                    >
+                      <Lucide icon="X" className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="h-16 w-16 shrink-0 flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
+                    <Lucide icon="Image" className="w-5 h-5 text-slate-300" />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <input
+                    type="url"
+                    value={draft.auto_reply_image_url}
+                    onChange={(e) => setDraft({ ...draft, auto_reply_image_url: e.target.value })}
+                    placeholder="https://yourbrand.com/lead-magnet.jpg"
+                    className="w-full px-3 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100"
+                  />
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    Public URL of an image to attach. The auto-reply text becomes its caption.
+                    Leave blank to send text-only. JPG, PNG, or GIF.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
