@@ -850,7 +850,7 @@ const LeadFormsPage: React.FC = () => {
                 a MessageMedia(mime, base64) directly. Cap at 4 MB raw
                 so the base64 payload stays well under the 50 MB Express
                 body limit. */}
-            <ImageUploadField
+            <MediaUploadField
               value={draft.auto_reply_image_url}
               onChange={(v) => setDraft({ ...draft, auto_reply_image_url: v })}
             />
@@ -924,33 +924,51 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, placeholder, onCopy, 
   );
 };
 
-// ── ImageUploadField ──────────────────────────────────────────────────
+// ── MediaUploadField ──────────────────────────────────────────────────
 //
-// File picker that converts the chosen image to a base64 data: URL and
+// File picker that converts the chosen media to a base64 data: URL and
 // stores it in `value`. The server treats data: URLs the same as https
 // URLs for MessageMedia, so the user never needs a public host.
 //
-// Limit: 4 MB raw — base64 expands by ~33 %, leaving plenty of headroom
-// under the server's 50 MB body limit. Bigger images get a friendly
-// toast saying so + suggestion to compress.
-const IMAGE_MAX_BYTES = 4 * 1024 * 1024;
+// Accepts: JPG / PNG / GIF / WebP / MP4 / WebM. Anything starting with
+// "image/" or "video/" is fine.
+//
+// Why MP4 too: WhatsApp only animates GIFs reliably when they're sent
+// as MP4 with `sendVideoAsGif: true` (the server adds that flag for
+// any video/* mime). So if the user wants an animated GIF, they should
+// upload an MP4 — this is what most GIF-export tools (Giphy, etc.)
+// already produce.
+//
+// Limit: 8 MB raw — bigger than the 4 MB image cap because short MP4
+// "GIFs" routinely run 5–7 MB. Base64 expands by ~33 %, still fits well
+// under the server's 50 MB body limit.
+const MEDIA_MAX_BYTES = 8 * 1024 * 1024;
 
-const ImageUploadField: React.FC<{
+const MediaUploadField: React.FC<{
   value: string;
   onChange: (v: string) => void;
 }> = ({ value, onChange }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [reading, setReading] = useState(false);
 
+  // Sniff the mime out of a data: URL so we can decide whether to render
+  // the preview as <video> (MP4/WebM) or <img> (everything else).
+  const valueMime = (() => {
+    const m = /^data:([^;,]+)/.exec(value || "");
+    return m ? m[1] : "";
+  })();
+  const isVideo = valueMime.startsWith("video/");
+
   const onPick = (file: File | undefined) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      toast.error("Pick an image file (JPG, PNG, GIF, or WebP).");
+    const ok = file.type.startsWith("image/") || file.type.startsWith("video/");
+    if (!ok) {
+      toast.error("Pick an image (JPG / PNG / GIF / WebP) or video (MP4 / WebM).");
       return;
     }
-    if (file.size > IMAGE_MAX_BYTES) {
+    if (file.size > MEDIA_MAX_BYTES) {
       const mb = (file.size / 1024 / 1024).toFixed(1);
-      toast.error(`Image is ${mb} MB — max is 4 MB. Compress it first.`);
+      toast.error(`File is ${mb} MB — max is 8 MB. Compress it first.`);
       return;
     }
     setReading(true);
@@ -958,7 +976,7 @@ const ImageUploadField: React.FC<{
     reader.onload = () => {
       const dataUrl = String(reader.result || "");
       if (!dataUrl.startsWith("data:")) {
-        toast.error("Couldn't read that file. Try another image.");
+        toast.error("Couldn't read that file. Try another one.");
         setReading(false);
         return;
       }
@@ -966,7 +984,7 @@ const ImageUploadField: React.FC<{
       setReading(false);
     };
     reader.onerror = () => {
-      toast.error("FileReader failed. Try another image.");
+      toast.error("FileReader failed. Try another file.");
       setReading(false);
     };
     reader.readAsDataURL(file);
@@ -975,26 +993,42 @@ const ImageUploadField: React.FC<{
   return (
     <div>
       <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
-        Image (optional)
+        Image / GIF / video (optional)
       </label>
       <div className="flex items-start gap-3">
         {value ? (
           <div className="relative shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={value}
-              alt="Auto-reply attachment preview"
-              className="h-16 w-16 object-cover rounded-lg border border-slate-200"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
-            />
+            {isVideo ? (
+              <video
+                src={value}
+                muted
+                loop
+                playsInline
+                autoPlay
+                className="h-16 w-16 object-cover rounded-lg border border-slate-200 bg-black"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={value}
+                alt="Auto-reply attachment preview"
+                className="h-16 w-16 object-cover rounded-lg border border-slate-200"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0.3"; }}
+              />
+            )}
             <button
               type="button"
               onClick={() => onChange("")}
-              title="Remove image"
+              title="Remove attachment"
               className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-rose-600 transition-colors"
             >
               <Lucide icon="X" className="w-3 h-3" />
             </button>
+            {isVideo && (
+              <span className="absolute bottom-1 left-1 px-1 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider bg-black/60 text-white">
+                GIF
+              </span>
+            )}
           </div>
         ) : (
           <div className="h-16 w-16 shrink-0 flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50">
@@ -1005,7 +1039,7 @@ const ImageUploadField: React.FC<{
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/quicktime"
             className="hidden"
             onChange={(e) => onPick(e.target.files?.[0])}
           />
@@ -1020,11 +1054,15 @@ const ImageUploadField: React.FC<{
             ) : (
               <Lucide icon={value ? "RefreshCw" : "Upload"} className="w-3.5 h-3.5" />
             )}
-            {reading ? "Reading…" : value ? "Replace image" : "Upload image"}
+            {reading ? "Reading…" : value ? "Replace" : "Upload"}
           </button>
           <p className="text-[10px] text-slate-500 mt-1.5">
-            Pick any JPG / PNG / GIF / WebP from your device. The auto-reply
-            text becomes its caption. Leave blank to send text-only. Max 4 MB.
+            Pick a JPG, PNG, GIF, WebP, MP4, or WebM. The auto-reply text
+            becomes its caption. Max 8 MB.
+          </p>
+          <p className="text-[10px] text-slate-400 mt-0.5 italic">
+            For an animated GIF, upload it as MP4 — WhatsApp will play it
+            as a looping GIF. Static GIF files often display as a still image.
           </p>
         </div>
       </div>
