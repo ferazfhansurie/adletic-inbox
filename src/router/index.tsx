@@ -77,6 +77,7 @@ const SplitTest              = lazy(() => import("../pages/SplitTest"));
 const WhatsAppCallback       = lazy(() => import("../pages/WhatsAppCallback"));
 const MessageTemplates       = lazy(() => import("../pages/MessageTemplates"));
 const ContactAudit           = lazy(() => import("../pages/ContactAudit"));
+const LeadForms              = lazy(() => import("../pages/LeadForms"));
 
 // Minimal route-level fallback. Intentionally tiny — a full-page spinner would
 // flash on fast chunks; this is a quiet centered dot that only shows on slow
@@ -133,6 +134,7 @@ function Router() {
         { path: "storage-pricing", element: lazyElement(<StoragePricing />) },
         { path: "/client-ticket", element: lazyElement(<PublicTaskForm />) },
         { path: "contact-audit", element: lazyElement(<ContactAudit />) },
+        { path: "lead-forms", element: lazyElement(<LeadForms />) },
 
         { path: "/loading2", element: lazyElement(<LoadingIcon2 />) },
         { path: "opportunities", element: lazyElement(<Opportunities />) },

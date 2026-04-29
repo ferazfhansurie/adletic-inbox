@@ -39,6 +39,12 @@ const menu: Array<Menu | "divider"> = [
     title: "AI Pipeline",
   },
 
+  {
+    icon: "Inbox",
+    pathname: "/lead-forms",
+    title: "Lead Forms",
+  },
+
   "divider",
   {
     icon: "Users",
