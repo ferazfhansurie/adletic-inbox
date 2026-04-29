@@ -96,6 +96,25 @@ const LeadFormsPage: React.FC = () => {
   const [lastTestPhone, setLastTestPhone] = useState<string>(() => {
     try { return sessionStorage.getItem("mb_lead_form_last_test_phone") || ""; } catch { return ""; }
   });
+
+  // Discover wizard state. Once the user pastes a token and clicks
+  // "Discover", we populate this with their FB pages + each page's
+  // lead forms. Selections drop straight into `draft`, so the dumb
+  // manual ID inputs become read-only previews — no more hunting for
+  // ids across two different Meta UIs.
+  type DiscoveredForm = { id: string; name: string; status?: string };
+  type DiscoveredPage = {
+    id: string;
+    name: string;
+    access_token: string;
+    forms: DiscoveredForm[];
+    error?: string;
+  };
+  const [discovered, setDiscovered] = useState<DiscoveredPage[] | null>(null);
+  const [discoveryError, setDiscoveryError] = useState<string | null>(null);
+  const [isDiscovering, setIsDiscovering] = useState(false);
+  const [autoSubscribeStatus, setAutoSubscribeStatus] = useState<"idle" | "pending" | "ok" | "fail">("idle");
+  const [autoSubscribeError, setAutoSubscribeError] = useState<string | null>(null);
   const [isSavingForm, setIsSavingForm] = useState(false);
 
   // ─────────── bootstrap ───────────
@@ -170,9 +189,18 @@ const LeadFormsPage: React.FC = () => {
   }, [companyId, phoneIndex, fetchAll, fetchLeads]);
 
   // ─────────── form CRUD ───────────
+  const resetDiscovery = () => {
+    setDiscovered(null);
+    setDiscoveryError(null);
+    setIsDiscovering(false);
+    setAutoSubscribeStatus("idle");
+    setAutoSubscribeError(null);
+  };
+
   const openAddModal = () => {
     setEditingId(null);
     setDraft({ fb_form_id: "", fb_page_id: "", fb_page_access_token: "", label: "", auto_reply_template: DEFAULT_TEMPLATE });
+    resetDiscovery();
     setShowFormModal(true);
   };
 
@@ -185,7 +213,96 @@ const LeadFormsPage: React.FC = () => {
       label: f.label,
       auto_reply_template: f.auto_reply_template,
     });
+    resetDiscovery();
     setShowFormModal(true);
+  };
+
+  // Discover: paste any token (User token from Graph Explorer OR a Page
+  // token), get back the user's pages + each page's lead forms. Replaces
+  // the manual hunt for Form ID / Page ID across Meta surfaces.
+  const runDiscover = async () => {
+    const token = draft.fb_page_access_token.trim();
+    if (!token) {
+      toast.error("Paste your access token first");
+      return;
+    }
+    setIsDiscovering(true);
+    setDiscoveryError(null);
+    setDiscovered(null);
+    try {
+      const res = await fetch(`${baseUrl}/api/lead-forms/${companyId}/discover`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accessToken: token }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      const pages = (data.pages || []) as DiscoveredPage[];
+      setDiscovered(pages);
+      const totalForms = pages.reduce((acc, p) => acc + p.forms.length, 0);
+      if (pages.length === 0) {
+        toast.info("No pages found for this token");
+      } else {
+        toast.success(`Found ${pages.length} page${pages.length === 1 ? "" : "s"} · ${totalForms} lead form${totalForms === 1 ? "" : "s"}`);
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setDiscoveryError(msg);
+      toast.error(`Discover failed: ${msg}`);
+    } finally {
+      setIsDiscovering(false);
+    }
+  };
+
+  // Auto-subscribe: subscribe the chosen Page to the App's leadgen
+  // events. This is the step that's most often missed when doing it
+  // manually — we fire it silently when the user picks a Page so
+  // webhooks just work after Save.
+  const autoSubscribePage = async (pageId: string, pageAccessToken: string) => {
+    setAutoSubscribeStatus("pending");
+    setAutoSubscribeError(null);
+    try {
+      const res = await fetch(`${baseUrl}/api/lead-forms/${companyId}/auto-subscribe`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId, pageAccessToken }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      setAutoSubscribeStatus("ok");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setAutoSubscribeStatus("fail");
+      setAutoSubscribeError(msg);
+    }
+  };
+
+  const handlePagePick = (pageId: string) => {
+    if (!discovered) return;
+    const page = discovered.find((p) => p.id === pageId);
+    if (!page) return;
+    setDraft((d) => ({
+      ...d,
+      fb_page_id: page.id,
+      fb_page_access_token: page.access_token,
+      fb_form_id: "", // reset, user picks a form next
+      label: d.label || page.name,
+    }));
+    autoSubscribePage(page.id, page.access_token);
+  };
+
+  const handleFormPick = (formId: string) => {
+    if (!discovered) return;
+    const page = discovered.find((p) => p.id === draft.fb_page_id);
+    const form = page?.forms.find((f) => f.id === formId);
+    if (!page || !form) return;
+    setDraft((d) => ({
+      ...d,
+      fb_form_id: form.id,
+      label: `${page.name} — ${form.name}`,
+    }));
   };
 
   const saveForm = async () => {
@@ -561,43 +678,141 @@ const LeadFormsPage: React.FC = () => {
           </Dialog.Title>
 
           <div className="mt-4 grid gap-3">
-            <div className="grid md:grid-cols-2 gap-3">
-              <Field
-                label="Form ID"
-                hint="From Meta Ads Manager → Lead form → Form details"
-                value={draft.fb_form_id}
-                onChange={(v) => setDraft({ ...draft, fb_form_id: v })}
-                placeholder="e.g. 123456789012345"
-                mono
-              />
-              <Field
-                label="Page ID"
-                hint="The Facebook Page that owns the form"
-                value={draft.fb_page_id}
-                onChange={(v) => setDraft({ ...draft, fb_page_id: v })}
-                placeholder="e.g. 100123456789012"
-                mono
-              />
+
+            {/* ── Step 1 — paste token + discover ─────────────────── */}
+            <div>
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
+                {editingId ? "Page Access Token (paste to update)" : "1. Paste a Facebook access token"}
+              </label>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Field
+                    label=""
+                    value={draft.fb_page_access_token}
+                    onChange={(v) => { setDraft({ ...draft, fb_page_access_token: v }); resetDiscovery(); }}
+                    placeholder="EAAB…"
+                    mono
+                    type="password"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={runDiscover}
+                  disabled={isDiscovering || !draft.fb_page_access_token.trim()}
+                  className="self-start mt-0 px-3 h-[34px] inline-flex items-center gap-1.5 text-[11px] font-semibold rounded-lg bg-adletic-orange text-white hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                  title="Look up your pages + lead forms from this token"
+                >
+                  {isDiscovering ? <LoadingIcon icon="oval" className="w-3 h-3" /> : <Lucide icon="Search" className="w-3.5 h-3.5" />}
+                  {isDiscovering ? "Discovering…" : "Discover"}
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-500 mt-1">
+                {editingId ? (
+                  "Leave blank to keep the existing token. Paste a fresh one + click Discover to rotate."
+                ) : (
+                  <>
+                    Use a User token (with <code className="bg-slate-100 px-1 rounded">leads_retrieval</code>,{" "}
+                    <code className="bg-slate-100 px-1 rounded">pages_show_list</code>,{" "}
+                    <code className="bg-slate-100 px-1 rounded">pages_manage_metadata</code>) from the{" "}
+                    <a className="text-adletic-orange hover:underline" href="https://developers.facebook.com/tools/explorer/" target="_blank" rel="noreferrer">Graph API Explorer</a>{" "}
+                    — we'll list your pages + forms. Or paste a Page Access Token directly if you already have one.
+                  </>
+                )}
+              </p>
+              {discoveryError && (
+                <p className="text-[10px] text-rose-600 mt-1">{discoveryError}</p>
+              )}
             </div>
+
+            {/* ── Step 2 — pick page + form (only when discovery succeeded) ── */}
+            {discovered && discovered.length > 0 && (
+              <div className="grid md:grid-cols-2 gap-3 p-3 bg-emerald-50/50 border border-emerald-200/70 rounded-lg">
+                <div className="md:col-span-2 flex items-center gap-2">
+                  <Lucide icon="CheckCircle2" className="w-4 h-4 text-emerald-600" />
+                  <p className="text-[11px] font-semibold text-emerald-700">
+                    Discovered {discovered.length} page{discovered.length === 1 ? "" : "s"} — pick one
+                  </p>
+                  {autoSubscribeStatus === "pending" && (
+                    <span className="ml-auto text-[10px] text-slate-500 flex items-center gap-1">
+                      <LoadingIcon icon="oval" className="w-3 h-3" />
+                      Subscribing webhook…
+                    </span>
+                  )}
+                  {autoSubscribeStatus === "ok" && (
+                    <span className="ml-auto text-[10px] text-emerald-700 flex items-center gap-1 font-semibold">
+                      <Lucide icon="CheckCircle2" className="w-3 h-3" />
+                      Page subscribed
+                    </span>
+                  )}
+                  {autoSubscribeStatus === "fail" && (
+                    <span className="ml-auto text-[10px] text-rose-600 flex items-center gap-1" title={autoSubscribeError || ""}>
+                      <Lucide icon="AlertCircle" className="w-3 h-3" />
+                      Subscribe failed (will retry on save)
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">2. Page</label>
+                  <select
+                    value={draft.fb_page_id}
+                    onChange={(e) => handlePagePick(e.target.value)}
+                    className="w-full px-3 py-2 text-xs text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100"
+                  >
+                    <option value="">— pick a page —</option>
+                    {discovered.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name} {p.forms.length ? `(${p.forms.length} form${p.forms.length === 1 ? "" : "s"})` : "(no forms)"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">3. Lead form</label>
+                  <select
+                    value={draft.fb_form_id}
+                    onChange={(e) => handleFormPick(e.target.value)}
+                    disabled={!draft.fb_page_id}
+                    className="w-full px-3 py-2 text-xs text-slate-800 bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100 disabled:opacity-50"
+                  >
+                    <option value="">— pick a form —</option>
+                    {(discovered.find((p) => p.id === draft.fb_page_id)?.forms || []).map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.name}{f.status ? ` · ${f.status}` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {/* ── Manual fallback — visible when discovery hasn't run ── */}
+            {(!discovered || discovered.length === 0) && (
+              <div className="grid md:grid-cols-2 gap-3">
+                <Field
+                  label="Form ID (manual)"
+                  hint="Or click Discover above to pick from a list"
+                  value={draft.fb_form_id}
+                  onChange={(v) => setDraft({ ...draft, fb_form_id: v })}
+                  placeholder="e.g. 123456789012345"
+                  mono
+                />
+                <Field
+                  label="Page ID (manual)"
+                  hint="Or click Discover above to pick from a list"
+                  value={draft.fb_page_id}
+                  onChange={(v) => setDraft({ ...draft, fb_page_id: v })}
+                  placeholder="e.g. 100123456789012"
+                  mono
+                />
+              </div>
+            )}
+
             <Field
               label="Label"
               hint="Internal name — only your team sees this"
               value={draft.label}
               onChange={(v) => setDraft({ ...draft, label: v })}
               placeholder="e.g. Adletic Lead Magnet — Q2"
-            />
-            <Field
-              label={editingId ? "Page Access Token (paste to update)" : "Page Access Token"}
-              hint={
-                editingId
-                  ? "Leave blank to keep the existing token. Paste a fresh one to rotate."
-                  : "Long-lived Page Access Token from Meta Graph API. Required so we can fetch lead details when a submission fires."
-              }
-              value={draft.fb_page_access_token}
-              onChange={(v) => setDraft({ ...draft, fb_page_access_token: v })}
-              placeholder="EAAB…"
-              mono
-              type="password"
             />
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
@@ -702,9 +917,11 @@ const Field: React.FC<FieldProps> = ({ label, hint, value, onChange, placeholder
   const isSecret = type === "password";
   return (
     <div>
-      <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
-        {label}
-      </label>
+      {label && (
+        <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
+          {label}
+        </label>
+      )}
       <div className="relative">
         <input
           type={isSecret && !revealed ? "password" : "text"}
