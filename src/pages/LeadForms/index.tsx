@@ -86,8 +86,15 @@ const LeadFormsPage: React.FC = () => {
   const [draft, setDraft] = useState({
     fb_form_id: "",
     fb_page_id: "",
+    fb_page_access_token: "",
     label: "",
     auto_reply_template: DEFAULT_TEMPLATE,
+  });
+
+  // Remember the last phone used for "Send test" so the user doesn't
+  // re-type it. Per-tab via sessionStorage is enough.
+  const [lastTestPhone, setLastTestPhone] = useState<string>(() => {
+    try { return sessionStorage.getItem("mb_lead_form_last_test_phone") || ""; } catch { return ""; }
   });
   const [isSavingForm, setIsSavingForm] = useState(false);
 
@@ -165,7 +172,7 @@ const LeadFormsPage: React.FC = () => {
   // ─────────── form CRUD ───────────
   const openAddModal = () => {
     setEditingId(null);
-    setDraft({ fb_form_id: "", fb_page_id: "", label: "", auto_reply_template: DEFAULT_TEMPLATE });
+    setDraft({ fb_form_id: "", fb_page_id: "", fb_page_access_token: "", label: "", auto_reply_template: DEFAULT_TEMPLATE });
     setShowFormModal(true);
   };
 
@@ -174,6 +181,7 @@ const LeadFormsPage: React.FC = () => {
     setDraft({
       fb_form_id: f.fb_form_id,
       fb_page_id: f.fb_page_id,
+      fb_page_access_token: "", // never echo the token back; user re-pastes if rotating
       label: f.label,
       auto_reply_template: f.auto_reply_template,
     });
@@ -232,16 +240,47 @@ const LeadFormsPage: React.FC = () => {
   };
 
   const sendTest = async (f: LeadForm) => {
+    // Prompt for the phone we should send the test message to. Keeping
+    // it in sessionStorage so re-clicking Test on different forms in
+    // the same session doesn't re-prompt cold every time.
+    const input = window.prompt(
+      "Send a test message to which phone number?\n\n" +
+        "Use international format with country code, no '+' or spaces (e.g. 60123456789).\n\n" +
+        "Leave blank to just preview the rendered message without sending.",
+      lastTestPhone,
+    );
+    // null === user clicked Cancel; empty string === preview-only.
+    if (input === null) return;
+    const toPhone = input.trim();
+    if (toPhone) {
+      try { sessionStorage.setItem("mb_lead_form_last_test_phone", toPhone); } catch {}
+      setLastTestPhone(toPhone);
+    }
+
     try {
       const res = await fetch(`${baseUrl}/api/lead-forms/${companyId}/${f.id}/test`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phoneIndex }),
+        body: JSON.stringify({ phoneIndex, toPhone: toPhone || undefined }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      toast.success("Test lead fired — check the Recent Leads table");
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      if (data.deliveryStatus === "sent") {
+        toast.success(`Test sent to ${toPhone} — check WhatsApp`);
+      } else if (data.deliveryStatus === "skipped") {
+        toast.info("Preview only — no phone supplied. Lead saved with status 'skipped'.");
+      } else if (data.deliveryStatus === "failed") {
+        toast.error(`Send failed: ${data.deliveryError || "unknown"}`);
+      } else {
+        toast.info("Test recorded");
+      }
+      // Refresh both the leads table and the form list so total-leads counter ticks up.
       fetchLeads();
+      fetchAll();
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       toast.error(`Test failed: ${msg}`);
@@ -547,6 +586,19 @@ const LeadFormsPage: React.FC = () => {
               onChange={(v) => setDraft({ ...draft, label: v })}
               placeholder="e.g. Adletic Lead Magnet — Q2"
             />
+            <Field
+              label={editingId ? "Page Access Token (paste to update)" : "Page Access Token"}
+              hint={
+                editingId
+                  ? "Leave blank to keep the existing token. Paste a fresh one to rotate."
+                  : "Long-lived Page Access Token from Meta Graph API. Required so we can fetch lead details when a submission fires."
+              }
+              value={draft.fb_page_access_token}
+              onChange={(v) => setDraft({ ...draft, fb_page_access_token: v })}
+              placeholder="EAAB…"
+              mono
+              type="password"
+            />
             <div>
               <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
                 Auto-reply message
@@ -642,22 +694,40 @@ interface FieldProps {
   onChange: (v: string) => void;
   placeholder?: string;
   mono?: boolean;
+  type?: "text" | "password";
 }
 
-const Field: React.FC<FieldProps> = ({ label, hint, value, onChange, placeholder, mono }) => (
-  <div>
-    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
-      {label}
-    </label>
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className={`w-full px-3 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100 ${mono ? "font-mono" : ""}`}
-    />
-    {hint && <p className="text-[10px] text-slate-500 mt-1">{hint}</p>}
-  </div>
-);
+const Field: React.FC<FieldProps> = ({ label, hint, value, onChange, placeholder, mono, type = "text" }) => {
+  const [revealed, setRevealed] = useState(false);
+  const isSecret = type === "password";
+  return (
+    <div>
+      <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 mb-1">
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          type={isSecret && !revealed ? "password" : "text"}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          autoComplete={isSecret ? "off" : undefined}
+          className={`w-full px-3 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-adletic-orange focus:ring-2 focus:ring-orange-100 ${mono ? "font-mono" : ""} ${isSecret ? "pr-9" : ""}`}
+        />
+        {isSecret && (
+          <button
+            type="button"
+            onClick={() => setRevealed((r) => !r)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 p-0.5"
+            title={revealed ? "Hide" : "Reveal"}
+          >
+            <Lucide icon={revealed ? "EyeOff" : "Eye"} className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </div>
+      {hint && <p className="text-[10px] text-slate-500 mt-1">{hint}</p>}
+    </div>
+  );
+};
 
 export default LeadFormsPage;
