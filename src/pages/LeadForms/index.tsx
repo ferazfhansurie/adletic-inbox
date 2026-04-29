@@ -57,13 +57,23 @@ interface WebhookInfo {
   verify_token: string;
 }
 
+// Default auto-reply — written as the AI assistant's OPENING line so
+// that when the lead replies, Zig (the bot already running on this
+// company) picks up the thread mid-conversation. The template ends
+// on an open question to invite a reply, which is what hands the
+// conversation over to the bot.
+//
+// Voice matches Zig's system prompt: casual MY-English, "tuan",
+// short paragraphs, MotionBoards as the only product, RM10
+// limited-time hook, no emoji bullets.
 const DEFAULT_TEMPLATE =
-  "Hi {{name}} — thanks for reaching out via Facebook!\n\n" +
-  "We just got your details. Someone from the Adletic team will WhatsApp " +
-  "you within the next hour. While you wait, try MotionBoards (the AI " +
-  "video tool we built) at https://motionboards.com — it's RM10/month, " +
-  "limited time.\n\n" +
-  "— Adletic Agency";
+  "Hi {{name}}! Zig here from Adletic Agency.\n\n" +
+  "We just got your details from FB — thanks for reaching out.\n\n" +
+  "Quick context: we built MotionBoards — every AI video model (Sora, " +
+  "Veo, Nano Banana, Seedance, Kling) in one canvas. RM10/month limited " +
+  "time (was RM100).\n\n" +
+  "What kind of content tuan nak buat — ads, social posts, or storyboards?\n\n" +
+  "Reply here and I'll walk you through it.";
 
 // Centralised so swapping back to staging is a one-line change.
 const baseUrl = "https://bisnesgpt.jutateknologi.com";
